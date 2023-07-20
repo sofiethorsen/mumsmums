@@ -1,0 +1,13 @@
+directories:
+  .
+
+derive_targets_from_directories: false
+
+targets:
+  //...
+
+test_sources:
+  */jvmTest/*
+
+additional_languages:
+  kotlin

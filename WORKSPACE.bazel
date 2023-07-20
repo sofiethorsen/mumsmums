@@ -1,1 +1,70 @@
 workspace(name = "mumsmums")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+####################################################################################
+### rules_kotlin (https://github.com/bazelbuild/rules_kotlin)
+###
+### Bazel kotlin rules
+####################################################################################
+
+rules_kotlin_version = "1.8"
+
+rules_kotlin_sha = "01293740a16e474669aba5b5a1fe3d368de5832442f164e4fbfc566815a8bc3a"
+
+http_archive(
+    name = "io_bazel_rules_kotlin",
+    sha256 = rules_kotlin_sha,
+    urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/v%s/rules_kotlin_release.tgz" % rules_kotlin_version],
+)
+
+load("@io_bazel_rules_kotlin//kotlin:repositories.bzl", "kotlin_repositories")
+
+kotlin_repositories()  # if you want the default. Otherwise see custom kotlinc distribution below
+
+load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_register_toolchains")
+
+kt_register_toolchains()  # to use the default toolchain, otherwise see toolchains below
+
+kotlin_repositories()
+
+####################################################################################
+### rules_jvm_external (https://github.com/bazelbuild/rules_jvm_external)
+###
+### Transitive Maven artifact resolution and publishing rules
+####################################################################################
+
+rules_jvm_external_tag = "5.3"
+
+rules_jvm_external_sha = "d31e369b854322ca5098ea12c69d7175ded971435e55c18dd9dd5f29cc5249ac"
+
+http_archive(
+    name = "rules_jvm_external",
+    sha256 = rules_jvm_external_sha,
+    strip_prefix = "rules_jvm_external-%s" % rules_jvm_external_tag,
+    url = "https://github.com/bazelbuild/rules_jvm_external/releases/download/%s/rules_jvm_external-%s.tar.gz" % (rules_jvm_external_tag, rules_jvm_external_tag),
+)
+
+load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
+
+rules_jvm_external_deps()
+
+load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
+load("@rules_jvm_external//:defs.bzl", "maven_install")
+
+ktor_version = "2.3.2"
+
+logback_version = "1.2.11"
+
+maven_install(
+    artifacts = [
+        "ch.qos.logback:logback-classic:%s" % logback_version,
+        "io.ktor:ktor-server-auth-jvm:%s" % ktor_version,
+        "io.ktor:ktor-server-core-jvm:%s" % ktor_version,
+        "io.ktor:ktor-server-host-common-jvm:%s" % ktor_version,
+        "io.ktor:ktor-server-netty-jvm:%s" % ktor_version,
+    ],
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)

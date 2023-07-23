@@ -1,0 +1,32 @@
+load("@io_bazel_rules_kotlin//kotlin:core.bzl", "define_kt_toolchain", "kt_compiler_plugin", "kt_kotlinc_options")
+
+kt_kotlinc_options(
+    name = "warnings_are_errors",
+    warn = "error",
+)
+
+kt_kotlinc_options(
+    name = "allow_experimental",
+    visibility = ["//visibility:public"],
+    warn = "error",
+    x_optin = ["kotlin.RequiresOptIn"],
+)
+
+define_kt_toolchain(
+    name = "kotlin_toolchain",
+    api_version = "1.7",
+    jvm_target = "11",
+    kotlinc_options = ":warnings_are_errors",
+    language_version = "1.7",
+)
+
+kt_compiler_plugin(
+    name = "serialization",
+    compile_phase = True,
+    id = "org.jetbrains.kotlin.serialization",
+    stubs_phase = True,
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_jetbrains_kotlin//:kotlinx-serialization-compiler-plugin",
+    ],
+)

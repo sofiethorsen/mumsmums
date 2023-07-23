@@ -1,8 +1,8 @@
 import React from 'react';
-// import style from './HomePage.scss';
+import './HomePage.css';
 
 export default function HomePage() {
     return (
-        <div>mumsmums</div>
+        <div className="container">Hello world</div>
     )
 }

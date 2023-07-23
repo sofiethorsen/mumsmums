@@ -20,13 +20,11 @@ http_archive(
 
 load("@io_bazel_rules_kotlin//kotlin:repositories.bzl", "kotlin_repositories")
 
-kotlin_repositories()  # if you want the default. Otherwise see custom kotlinc distribution below
+kotlin_repositories()
 
 load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_register_toolchains")
 
-kt_register_toolchains()  # to use the default toolchain, otherwise see toolchains below
-
-kotlin_repositories()
+register_toolchains("//bazel:kotlin_toolchain")
 
 ####################################################################################
 ### rules_jvm_external (https://github.com/bazelbuild/rules_jvm_external)
@@ -56,13 +54,21 @@ ktor_version = "2.3.2"
 
 logback_version = "1.2.11"
 
+kgraphql_version = "0.19.0"
+
+kotlinx_serialization_version = "1.5.0"
+
 maven_install(
     artifacts = [
         "ch.qos.logback:logback-classic:%s" % logback_version,
         "io.ktor:ktor-server-auth-jvm:%s" % ktor_version,
         "io.ktor:ktor-server-core-jvm:%s" % ktor_version,
+        "io.ktor:ktor-server-cors-jvm:%s" % ktor_version,
         "io.ktor:ktor-server-host-common-jvm:%s" % ktor_version,
         "io.ktor:ktor-server-netty-jvm:%s" % ktor_version,
+        "com.apurebase:kgraphql:%s" % kgraphql_version,
+        "com.apurebase:kgraphql-ktor:%s" % kgraphql_version,
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:%s" % kotlinx_serialization_version,
     ],
     repositories = [
         "https://repo1.maven.org/maven2",

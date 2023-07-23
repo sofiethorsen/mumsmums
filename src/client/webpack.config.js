@@ -1,5 +1,5 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
 
 module.exports = {
   entry: './index.js',
@@ -12,7 +12,7 @@ module.exports = {
   devServer: {
     port: '3000',
     static: {
-      directory: path.join(__dirname, 'public')
+      directory: path.join(__dirname, 'public'),
     },
     open: true,
     hot: true,
@@ -30,13 +30,13 @@ module.exports = {
       },
       {
         test: /\.(css)$/,
-        use: ['style-loader','css-loader']
-      }
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'public', 'index.html')
-    })
-  ]
-};
+      template: path.join(__dirname, 'public', 'index.html'),
+    }),
+  ],
+}

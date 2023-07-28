@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
-import './PageFrame.css'
+import styles from './PageFrame.module.css'
 
 import Navigation from '../Navigation/Navigation'
 import client from '../../graphql/client/client'
 import { ApolloProvider } from '@apollo/client'
 
-const PageFrame = ({ children }) => {
+const PageFrame = ({ children }: PropsWithChildren) => {
     return (
         <ApolloProvider client={client}>
-            <div className="page">
+            <div className={styles.page}>
                 <Navigation />
                 {children}
             </div>

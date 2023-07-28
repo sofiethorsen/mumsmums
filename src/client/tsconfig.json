@@ -3,11 +3,24 @@
     "outDir": "./dist",
     "jsx": "react",
     "target": "es5",
-    "lib": ["dom", "es2015", "es6", "es2017", "esnext.asynciterable"],
+    "lib": [
+      "dom",
+      "es2015",
+      "es6",
+      "es2017",
+      "esnext.asynciterable"
+    ],
     "strict": true,
     "module": "esnext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ]
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

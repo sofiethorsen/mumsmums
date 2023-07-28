@@ -1,5 +1,5 @@
 import React from 'react'
-import './Recipe.css'
+import styles from './Recipe.module.css'
 
 import { useQuery, gql } from '@apollo/client'
 
@@ -25,7 +25,7 @@ export default function Recipe({ recipeId }) {
     const recipe = data.recipe
 
     return (
-        <div className="recipe">
+        <div className={styles.recipe}>
             <h2>{recipe.name}</h2>
             <div>{recipe.instruction}</div>
         </div>

@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import ErrorPage from './src/views/ErrorPage/ErrorPage.tsx'
 import HomePage from './src/views/HomePage/HomePage.tsx'
+import RecipePage from './src/views/RecipePage/RecipePage.tsx'
 import ShoppingListPage from './src/views/ShoppingListPage/ShoppingListPage.tsx'
 import './index.css'
 
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: '/list',
     element: <ShoppingListPage />,
+  },
+  {
+    path: '/recipe/:recipeId',
+    element: <RecipePage />,
   },
 ])
 

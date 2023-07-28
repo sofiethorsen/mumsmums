@@ -10,7 +10,7 @@ const Navigation = () => {
                 <a href="/list">Shoppinglista</a>
             </nav>
         </div>
-   )
+    )
 }
 
 export default Navigation

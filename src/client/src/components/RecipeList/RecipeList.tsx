@@ -1,33 +1,31 @@
-import React from 'react';
-import { useQuery, gql } from '@apollo/client';
+import React from 'react'
+import { useQuery, gql } from '@apollo/client'
 import './RecipeList.css'
+
+import ImageGrid from '../ImageGrid/ImageGrid'
 
 const GET_RECIPES = gql`
   query {
     recipes {
-      name
+      id,
+      name,
+      imageUrl
     }
   }
-`;
+`
 
 const RecipeList = () => {
-  const { loading, error, data } = useQuery(GET_RECIPES);
+  const { loading, error, data } = useQuery(GET_RECIPES)
 
   if (loading) return null
   if (error) return <p>Error: {error.message}</p>
 
   return (
     <div className="container">
-      <h1>Topp mumsar</h1>
-      <ul>
-        {data.recipes.map((recipe, index) => (
-          <li key={index} data-testid={`recipe-name-${index}`}>
-            {recipe.name}
-          </li>
-        ))}
-      </ul>
+      <div><h1>Topp mumsar</h1></div>
+      <ImageGrid recipes={data.recipes} />
     </div>
-  );
-};
+  )
+}
 
-export default RecipeList;
+export default RecipeList

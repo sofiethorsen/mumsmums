@@ -2,15 +2,15 @@ import React from 'react'
 
 import './PageFrame.css'
 
-import Navigation from '../Navigation/Navigation.tsx'
+import Navigation from '../Navigation/Navigation'
 import client from '../../graphql/client/client'
 import { ApolloProvider } from '@apollo/client'
 
-const PageFrame = ({children}) => {
+const PageFrame = ({ children }) => {
     return (
         <ApolloProvider client={client}>
             <div className="page">
-                <Navigation/>
+                <Navigation />
                 {children}
             </div>
         </ApolloProvider>

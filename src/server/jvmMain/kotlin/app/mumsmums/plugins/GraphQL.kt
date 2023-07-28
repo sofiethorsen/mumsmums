@@ -6,6 +6,10 @@ import com.apurebase.kgraphql.GraphQL
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 
+private fun getRecipeById(id: Int): Recipe? {
+    return recipes.find { it.id == id }
+}
+
 fun Application.configureGraphQL() {
     install(GraphQL) {
         playground = true
@@ -15,6 +19,9 @@ fun Application.configureGraphQL() {
             }
             query("recipes") {
                 resolver { -> recipes }
+            }
+            query("recipe") {
+                resolver { id: Int -> getRecipeById(id) }
             }
         }
     }

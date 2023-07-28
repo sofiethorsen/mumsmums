@@ -13,12 +13,12 @@ const GET_RECIPES = gql`
 const RecipeList = () => {
   const { loading, error, data } = useQuery(GET_RECIPES);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return null
+  if (error) return <p>Error: {error.message}</p>
 
   return (
     <div className="container">
-      <h1>Recipes</h1>
+      <h1>Topp mumsar</h1>
       <ul>
         {data.recipes.map((recipe, index) => (
           <li key={index} data-testid={`recipe-name-${index}`}>

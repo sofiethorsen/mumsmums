@@ -5,6 +5,7 @@ kt_jvm_library(
     srcs = glob(["*.kt"]),
     visibility = ["//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__"],
     deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/data",
         "//src/server/jvmMain/kotlin/app/mumsmums/environment",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
         "@maven//:com_apurebase_kgraphql",

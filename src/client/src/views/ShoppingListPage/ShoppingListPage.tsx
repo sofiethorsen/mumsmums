@@ -1,13 +1,15 @@
 import React from 'react'
-import './HomePage.css'
+import './ShoppingListPage.css'
 
 import RecipeList from '../../components/RecipeList/RecipeList'
 import PageFrame from '../../components/PageFrame/PageFrame'
 
-export default function HomePage() {
+export default function ShoppingListPage() {
     return (
         <PageFrame>
-            <RecipeList />
+            <div className="container">
+                Här blir det shopping snart!
+            </div>
         </PageFrame>
    )
 }

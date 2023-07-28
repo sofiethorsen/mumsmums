@@ -7,6 +7,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'index_bundle.js',
+    publicPath: '/',
   },
   target: 'web',
   devServer: {
@@ -15,6 +16,7 @@ module.exports = {
       directory: path.join(__dirname, 'public'),
     },
     open: true,
+    historyApiFallback: true,
     hot: true,
     liveReload: true,
   },

@@ -20,6 +20,7 @@
 }
 
 .name {
+  text-align: center;
   color: black;
   position: relative;
   background-color: white;

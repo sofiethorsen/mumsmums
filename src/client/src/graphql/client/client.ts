@@ -1,13 +1,9 @@
-import fetch from 'cross-fetch';
-import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
-
-// TODO: set via webpack config
-//const host = process.env.NODE_ENV === "development" ? "http://localhost:8080" : ""
-const isProd = true
-const host = isProd ? "" : "http://localhost:8080"
+import fetch from 'cross-fetch'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import { BACKEND_BASE_URI } from '../../constants/environment'
 
 const client = new ApolloClient({
-    link: new HttpLink({ uri: `${host}/graphql`, fetch }),
+    link: new HttpLink({ uri: `${BACKEND_BASE_URI}/graphql`, fetch }),
     cache: new InMemoryCache(),
 });
 

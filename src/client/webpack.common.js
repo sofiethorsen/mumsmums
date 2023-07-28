@@ -10,16 +10,6 @@ module.exports = {
     publicPath: '/',
   },
   target: 'web',
-  devServer: {
-    port: '3000',
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
-    open: true,
-    historyApiFallback: true,
-    hot: true,
-    liveReload: true,
-  },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
   },

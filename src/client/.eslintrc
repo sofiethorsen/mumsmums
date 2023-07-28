@@ -12,7 +12,8 @@
     "no-console": 0,
     "quotes": [2, "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
     "no-use-before-define": [2, { "functions": false, "classes": true }],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/webpack.*.js"] }]
   },
   "env": {
     "browser": true

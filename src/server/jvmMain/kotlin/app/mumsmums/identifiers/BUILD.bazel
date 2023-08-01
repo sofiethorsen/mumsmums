@@ -1,0 +1,13 @@
+load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
+
+kt_jvm_library(
+    name = "identifiers",
+    srcs = glob(["*.kt"]),
+    visibility = [
+        "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
+        "//src/server/jvmTest/kotlin/app/mumsmums:__subpackages__",
+    ],
+    deps = [
+        "@maven//:com_amazonaws_aws_java_sdk_core",
+    ],
+)

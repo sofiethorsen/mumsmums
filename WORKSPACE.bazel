@@ -50,25 +50,44 @@ rules_jvm_external_deps()
 load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
-ktor_version = "2.3.2"
+aws_java_sdk_version = "1.12.518"
 
-logback_version = "1.2.11"
+jupiter_version = "5.10.0"
+
+jupiter_platform_version = "1.10.0"
 
 kgraphql_version = "0.19.0"
 
 kotlinx_serialization_version = "1.5.0"
 
+ktor_version = "2.3.2"
+
+logback_version = "1.2.11"
+
+mockk_version = "1.13.5"
+
 maven_install(
     artifacts = [
         "ch.qos.logback:logback-classic:%s" % logback_version,
+        "com.amazonaws:aws-java-sdk-core:%s" % aws_java_sdk_version,
+        "com.apurebase:kgraphql-ktor:%s" % kgraphql_version,
+        "com.apurebase:kgraphql:%s" % kgraphql_version,
         "io.ktor:ktor-server-auth-jvm:%s" % ktor_version,
         "io.ktor:ktor-server-core-jvm:%s" % ktor_version,
         "io.ktor:ktor-server-cors-jvm:%s" % ktor_version,
         "io.ktor:ktor-server-host-common-jvm:%s" % ktor_version,
         "io.ktor:ktor-server-netty-jvm:%s" % ktor_version,
-        "com.apurebase:kgraphql:%s" % kgraphql_version,
-        "com.apurebase:kgraphql-ktor:%s" % kgraphql_version,
+        "io.mockk:mockk:%s" % mockk_version,
+        "io.mockk:mockk-jvm:%s" % mockk_version,
         "org.jetbrains.kotlinx:kotlinx-serialization-json:%s" % kotlinx_serialization_version,
+        "org.junit.jupiter:junit-jupiter-api:%s" % jupiter_version,
+        "org.junit.jupiter:junit-jupiter-engine:%s" % jupiter_version,
+        "org.junit.jupiter:junit-jupiter-params:%s" % jupiter_version,
+        "org.junit.platform:junit-platform-commons:%s" % jupiter_platform_version,
+        "org.junit.platform:junit-platform-console:%s" % jupiter_platform_version,
+        "org.junit.platform:junit-platform-engine:%s" % jupiter_platform_version,
+        "org.junit.platform:junit-platform-launcher:%s" % jupiter_platform_version,
+        "org.junit.platform:junit-platform-suite-api:%s" % jupiter_platform_version,
     ],
     repositories = [
         "https://repo1.maven.org/maven2",

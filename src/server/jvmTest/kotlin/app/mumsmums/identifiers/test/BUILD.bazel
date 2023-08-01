@@ -1,0 +1,13 @@
+load("//bazel/junit5:defs.bzl", "kt_jvm_junit5_test")
+
+kt_jvm_junit5_test(
+    name = "test",
+    size = "small",
+    srcs = glob(["*.kt"]),
+    associates = ["//src/server/jvmMain/kotlin/app/mumsmums/identifiers"],
+    test_package = "app.mumsmums.identifiers.test",
+    deps = [
+        "@maven//:io_mockk_mockk",
+        "@maven//:io_mockk_mockk_jvm",
+    ],
+)

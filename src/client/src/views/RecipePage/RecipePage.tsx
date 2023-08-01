@@ -1,5 +1,5 @@
 import React from 'react'
-import './RecipePage.css'
+import styles from './RecipePage.module.css'
 
 import PageFrame from '../../components/PageFrame/PageFrame'
 import Recipe from '../../components/Recipe/Recipe'

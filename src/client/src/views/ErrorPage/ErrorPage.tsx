@@ -1,5 +1,5 @@
 import React from 'react'
-import './ErrorPage.css'
+import styles from './ErrorPage.module.css'
 
 import { useRouteError } from 'react-router-dom'
 
@@ -10,9 +10,9 @@ export default function ErrorPage() {
 
     return (
         <PageFrame>
-            <div className="container">
+            <div className={styles.container}>
                 <i>{error.statusText || error.message}</i>
             </div>
         </PageFrame>
-   )
+    )
 }

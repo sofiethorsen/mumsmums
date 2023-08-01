@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery, gql } from '@apollo/client'
-import './RecipeList.css'
+import styles from './RecipeList.module.css'
 
 import ImageGrid from '../ImageGrid/ImageGrid'
 
@@ -21,7 +21,7 @@ const RecipeList = () => {
   if (error) return <p>Error: {error.message}</p>
 
   return (
-    <div className="container">
+    <div className={styles.container}>
       <div><h1>Topp mumsar</h1></div>
       <ImageGrid recipes={data.recipes} />
     </div>

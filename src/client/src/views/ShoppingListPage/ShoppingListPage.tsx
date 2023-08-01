@@ -1,15 +1,14 @@
 import React from 'react'
-import './ShoppingListPage.css'
+import styles from './ShoppingListPage.module.css'
 
-import RecipeList from '../../components/RecipeList/RecipeList'
 import PageFrame from '../../components/PageFrame/PageFrame'
 
 export default function ShoppingListPage() {
     return (
         <PageFrame>
-            <div className="container">
+            <div className={styles.container}>
                 Här blir det shopping snart!
             </div>
         </PageFrame>
-   )
+    )
 }

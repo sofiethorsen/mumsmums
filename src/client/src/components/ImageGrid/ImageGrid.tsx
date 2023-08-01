@@ -2,12 +2,17 @@ import React from 'react'
 import styles from './ImageGrid.module.css'
 
 import { Link } from 'react-router-dom'
+import { Recipe } from '../../graphql/client/types'
 
-const ImageGrid = ({ recipes }) => {
+interface ImageGridProps {
+  recipes: Recipe[]
+}
+
+const ImageGrid: React.FC<ImageGridProps> = ({ recipes }) => {
 
   return (
     <div className={styles.grid}>
-      {recipes.map((recipe, index) => (
+      {recipes.map((recipe: Recipe, index: number) => (
         <Link to={`/recipe/${recipe.id}`} key={index}>
           <div key={index} className={styles.squareImageContainer}>
             <img

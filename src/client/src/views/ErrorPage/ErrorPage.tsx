@@ -1,18 +1,33 @@
 import React from 'react'
 import styles from './ErrorPage.module.css'
 
-import { useRouteError } from 'react-router-dom'
+import { isRouteErrorResponse, useRouteError } from 'react-router-dom'
 
 import PageFrame from '../../components/PageFrame/PageFrame'
 
-export default function ErrorPage() {
-    const error = useRouteError()
+interface Error {
+    statusText: string | undefined
+    message: string | undefined
+}
+
+const getErrorMessage = (error: unknown) => {
+    if (isRouteErrorResponse(error)) {
+        return <i>{error.status || error.statusText}</i>
+    } else {
+        return <i>Hoppsan, här fanns ingenting!</i>
+    }
+}
+
+const ErrorPage = () => {
+    let error = useRouteError()
 
     return (
         <PageFrame>
             <div className={styles.container}>
-                <i>{error.statusText || error.message}</i>
+                {getErrorMessage(error)}
             </div>
         </PageFrame>
     )
 }
+
+export default ErrorPage

@@ -8,7 +8,8 @@
     "build": "webpack --config webpack.prod.js",
     "test": "jest --config=jest.config.ts",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "lint:tsc": "tsc --noemit"
   },
   "homepage": ".",
   "keywords": [],

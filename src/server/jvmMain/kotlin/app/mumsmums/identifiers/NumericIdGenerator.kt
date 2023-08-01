@@ -23,7 +23,7 @@ private const val bitsInTimestamp = 29
 private const val bitsInCounter = 11
 
 // Tuesday, 1 August 2023 00:00:00 UTC
-private const val epochOffset: Long = 1690848000
+const val epochOffset: Long = 1690848000
 
 // Get the IP address of the machine, which is used for generating the numeric ID.
 private fun getIpAddress(): InetAddress {

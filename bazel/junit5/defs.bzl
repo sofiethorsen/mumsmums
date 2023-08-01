@@ -1,20 +1,15 @@
 load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library", "kt_jvm_test")
 
-def common(filter_kwargs, name, srcs = [], test_package = None, deps = [], runtime_deps = [], **kwargs):
-    """Helper macro to generate test targets that run using junit5 console launcher.
-    One test target is specified for each entry in the srcs argument.
-    Args:
-      filter_kwargs: list of kwargs to ignore.
-      name: the test target.
-        When srcs is empty, this must refer to the name of the class to test.
-      srcs: list of sources to test. This may be empty, e.g. if user provides their own lib as a runtime dep.
-      test_package: java package name of the test classes.
-      deps: deps for the test targets.
-      runtime_deps: runtime_deps for the test targets.
-      **kwargs: other args.
-    """
+def kt_jvm_junit5_test(name, srcs = [], test_package = None, deps = [], runtime_deps = [], **kwargs):
+    """Generates kotlin test targets that run using junit 5"""
 
-    for arg in filter_kwargs:
+    # args to ignore
+    FILTER_KWARGS = [
+        "main_class",
+        "args",
+    ]
+
+    for arg in FILTER_KWARGS:
         if arg in kwargs.keys():
             kwargs.pop(arg)
 
@@ -64,14 +59,6 @@ def common(filter_kwargs, name, srcs = [], test_package = None, deps = [], runti
             tests = test_suite_tests,
             visibility = ["//:__subpackages__"],
         )
-
-def kt_jvm_junit5_test(name, srcs = [], test_package = None, deps = [], runtime_deps = [], **kwargs):
-    """Generates kotlin test targets that run using junit 5"""
-    FILTER_KWARGS = [
-        "main_class",
-        "args",
-    ]
-    common(FILTER_KWARGS, name, srcs, test_package, deps, runtime_deps, **kwargs)
 
 def _rule_kt_test(name, test_package, srcs = [], runtime_deps = [], **kwargs):
     """Helper macro for calling kt_jvm_test"""

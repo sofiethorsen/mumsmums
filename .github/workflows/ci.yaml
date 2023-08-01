@@ -20,7 +20,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Build server code
+    - name: Build and test server code
       run: |
         ./ci/pr-build-server.sh
 

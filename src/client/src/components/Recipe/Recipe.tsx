@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Recipe.module.css'
 
-import ErrorPage from '../../views/ErrorPage/ErrorPage'
+import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import { useQuery, gql } from '@apollo/client'
 
 const GET_RECIPE_BY_ID = gql`
@@ -30,7 +30,7 @@ const Recipe: React.FC<RecipeProps> = ({ recipeId }) => {
   const recipe = data.recipe
 
   if (recipe === null || undefined) {
-    return <div className={styles.recipe}><i>Hoppsan, här fanns ingenting!</i></div>
+    return <ErrorMessage />
   }
 
   return (

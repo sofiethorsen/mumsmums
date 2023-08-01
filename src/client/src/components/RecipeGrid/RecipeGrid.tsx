@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery, gql } from '@apollo/client'
-import styles from './RecipeList.module.css'
+import styles from './RecipeGrid.module.css'
 
 import ImageGrid from '../ImageGrid/ImageGrid'
 

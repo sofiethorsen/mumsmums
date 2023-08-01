@@ -1,12 +1,12 @@
 import React from 'react'
 
-import RecipeList from '../../components/RecipeList/RecipeList'
+import RecipeGrid from '../../components/RecipeGrid/RecipeGrid'
 import PageFrame from '../../components/PageFrame/PageFrame'
 
 export default function HomePage() {
     return (
         <PageFrame>
-            <RecipeList />
+            <RecipeGrid />
         </PageFrame>
     )
 }

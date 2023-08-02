@@ -1,0 +1,53 @@
+@import "styles/palette.css";
+@import "styles/dark.css";
+@import "styles/light.css";
+
+/* re-evaluate on each element with an applied theme */
+[data-theme] {
+  /* Surfaces */
+  --page-bg-color: var(--color-surface-background);
+
+  /* Content */
+  --content-primary-color: var(--color-content-primary);
+  --content-secondary-color: var(--color-content-secondary);
+}
+
+:root {
+  /* fonts */
+  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  --animation-fade-in: fadeIn;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--page-bg-color);
+  color: var(--content-primary-color);
+  font-family: var(--font-primary);
+  -webkit-text-fill-color: currentcolor;
+
+  height: 100%;
+  margin: 0;
+}
+
+a {
+  color: var(--content-primary-color);
+  font-family: var(--font-primary);
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: inherit;
+  font: inherit;
+}

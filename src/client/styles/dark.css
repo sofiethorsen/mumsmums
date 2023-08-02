@@ -1,0 +1,10 @@
+[data-theme="dark"] {
+    /* Surfaces */
+    --color-surface-background: #1e1e1e;
+    --color-surface-pagebg: var(--black-150);
+
+    /* Content */
+    --color-content-primary: white;
+    --color-content-secondary: var(--gray-200);
+    --content-tertiary: var(--black-50);
+}

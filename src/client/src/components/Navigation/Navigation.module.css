@@ -1,6 +1,6 @@
 .header {
-  background-color: #333;
   width: 100%;
+  border-bottom: 1px solid var(--color-content-secondary);
 }
 
 nav {
@@ -11,6 +11,5 @@ nav {
 
 a {
   text-decoration: none;
-  color: #fff;
   padding: 5px 10px;
 }

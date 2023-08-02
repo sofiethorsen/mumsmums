@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>mumsmums</title>
-    </head>
-    <body>
-        <div id="root"></div>
-    </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mumsmums</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script>
+        // Function to set the data-theme attribute based on user preference
+        function setTheme() {
+            document.documentElement.setAttribute(
+                "data-theme",
+                document.documentElement.getAttribute("data-theme-override") ||
+                (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+            )
+        }
+
+        // Initial call to set the theme on page load
+        setTheme()
+
+        // Listen for changes in user's appearance preference and update the theme accordingly
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+            setTheme()
+        });
+    </script>
+</body>
+
 </html>

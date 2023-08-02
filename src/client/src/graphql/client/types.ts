@@ -6,10 +6,15 @@ export interface Ingredient {
     quantity: number
 }
 
+export interface IngredientSection {
+    name: string | undefined
+    ingredients: Ingredient[]
+}
+
 export interface Recipe {
     id: number,
     name: string,
-    ingredients: Ingredient[],
-    instruction: String,
+    ingredientSections: IngredientSection[],
+    steps: string[],
     imageUrl: string,
 }

@@ -26,8 +26,10 @@
   background-color: white;
   max-width: 300px;
   opacity: 0.8;
-  height: 20px;
+  height: 40px;
   top: -40px;
   border-radius: 12px 12px 0 0;
-  padding: 10px
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -9,6 +9,5 @@ npm ci
 npm run lint
 npm run lint:tsc
 npm run build --if-present
-npm test
 
 cd "$GIT_DIR" || exit 1

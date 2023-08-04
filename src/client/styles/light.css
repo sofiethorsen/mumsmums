@@ -2,6 +2,7 @@
     /* Surfaces */
     --color-surface-background: white;
     --color-surface-pagebg: white;
+    --color-surface-card: var(--gray-100);
 
     /* Content */
     --color-content-primary: black;

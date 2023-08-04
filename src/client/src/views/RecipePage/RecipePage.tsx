@@ -1,12 +1,17 @@
 import React from 'react'
+import { useMediaQuery } from 'react-responsive'
+
 
 import ErrorPage from '../ErrorPage/ErrorPage'
 import PageFrame from '../../components/PageFrame/PageFrame'
-import Recipe from '../../components/Recipe/Recipe'
+import RecipeDesktop from '../../components/Recipe/RecipeDesktop'
 import { useParams } from 'react-router-dom'
+import RecipeMobile from '../../components/Recipe/RecipeMobile'
 
 const RecipePage = () => {
     const { recipeId } = useParams()
+    const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' })
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 
     if (recipeId === undefined) {
         return <ErrorPage />
@@ -20,7 +25,8 @@ const RecipePage = () => {
 
     return (
         <PageFrame>
-            <Recipe recipeId={parsedRecipeId} />
+            {isTabletOrMobile && <RecipeMobile recipeId={parsedRecipeId} />}
+            {isDesktopOrLaptop && <RecipeDesktop recipeId={parsedRecipeId} />}
         </PageFrame>
     )
 }

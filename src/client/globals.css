@@ -6,6 +6,7 @@
 [data-theme] {
   /* Surfaces */
   --page-bg-color: var(--color-surface-background);
+  --card-bg-color: var(--color-surface-card);
 
   /* Content */
   --content-primary-color: var(--color-content-primary);

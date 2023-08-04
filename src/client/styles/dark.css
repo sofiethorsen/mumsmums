@@ -1,7 +1,8 @@
 [data-theme="dark"] {
     /* Surfaces */
-    --color-surface-background: #1e1e1e;
+    --color-surface-background: var(--black-900);
     --color-surface-pagebg: var(--black-150);
+    --color-surface-card: var(--black-800);
 
     /* Content */
     --color-content-primary: white;

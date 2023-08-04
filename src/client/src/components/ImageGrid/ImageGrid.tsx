@@ -3,6 +3,7 @@ import styles from './ImageGrid.module.css'
 
 import { Link } from 'react-router-dom'
 import { Recipe } from '../../graphql/client/types'
+import SquareRecipeImage from '../SquareRecipeImage/SquareRecipeImage'
 
 interface ImageGridProps {
   recipes: Recipe[]
@@ -14,13 +15,7 @@ const ImageGrid: React.FC<ImageGridProps> = ({ recipes }) => {
     <div className={styles.grid}>
       {recipes.map((recipe: Recipe, index: number) => (
         <Link to={`/recipe/${recipe.id}`} key={index}>
-          <div key={index} className={styles.squareImageContainer}>
-            <img
-              src={recipe.imageUrl}
-              alt="Cropped square image"
-              className={styles.squareImage}
-            />
-          </div>
+          <SquareRecipeImage imageUrl={recipe.imageUrl} imageAltText={recipe.name} />
           <div className={styles.name}>
             {recipe.name}
           </div>

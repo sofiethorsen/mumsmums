@@ -95,3 +95,12 @@
 li {
     padding-top: 10px;
 }
+
+.servings {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border: 1px solid var(--color-content-secondary);
+    border-radius: 5px;
+    padding: 10px;
+}

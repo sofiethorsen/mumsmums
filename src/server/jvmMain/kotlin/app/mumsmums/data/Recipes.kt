@@ -7,6 +7,8 @@ import app.mumsmums.model.Recipe
 private val one = Recipe(
         id = 1,
         name = "Hasselbackspotatis med löjrom och smetana",
+        servings = 6,
+        numberOfUnits = 12,
         ingredientSections = listOf(
                 IngredientSection(
                         null,
@@ -48,6 +50,8 @@ private val one = Recipe(
 private val two = Recipe(
         id = 2,
         name = "Kanelbullar",
+        servings = null,
+        numberOfUnits = 30,
         ingredientSections = listOf(
                 IngredientSection(
                         "Vetedeg",
@@ -103,22 +107,36 @@ private val two = Recipe(
 private val three = Recipe(
         id = 3,
         name = "Råbiff",
+        servings = 2,
+        numberOfUnits = null,
         ingredientSections = listOf(
                 IngredientSection(
                         null,
                         listOf(
                                 Ingredient("oxfilé", "gram", 150f),
                                 Ingredient("majonäs", "deciliter", 0.5f),
+                                Ingredient("spritärter", "gram", 100f),
+                                Ingredient("dillolja", null, null),
+                                Ingredient("dill", null, null),
                                 Ingredient("salt", null, null),
                         )),
         ),
-        steps = listOf("Tärna oxfilén i lagom stora bitar, salta och peppra."),
+        steps = listOf(
+                "Sprita ärterna och förbered ett isbad.",
+                "Koka ärterna i vatten och lite salt i ca 2-3 minuter, och lägg sedan i isbadet",
+                "Blanda majonäsen med lite dillolja.",
+                "Tärna oxfilén i lagom stora bitar, salta och peppra",
+                "Blanda i ärterna med oxfilén och ha på lite dillolja.",
+                "Lägg upp på en tallrik och klicka på majonäs och toppa med dill."
+        ),
         imageUrl = "https://lh3.googleusercontent.com/pw/AIL4fc-c2Cpr-fRxsHm47-Rv1xho5pwfGRsa51A-yEsEPdqg0T81ZQEeQxuvDB5dqbKOe2hfDQvE1YLzK773iLm8G6RWqdjkjLetd6o32VLxOFFGfVA7J9o1NDR2n5rpHJVHpWTPNag7KBGUydWt0Z-l3FBqsA=w1710-h2280-s-no?authuser=0"
 )
 
 private val four = Recipe(
         id = 4,
         name = "Amerikanska pannkakor med blåbär",
+        servings = 2,
+        numberOfUnits = 8,
         ingredientSections = listOf(
                 IngredientSection(
                         null,

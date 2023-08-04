@@ -116,4 +116,34 @@ private val three = Recipe(
         imageUrl = "https://lh3.googleusercontent.com/pw/AIL4fc-c2Cpr-fRxsHm47-Rv1xho5pwfGRsa51A-yEsEPdqg0T81ZQEeQxuvDB5dqbKOe2hfDQvE1YLzK773iLm8G6RWqdjkjLetd6o32VLxOFFGfVA7J9o1NDR2n5rpHJVHpWTPNag7KBGUydWt0Z-l3FBqsA=w1710-h2280-s-no?authuser=0"
 )
 
-val recipes = listOf(one, two, three)
+private val four = Recipe(
+        id = 4,
+        name = "Amerikanska pannkakor med blåbär",
+        ingredientSections = listOf(
+                IngredientSection(
+                        null,
+                        listOf(
+                                Ingredient("pannkaksmix", "gram", 150f),
+                                Ingredient("ägg", "st", 1f),
+                                Ingredient("mjölk", "deciliter", 1f),
+                                Ingredient("yoghurt", "deciliter", 2f),
+                                Ingredient("smör", "gram", 30f),
+                                Ingredient("blåbär", "gram", 125f),
+                                Ingredient("florsocker", null, null),
+                                Ingredient("lönnsirap", null, null)
+                        )),
+        ),
+        steps = listOf(
+                "Smält smöret och låt svalna något.",
+                "Separera äggulan och äggvitan, och blanda sedan äggula, mjölk och yoghurt i en skål",
+                "Tillsätt det smälta smöret under vispning.",
+                "Vispa äggvitan fluffig och vänd sedan ner i den andra blandningen",
+                "Tillsätt pannkaksmixen och blanda försiktigt.",
+                "Vänd ner ca 2/3 av blåbären i blandingen",
+                "Värm en smör i en stekpanna på medelhög värme, och klicka ut smet, stek ca 2-3 minuter per sida",
+                "Toppa med blåbär, pudra med florsocker och servera med lönnsirap."
+        ),
+        imageUrl = "https://lh3.googleusercontent.com/pw/AIL4fc9l_zHnFqiZsNKlf5BeT22XPKZcYb-oPu2ZGNc20Nom5dMq1e-LsghauLEtqisr4eVBmAnF_3gnx8O4-DBTEY0UGDDyyp7xhf8AHFLsLI5BpWEadipJLJyTnda5OaswvoXXzOhs6Nt9el5cfym-BuTkqw=w1732-h2310-s-no?authuser=0"
+)
+
+val recipes = listOf(one, two, three, four)

@@ -3,7 +3,9 @@ import styles from './RecipeMobile.module.css'
 
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import { Ingredient, IngredientSection } from '../../graphql/client/types'
-import { useQuery, gql } from '@apollo/client'
+import { useQuery } from '@apollo/client'
+
+import SquareRecipeImage from '../SquareRecipeImage/SquareRecipeImage'
 
 import { GET_RECIPE_BY_ID } from './queries'
 
@@ -70,14 +72,8 @@ const RecipeMobile: React.FC<RecipeProps> = ({ recipeId }) => {
         <div className={styles.container}>
             <div className={styles.recipeName}>{recipe.name}</div>
             <div className={styles.details}>
-                <div className={styles.foo}>
-                    <div className={styles.squareImageContainer}>
-                        <img
-                            src={recipe.imageUrl}
-                            alt="Cropped square image"
-                            className={styles.squareImage}
-                        />
-                    </div>
+                <div>
+                    <SquareRecipeImage imageUrl={recipe.imageUrl} imageAltText={Image.name} />
                     <div className={styles.ingredients}>
                         <div className={styles.ingredientsCard}>
                             <div className={styles.title}>Ingredienser</div>

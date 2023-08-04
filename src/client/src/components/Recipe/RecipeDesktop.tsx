@@ -3,9 +3,10 @@ import styles from './RecipeDesktop.module.css'
 
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import { Ingredient, IngredientSection } from '../../graphql/client/types'
-import { useQuery, gql } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 
 import { GET_RECIPE_BY_ID } from './queries'
+import SquareRecipeImage from '../SquareRecipeImage/SquareRecipeImage'
 
 interface RecipeProps {
     recipeId: number
@@ -96,13 +97,7 @@ const RecipeDesktop: React.FC<RecipeProps> = ({ recipeId }) => {
                 </div>
                 <div className={styles.rightColumn}>
                     <div className={styles.imageWrapper}>
-                        <div className={styles.squareImageContainer}>
-                            <img
-                                src={recipe.imageUrl}
-                                alt="Cropped square image"
-                                className={styles.squareImage}
-                            />
-                        </div>
+                        <SquareRecipeImage imageUrl={recipe.imageUrl} imageAltText={Image.name} />
                     </div>
                 </div>
             </div>

@@ -14,6 +14,8 @@ export interface IngredientSection {
 export interface Recipe {
     id: number,
     name: string,
+    servings: number | undefined,
+    numberOfUnits: number | undefined,
     ingredientSections: IngredientSection[],
     steps: string[],
     imageUrl: string,

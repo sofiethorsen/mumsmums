@@ -5,24 +5,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import { Ingredient, IngredientSection } from '../../graphql/client/types'
 import { useQuery, gql } from '@apollo/client'
 
-const GET_RECIPE_BY_ID = gql`
-  query GetRecipeById($recipeId: Int!) {
-    recipe(id: $recipeId) {
-      id,
-      name,
-      steps,
-      ingredientSections {
-        name,
-        ingredients {
-          name,
-          volume,
-          quantity,
-        }
-      }
-      imageUrl
-    }
-  }
-`
+import { GET_RECIPE_BY_ID } from './queries'
 
 interface RecipeProps {
     recipeId: number
@@ -34,6 +17,16 @@ const renderSectionTitle = (name: string | undefined) => {
     } else {
         return null
     }
+}
+
+const renderServingsOrUnitsInfo = (servings: number | undefined, numberOfUnits: number | undefined) => {
+    const info = (numberOfUnits && `${numberOfUnits} st`) || `${servings} port.`
+
+    return (
+        <div className={styles.servings}>
+            {info}
+        </div>
+    )
 }
 
 const renderIngredient = (ingredient: Ingredient, index: number) => {
@@ -81,6 +74,7 @@ const RecipeDesktop: React.FC<RecipeProps> = ({ recipeId }) => {
                     <div>
                         <div className={styles.ingredientsCard}>
                             <div className={styles.title}>Ingredienser</div>
+                            {renderServingsOrUnitsInfo(recipe.servings, recipe.numberOfUnits)}
                             {recipe.ingredientSections.map((section: IngredientSection, index: number) => renderIngredientSection(section, index))}
                         </div>
                     </div>

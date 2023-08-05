@@ -190,7 +190,7 @@ private val five = Recipe(
                 "Kombinera alla ingredienser i en bunke och blanda väl.",
                 "Lägg mixen i en lufttät burk.",
                 "Mixen håller ca 3 månader.",
-                "Om du ej har kosher salt, så kan du byta ut mot vanligt bordssalt, men en halv tesked.",
+                "Om du ej har kosher salt, så kan du byta ut mot vanligt bordssalt, men använd halva mängden i vikt.",
         ),
         imageUrl = placeHolderImageUrl
 )

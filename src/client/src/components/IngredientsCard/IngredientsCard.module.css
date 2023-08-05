@@ -47,6 +47,10 @@
     line-height: 20px;
 }
 
+.ingredientLink {
+    text-decoration: underline;
+}
+
 .ingredient:after {
     content: "";
     display: block;

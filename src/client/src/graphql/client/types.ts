@@ -3,12 +3,13 @@
 export interface Ingredient {
     name: string,
     volume: string,
-    quantity: number
+    quantity: number,
+    recipeId: number | undefined,
 }
 
 export interface IngredientSection {
-    name: string | undefined
-    ingredients: Ingredient[]
+    name: string | undefined,
+    ingredients: Ingredient[],
 }
 
 export interface Recipe {

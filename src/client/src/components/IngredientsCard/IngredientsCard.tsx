@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import styles from './IngredientsCard.module.css'
 
@@ -43,10 +44,19 @@ const renderSectionTitle = (name: string | undefined) => {
 const renderIngredient = (ingredient: Ingredient, index: number) => {
     const quantity = ingredient.quantity && `${ingredient.quantity} `
     const volume = ingredient.volume && `${ingredient.volume} `
+    const hasRecipeId = Boolean(ingredient.recipeId)
 
-    return (
-        <div className={styles.ingredient} key={`ingredient-${index}`}>{quantity}{volume}{ingredient.name}</div>
-    )
+    if (hasRecipeId) {
+        return (
+            <Link className={styles.ingredientLink} to={`/recipe/${ingredient.recipeId}`} key={index}>
+                <div className={styles.ingredient} key={`ingredient-${index}`}>{quantity}{volume}{ingredient.name}</div>
+            </Link >
+        )
+    } else {
+        return (
+            <div className={styles.ingredient} key={`ingredient-${index}`}>{quantity}{volume}{ingredient.name}</div>
+        )
+    }
 }
 
 const IngredientsCard: React.FC<IngredientsCardProps> = ({ recipe }) => {

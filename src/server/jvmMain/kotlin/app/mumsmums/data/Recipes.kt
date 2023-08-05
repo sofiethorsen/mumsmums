@@ -4,6 +4,8 @@ import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
 
+private const val placeHolderImageUrl = "https://bozzutorefuse.com/wp-content/uploads/2020/10/placeholder-300x300-1.jpg"
+
 private val one = Recipe(
         id = 1,
         name = "Hasselbackspotatis med löjrom och smetana",
@@ -15,8 +17,8 @@ private val one = Recipe(
                         listOf(
                                 Ingredient("potatis, små", "st", 12f),
                                 Ingredient("löjrom", "gram", 60f),
-                                Ingredient("gräslök, finhackad", null, null),
-                                Ingredient("frityrolja", null, null)
+                                Ingredient("gräslök, finhackad"),
+                                Ingredient("frityrolja")
                         )
                 ),
                 IngredientSection(
@@ -25,7 +27,7 @@ private val one = Recipe(
                                 Ingredient("vatten", "liter", 1f),
                                 Ingredient("äppelcidervinäger", "deciliter", 2f),
                                 Ingredient("salt", "deciliter", 0.75f)
-                        )
+                        ),
                 )
         ),
         steps = listOf("Skiva potatisen fint nästan hela vägen igenom, använd antingen en träsked eller en handduk som " +
@@ -65,8 +67,8 @@ private val two = Recipe(
                                 Ingredient("ägg", "st", 1f),
                                 Ingredient("smör", "gram", 250f),
                                 Ingredient("ägg till pensling", "st", 1f),
-                                Ingredient("pärlsocker", null, null),
-                )),
+                                Ingredient("pärlsocker"))
+                ),
                 IngredientSection(
                         "Kanel och mandelfyllning",
                         listOf(
@@ -79,7 +81,7 @@ private val two = Recipe(
                         "Sockerlag",
                         listOf(
                                 Ingredient("vatten", "gram", 150f),
-                                Ingredient("strösocker", "gram", 95f))
+                                Ingredient("strösocker", "gram", 95f)),
                 ),
         ),
         steps = listOf(
@@ -116,10 +118,11 @@ private val three = Recipe(
                                 Ingredient("oxfilé", "gram", 150f),
                                 Ingredient("majonäs", "deciliter", 0.5f),
                                 Ingredient("spritärter", "gram", 100f),
-                                Ingredient("dillolja", null, null),
-                                Ingredient("dill", null, null),
-                                Ingredient("salt", null, null),
-                        )),
+                                Ingredient("dillolja"),
+                                Ingredient("dill"),
+                                Ingredient("salt"),
+                        ),
+                ),
         ),
         steps = listOf(
                 "Sprita ärterna och förbered ett isbad.",
@@ -141,15 +144,16 @@ private val four = Recipe(
                 IngredientSection(
                         null,
                         listOf(
-                                Ingredient("pannkaksmix", "gram", 150f),
+                                Ingredient("pannkaksmix", "gram", 150f, 5),
                                 Ingredient("ägg", "st", 1f),
                                 Ingredient("mjölk", "deciliter", 1f),
                                 Ingredient("yoghurt", "deciliter", 2f),
                                 Ingredient("smör", "gram", 30f),
                                 Ingredient("blåbär", "gram", 125f),
-                                Ingredient("florsocker", null, null),
-                                Ingredient("lönnsirap", null, null)
-                        )),
+                                Ingredient("florsocker",),
+                                Ingredient("lönnsirap")
+                        ),
+                ),
         ),
         steps = listOf(
                 "Smält smöret och låt svalna något.",
@@ -164,4 +168,31 @@ private val four = Recipe(
         imageUrl = "https://lh3.googleusercontent.com/pw/AIL4fc9l_zHnFqiZsNKlf5BeT22XPKZcYb-oPu2ZGNc20Nom5dMq1e-LsghauLEtqisr4eVBmAnF_3gnx8O4-DBTEY0UGDDyyp7xhf8AHFLsLI5BpWEadipJLJyTnda5OaswvoXXzOhs6Nt9el5cfym-BuTkqw=w1732-h2310-s-no?authuser=0"
 )
 
-val recipes = listOf(one, two, three, four)
+private val five = Recipe(
+        id = 5,
+        name = "Pannkaksmix",
+        servings = 4,
+        numberOfUnits = null,
+        ingredientSections = listOf(
+                IngredientSection(
+                        null,
+                        listOf(
+                                Ingredient("mjöl", "gram", 280f),
+                                Ingredient("bakpulver", "tesked", 1f),
+                                Ingredient("bikarbonat", "tesked", 0.5f),
+                                Ingredient("kosher salt", "tesked", 1f),
+                                Ingredient("socker", "matsked", 1f),
+                        ),
+                ),
+        ),
+        steps = listOf(
+                "Räcker till ca 16 pannkakor.",
+                "Kombinera alla ingredienser i en bunke och blanda väl.",
+                "Lägg mixen i en lufttät burk.",
+                "Mixen håller ca 3 månader.",
+                "Om du ej har kosher salt, så kan du byta ut mot vanligt bordssalt, men en halv tesked.",
+        ),
+        imageUrl = placeHolderImageUrl
+)
+
+val recipes = listOf(one, two, three, four, five)

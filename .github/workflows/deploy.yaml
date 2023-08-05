@@ -51,7 +51,6 @@ jobs:
             src/client/dist/index.html
             src/client/dist/index_bundle.js
           target: /home/ubuntu/
-          working-directory: ${{ github.workspace }}
 
       - name: SSH into EC2 and restart application
         uses: appleboy/ssh-action@master

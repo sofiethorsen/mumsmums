@@ -46,10 +46,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: |
-            bazel-bin/src/server/jvmMain/kotlin/app/mumsmums/mumsmums_deploy.jar
-            src/client/dist/index.html
-            src/client/dist/index_bundle.js
+          source: "bazel-bin/src/server/jvmMain/kotlin/app/mumsmums/mumsmums_deploy.jar,src/client/dist/index.html,src/client/dist/index_bundle.js"
           target: /home/ubuntu/
 
       - name: SSH into EC2 and restart application

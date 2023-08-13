@@ -4,6 +4,7 @@ kt_jvm_library(
     name = "identifiers",
     srcs = glob(["*.kt"]),
     visibility = [
+        "//src/scripts/jvmMain/kotlin/app/mumsmums:__subpackages__",
         "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
         "//src/server/jvmTest/kotlin/app/mumsmums:__subpackages__",
     ],

@@ -1,0 +1,43 @@
+load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
+
+kt_jvm_library(
+    name = "lib",
+    srcs = glob(["*.kt"]),
+    plugins = ["//bazel:serialization"],
+    deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
+    ],
+)
+
+java_binary(
+    name = "initalize",
+    main_class = "app.mumsmums.InitializeDbKt",
+    runtime_deps = [
+        ":lib",
+    ],
+)
+
+java_binary(
+    name = "update",
+    main_class = "app.mumsmums.UpdateRecipeItemKt",
+    runtime_deps = [
+        ":lib",
+    ],
+)
+
+java_binary(
+    name = "put",
+    main_class = "app.mumsmums.PutRecipeItemKt",
+    runtime_deps = [
+        ":lib",
+    ],
+)
+
+java_binary(
+    name = "get",
+    main_class = "app.mumsmums.GetRecipeItemKt",
+    runtime_deps = [
+        ":lib",
+    ],
+)

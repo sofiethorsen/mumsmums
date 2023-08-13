@@ -13,7 +13,7 @@ export interface IngredientSection {
 }
 
 export interface Recipe {
-    id: number,
+    recipeId: number,
     name: string,
     servings: number | undefined,
     numberOfUnits: number | undefined,

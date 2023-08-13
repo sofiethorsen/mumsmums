@@ -50,6 +50,8 @@ rules_jvm_external_deps()
 load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
 load("@rules_jvm_external//:defs.bzl", "maven_install")
 
+aws_sdk_version = "2.20.123"
+
 aws_java_sdk_version = "1.12.518"
 
 jupiter_version = "5.10.0"
@@ -70,6 +72,7 @@ maven_install(
     artifacts = [
         "ch.qos.logback:logback-classic:%s" % logback_version,
         "com.amazonaws:aws-java-sdk-core:%s" % aws_java_sdk_version,
+        "com.amazonaws:aws-java-sdk-dynamodb:%s" % aws_java_sdk_version,
         "com.apurebase:kgraphql-ktor:%s" % kgraphql_version,
         "com.apurebase:kgraphql:%s" % kgraphql_version,
         "io.ktor:ktor-server-auth-jvm:%s" % ktor_version,
@@ -88,6 +91,8 @@ maven_install(
         "org.junit.platform:junit-platform-engine:%s" % jupiter_platform_version,
         "org.junit.platform:junit-platform-launcher:%s" % jupiter_platform_version,
         "org.junit.platform:junit-platform-suite-api:%s" % jupiter_platform_version,
+        "software.amazon.awssdk:dynamodb:%s" % aws_sdk_version,
+        "software.amazon.awssdk:sts:%s" % aws_sdk_version,
     ],
     repositories = [
         "https://repo1.maven.org/maven2",

@@ -7,7 +7,7 @@ import ImageGrid from '../ImageGrid/ImageGrid'
 const GET_RECIPES = gql`
   query {
     recipes {
-      id,
+      recipeId,
       name,
       imageUrl
     }

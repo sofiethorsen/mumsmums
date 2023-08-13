@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client'
 
 export const GET_RECIPE_BY_ID = gql`
-  query GetRecipeById($recipeId: Int!) {
-    recipe(id: $recipeId) {
-      id,
+  query GetRecipeById($recipeId: Long!) {
+    recipe(recipeId: $recipeId) {
+      recipeId,
       name,
       steps,
       servings,

@@ -1,7 +1,7 @@
 load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 
 kt_jvm_library(
-    name = "model",
+    name = "db",
     srcs = glob(["*.kt"]),
     plugins = ["//bazel:serialization"],
     visibility = [
@@ -9,6 +9,11 @@ kt_jvm_library(
         "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
     ],
     deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/identifiers",
+        "//src/server/jvmMain/kotlin/app/mumsmums/model",
+        "@maven//:com_amazonaws_aws_java_sdk_dynamodb",
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
+        "@maven//:software_amazon_awssdk_dynamodb",
+        "@maven//:software_amazon_awssdk_sts",
     ],
 )

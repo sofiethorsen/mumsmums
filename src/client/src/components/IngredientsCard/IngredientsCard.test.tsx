@@ -18,7 +18,7 @@ describe('IngredientsCard', () => {
             "step three",
         ]
         const recipe = {
-            id: 1,
+            recipeId: 1,
             name: "Foo",
             numberOfUnits: 12,
             servings: 6,

@@ -7,5 +7,5 @@ data class Ingredient(
         val name: String,
         val volume: String? = null,
         val quantity: Float? = null,
-        val recipeId: Int? = null
+        val recipeId: Long? = null
 )

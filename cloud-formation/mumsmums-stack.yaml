@@ -1,0 +1,124 @@
+Description: 'Template setting up AWS resources for mumsmums'
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  EC2SecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: EC2 Security group to allow for internet access and ssh for development
+      GroupName: 'mumsmums-sg'
+      VpcId: vpc-046dea61a8a2ed513
+      SecurityGroupIngress:
+        # General rules
+        - Description: Allow HTTP from any IPv4
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - Description: Allow HTTP from any IPv6
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIpv6: ::/0
+        - Description: Allow HTTPS from any IPv4
+          IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - Description: Allow HTTP from any IPv6
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIpv6: ::/0
+
+        # Development rules
+        - Description: Allow SSH from Dalagatan IP
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 188.150.18.121/32
+
+  # ECR repo for docker images
+  MumsMumsECRRepository:
+    Type: 'AWS::ECR::Repository'
+    Properties:
+      RepositoryName: 'mumsmums'
+      EncryptionConfiguration:
+        EncryptionType: AES256
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      ImageTagMutability: IMMUTABLE
+      # Policy to only keep the latest 3 images
+      LifecyclePolicy:
+        LifecyclePolicyText: >
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Retain only the latest 3 images",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 3
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+
+  MumsMumsEC2Role:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ECRAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: PullImages
+                Effect: Allow
+                Action:
+                  - 'ecr:BatchGetImage'
+                  - 'ecr:GetAuthorizationToken'
+                  - 'ecr:GetDownloadUrlForLayer'
+                Resource:
+                  - '*'
+        - PolicyName: DynamoDbAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: ReadActions
+                Effect: Allow
+                Action:
+                  - 'dynamodb:GetItem'
+                  - 'dynamodb:Scan'
+                Resource:
+                  - 'arn:aws:dynamodb:eu-north-1:487538579658:table/RecipeTable'
+                  - 'arn:aws:dynamodb:eu-north-1:487538579658:table/IngredientTable'
+
+  MumsMumsIAMInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Roles:
+        - !Ref MumsMumsEC2Role
+
+  MumsMumsEC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t3.micro
+      ImageId: ami-0194def630642c334 # Docker on Ubuntu 22.04 LTS
+      KeyName: mumsmums-server
+      SecurityGroupIds:
+        - !GetAtt EC2SecurityGroup.GroupId
+      IamInstanceProfile: !Ref MumsMumsIAMInstanceProfile
+      Tags:
+        - Key: 'Name'
+          Value: 'mumsmums-ec2'

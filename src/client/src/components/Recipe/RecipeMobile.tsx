@@ -33,7 +33,11 @@ const RecipeMobile: React.FC<RecipeProps> = ({ recipeId }) => {
             <div className={styles.recipeName}>{recipe.name}</div>
             <div className={styles.details}>
                 <div>
-                    <SquareRecipeImage imageUrl={recipe.imageUrl} imageAltText={Image.name} />
+                    <SquareRecipeImage
+                        imageUrl={recipe.imageUrl}
+                        imageAltText={recipe.name} 
+                        recipeId={recipe.recipeId}
+                    />
                     <div className={styles.ingredients}>
                         <IngredientsCard recipe={recipe} />
                     </div>

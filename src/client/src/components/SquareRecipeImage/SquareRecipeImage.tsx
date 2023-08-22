@@ -1,20 +1,38 @@
 import React from 'react'
 
 import styles from './SquareRecipeImage.module.css'
+import generateHexColor from './colorGenerator'
 
 interface SquareImageProps {
-    imageUrl: string
+    imageUrl: string | undefined
     imageAltText: string
+    recipeId: number
 }
 
-const SquareRecipeImage: React.FC<SquareImageProps> = ({ imageUrl, imageAltText }) => {
-    return (
-        <div className={styles.imageContainer}>
+const renderImageOrPlaceholder = (imageUrl: string | undefined, imageAltText: string, recipeId: number) => {
+    if (imageUrl && imageUrl.length > 0) {
+        return (
             <img
                 src={imageUrl}
                 alt={imageAltText}
                 className={styles.squareImage}
             />
+        )
+    } else {
+        return (
+            <div
+                className={styles.placeHolder}
+                style={{ backgroundColor: generateHexColor(recipeId) }}
+            />
+        );
+    }
+};
+
+
+const SquareRecipeImage: React.FC<SquareImageProps> = ({ imageUrl, imageAltText, recipeId }) => {
+    return (
+        <div className={styles.imageContainer}>
+            {renderImageOrPlaceholder(imageUrl, imageAltText, recipeId)}
         </div>
     )
 }

@@ -32,7 +32,11 @@ class Mapper {
 
         val stringSteps = formatter.encodeToString(recipe.steps)
         attributeMap["steps"] = toAttributeValueFromString(stringSteps)
-        attributeMap["imageUrl"] = toAttributeValueFromString(recipe.imageUrl)
+
+        if (recipe.imageUrl != null) {
+            attributeMap["imageUrl"] = toAttributeValueFromString(recipe.imageUrl as String)
+        }
+
         attributeMap["version"] = toAttributeValueFromLong(recipe.version)
         attributeMap["createdAtInMillis"] = toAttributeValueFromLong(recipe.createdAtInMillis)
         attributeMap["lastUpdatedAtInMillis"] = toAttributeValueFromLong(recipe.lastUpdatedAtInMillis)
@@ -47,7 +51,7 @@ class Mapper {
         val numberOfUnits = if (item.hasAttribute("numberOfUnits")) item.getNumber("numberOfUnits").toInt() else null
         val ingredientSections: List<IngredientSection> = formatter.decodeFromString(item.getString("ingredientSections"))
         val steps: List<String> = formatter.decodeFromString(item.getString("steps"))
-        val imageUrl = item.getString("imageUrl")
+        val imageUrl = if (item.hasAttribute("imageUrl")) item.getString("imageUrl") else null
         val version = item.getLong("version")
         val createdAtInMillis = item.getLong("createdAtInMillis")
         val lastUpdatedAtInMillis = item.getLong("lastUpdatedAtInMillis")

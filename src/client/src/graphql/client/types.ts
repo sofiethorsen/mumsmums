@@ -19,5 +19,5 @@ export interface Recipe {
     numberOfUnits: number | undefined,
     ingredientSections: IngredientSection[],
     steps: string[],
-    imageUrl: string,
+    imageUrl: string | undefined,
 }

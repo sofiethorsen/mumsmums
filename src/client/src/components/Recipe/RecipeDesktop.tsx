@@ -49,7 +49,11 @@ const RecipeDesktop: React.FC<RecipeProps> = ({ recipeId }) => {
                 </div>
                 <div className={styles.rightColumn}>
                     <div className={styles.imageWrapper}>
-                        <SquareRecipeImage imageUrl={recipe.imageUrl} imageAltText={Image.name} />
+                        <SquareRecipeImage
+                            imageUrl={recipe.imageUrl}
+                            imageAltText={recipe.name}
+                            recipeId={recipe.recipeId}
+                        />
                     </div>
                 </div>
             </div>

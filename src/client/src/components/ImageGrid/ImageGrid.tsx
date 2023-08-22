@@ -15,7 +15,11 @@ const ImageGrid: React.FC<ImageGridProps> = ({ recipes }) => {
     <div className={styles.grid}>
       {recipes.map((recipe: Recipe, index: number) => (
         <Link to={`/recipe/${recipe.recipeId}`} key={index}>
-          <SquareRecipeImage imageUrl={recipe.imageUrl} imageAltText={recipe.name} />
+          <SquareRecipeImage
+            imageUrl={recipe.imageUrl}
+            imageAltText={recipe.name}
+            recipeId={recipe.recipeId}
+          />
           <div className={styles.name}>
             {recipe.name}
           </div>

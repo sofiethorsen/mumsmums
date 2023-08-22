@@ -8,9 +8,9 @@ describe('SquareRecipeImage', () => {
     it('should render an image with the expected properties', async () => {
         const imageUrl = 'foo'
         const imageAltText = 'bar'
+        const recipeId = 1
 
-
-        const { getByAltText } = render(<SquareRecipeImage imageUrl={imageUrl} imageAltText={imageAltText} />)
+        const { getByAltText } = render(<SquareRecipeImage imageUrl={imageUrl} imageAltText={imageAltText} recipeId={recipeId} />)
 
         const imageElement = getByAltText(imageAltText)
         expect(imageElement).toBeInTheDocument()

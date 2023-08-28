@@ -122,3 +122,54 @@ Resources:
       Tags:
         - Key: 'Name'
           Value: 'mumsmums-ec2'
+
+  MumsMumsImageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: mumsmums
+
+  CloudFrontOriginIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !GetAtt MumsMumsImageBucket.DomainName
+
+  MumsMumsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: MumsMumsImageBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              CanonicalUser:
+                Fn::GetAtt: [ CloudFrontOriginIdentity , S3CanonicalUserId ]
+            Action: "s3:GetObject"
+            Resource: !Sub "${MumsMumsImageBucket.Arn}/*"
+
+  MumsMumsCFDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !Sub "${MumsMumsImageBucket}.s3.amazonaws.com"
+            Id: s3-origin
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginIdentity}"
+        Enabled: True
+        DefaultCacheBehavior:
+          ForwardedValues:
+            QueryString: False
+          TargetOriginId: s3-origin
+          ViewerProtocolPolicy: allow-all
+        CacheBehaviors:
+          - PathPattern: assets/*
+            TargetOriginId: s3-origin
+            ViewerProtocolPolicy: allow-all
+            AllowedMethods:
+              - GET
+              - HEAD
+            ForwardedValues:
+              QueryString: false

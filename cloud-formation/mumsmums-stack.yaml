@@ -173,3 +173,6 @@ Resources:
               - HEAD
             ForwardedValues:
               QueryString: false
+        DefaultOriginConfig:
+          OriginCustomHeaders:
+            - Origin: 'https://mumsmums.app'

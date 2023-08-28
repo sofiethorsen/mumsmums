@@ -50,7 +50,6 @@ const SquareRecipeImage: React.FC<SquareImageProps> = ({ imageUrl, imageAltText,
 
         // Start observing each lazy image
         lazyImages.forEach(image => {
-            console.log(image)
             imageObserver.observe(image)
         })
 

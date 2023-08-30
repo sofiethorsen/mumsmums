@@ -338,5 +338,158 @@
       "Mixen håller ca 3 månader.",
       "Om du ej har kosher salt, så kan du byta ut mot vanligt bordssalt, men använd halva mängden i vikt."
     ]
+  },
+  {
+    "imageUrl": "https://lh3.googleusercontent.com/pw/AIL4fc92mXhiGP7MLpaP6VQRZfWhWnLojm_g9wx2thttWx_EcTUIaNHhG3NQprQioT5FXn24NIdPSYG5C3-9LMZdob9pCFiQmyLc95PXkdatEYBOk3drMvCjqy6K1Vk630PBj1nVHPAoRTWRYwSCur1cV-jOvA=w2240-h2240-s-no?authuser=0",
+    "ingredientSections":
+    [
+      {
+        "ingredients":
+        [
+          {
+            "name": "svart kardemumma",
+            "quantity": 1,
+            "volume": "st"
+          },
+          {
+            "name": "nejlika, hel",
+            "quantity": 4,
+            "volume": "st"
+          },
+          {
+            "name": "svartpepparkorn",
+            "quantity": 5,
+            "volume": "gram"
+          },
+          {
+            "name": "kanelstång",
+            "quantity": 2,
+            "volume": "st"
+          },
+          {
+            "name": "korianderfrö",
+            "quantity": 10,
+            "volume": "gram"
+          },
+          {
+            "name": "spiskumminfrö",
+            "quantity": 5,
+            "volume": "gram"
+          },
+          {
+            "name": "fänkålsfrö",
+            "quantity": 5,
+            "volume": "gram"
+          },
+          {
+            "name": "stjärnanis",
+            "quantity": 2,
+            "volume": "gram"
+          },
+          {
+            "name": "lagerblad",
+            "quantity": 1,
+            "volume": "st"
+          },
+          {
+            "name": "muskotblomma",
+            "quantity": 2,
+            "volume": "gram"
+          },
+          {
+            "name": "vallmofrö",
+            "quantity": 10,
+            "volume": "gram"
+          },
+          {
+            "name": "rosblad",
+            "quantity": 2,
+            "volume": "gram"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Garam masala",
+    "numberOfUnits": 1,
+    "recipeId": 0,
+    "servings": null,
+    "steps":
+    [
+      "Gör ca 50 gram.",
+      "Värm ugnen till 50C. Sprid ut alla kryddor förutom vallmofrön och rosblad på en plåt.",
+      "Ställ in i ugnen i ca 2.5h.",
+      "Ta ut plåten och lägg till vallmofrön och rosblad och placera i ugnen igen - men stäng av ugnen.",
+      "Låt plåten stå i ugnen i ca 30 minuter.",
+      "Ta ut kryddorna och häll i en kryddkvarn eller mortel och mixa till ett fint pulver."
+    ]
+  },
+  {
+    "ingredientSections":
+    [
+      {
+        "ingredients": [
+          {
+            "name": "belugalinser",
+            "quantity": 300,
+            "volume": "g"
+          },
+          {
+            "name": "vitlökspasta",
+            "quantity": 12,
+            "volume": "gram"
+          },
+          {
+            "name": "ingefärspasta",
+            "quantity": 10,
+            "volume": "gram"
+          },
+          {
+            "name": "tomatpuré",
+            "quantity": 130,
+            "volume": "gram"
+          },
+          {
+            "name": "flingsalt",
+            "quantity": 8,
+            "volume": "gram"
+          },
+          {
+            "name": "deggi mirch",
+            "quantity": 1.33,
+            "volume": "tsk"
+          },
+          {
+            "name": "garam masala",
+            "quantity": 0.67,
+            "volume": "tsk"
+          },
+          {
+            "name": "smör",
+            "quantity": 90,
+            "volume": "gram"
+          },
+          {
+            "name": "grädde",
+            "quantity": 90,
+            "volume": "ml"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Svart daal",
+    "numberOfUnits": null,
+    "recipeId": 0,
+    "servings": 8,
+    "steps":
+    [
+      "Lägg linserna i en stor skål, täck med vatten och blanda ca 10 sekunder. Häll sedan ut vattnet och upprepa, 3-4 gånger, tills vattnet är klart.",
+      "Häll linserna i en stor kastrull och fyll med 4 liter vatten. Låt koka upp, och koka sedan i 2-3 timmar. Skumma av och ta bort tomma skal som stiger till ytan allteftersom, och addera vatten när det behövs för att täcka linserna ordentligt. Linserna behöver bli helt mjuka, skalen ska lossna. Om du pressar en lins så ska konsistensen vara krämig snarare än smulig. När linserna är tillräckligt tillagade, slå av värmen och låt kastrullen sitta i ca 15 minuter.",
+      "I en skål, mixa vitlöks och ingefärspasta, tomatpuré, salt, deggi mirch och garam masala till en pasta.",
+      "Häll försiktigt av kokvattnet från linserna och häll på nytt vatten så att linserna täcks med ca 3-4 cm. Koka upp igen på medelhög värme och lägg till kryddpastan och smöret. Koka kraftigt ca 30 minuter och rör ofta så att mixen ej fastnar i botten.",
+      "Sänk värmen och låt puttra i ca 1-1.5 timme och rör regelbundet. Addera vatten om vätskenivån kommer nära linserna. Konsistensen ska bli tjock och krämig, där krämigheten ska komma från att linserna löses upp med vätskan, inte att vätskan kokas bort.",
+      "Lägg till grädde och fortsätt koka i ca 15 minuter."
+    ]
   }
 ]

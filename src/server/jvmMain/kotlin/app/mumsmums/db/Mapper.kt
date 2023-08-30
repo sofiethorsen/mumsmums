@@ -56,7 +56,18 @@ class Mapper {
         val createdAtInMillis = item.getLong("createdAtInMillis")
         val lastUpdatedAtInMillis = item.getLong("lastUpdatedAtInMillis")
 
-        return Recipe(id, name, servings, numberOfUnits, ingredientSections, steps, imageUrl, version, createdAtInMillis, lastUpdatedAtInMillis)
+        return Recipe(
+                recipeId = id,
+                name = name,
+                ingredientSections = ingredientSections,
+                steps = steps,
+                servings = servings,
+                numberOfUnits = numberOfUnits,
+                imageUrl = imageUrl,
+                version = version,
+                createdAtInMillis = createdAtInMillis,
+                lastUpdatedAtInMillis = lastUpdatedAtInMillis
+        )
     }
 
     private fun toAttributeValueFromLong(value: Long): AttributeValue {

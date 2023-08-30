@@ -1,0 +1,97 @@
+{
+  "ingredientSections":
+  [
+    {
+      "ingredients": [
+        {
+          "name": "vitkål, finhackad",
+          "quantity": 450,
+          "volume": "gram"
+        },
+        {
+          "name": "kosher salt",
+          "quantity": 1,
+          "volume": "msk"
+        },
+        {
+          "name": "fläskfärs",
+          "quantity": 450,
+          "volume": "gram"
+        },
+        {
+          "name": "vitpeppar",
+          "quantity": 1,
+          "volume": "tsk"
+        },
+        {
+          "name": "vitlök, finhackad",
+          "quantity": 1,
+          "volume": "msk"
+        },
+        {
+          "name": "ingefära, riven",
+          "quantity": 1,
+          "volume": "tsk"
+        },
+        {
+          "name": "salladslök, finhackad",
+          "quantity": 60,
+          "volume": "gram"
+        },
+        {
+          "name": "socker",
+          "quantity": 2,
+          "volume": "tsk"
+        },
+        {
+          "name": "gyozablad",
+          "quantity": 1,
+          "volume": "paket"
+        },
+        {
+          "name": "olja"
+        }
+      ],
+      "name": "Dumplings"
+    },
+    {
+      "ingredients": [
+        {
+          "name": "risvinäger",
+          "quantity": 1.2,
+          "volume": "dl"
+        },
+        {
+          "name": "soja",
+          "quantity": 0.6,
+          "volume": "dl"
+        },
+        {
+          "name": "chiliolja",
+          "quantity": 2,
+          "volume": "msk"
+        }
+      ],
+      "name": "Dippsås"
+    }
+  ],
+  "name": "Gyoza med fläsk och vitkål",
+  "numberOfUnits": null,
+  "recipeId": 0,
+  "servings": 6,
+  "steps":
+  [
+    "Kombinera kål och 2 tsk salt i en stor skål och blanda.",
+    "För över till en sil och låt sila av i rumstemperatur i cirka 15 minuter",
+    "Lägg kålen i en ren kökshandduk och samla upp kanterna, vrid handduken och pressa kålen för att få ut så mycket vätska som möjligt.",
+    "Kombinera fläskfärs, kålen, resten av saltet, vitpeppar, vitlök, ingefära, salladslök och socker i en stor skål och knåda med rena händer tills mixen käns jämn och klibbig.",
+    "Provmicra en tesked av blandning och smaka av, lägg till mer salt, peppar och/eller socker efter smak.",
+    "Sätt upp en jobbstation med en liten skål med vatten, en ren kökshandduk och stacken med gyozablad.",
+    "För att forma dumplings, lägg ett blad i handen. Ta en sked och lägg ca två teskedar till en matsked med fyllning i mitten av bladet. Fukta kanten av bladet försiktigt med ett finger som du doppar i vattenskålen.",
+    "Från ena sidan, försegla sedan fyllningen i bladet genom att vika bladet till en halvmåne, och vecka kanterna mot varandra. Lägg dem sedan på en plåt med bakplåtspapper.",
+    "Nu kan du frysa in dumplingsen genom att ställa plåten i frysen (låt frysa i minst 30 minuter och för sedan över till påsar), eller fortsätta med tillagning.",
+    "För att tillaga, värm en matsked olja i en stekpanna på medelhög värme tills oljan skimrar. Lägg i så många dumplings som får plats i ett lager och tillaga tills botten på dumplingsarna är gyllenbrun, ca 1.5 minut.",
+    "Öka värmen något och lägg till en deciliter vatten och täck stekpannan med ett lock. Låt dumplingsen ångas i ca 3 minuter (eller 5 om frysta) och ta sedan bort locket. Fortsätt tillaga och virvla runt stekpannan så att dumplingsarna ej fastnar - tills dess att vattnet har ångat bort, ca 2 minuter till. Dumplingsen ska nu vara krispiga. Lägg upp på ett fat med den krispiga sidan uppåt.",
+    "Kombinera vinäger, olja och chiliolja och servera med dumplingsen."
+  ]
+}

@@ -29,6 +29,13 @@ object JsonParser {
         }
     }
 
+    fun parseRecipe(pathToFile: Path): Recipe {
+        FileReader(pathToFile.toString(), Charset.forName("UTF-8")).use {
+            val recipe: Recipe = formatter.decodeFromString(it.buffered().readText())
+            return recipe.copy(recipeId = idGenerator.generateId())
+        }
+    }
+
     private fun postprocess(recipes: List<Recipe>): List<Recipe> {
         val recipesByName = recipes.associateBy { it.name.lowercase() }
         val recipeNames = mutableSetOf<String>()

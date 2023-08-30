@@ -173,6 +173,24 @@ Resources:
               - HEAD
             ForwardedValues:
               QueryString: false
-        DefaultOriginConfig:
-          OriginCustomHeaders:
-            - Origin: 'https://mumsmums.app'
+            CachePolicyId: !Ref AssetCachePolicy
+
+  AssetCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+     CachePolicyConfig:
+      Name: ImageCachePolicy
+      Comment: Cache policy for assets/* path
+      DefaultTTL: 31536000
+      MaxTTL: 31536000
+      MinTTL: 31536000
+      ParametersInCacheKeyAndForwardedToOrigin:
+        CookiesConfig:
+          CookieBehavior: none
+        EnableAcceptEncodingGzip: true
+        EnableAcceptEncodingBrotli: true
+        HeadersConfig:
+           HeaderBehavior: whitelist
+           Headers: ["Accept", "Origin", "Access-Control-Request-Headers", "Access-Control-Request-Method", "Cache-Control"]
+        QueryStringsConfig:
+          QueryStringBehavior: all

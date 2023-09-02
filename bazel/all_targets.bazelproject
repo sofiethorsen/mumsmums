@@ -3,7 +3,7 @@ directories:
 
 derive_targets_from_directories: false
 
-java_language_level: 11
+java_language_level: 17
 
 targets:
   //...

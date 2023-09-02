@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './SquareRecipeImage.module.css'
 import generateHexColor from './colorGenerator'
 
@@ -7,6 +7,9 @@ interface SquareImageProps {
     imageAltText: string
     recipeId: number
 }
+
+// transparent 300x300 png
+const placeholder = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAQAAADTdEb+AAACHElEQVR42u3SMQ0AAAzDsJU/6aGo+tgQouSgIBJgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC4yFsTAWGAtjYSwwFsbCWGAsjIWxwFgYC2OBsTAWxgJjYSyMBcbCWBgLjIWxMBYYC2NhLDAWxsJYYCyMhbHAWBgLY4GxMBbGAmNhLIwFxsJYGAuMhbEwFhgLY2EsMBbGwlhgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC2OBsTAWxgJjYSyMBcbCWBgLjIWxMBYYC2NhLDAWxsJYYCyMhbHAWBgLY4GxMBbGAmNhLIwFxsJYGAuMhbEwFhgLY2EsMBbGwlhgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC4yFsTAWGAtjYSwwFsbCWGAsjIWxwFgYC2OBsTAWxgJjYSyMBcbCWBgLjIWxMBbGAmNhLIwFxsJYGAuMhbEwFhgLY2EsMBbGwlhgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC4yFsTAWGAtjYSwwFsbCWGAsjIWxwFgYC2OBsTAWxgJjYSyMBcbCWBgLjIWxMBYYC2NhLDAWxsJYYCyMhbHAWBgLY4GxMBbGAmNhLIwFxsJYGAuMhbEwFhgLY2EsjCUBxsJYGAuMhbEwFhgLY2EsMBbGwlhgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC4yFsTAWGAtjYSwwFsbCWGAsjIWxwFjsPeVaAS0/Qs6MAAAAAElFTkSuQmCC"
 
 const renderImage = (imageUrl: string, imageAltText: string) => {
     return <img
@@ -24,9 +27,27 @@ const renderPlaceHolder = (recipeId: number) => {
 }
 
 const SquareRecipeImage: React.FC<SquareImageProps> = ({ imageUrl, imageAltText, recipeId }) => {
+    const [inView, setInView] = useState(false)
+    const placeholderRef = useRef<HTMLImageElement | null>(null)
+
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries: IntersectionObserverEntry[], obs: IntersectionObserver) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) {
+                    setInView(true)
+                    obs.disconnect()
+                }
+            }
+        }, {})
+        placeholderRef.current && observer.observe(placeholderRef.current)
+        return () => {
+            observer.disconnect()
+        }
+    }, [])
+
     return (
         <div className={styles.imageContainer}>
-            {imageUrl && imageUrl.length > 0 && renderImage(imageUrl, imageAltText)}
+            {imageUrl && imageUrl.length > 0 && inView ? renderImage(imageUrl, imageAltText) : <img ref={placeholderRef} src={placeholder} alt={imageAltText} className={styles.squareImage} />}
             {!imageUrl && renderPlaceHolder(recipeId)}
         </div>
     )

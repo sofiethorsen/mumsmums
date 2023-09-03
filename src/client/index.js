@@ -7,6 +7,7 @@ import ErrorPage from './src/views/ErrorPage/ErrorPage.tsx'
 import HomePage from './src/views/HomePage/HomePage.tsx'
 import RecipePage from './src/views/RecipePage/RecipePage.tsx'
 import ShoppingListPage from './src/views/ShoppingListPage/ShoppingListPage.tsx'
+import ThemeManager from './src/components/ThemeManager/ThemeManager.tsx'
 import './globals.css'
 
 const router = createBrowserRouter([
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <ThemeManager />
     <HelmetProvider>
       <RouterProvider router={router} />
     </HelmetProvider>

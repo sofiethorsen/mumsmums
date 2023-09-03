@@ -14,25 +14,6 @@
         href="https://dmdqeeh0foqsn.cloudfront.net/assets/favicon/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180"
         href="https://dmdqeeh0foqsn.cloudfront.net/assets/favicon/apple-touch-icon.png">
-
-    <script>
-        // Function to set the data-theme attribute based on user preference
-        function setTheme() {
-            document.documentElement.setAttribute(
-                "data-theme",
-                document.documentElement.getAttribute("data-theme-override") ||
-                (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-            )
-        }
-
-        // Initial call to set the theme on page load
-        setTheme()
-
-        // Listen for changes in user's appearance preference and update the theme accordingly
-        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-            setTheme()
-        });
-    </script>
 </head>
 
 <body>

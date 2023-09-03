@@ -1,6 +1,8 @@
 import React from 'react'
 import styles from './RecipeDesktop.module.css'
 
+import { Helmet } from 'react-helmet-async'
+
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import { useQuery } from '@apollo/client'
 
@@ -27,37 +29,47 @@ const RecipeDesktop: React.FC<RecipeProps> = ({ recipeId }) => {
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.recipeName}>{recipe.name}</div>
-            <div className={styles.columns}>
-                <div className={styles.leftColumn}>
-                    <IngredientsCard recipe={recipe} />
-                </div>
-                <div className={styles.middleColumn}>
-                    <div className={styles.instruction}>
-                        <div className={styles.instructionCard} >
-                            <div className={styles.title}>Gör så här</div>
-                            <div className={styles.steps}>
-                                <ol>
-                                    {recipe.steps.map((step: string, index: number) => (
-                                        <li key={`step-${index}`}>{step}</li>)
-                                    )}
-                                </ol>
+        <>
+            <Helmet>
+                <title>mumsmums - {recipe.name}</title>
+                <meta property="og:title" content={recipe.name} />
+                <meta property="og:site_name" content="mumsmums" />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content={`https://mumsmums.app/recipe/${recipe.recipeId}`} />
+                {recipe.imageUrl && <meta property="og:image" content={recipe.imageUrl} />}
+            </Helmet>
+            <div className={styles.container}>
+                <div className={styles.recipeName}>{recipe.name}</div>
+                <div className={styles.columns}>
+                    <div className={styles.leftColumn}>
+                        <IngredientsCard recipe={recipe} />
+                    </div>
+                    <div className={styles.middleColumn}>
+                        <div className={styles.instruction}>
+                            <div className={styles.instructionCard} >
+                                <div className={styles.title}>Gör så här</div>
+                                <div className={styles.steps}>
+                                    <ol>
+                                        {recipe.steps.map((step: string, index: number) => (
+                                            <li key={`step-${index}`}>{step}</li>)
+                                        )}
+                                    </ol>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className={styles.rightColumn}>
-                    <div className={styles.imageWrapper}>
-                        <SquareRecipeImage
-                            imageUrl={recipe.imageUrl}
-                            imageAltText={recipe.name}
-                            recipeId={recipe.recipeId}
-                        />
+                    <div className={styles.rightColumn}>
+                        <div className={styles.imageWrapper}>
+                            <SquareRecipeImage
+                                imageUrl={recipe.imageUrl}
+                                imageAltText={recipe.name}
+                                recipeId={recipe.recipeId}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div >
+            </div >
+        </>
     )
 }
 

@@ -1,0 +1,18 @@
+.section {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.sectionTitle {
+    padding: 20px;
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.ingredients {
+    padding-top: 10px;
+}

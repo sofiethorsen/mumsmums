@@ -1,70 +1,60 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 
 import styles from './IngredientsCard.module.css'
 
-import { Recipe, Ingredient, IngredientSection } from '../../graphql/client/types'
+import { Recipe } from '../../graphql/client/types'
+import IngredientSection from './IngredientSection/IngredientSection'
 
 interface IngredientsCardProps {
     recipe: Recipe
 }
 
-const renderServingsOrUnitsInfo = (servings: number | undefined, numberOfUnits: number | undefined) => {
-    const info = (numberOfUnits && `${numberOfUnits} st`) || `${servings} port.`
-
-    return (
-        <div className={styles.servings}>
-            {info}
-        </div>
-    )
-}
-
-const renderIngredientSection = (section: IngredientSection, sectionIndex: number) => {
-    return (
-        <div key={`section-${sectionIndex}`} className={styles.section}>
-            {renderSectionTitle(section.name)}
-            <div className={styles.ingredients}>
-                {section.ingredients.map((ingredient: Ingredient, index: number) => (
-                    renderIngredient(ingredient, index)
-                ))
-                }
-            </div>
-        </div>
-    )
-}
-
-const renderSectionTitle = (name: string | undefined) => {
-    if (name) {
-        return <div className={styles.sectionTitle}>{name}</div>
-    } else {
-        return null
-    }
-}
-
-const renderIngredient = (ingredient: Ingredient, index: number) => {
-    const quantity = ingredient.quantity && `${ingredient.quantity} `
-    const volume = ingredient.volume && `${ingredient.volume} `
-    const hasRecipeId = Boolean(ingredient.recipeId)
-
-    if (hasRecipeId) {
-        return (
-            <Link className={styles.ingredientLink} to={`/recipe/${ingredient.recipeId}`} key={index}>
-                <div className={styles.ingredient} key={`ingredient-${index}`}>{quantity}{volume}{ingredient.name}</div>
-            </Link >
-        )
-    } else {
-        return (
-            <div className={styles.ingredient} key={`ingredient-${index}`}>{quantity}{volume}{ingredient.name}</div>
-        )
-    }
-}
+const MULTIPLIERS = [0.5, 1, 1.5, 2]
 
 const IngredientsCard: React.FC<IngredientsCardProps> = ({ recipe }) => {
+    const [multiplier, setMultiplier] = useState(1)
+    const [originalAmount, setOriginalAmount] = useState(recipe.numberOfUnits || recipe.servings || 1)
+
+    useEffect(() => {
+        const value: number = (recipe.numberOfUnits || recipe.servings || 1) * multiplier
+        setOriginalAmount(value)
+    }, [])
+
+    const handleMultiplierChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const newMultiplier = parseFloat(e.target.value)
+        setMultiplier(newMultiplier)
+    }
+
+    const scaledRecipe = {
+        ...recipe,
+        servings: (recipe.servings && recipe.servings * multiplier),
+        numberOfUnits: (recipe.numberOfUnits && recipe.numberOfUnits * multiplier),
+        ingredientSections: recipe.ingredientSections.map((section) => ({
+            ...section,
+            ingredients: section.ingredients.map((ingredient) => ({
+                ...ingredient,
+                quantity: (ingredient.quantity && ingredient.quantity * multiplier) || ingredient.quantity,
+            })),
+        })),
+    }
+
+    const unit = (scaledRecipe.numberOfUnits && 'st') || (scaledRecipe.servings && 'port.')
+
     return (
         <div className={styles.ingredientsCard}>
             <div className={styles.title}>Ingredienser</div>
-            {renderServingsOrUnitsInfo(recipe.servings, recipe.numberOfUnits)}
-            {recipe.ingredientSections.map((section: IngredientSection, index: number) => renderIngredientSection(section, index))}
+            <div className={styles.servings}>
+                <label>
+                    <select value={multiplier} onChange={handleMultiplierChange}>
+                        {MULTIPLIERS.map((option, index) => (
+                            <option key={index} value={option}>
+                                {originalAmount * option} {unit}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+            </div>
+            {scaledRecipe.ingredientSections.map((section, index) => <IngredientSection key={index} section={section} />)}
         </div>
     )
 }

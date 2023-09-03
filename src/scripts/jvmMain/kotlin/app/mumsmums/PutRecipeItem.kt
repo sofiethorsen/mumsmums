@@ -2,7 +2,6 @@ package app.mumsmums
 
 import app.mumsmums.db.DynamoClientFactory
 import app.mumsmums.db.RecipeTable
-import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.Recipe
 import kotlin.io.path.Path
 

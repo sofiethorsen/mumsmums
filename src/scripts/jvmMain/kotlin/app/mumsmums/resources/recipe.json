@@ -1,46 +1,119 @@
 {
-  "imageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43986376914944/300-300.webp",
+  "imageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43987089885184/300-300.webp",
   "ingredientSections":
   [
     {
       "ingredients": [
         {
-          "name": "ägg",
-          "quantity": 6,
+          "name": "gurka",
+          "quantity": 0.5,
           "volume": "st"
         },
         {
-          "name": "äggula",
-          "quantity": 2,
-          "volume": "st"
-        },
-        {
-          "name": "kosher salt",
-          "quantity": 0.75,
-          "volume": "tsk"
-        },
-        {
-          "name": "smör",
-          "quantity": 30,
+          "name": "soja",
+          "quantity": 15,
           "volume": "gram"
         },
         {
-          "name": "grädde",
-          "quantity": 2,
-          "volume": "msk"
+          "name": "risvinäger",
+          "quantity": 15,
+          "volume": "gram"
+        },
+        {
+          "name": "vitlökspulver",
+          "quantity": 0.5,
+          "volume": "tsk"
+        },
+        {
+          "name": "koreanska chiliflakes",
+          "quantity": 0.5,
+          "volume": "tsk"
+        },
+        {
+          "name": "svarta sesamfrön",
+          "quantity": 1,
+          "volume": "tsk"
         }
       ],
-      "name": null
+      "name": "Picklad gurka"
+    },
+    {
+      "ingredients": [
+        {
+          "name": "majonäs",
+          "quantity": 70,
+          "volume": "gram"
+        },
+        {
+          "name": "gochujang",
+          "quantity": 10,
+          "volume": "gram"
+        }
+      ],
+      "name": "Gochujang-majonäs"
+    },
+    {
+      "ingredients": [
+        {
+          "name": "köttfärs",
+          "quantity": 500,
+          "volume": "gram"
+        },
+        {
+          "name": "soja",
+          "quantity": 50,
+          "volume": "gram"
+        },
+        {
+          "name": "flytande honung",
+          "quantity": 20,
+          "volume": "gram"
+        },
+        {
+          "name": "sesamolja",
+          "quantity": 10,
+          "volume": "gram"
+        },
+        {
+          "name": "gochujang",
+          "quantity": 25,
+          "volume": "gram"
+        },
+        {
+          "name": "färsk vitlök",
+          "quantity": 3,
+          "volume": "klyftor"
+        },
+        {
+          "name": "svarta sesamfrön",
+          "quantity": 1,
+          "volume": "tsk"
+        },
+        {
+          "name": "vita sesamfrön",
+          "quantity": 1,
+          "volume": "tsk"
+        },
+        {
+          "name": "salladslök",
+          "quantity": 2,
+          "volume": "st"
+        }
+      ],
+      "name": "Köttfärs"
     }
   ],
-  "name": "Äggröra",
+  "name": "Koreansk köttfärs med picklad gurka",
   "numberOfUnits": null,
-  "recipeId": 43986376914944,
-  "servings": 6,
+  "recipeId": 43987089885184,
+  "servings": 2,
   "steps":
   [
-    "Kombinera ägg, äggula och salt i en skål och vispa tills blandat och skummigt. Låt vila i rumstemperatur i 15 minuter. Äggen ska mörkna i färgen.",
-    "Skär kuber av smöret och lägg i äggblandningen, och häll sedan i en non-stick kastrull eller stekpanna, och tillaga på medellåg värme. Rör tills smöret har smält och äggen börjar stelna. Rör snabbare för att bryta upp större bitar och fortsätt tillaga tills all äggvätska är tillagad.",
-    "Ta bort pannan från värmen, häll i grädden och rör i ca 15 sekunder tills allt är blandat. Servera."
+    "Förbered ris för att servera till rätten.",
+    "För den picklade gurkan, börja med att blanda soja, risvinäger, vitlökspulver, chiliflakes och sesamfrön. Skiva gurkan och vänd runt i blandningen. Ställ åt sidan.",
+    "För majonäsen, blanda majonäs och gochujang. Ställ åt sidan.",
+    "För köttfärsen, börja med att skiva salladslöken och ställ åt sidan. Blanda sedan soja, honung, sesamolja, gochujang och sesamfrön i en skål. Riv ner vitlöken.",
+    "Stek sedan köttfärsen i lite olja tills den är tillagad. Häll ner blandningen och stek. När mestadels av vätskan har kokats bort, häll i salladslök, men spara lite för att toppa med. När vätskan har kokat bort är köttfärsen klar.",
+    "Lägg upp ris i en djup tallrik, sedan köttfärsen och ringla majonäsen över. Häll av gurkan och lägg på. Toppa med salladslök och eventuellt mer sesamfrön."
   ]
 }

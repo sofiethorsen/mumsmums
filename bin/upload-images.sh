@@ -6,7 +6,7 @@ BUCKET_NAME="mumsmums"
 
 # Dir for the images we're uploading
 BASE_DIR="/Users/sthorsen/Downloads/mumsimg"
-RECIPE_ID="43986376914944"
+RECIPE_ID="43987089885184"
 
 # Loop through image files in the base directory
 for FILE_PATH in "$BASE_DIR"/*; do

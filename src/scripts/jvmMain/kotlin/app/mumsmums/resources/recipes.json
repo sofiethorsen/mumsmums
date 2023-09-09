@@ -753,5 +753,92 @@
       "Stek sedan köttfärsen i lite olja tills den är tillagad. Häll ner blandningen och stek. När mestadels av vätskan har kokats bort, häll i salladslök, men spara lite för att toppa med. När vätskan har kokat bort är köttfärsen klar.",
       "Lägg upp ris i en djup tallrik, sedan köttfärsen och ringla majonäsen över. Häll av gurkan och lägg på. Toppa med salladslök och eventuellt mer sesamfrön."
     ]
+  },
+  {
+    "ingredientSections":
+    [
+      {
+        "ingredients": [
+          {
+            "name": "mjöl",
+            "quantity": 170,
+            "volume": "gram"
+          },
+          {
+            "name": "socker",
+            "quantity": 75,
+            "volume": "gram"
+          },
+          {
+            "name": "bakpulver",
+            "quantity": 4,
+            "volume": "gram"
+          },
+          {
+            "name": "salt",
+            "quantity": 1.5,
+            "volume": "gram"
+          },
+          {
+            "name": "vaniljsocker",
+            "quantity": 1,
+            "volume": "tsk"
+          },
+          {
+            "name": "bikarbonat",
+            "quantity": 0.125,
+            "volume": "tsk"
+          },
+          {
+            "name": "koriander, malen",
+            "quantity": 0.125,
+            "volume": "tsk"
+          },
+          {
+            "name": "muskot",
+            "quantity": 0.1,
+            "volume": "tsk"
+          },
+          {
+            "name": "smör",
+            "quantity": 85,
+            "volume": "gram"
+          },
+          {
+            "name": "mjölk",
+            "quantity": 60,
+            "volume": "gram"
+          },
+          {
+            "name": "blåbär",
+            "quantity": 170,
+            "volume": "gram"
+          },
+          {
+            "name": "ägg",
+            "quantity": 1,
+            "volume": "st"
+          },
+          {
+            "name": "socker"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Blåbärsmuffins",
+    "numberOfUnits": 6,
+    "recipeId": 43987442419712,
+    "servings": null,
+    "steps":
+    [
+      "Sätt ugnen på 180C.",
+      "Förbered en muffinsplåt genom att smöra den, eller sätt i pappersformar.",
+      "Kombinera mjöl, socker, vaniljsocker, bakpulver, bikarbonat, koriander, muskot och smör i skålen på en köksmixer, med en flatblandare/paddel.",
+      "Blanda på låg hastighet så du får en mjölig blandning, ca 2 minuter. Lägg till ägg och mjölk och mixa hastigt så du får en tjock smet.",
+      "Lägg i en sked smet i botten av varje muffinsform, och vänd sedan i blåbären i resten av smeten. Detta hindrar att blåbär hamnar i botten av muffinsen.",
+      "Toppa upp formarna med resten av smeten, och toppa med lite socker.",
+      "Baka i ugn tills muffinsen har stigit och känns fasta, ca 25 minuter."
+    ]
   }
 ]

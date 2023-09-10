@@ -6,3 +6,5 @@ bazel-mumsmums
 bazel-out
 bazel-testlogs
 build
+
+*.tsbuildinfo

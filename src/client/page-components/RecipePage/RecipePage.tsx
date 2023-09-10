@@ -1,32 +1,39 @@
 import React from 'react'
 import { useMediaQuery } from 'react-responsive'
 
-import PageFrame from '../../components/PageFrame/PageFrame'
+import { useQuery } from '@apollo/client'
+
+import { GET_RECIPE_BY_ID } from '../../components/Recipe/queries'
+
 import RecipeDesktop from '../../components/Recipe/RecipeDesktop'
-import { useRouter } from 'next/router'
 import RecipeMobile from '../../components/Recipe/RecipeMobile'
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 
-const RecipePage = () => {
-    const router = useRouter()
+interface RecipePageProps {
+    recipeId: number
+}
+
+const RecipePage: React.FC<RecipePageProps> = ({ recipeId }) => {
     const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' })
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 
-    if (router === undefined) {
-        return <ErrorMessage />
-    }
+    const { loading, error, data } = useQuery(GET_RECIPE_BY_ID, {
+        variables: { recipeId: recipeId },
+    })
 
-    const parsedRecipeId = parseFloat(String(router.query.recipeId))
+    if (loading) return null
+    if (error) return <p>Error: {error.message}</p>
 
-    if (isNaN(parsedRecipeId)) {
+    const recipe = data.recipe
+    if (recipe === null || undefined) {
         return <ErrorMessage />
     }
 
     return (
-        <PageFrame>
-            {isTabletOrMobile && <RecipeMobile recipeId={parsedRecipeId} />}
-            {isDesktopOrLaptop && <RecipeDesktop recipeId={parsedRecipeId} />}
-        </PageFrame>
+        <>
+            {isTabletOrMobile && <RecipeMobile recipe={recipe} />}
+            {isDesktopOrLaptop && <RecipeDesktop recipe={recipe} />}
+        </>
     )
 }
 

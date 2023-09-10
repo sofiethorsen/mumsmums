@@ -1,8 +1,8 @@
 .DS_Store
 .idea/
 .ijwb/
+build
 bazel-bin
 bazel-mumsmums
 bazel-out
 bazel-testlogs
-build

@@ -55,11 +55,11 @@ Resources:
             "rules": [
               {
                 "rulePriority": 1,
-                "description": "Retain only the latest 3 images",
+                "description": "Retain only the latest 4 images",
                 "selection": {
                   "tagStatus": "any",
                   "countType": "imageCountMoreThan",
-                  "countNumber": 3
+                  "countNumber": 4
                 },
                 "action": {
                   "type": "expire"

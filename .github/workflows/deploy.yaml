@@ -65,9 +65,11 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY:app-$IMAGE_TAG -f docker/mumsmums.Dockerfile .
           docker build -t $REGISTRY/$REPOSITORY:certbot-$IMAGE_TAG -f docker/certbot.Dockerfile .
           docker build -t $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG -f docker/nginx.Dockerfile .
+          docker build -t $REGISTRY/$REPOSITORY:next-$IMAGE_TAG -f docker/next.Dockerfile .
           docker push $REGISTRY/$REPOSITORY:app-$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:certbot-$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
+          docker push $REGISTRY/$REPOSITORY:next-$IMAGE_TAG
 
       - name: Get Github Actions IP
         id: ip
@@ -75,7 +77,7 @@ jobs:
 
       - name: Add Github Actions IP to Security group
         run: |
-          aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32      
+          aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
       - name: Deploy Docker image to EC2
         uses: appleboy/ssh-action@master
@@ -92,15 +94,21 @@ jobs:
             sudo apt update
             sudo apt install awscli -y
             sudo $(aws ecr get-login --no-include-email --region $AWS_REGION);
+
+            sudo docker pull $REGISTRY/$REPOSITORY:app-$IMAGE_TAG
+            sudo docker pull $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
+            sudo docker pull $REGISTRY/$REPOSITORY:next-$IMAGE_TAG
+
             sudo docker stop nginx || true
             sudo docker rm nginx || true
             sudo docker stop mumsmums || true
             sudo docker rm mumsmums || true
-            sudo docker pull $REGISTRY/$REPOSITORY:app-$IMAGE_TAG
-            sudo docker pull $REGISTRY/$REPOSITORY:certbot-$IMAGE_TAG
-            sudo docker pull $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
+            sudo docker stop next || true
+            sudo docker rm next || true
+
             sudo docker network create app_net
             sudo docker run -d --name mumsmums --network app_net -p 8080:8080 $REGISTRY/$REPOSITORY:app-$IMAGE_TAG
+            sudo docker run -d --name next --network app_net -p 3000:3000 $REGISTRY/$REPOSITORY:next-$IMAGE_TAG
             sudo docker run -d --name nginx --network app_net -p 80:80 -p 443:443 -v /etc/nginx/conf.d:/config -v /etc/letsencrypt:/etc/letsencrypt:ro -v /tmp/acme_challenge:/tmp/acme_challenge $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
 
       - name: Deploy cert renewal script to EC2

@@ -1,10 +1,8 @@
 import React from 'react'
 import RecipePage from '../../page-components/RecipePage/RecipePage'
-import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
-import { useRouter } from 'next/router'
 import PageFrame from '../../components/PageFrame/PageFrame'
-import { useQuery, gql } from '@apollo/client'
 import client from '../../graphql/client'
+import { gql } from '@apollo/client'
 
 import { GET_RECIPE_BY_ID } from '../../components/Recipe/queries'
 
@@ -16,17 +14,10 @@ const GET_RECIPE_IDS = gql`
   }
 `
 
-export default function Recipe() {
-    const router = useRouter()
-    const parsedRecipeId = parseFloat(String(router.query.recipeId))
-
-    if (isNaN(parsedRecipeId)) {
-        return <ErrorMessage />
-    }
-
+export default function Recipe({ recipe }) {
     return (
         <PageFrame>
-            <RecipePage recipeId={parsedRecipeId} />
+            <RecipePage recipe={recipe} />
         </PageFrame>
     )
 }
@@ -54,7 +45,7 @@ export async function getStaticProps({ params }) {
 
     return {
         props: {
-            recipeData,
+            recipe: recipeData.data.recipe,
         },
     }
 }

@@ -1,38 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
-
-import { useQuery } from '@apollo/client'
-
-import { GET_RECIPE_BY_ID } from '../../components/Recipe/queries'
+import Head from 'next/head'
 
 import RecipeDesktop from '../../components/Recipe/RecipeDesktop'
 import RecipeMobile from '../../components/Recipe/RecipeMobile'
-import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
+
+import { Recipe } from '../../graphql/types'
 
 interface RecipePageProps {
-    recipeId: number
+    recipe: Recipe
 }
 
-const RecipePage: React.FC<RecipePageProps> = ({ recipeId }) => {
+const RecipePage: React.FC<RecipePageProps> = ({ recipe }) => {
+    const [isDesktop, setDesktop] = useState(false)
+
     const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' })
-    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 
-    const { loading, error, data } = useQuery(GET_RECIPE_BY_ID, {
-        variables: { recipeId: recipeId },
-    })
-
-    if (loading) return null
-    if (error) return <p>Error: {error.message}</p>
-
-    const recipe = data.recipe
-    if (recipe === null || undefined) {
-        return <ErrorMessage />
-    }
+    useEffect(() => {
+        setDesktop(isDesktopOrLaptop)
+    }, [isDesktopOrLaptop])
 
     return (
         <>
-            {isTabletOrMobile && <RecipeMobile recipe={recipe} />}
-            {isDesktopOrLaptop && <RecipeDesktop recipe={recipe} />}
+            <Head>
+                <title>mumsmums - {recipe.name}</title>
+                <meta property="og:title" content={recipe.name} key="title" />
+                <meta property="og:site_name" content="mumsmums" />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content={`https://mumsmums.app/recipe/${recipe.recipeId}`} />
+                <meta property="og:locale" content="sv_SE" />
+                {recipe.imageUrl && <meta property="og:image" content={recipe.imageUrl} />}
+            </Head>
+            {isDesktop && <RecipeDesktop recipe={recipe} />}
+            {!isDesktop && <RecipeMobile recipe={recipe} />}
         </>
     )
 }

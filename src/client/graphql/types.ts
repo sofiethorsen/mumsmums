@@ -15,9 +15,11 @@ export interface IngredientSection {
 export interface Recipe {
     recipeId: number,
     name: string,
+    description: string | undefined,
     servings: number | undefined,
     numberOfUnits: number | undefined,
     ingredientSections: IngredientSection[],
     steps: string[],
     imageUrl: string | undefined,
+    fbPreviewImageUrl: string | undefined
 }

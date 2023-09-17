@@ -7,6 +7,7 @@ export const GET_RECIPE_BY_ID = gql`
       name,
       steps,
       servings,
+      description,
       numberOfUnits,
       ingredientSections {
         name,
@@ -17,7 +18,8 @@ export const GET_RECIPE_BY_ID = gql`
           recipeId,
         }
       }
-      imageUrl
+      imageUrl,
+      fbPreviewImageUrl,
     }
   }
 `

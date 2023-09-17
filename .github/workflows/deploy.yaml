@@ -132,6 +132,15 @@ jobs:
               echo "0 3 * * * /home/ubuntu/certbot_renew.sh" | crontab -
             fi
 
+      - name: SSH into EC2 and prune old docker images
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.MUMSMUMS_EC2_PUBLIC_IP }}
+          username: ${{ secrets.MUMSMUMS_EC2_USER }}
+          key: ${{ secrets.MUMSMUMS_PRIVATE_SSH_KEY }}
+          script: |
+            sudo docker image prune -a -f
+
       - name: Remove Github Actions IP from security group
         run: |
           aws ec2 revoke-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32

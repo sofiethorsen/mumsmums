@@ -37,6 +37,14 @@ class Mapper {
             attributeMap["imageUrl"] = toAttributeValueFromString(recipe.imageUrl as String)
         }
 
+        if (recipe.fbPreviewImageUrl != null) {
+            attributeMap["fbPreviewImageUrl"] = toAttributeValueFromString(recipe.fbPreviewImageUrl as String)
+        }
+
+        if (recipe.description != null) {
+            attributeMap["description"] = toAttributeValueFromString(recipe.description as String)
+        }
+
         attributeMap["version"] = toAttributeValueFromLong(recipe.version)
         attributeMap["createdAtInMillis"] = toAttributeValueFromLong(recipe.createdAtInMillis)
         attributeMap["lastUpdatedAtInMillis"] = toAttributeValueFromLong(recipe.lastUpdatedAtInMillis)
@@ -51,7 +59,9 @@ class Mapper {
         val numberOfUnits = if (item.hasAttribute("numberOfUnits")) item.getNumber("numberOfUnits").toInt() else null
         val ingredientSections: List<IngredientSection> = formatter.decodeFromString(item.getString("ingredientSections"))
         val steps: List<String> = formatter.decodeFromString(item.getString("steps"))
+        val description = if (item.hasAttribute("description")) item.getString("description") else null
         val imageUrl = if (item.hasAttribute("imageUrl")) item.getString("imageUrl") else null
+        val fbPreviewImageUrl = if (item.hasAttribute("fbPreviewImageUrl")) item.getString("fbPreviewImageUrl") else null
         val version = item.getLong("version")
         val createdAtInMillis = item.getLong("createdAtInMillis")
         val lastUpdatedAtInMillis = item.getLong("lastUpdatedAtInMillis")
@@ -61,9 +71,11 @@ class Mapper {
                 name = name,
                 ingredientSections = ingredientSections,
                 steps = steps,
+                description = description,
                 servings = servings,
                 numberOfUnits = numberOfUnits,
                 imageUrl = imageUrl,
+                fbPreviewImageUrl = fbPreviewImageUrl,
                 version = version,
                 createdAtInMillis = createdAtInMillis,
                 lastUpdatedAtInMillis = lastUpdatedAtInMillis
@@ -85,12 +97,6 @@ class Mapper {
     private fun toAttributeValueFromString(value: String): AttributeValue {
         val attributeValue = AttributeValue()
         attributeValue.s = value
-        return attributeValue
-    }
-
-    private fun toAttributeValueFromStringList(value: List<String>): AttributeValue {
-        val attributeValue = AttributeValue()
-        attributeValue.setSS(value)
         return attributeValue
     }
 }

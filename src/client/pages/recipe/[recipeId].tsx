@@ -1,5 +1,6 @@
 import React from 'react'
 import RecipePage from '../../page-components/RecipePage/RecipePage'
+import PageHead from '../../components/PageHead/PageHead'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import client from '../../graphql/client'
 import { gql } from '@apollo/client'
@@ -14,11 +15,25 @@ const GET_RECIPE_IDS = gql`
   }
 `
 
+const renderPageHead = (recipe) => {
+    return <PageHead
+        title={`mumsmums - ${recipe.name}`}
+        description={recipe.description}
+        siteType={'article'}
+        url={`https://mumsmums.app/recipe/${recipe.recipeId}`}
+        imageUrl={recipe.imageUrl}
+        fbPreviewImageUrl={recipe.fbPreviewImageUrl}
+    />
+}
+
 export default function Recipe({ recipe }) {
     return (
-        <PageFrame>
-            <RecipePage recipe={recipe} />
-        </PageFrame>
+        <>
+            {renderPageHead(recipe)}
+            <PageFrame>
+                <RecipePage recipe={recipe} />
+            </PageFrame>
+        </>
     )
 }
 

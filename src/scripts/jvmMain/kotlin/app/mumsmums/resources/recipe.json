@@ -1,137 +1,57 @@
 {
-  "description": "Festlig huvudrätt som ändå är snabblagad",
-  "imageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43988905564160/300-300.webp",
+  "description": "Enkel klassiker som är löjligt god",
+  "fbPreviewImageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43988908120064/1200-600.webp",
+  "imageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43988908120064/300-300.webp",
   "ingredientSections":
   [
     {
       "ingredients": [
         {
-          "name": "torskrygg",
-          "quantity": 600,
-          "volume": "gram"
-        },
-        {
-          "name": "smör"
-        },
-        {
-          "name": "salt"
-        }
-      ],
-      "name": "Torskrygg"
-    },
-    {
-      "ingredients": [
-        {
-          "name": "spetskål",
-          "quantity": 2,
-          "volume": "st"
-        },
-        {
           "name": "smör",
-          "quantity": 100,
+          "quantity": 150,
           "volume": "gram"
         },
         {
-          "name": "soja",
-          "quantity": 1,
-          "volume": "tsk"
+          "name": "socker",
+          "quantity": 1.5,
+          "volume": "dl"
         },
         {
-          "name": "hasselnötter",
-          "quantity": 3,
+          "name": "kakao",
+          "quantity": 4,
           "volume": "msk"
-        }
-      ],
-      "name": "Ugnsbakad spetskål med brynt smör och hasselnötter"
-    },
-    {
-      "ingredients": [
-        {
-          "name": "schalottenlök",
-          "quantity": 1,
-          "volume": "st"
         },
         {
-          "name": "smör",
+          "name": "vaniljsocker",
           "quantity": 1,
           "volume": "msk"
         },
         {
-          "name": "soja",
-          "quantity": 1,
-          "volume": "tsk"
-        },
-        {
-          "name": "champagne",
+          "name": "kallt kaffe",
           "quantity": 2,
-          "volume": "dl"
-        },
-        {
-          "name": "fiskfond",
-          "quantity": 1,
-          "volume": "dl"
-        },
-        {
-          "name": "rödvinsvinäger",
-          "quantity": 1,
           "volume": "msk"
         },
         {
-          "name": "mjölk",
-          "quantity": 0.5,
+          "name": "havregryn",
+          "quantity": 4,
           "volume": "dl"
         },
         {
-          "name": "grädde",
-          "quantity": 2,
-          "volume": "dl"
-        },
-        {
-          "name": "salt"
-        },
-        {
-          "name": "peppar"
+          "name": "pärlsocker"
         }
       ],
-      "name": "Champagnesås"
-    },
-    {
-      "ingredients": [
-        {
-          "name": "ärter",
-          "quantity": 50,
-          "volume": "gram"
-        },
-        {
-          "name": "dill"
-        },
-        {
-          "name": "dillolja"
-        }
-      ],
-      "name": "Dekoration"
+      "name": null
     }
   ],
-  "name": "Torskrygg med ugnsbakad spetskål och champagnesås",
-  "numberOfUnits": null,
-  "recipeId": 43988905564160,
-  "servings": 4,
+  "name": "Chokladbollar",
+  "numberOfUnits": 25,
+  "recipeId": 43988908120064,
+  "servings": null,
   "steps":
   [
-    "Skala och finhacka sharlottenlök, ställ åt sidan",
-    "Bryn hasselnötterna försiktigt och ta bort överflödigt skal (du kan gnugga nötterna mot varandra i händerna eller i en handduk). Hacka grovt och ställ åt sidan.",
-    "Lägg torskryggen i en ugnsform med skinnet nedåt. Salta och låt stå och dra i kylskåpet ca 15 min.",
-    "Skär spetskålen tvärs över så att du får ca 1,5 cm tjocka runda puckar med ca 8-10 cm i diameter. Du kan få ut 2-4 puckar per spetskål beroende på storlek. Lägg på en plåt med bakplåtspapper.",
-    "Bryn smöret försiktigt gyllene och tillsätt rostade hasselnötter och soja.",
-    "Pensla det brynta hasselnötssmöret på spetskålspuckarna, salta och låt stå en stund för att dra.",
-    "Om du har två ugnar, sätt den ena på 200C och den andra på 120C, annars sätt din ugn på 200C",
-    "Fräs löken i en klick smör på medelhög värme.",
-    "När löken är glansig och lite mjuk, tillsätt vinet och låt koka ner till hälften. Tillsätt fond, rödvinsvinäger och grädde. Låt koka 3-4 min så den får reducera ner lite.",
-    "Ta kastrullen åt sidan och mixa såsen slät. Sila sedan av.",
-    "Fisken tar ca 15-20 minuter på 120C för att komma upp i 47-48 grader, om du har en ugn så börja med att låta spetskålen gå i 15 minuter i 200C innan du sänker till 120C och sätter in fisken. Håll lite koll och sikta på att ta ut kål och fisk samtidigt",
-    "Under tiden kålen och fisken tillagas, koka ärter (ex spritärter eller bondbönor) i några minuter och lägg i isbad.",
-    "Smaka sedan av såsen med salt, peppar och grädde.",
-    "Precis innan servering, tilsätt mjölk i såsen och mixa så den blir skummig.",
-    "Placera en puck på en tallrik, toppa med fisk, champagnesås, ärter, dillolja och dill."
+    "Rör ihop smör och socker",
+    "Rör i kakao, vaniljsocker, kaffe och havregryn.",
+    "Forma runda bollar och rulla dem i pärlsocker.",
+    "Låt bli kalla i kylen innan du serverar."
   ]
 }

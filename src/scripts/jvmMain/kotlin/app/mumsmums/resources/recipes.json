@@ -1049,5 +1049,62 @@
       "Precis innan servering, tilsätt mjölk i såsen och mixa så den blir skummig.",
       "Placera en puck på en tallrik, toppa med fisk, champagnesås, ärter, dillolja och dill."
     ]
+  },
+  {
+    "description": "Enkel klassiker som är löjligt god",
+    "fbPreviewImageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43988908120064/1200-600.webp",
+    "imageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43988908120064/300-300.webp",
+    "ingredientSections":
+    [
+      {
+        "ingredients": [
+          {
+            "name": "smör",
+            "quantity": 150,
+            "volume": "gram"
+          },
+          {
+            "name": "socker",
+            "quantity": 1.5,
+            "volume": "dl"
+          },
+          {
+            "name": "kakao",
+            "quantity": 4,
+            "volume": "msk"
+          },
+          {
+            "name": "vaniljsocker",
+            "quantity": 1,
+            "volume": "msk"
+          },
+          {
+            "name": "kallt kaffe",
+            "quantity": 2,
+            "volume": "msk"
+          },
+          {
+            "name": "havregryn",
+            "quantity": 4,
+            "volume": "dl"
+          },
+          {
+            "name": "pärlsocker"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Chokladbollar",
+    "numberOfUnits": 25,
+    "recipeId": 43988908120064,
+    "servings": null,
+    "steps":
+    [
+      "Rör ihop smör och socker.",
+      "Rör i kakao, vaniljsocker, kaffe och havregryn.",
+      "Forma runda bollar och rulla dem i pärlsocker.",
+      "Låt bli kalla i kylen innan du serverar."
+    ]
   }
 ]

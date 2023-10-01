@@ -86,9 +86,9 @@
             "volume": "gram"
           },
           {
-            "quantity": 0.5,
+            "quantity": 3,
             "name": "salt",
-            "volume": "tsk"
+            "volume": "gram"
           },
           {
             "quantity": 5,
@@ -106,7 +106,7 @@
             "volume": "st"
           },
           {
-            "quantity": 250,
+            "quantity": 110,
             "name": "smör",
             "volume": "gram"
           },

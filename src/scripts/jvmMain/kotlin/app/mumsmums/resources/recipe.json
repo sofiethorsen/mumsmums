@@ -1,57 +1,65 @@
 {
-  "description": "Enkel klassiker som är löjligt god",
-  "fbPreviewImageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43988908120064/1200-600.webp",
-  "imageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43988908120064/300-300.webp",
+  "description": "Enkel focaccia som sköter sig själv. Degen kan jäsa över natten och bakas ut dagen efter.",
+  "fbPreviewImageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43998781233152/1200-600.webp",
+  "imageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43998781233152/300-300.webp",
   "ingredientSections":
   [
     {
       "ingredients": [
         {
-          "name": "smör",
-          "quantity": 150,
+          "name": "mjöl",
+          "quantity": 500,
           "volume": "gram"
         },
         {
-          "name": "socker",
-          "quantity": 1.5,
+          "name": "kosher salt",
+          "quantity": 15,
+          "volume": "gram"
+        },
+        {
+          "name": "torrjäst",
+          "quantity": 4,
+          "volume": "gram"
+        },
+        {
+          "name": "vatten",
+          "quantity": 325,
+          "volume": "gram"
+        },
+        {
+          "name": "olivolja",
+          "quantity": 0.6,
           "volume": "dl"
         },
         {
-          "name": "kakao",
-          "quantity": 4,
-          "volume": "msk"
+          "name": "oliver, urkärnade",
+          "quantity": 100,
+          "volume": "gram"
         },
         {
-          "name": "vaniljsocker",
-          "quantity": 1,
-          "volume": "msk"
-        },
-        {
-          "name": "kallt kaffe",
+          "name": "rosmarin, grovhackad",
           "quantity": 2,
           "volume": "msk"
         },
         {
-          "name": "havregryn",
-          "quantity": 4,
-          "volume": "dl"
-        },
-        {
-          "name": "pärlsocker"
+          "name": "flingsalt"
         }
       ],
       "name": null
     }
   ],
-  "name": "Chokladbollar",
-  "numberOfUnits": 25,
-  "recipeId": 43988908120064,
+  "name": "Focaccia",
+  "numberOfUnits": 1,
+  "recipeId": 43998781233152,
   "servings": null,
   "steps":
   [
-    "Rör ihop smör och socker",
-    "Rör i kakao, vaniljsocker, kaffe och havregryn.",
-    "Forma runda bollar och rulla dem i pärlsocker.",
-    "Låt bli kalla i kylen innan du serverar."
+    "Kombinera mjöl, salt, jäst och vatten i en stor skål. Mixa med händerna eller en träslev tills inget torrt mjöl kvarstår. Skålen bör vara stor nog för att kunna jäsa till 4-6 ggr storleken på degen.",
+    "Täck skålen ordentligt med plast och se till att kanterna är väl inslagna så att luft inte kommer in. Låt jäsa i rumstemperatur i åtminstone 8 timmar, upp till 24 timmar. Degen ska jäsa ordentligt i storlek.",
+    "Pudra lite mjöl på degen och vänd sedan ut den på en mjölad arbetsyta. Forma till en boll genom att vika in kanterna under degen själv.",
+    "Häll hälften av olivoljan i en gjutjärnspanna och lägg i degen, och låt hela degen bli täckt av olja. Lägg sedan degen med sömmen nedåt. Tryck sedan ut degen med handflatan så den sprids ut jämnt i pannan. Täck sedan med plast och låt jäsa i rumstemperatur i två timmar till. När det är ca 30 minuter kvar på jäsningen kan du sätta ugnen på 275C.",
+    "När det gått två timmar så bör degen ha jäst något till. Använd fingrarna för att pressa ut degen ytterligare och spräck större luftbubblor. Lyft en kant av degen för att låta luft undertill komma ut, och rotera tills degen fyller pannan jämnt.",
+    "Tryck ner oliverna (hela eller skivade) i degen och pressa ner dem. Häll över resterande olivolja och strö över rosmarin och flingsalt.",
+    "Grädda i ugnen tills focaccian är gyllenbrun, ca 24 minuter."
   ]
 }

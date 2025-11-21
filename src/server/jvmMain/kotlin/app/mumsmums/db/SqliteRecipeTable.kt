@@ -15,7 +15,7 @@ class SqliteRecipeTable(private val dbPath: String = "recipes.db") {
     init {
         connection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
         createTables()
-        loadRecipesIfEmpty()
+        reloadRecipes()
     }
 
     private fun createTables() {
@@ -77,35 +77,36 @@ class SqliteRecipeTable(private val dbPath: String = "recipes.db") {
         }
     }
 
-    private fun loadRecipesIfEmpty() {
-        val count = connection.createStatement().use { stmt ->
-            val rs = stmt.executeQuery("SELECT COUNT(*) FROM recipes")
-            rs.getInt(1)
+    private fun reloadRecipes() {
+        // Clear existing data
+        connection.createStatement().use { stmt ->
+            stmt.execute("DELETE FROM recipe_steps")
+            stmt.execute("DELETE FROM ingredients")
+            stmt.execute("DELETE FROM ingredient_sections")
+            stmt.execute("DELETE FROM recipes")
         }
 
-        if (count == 0) {
-            println("Loading recipes from recipes.json...")
-            val jsonString = this::class.java.classLoader
-                .getResourceAsStream("scripts/jvmMain/kotlin/app/mumsmums/resources/recipes.json")
-                ?.bufferedReader()
-                ?.use { it.readText() }
-                ?: throw IllegalStateException("Could not find recipes.json in resources")
+        println("Loading recipes from recipes.json...")
+        val jsonString = this::class.java.classLoader
+            .getResourceAsStream("scripts/jvmMain/kotlin/app/mumsmums/resources/recipes.json")
+            ?.bufferedReader()
+            ?.use { it.readText() }
+            ?: throw IllegalStateException("Could not find recipes.json in resources")
 
-            val recipes = json.decodeFromString(ListSerializer(Recipe.serializer()), jsonString)
+        val recipes = json.decodeFromString(ListSerializer(Recipe.serializer()), jsonString)
 
-            connection.autoCommit = false
-            try {
-                recipes.forEach { recipe ->
-                    insertRecipe(recipe)
-                }
-                connection.commit()
-                println("Loaded ${recipes.size} recipes into SQLite database")
-            } catch (e: Exception) {
-                connection.rollback()
-                throw e
-            } finally {
-                connection.autoCommit = true
+        connection.autoCommit = false
+        try {
+            recipes.forEach { recipe ->
+                insertRecipe(recipe)
             }
+            connection.commit()
+            println("Loaded ${recipes.size} recipes into SQLite database")
+        } catch (e: Exception) {
+            connection.rollback()
+            throw e
+        } finally {
+            connection.autoCommit = true
         }
     }
 
@@ -229,10 +230,11 @@ class SqliteRecipeTable(private val dbPath: String = "recipes.db") {
             stmt.setLong(1, sectionId)
             val rs = stmt.executeQuery()
             while (rs.next()) {
+                val quantityDouble = rs.getObject("quantity") as? Double
                 val ingredient = Ingredient(
                     name = rs.getString("name"),
                     volume = rs.getString("volume"),
-                    quantity = rs.getObject("quantity") as? Float
+                    quantity = quantityDouble?.toFloat()
                 )
                 ingredients.add(ingredient)
             }

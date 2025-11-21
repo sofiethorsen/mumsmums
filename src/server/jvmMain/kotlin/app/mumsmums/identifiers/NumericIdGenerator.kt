@@ -2,11 +2,8 @@ package app.mumsmums.identifiers
 
 import java.net.InetAddress
 
-import com.amazonaws.util.EC2MetadataUtils
-
 /**
- * Use 12 bits for the machine ID. When running on EC2, use the EC2 instance IP address lower 12 bits. This is
- * guaranteed to be unique as they are in a network with a 20 CIDR mask size, leaving 12 bits for the host address.
+ * Use 12 bits for the machine ID based on the local IP address lower 12 bits.
  */
 private const val bitsInMachineId = 12
 
@@ -27,8 +24,7 @@ const val epochOffset: Long = 1690848000
 
 // Get the IP address of the machine, which is used for generating the numeric ID.
 private fun getIpAddress(): InetAddress {
-    return if (System.getProperty("os.name").startsWith("Mac")) InetAddress.getLocalHost()
-    else InetAddress.getByName(EC2MetadataUtils.getPrivateIpAddress())
+    return InetAddress.getLocalHost()
 }
 
 /**

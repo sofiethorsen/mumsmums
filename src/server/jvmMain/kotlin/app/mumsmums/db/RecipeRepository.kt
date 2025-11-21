@@ -2,7 +2,7 @@ package app.mumsmums.db
 
 import app.mumsmums.model.Recipe
 
-class RecipeRepository(recipeTable: RecipeTable) {
+class RecipeRepository(recipeTable: SqliteRecipeTable) {
     private val cache = HashMap<Long, Recipe>()
     private var allRecipes = listOf<Recipe>()
 

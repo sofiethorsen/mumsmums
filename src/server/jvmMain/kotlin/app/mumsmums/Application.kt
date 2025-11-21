@@ -1,8 +1,7 @@
 package app.mumsmums
 
-import app.mumsmums.db.DynamoClientFactory
 import app.mumsmums.db.RecipeRepository
-import app.mumsmums.db.RecipeTable
+import app.mumsmums.db.SqliteRecipeTable
 import app.mumsmums.plugins.configureCORS
 import app.mumsmums.plugins.configureGraphQL
 import io.ktor.server.application.Application
@@ -14,8 +13,7 @@ fun main() {
 }
 
 fun Application.module() {
-    val amazonDynamoDB = DynamoClientFactory.getDynamoDb()
-    val recipeTable = RecipeTable(amazonDynamoDB)
+    val recipeTable = SqliteRecipeTable()
     val recipeRepository = RecipeRepository(recipeTable)
 
     configureGraphQL(recipeRepository)

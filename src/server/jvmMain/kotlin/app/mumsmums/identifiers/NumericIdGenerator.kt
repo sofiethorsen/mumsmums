@@ -43,31 +43,35 @@ class NumericIdGenerator(
     // Get the raw IP address in the in network byte order, highest order byte is in the first octet.
     private val ipAddressBytes = ipAddress.address
 
-    // Convert the raw IPv4 address into a single 32-bit unsigned integer (i.e. Long in Kotlin) as the machine ID.
-    // We do this by applying a bitmask on each octet, to ensure we get a positive value between 0 and 255.
+    // Convert the IP address (IPv4 or IPv6) into a Long for use as machine ID.
+    // For IPv4: use all 4 bytes
+    // For IPv6: use the last 4 bytes (interface identifier portion)
     //
-    // For an example, consider an IP address like 192.168.1.10.
-    //
+    // For an example IPv4 address like 192.168.1.10:
     // - The ipAddressBytes array would look like [192, 168, 1, 10].
-    // - The first octet (ipAddressBytes[0]) is 192 (0xC0 in hexadecimal).
-    // - The second octet (ipAddressBytes[1]) is 168 (0xA8 in hexadecimal).
-    // - The third octet (ipAddressBytes[2]) is 1 (0x01 in hexadecimal).
-    // - The fourth octet (ipAddressBytes[3]) is 10 (0x0A in hexadecimal).
+    // - Together this results in: 3221225472 + 1101004800 + 256 + 10 = 3232235786
     //
-    // - ipAddressBytes[0].toLong() and 0xFFL is 192 and 0xFFL, which gives 192.
-    // - 192 shl (3 * 8) shifts 192 to the left by 24 bits, giving 3221225472.
-    // - ipAddressBytes[1].toLong() and 0xFFL is 168 and 0xFFL, which gives 168.
-    // - 168 shl (2 * 8) shifts 168 to the left by 16 bits, giving 1101004800.
-    // - ipAddressBytes[2].toLong() and 0xFFL is 1 and 0xFFL, which gives 1.
-    // - 1 shl (1 * 8) shifts 1 to the left by 8 bits, giving 256.
-    // - ipAddressBytes[3].toLong() and 0xFFL is 10 and 0xFFL, which gives 10.
-    //
-    // Together this results in the ID: 3221225472 + 1101004800 + 256 + 10 = 4328719366
-    private val ipAddressAsLong: Long =
+    // For an IPv6 address, we use the last 4 bytes which typically contain the interface identifier.
+    private val ipAddressAsLong: Long = when (ipAddressBytes.size) {
+        4 -> {
+            // IPv4: use all 4 bytes
             ((ipAddressBytes[0].toLong() and 0xFFL) shl (3 * 8)) +
                     ((ipAddressBytes[1].toLong() and 0xFFL) shl (2 * 8)) +
                     ((ipAddressBytes[2].toLong() and 0xFFL) shl (1 * 8)) +
                     (ipAddressBytes[3].toLong() and 0xFFL)
+        }
+        16 -> {
+            // IPv6: use last 4 bytes
+            ((ipAddressBytes[12].toLong() and 0xFFL) shl (3 * 8)) +
+                    ((ipAddressBytes[13].toLong() and 0xFFL) shl (2 * 8)) +
+                    ((ipAddressBytes[14].toLong() and 0xFFL) shl (1 * 8)) +
+                    (ipAddressBytes[15].toLong() and 0xFFL)
+        }
+        else -> {
+            // Fallback: use hashCode if we get an unexpected address format
+            ipAddress.hashCode().toLong() and 0xFFFFFFFFL
+        }
+    }
 
     // Calculate the machine ID bits by combining the IP address with timestamp and counter bits.
     private val machineIdBit = (ipAddressAsLong and ((1L shl bitsInMachineId) - 1)) shl

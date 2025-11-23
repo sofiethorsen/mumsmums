@@ -23,17 +23,19 @@ jobs:
 
     # https://github.com/actions/cache/blob/master/examples.md#node---npm
     - name: Restore NPM cache
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Build and test client code
-      run: |
-        ./ci/pr-build-client.sh
+# TODO: Since the client build relies on SSR, the server needs to be running. Before
+# enabling the client build, the server needs to be migrated off of AWS.
+#    - name: Use Node.js ${{ matrix.node-version }}
+#      uses: actions/setup-node@v1
+#      with:
+#        node-version: ${{ matrix.node-version }}
+#    - name: Build and test client code
+#      run: |
+#        ./ci/pr-build-client.sh

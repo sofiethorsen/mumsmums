@@ -43,10 +43,6 @@ class NumericIdGenerator(
     // Get the raw IP address in the in network byte order, highest order byte is in the first octet.
     private val ipAddressBytes = ipAddress.address
 
-    init {
-        println("DEBUG NumericIdGenerator: IP address: ${ipAddress.hostAddress}, bytes size: ${ipAddressBytes.size}, raw: ${ipAddressBytes.contentToString()}")
-    }
-
     // Convert the IP address (IPv4 or IPv6) into a Long for use as machine ID.
     // For IPv4: use all 4 bytes
     // For IPv6: use the last 4 bytes (interface identifier portion)

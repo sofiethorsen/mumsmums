@@ -16,11 +16,9 @@ class NumericIdGeneratorTest {
     fun `When generating IDs, 12 bits are used for the machine part`() {
         every { currentTimestampMillis.invoke() } answers { epochOffset * 1000L }
         val inetAddress = InetAddress.getByName("255.255.255.255")
-        println("DEBUG: Testing machine part with address: ${inetAddress.hostAddress}, bytes: ${inetAddress.address.size}, raw: ${inetAddress.address.contentToString()}")
         val idGenerator = NumericIdGenerator(inetAddress, currentTimestampMillis, counter)
 
         val id = idGenerator.generateId()
-        println("DEBUG: Generated ID for machine part test: 0x${id.toString(16).uppercase()}, expected: 0x000FFF0000000000")
 
         Assertions.assertEquals(id, 0x000FFF0000000000L)
     }
@@ -29,11 +27,9 @@ class NumericIdGeneratorTest {
     fun `When generating IDs, 29 bits are used for the timestamp part`() {
         every { currentTimestampMillis.invoke() } answers { (0xFFFFFFFFFFL + epochOffset) * 1000L }
         val inetAddress = InetAddress.getByName("0.0.0.0")
-        println("DEBUG: Testing timestamp part with address: ${inetAddress.hostAddress}, bytes: ${inetAddress.address.size}")
         val idGenerator = NumericIdGenerator(inetAddress, currentTimestampMillis, counter)
 
         val id = idGenerator.generateId()
-        println("DEBUG: Generated ID for timestamp part test: 0x${id.toString(16).uppercase()}, expected: 0x000000FFFFFFF800")
 
         Assertions.assertEquals(id,  0x000000FFFFFFF800L)
     }

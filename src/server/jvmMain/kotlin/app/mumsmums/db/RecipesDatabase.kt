@@ -63,8 +63,10 @@ class RecipesDatabase(dbPath: String = "sqlite/recipes.db") {
                     name TEXT NOT NULL,
                     volume TEXT,
                     quantity REAL,
+                    recipeId INTEGER,
                     position INTEGER NOT NULL,
-                    FOREIGN KEY (sectionId) REFERENCES ingredient_sections(id)
+                    FOREIGN KEY (sectionId) REFERENCES ingredient_sections(id),
+                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId)
                 )
                 """.trimIndent()
             )
@@ -177,13 +179,14 @@ class RecipesDatabase(dbPath: String = "sqlite/recipes.db") {
 
             section.ingredients.forEachIndexed { ingredientIndex, ingredient ->
                 connection.prepareStatement(
-                    "INSERT INTO ingredients (sectionId, name, volume, quantity, position) VALUES (?, ?, ?, ?, ?)"
+                    "INSERT INTO ingredients (sectionId, name, volume, quantity, recipeId, position) VALUES (?, ?, ?, ?, ?, ?)"
                 ).use { statement ->
                     statement.setLong(1, sectionId)
                     statement.setString(2, ingredient.name)
                     statement.setString(3, ingredient.volume)
                     statement.setObject(4, ingredient.quantity)
-                    statement.setInt(5, ingredientIndex)
+                    statement.setObject(5, ingredient.recipeId)
+                    statement.setInt(6, ingredientIndex)
                     statement.executeUpdate()
                 }
             }
@@ -279,16 +282,18 @@ class RecipesDatabase(dbPath: String = "sqlite/recipes.db") {
         val ingredients = mutableListOf<Ingredient>()
 
         connection.prepareStatement(
-            "SELECT name, volume, quantity FROM ingredients WHERE sectionId = ? ORDER BY position"
+            "SELECT name, volume, quantity, recipeId FROM ingredients WHERE sectionId = ? ORDER BY position"
         ).use { statement ->
             statement.setLong(1, sectionId)
             val resultSet = statement.executeQuery()
             while (resultSet.next()) {
                 val quantityDouble = resultSet.getObject("quantity") as? Double
+                val recipeIdLong = resultSet.getObject("recipeId") as? Long
                 val ingredient = Ingredient(
                     name = resultSet.getString("name"),
                     volume = resultSet.getString("volume"),
-                    quantity = quantityDouble?.toFloat()
+                    quantity = quantityDouble?.toFloat(),
+                    recipeId = recipeIdLong
                 )
                 ingredients.add(ingredient)
             }

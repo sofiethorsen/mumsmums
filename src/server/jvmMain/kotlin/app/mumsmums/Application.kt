@@ -13,7 +13,20 @@ fun main() {
 }
 
 fun Application.module() {
-    val recipeTable = SqliteRecipeTable()
+    // Use environment variable or resolve to project root
+    val dbPath = System.getenv("SQLITE_DB_PATH") ?: run {
+        // Try to find project root by looking for MODULE.bazel
+        val currentDir = java.io.File(".").absoluteFile
+        var projectRoot = currentDir
+        while (projectRoot != null && !java.io.File(projectRoot, "MODULE.bazel").exists()) {
+            projectRoot = projectRoot.parentFile
+        }
+        val resolvedRoot = projectRoot ?: currentDir
+        "${resolvedRoot.absolutePath}/sqlite/recipes.db"
+    }
+
+    println("Using database path: $dbPath")
+    val recipeTable = SqliteRecipeTable(dbPath)
     val recipeRepository = RecipeRepository(recipeTable)
 
     configureGraphQL(recipeRepository)

@@ -8,14 +8,18 @@ import kotlinx.serialization.json.Json
 import java.sql.Connection
 import java.sql.DriverManager
 
-class SqliteRecipeTable(private val dbPath: String = "recipes.db") {
+class SqliteRecipeTable(private val dbPath: String = "sqlite/recipes.db") {
     private val connection: Connection
     private val json = Json { ignoreUnknownKeys = true }
 
     init {
+        // Ensure the parent directory exists
+        val dbFile = java.io.File(dbPath)
+        dbFile.parentFile?.mkdirs()
+
         connection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
         createTables()
-        reloadRecipes()
+        loadRecipesIfEmpty()
     }
 
     private fun createTables() {
@@ -77,7 +81,24 @@ class SqliteRecipeTable(private val dbPath: String = "recipes.db") {
         }
     }
 
-    private fun reloadRecipes() {
+    private fun loadRecipesIfEmpty() {
+        // Check if database already has recipes
+        val hasRecipes = connection.createStatement().use { stmt ->
+            val rs = stmt.executeQuery("SELECT COUNT(*) as count FROM recipes")
+            rs.next()
+            rs.getInt("count") > 0
+        }
+
+        if (hasRecipes) {
+            println("Database already contains recipes, skipping load")
+            return
+        }
+
+        println("Loading recipes from recipes.json...")
+        loadRecipesFromJson()
+    }
+
+    fun reloadRecipes() {
         // Clear existing data
         connection.createStatement().use { stmt ->
             stmt.execute("DELETE FROM recipe_steps")
@@ -86,7 +107,11 @@ class SqliteRecipeTable(private val dbPath: String = "recipes.db") {
             stmt.execute("DELETE FROM recipes")
         }
 
-        println("Loading recipes from recipes.json...")
+        println("Reloading recipes from recipes.json...")
+        loadRecipesFromJson()
+    }
+
+    private fun loadRecipesFromJson() {
         val jsonString = this::class.java.classLoader
             .getResourceAsStream("scripts/jvmMain/kotlin/app/mumsmums/resources/recipes.json")
             ?.bufferedReader()

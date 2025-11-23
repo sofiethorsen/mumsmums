@@ -17,6 +17,7 @@ kt_jvm_library(
     visibility = [
         "//src/scripts/jvmMain/kotlin/app/mumsmums:__subpackages__",
         "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
+        "//src/server/jvmTest/kotlin/app/mumsmums:__subpackages__",
     ],
     deps = [
         "//src/scripts/jvmMain/kotlin/app/mumsmums/resources:recipes",

@@ -1,0 +1,13 @@
+load("//bazel/junit5:defs.bzl", "kt_jvm_junit5_test")
+
+kt_jvm_junit5_test(
+    name = "test",
+    size = "small",
+    srcs = glob(["*.kt"]),
+    associates = ["//src/server/jvmMain/kotlin/app/mumsmums/db"],
+    test_package = "app.mumsmums.db.test",
+    deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/model",
+        "@maven//:org_xerial_sqlite_jdbc",
+    ],
+)

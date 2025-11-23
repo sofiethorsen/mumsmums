@@ -1,4 +1,4 @@
-load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library", "kt_jvm_test")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library", "kt_jvm_test")
 
 def kt_jvm_junit5_test(name, srcs = [], test_package = None, deps = [], runtime_deps = [], **kwargs):
     """Generates kotlin test targets that run using junit 5"""

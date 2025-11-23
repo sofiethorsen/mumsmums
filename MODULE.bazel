@@ -1,0 +1,59 @@
+module(
+    name = "mumsmums",
+    version = "1.0",
+)
+
+# Kotlin rules
+bazel_dep(name = "rules_kotlin", version = "2.2.0")
+
+# JVM external rules
+bazel_dep(name = "rules_jvm_external", version = "6.6")
+
+# Register Kotlin toolchain
+register_toolchains("//bazel:kotlin_toolchain")
+
+# Use JVM external extension for Maven dependencies
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+
+# Exclude junit:junit from mockk to avoid testonly conflicts
+maven.artifact(
+    testonly = True,
+    artifact = "mockk",
+    exclusions = ["junit:junit"],
+    group = "io.mockk",
+    version = "1.13.5",
+)
+maven.artifact(
+    testonly = True,
+    artifact = "mockk-jvm",
+    exclusions = ["junit:junit"],
+    group = "io.mockk",
+    version = "1.13.5",
+)
+maven.install(
+    artifacts = [
+        "ch.qos.logback:logback-classic:1.2.11",
+        "com.amazonaws:aws-java-sdk-core:1.12.518",
+        "com.amazonaws:aws-java-sdk-dynamodb:1.12.518",
+        "com.apurebase:kgraphql-ktor:0.19.0",
+        "com.apurebase:kgraphql:0.19.0",
+        "io.ktor:ktor-server-auth-jvm:2.3.2",
+        "io.ktor:ktor-server-core-jvm:2.3.2",
+        "io.ktor:ktor-server-cors-jvm:2.3.2",
+        "io.ktor:ktor-server-host-common-jvm:2.3.2",
+        "io.ktor:ktor-server-netty-jvm:2.3.2",
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0",
+        "org.junit.jupiter:junit-jupiter-api:5.10.0",
+        "org.junit.jupiter:junit-jupiter-engine:5.10.0",
+        "org.junit.jupiter:junit-jupiter-params:5.10.0",
+        "org.junit.platform:junit-platform-commons:1.10.0",
+        "org.junit.platform:junit-platform-console:1.10.0",
+        "org.junit.platform:junit-platform-engine:1.10.0",
+        "org.junit.platform:junit-platform-launcher:1.10.0",
+        "org.junit.platform:junit-platform-suite-api:1.10.0",
+        "software.amazon.awssdk:dynamodb:2.20.123",
+        "software.amazon.awssdk:sts:2.20.123",
+    ],
+    repositories = ["https://repo1.maven.org/maven2"],
+)
+use_repo(maven, "maven")

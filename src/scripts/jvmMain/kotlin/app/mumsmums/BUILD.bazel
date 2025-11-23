@@ -5,6 +5,7 @@ kt_jvm_library(
     srcs = glob(
         ["*.kt"],
         exclude = [
+            "DeleteRecipeItem.kt",
             "GetRecipeItem.kt",
             "InitializeDb.kt",
             "PutRecipeItem.kt",
@@ -18,11 +19,23 @@ kt_jvm_library(
     ],
 )
 
+kt_jvm_library(
+    name = "initialize_db_lib",
+    srcs = ["InitializeDb.kt"],
+    plugins = ["//bazel:serialization"],
+    deps = [
+        ":lib",
+        "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
+        "@maven//:org_xerial_sqlite_jdbc",
+    ],
+)
+
 java_binary(
     name = "initalize",
     main_class = "app.mumsmums.InitializeDbKt",
     runtime_deps = [
-        ":lib",
+        ":initialize_db_lib",
     ],
 )
 
@@ -34,11 +47,54 @@ java_binary(
     ],
 )
 
+kt_jvm_library(
+    name = "put_recipe_item_lib",
+    srcs = ["PutRecipeItem.kt"],
+    plugins = ["//bazel:serialization"],
+    deps = [
+        ":lib",
+        "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "//src/server/jvmMain/kotlin/app/mumsmums/model",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
+        "@maven//:org_xerial_sqlite_jdbc",
+    ],
+)
+
 java_binary(
     name = "put",
     main_class = "app.mumsmums.PutRecipeItemKt",
     runtime_deps = [
-        ":lib",
+        ":put_recipe_item_lib",
+    ],
+)
+
+kt_jvm_library(
+    name = "delete_recipe_item_lib",
+    srcs = ["DeleteRecipeItem.kt"],
+    plugins = ["//bazel:serialization"],
+    deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
+        "@maven//:org_xerial_sqlite_jdbc",
+    ],
+)
+
+java_binary(
+    name = "delete",
+    main_class = "app.mumsmums.DeleteRecipeItemKt",
+    runtime_deps = [
+        ":delete_recipe_item_lib",
+    ],
+)
+
+kt_jvm_library(
+    name = "get_recipe_item_lib",
+    srcs = ["GetRecipeItem.kt"],
+    plugins = ["//bazel:serialization"],
+    deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
+        "@maven//:org_xerial_sqlite_jdbc",
     ],
 )
 
@@ -46,6 +102,14 @@ java_binary(
     name = "get",
     main_class = "app.mumsmums.GetRecipeItemKt",
     runtime_deps = [
-        ":lib",
+        ":get_recipe_item_lib",
+    ],
+)
+
+java_binary(
+    name = "regenerate_database",
+    main_class = "app.mumsmums.InitializeDbKt",
+    runtime_deps = [
+        ":initialize_db_lib",
     ],
 )

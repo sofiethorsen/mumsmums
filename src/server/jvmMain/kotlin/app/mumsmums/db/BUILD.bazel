@@ -7,13 +7,14 @@ kt_jvm_library(
     visibility = [
         "//src/scripts/jvmMain/kotlin/app/mumsmums:__subpackages__",
         "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
+        "//src/server/jvmTest/kotlin/app/mumsmums:__subpackages__",
     ],
     deps = [
+        "//src/scripts/jvmMain/kotlin/app/mumsmums/resources:recipes",
+        "//src/server/jvmMain/kotlin/app/mumsmums/filesystem",
         "//src/server/jvmMain/kotlin/app/mumsmums/identifiers",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
-        "@maven//:com_amazonaws_aws_java_sdk_dynamodb",
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
-        "@maven//:software_amazon_awssdk_dynamodb",
-        "@maven//:software_amazon_awssdk_sts",
+        "@maven//:org_xerial_sqlite_jdbc",
     ],
 )

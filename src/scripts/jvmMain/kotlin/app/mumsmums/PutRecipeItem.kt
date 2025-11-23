@@ -1,31 +1,32 @@
 package app.mumsmums
 
-import app.mumsmums.db.DynamoClientFactory
-import app.mumsmums.db.RecipeTable
+import app.mumsmums.db.SqliteRecipesDatabase
+import app.mumsmums.filesystem.MumsMumsPaths
 import app.mumsmums.model.Recipe
 import kotlin.io.path.Path
 
-private val amazonDynamoDb = DynamoClientFactory.getDynamoDbForScriptContext()
-private val table = RecipeTable(amazonDynamoDb)
-
 fun main() {
-    val home = System.getenv("HOME")
-    val repoFolder = "Snapchat/Dev/mumsmums/src/scripts/jvmMain/kotlin/app/mumsmums/resources/recipe.json"
-    val path = "$home/$repoFolder"
+    val db = SqliteRecipesDatabase()
 
-    val recipeWithId = JsonParser.parseRecipe(Path(path))
+    // Path to the recipe JSON file
+    val recipePath = MumsMumsPaths.getRecipeJsonPath()
 
-    // store the new recipe
-    table.put(recipeWithId)
+    println("Reading recipe from: $recipePath")
+    val recipeWithId = JsonParser.parseRecipe(Path(recipePath))
+
+    // store the new recipe (ID will be generated if not present)
+    db.put(recipeWithId)
 
     // now see if we need to make any updates
-    val allRecipes = table.scan()
+    val allRecipes = db.scan()
 
     val updates = filterNeedUpdate(allRecipes)
 
     updates.forEach { recipe ->
-        table.update(recipe.recipeId, recipe, setOf("ingredientSections"))
+        db.update(recipe.recipeId, recipe)
     }
+
+    println("Done! Added/updated ${updates.size + 1} recipe(s)")
 }
 
 

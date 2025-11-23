@@ -7,6 +7,7 @@ kt_jvm_library(
     visibility = [
         "//src/scripts/jvmMain/kotlin/app/mumsmums:__subpackages__",
         "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
+        "//src/server/jvmTest/kotlin/app/mumsmums:__subpackages__",
     ],
     deps = [
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",

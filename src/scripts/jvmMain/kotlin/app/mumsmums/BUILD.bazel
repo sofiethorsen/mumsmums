@@ -6,38 +6,44 @@ kt_jvm_library(
     plugins = ["//bazel:serialization"],
     deps = [
         "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "//src/server/jvmMain/kotlin/app/mumsmums/model",
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
+        "@maven//:org_xerial_sqlite_jdbc",
     ],
 )
 
 java_binary(
     name = "initalize",
     main_class = "app.mumsmums.InitializeDbKt",
-    runtime_deps = [
-        ":lib",
-    ],
+    runtime_deps = [":lib"],
 )
 
 java_binary(
     name = "update",
     main_class = "app.mumsmums.UpdateRecipeItemKt",
-    runtime_deps = [
-        ":lib",
-    ],
+    runtime_deps = [":lib"],
 )
 
 java_binary(
     name = "put",
     main_class = "app.mumsmums.PutRecipeItemKt",
-    runtime_deps = [
-        ":lib",
-    ],
+    runtime_deps = [":lib"],
+)
+
+java_binary(
+    name = "delete",
+    main_class = "app.mumsmums.DeleteRecipeItemKt",
+    runtime_deps = [":lib"],
 )
 
 java_binary(
     name = "get",
     main_class = "app.mumsmums.GetRecipeItemKt",
-    runtime_deps = [
-        ":lib",
-    ],
+    runtime_deps = [":lib"],
+)
+
+java_binary(
+    name = "regenerate_database",
+    main_class = "app.mumsmums.InitializeDbKt",
+    runtime_deps = [":lib"],
 )

@@ -33,8 +33,6 @@ maven.artifact(
 maven.install(
     artifacts = [
         "ch.qos.logback:logback-classic:1.2.11",
-        "com.amazonaws:aws-java-sdk-core:1.12.518",
-        "com.amazonaws:aws-java-sdk-dynamodb:1.12.518",
         "com.apurebase:kgraphql-ktor:0.19.0",
         "com.apurebase:kgraphql:0.19.0",
         "io.ktor:ktor-server-auth-jvm:2.3.2",
@@ -51,8 +49,7 @@ maven.install(
         "org.junit.platform:junit-platform-engine:1.10.0",
         "org.junit.platform:junit-platform-launcher:1.10.0",
         "org.junit.platform:junit-platform-suite-api:1.10.0",
-        "software.amazon.awssdk:dynamodb:2.20.123",
-        "software.amazon.awssdk:sts:2.20.123",
+        "org.xerial:sqlite-jdbc:3.47.1.0",
     ],
     repositories = ["https://repo1.maven.org/maven2"],
 )

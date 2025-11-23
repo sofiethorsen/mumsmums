@@ -1,6 +1,6 @@
 package app.mumsmums
 
-import app.mumsmums.db.RecipesDatabase
+import app.mumsmums.db.SqliteRecipesDatabase
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
     }
 
     val dbPath = "${projectRoot.absolutePath}/sqlite/recipes.db"
-    val table = RecipesDatabase(dbPath)
+    val table = SqliteRecipesDatabase(dbPath)
 
     println("Deleting recipe with ID: $recipeId")
     table.delete(recipeId)

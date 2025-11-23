@@ -1,6 +1,6 @@
 package app.mumsmums
 
-import app.mumsmums.db.RecipesDatabase
+import app.mumsmums.db.SqliteRecipesDatabase
 import app.mumsmums.model.Recipe
 import kotlin.io.path.Path
 
@@ -16,7 +16,7 @@ fun main() {
     }
 
     val dbPath = "${projectRoot.absolutePath}/sqlite/recipes.db"
-    val table = RecipesDatabase(dbPath)
+    val table = SqliteRecipesDatabase(dbPath)
 
     // Path to the recipe JSON file
     val recipePath = "${projectRoot.absolutePath}/src/scripts/jvmMain/kotlin/app/mumsmums/resources/recipe.json"

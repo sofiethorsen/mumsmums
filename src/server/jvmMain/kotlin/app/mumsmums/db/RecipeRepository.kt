@@ -2,13 +2,13 @@ package app.mumsmums.db
 
 import app.mumsmums.model.Recipe
 
-class RecipeRepository(recipeTable: RecipesDatabase) {
+class RecipeRepository(recipesDatabase: RecipesDatabase) {
     private val cache = HashMap<Long, Recipe>()
     private var allRecipes = listOf<Recipe>()
 
     init {
         // populate the cache on init
-        val items = recipeTable.scan()
+        val items = recipesDatabase.scan()
         items.forEach {
             cache[it.recipeId] = it
         }

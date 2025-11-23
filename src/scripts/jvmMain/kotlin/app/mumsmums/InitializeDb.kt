@@ -1,6 +1,6 @@
 package app.mumsmums
 
-import app.mumsmums.db.RecipesDatabase
+import app.mumsmums.db.SqliteRecipesDatabase
 import kotlin.io.path.Path
 import kotlin.system.exitProcess
 
@@ -39,7 +39,7 @@ fun main() {
         println()
 
         // Initialize database connection
-        val db = RecipesDatabase(dbPath)
+        val db = SqliteRecipesDatabase(dbPath)
 
         println("Deleting existing tables and recreating them...")
         db.dropTables()

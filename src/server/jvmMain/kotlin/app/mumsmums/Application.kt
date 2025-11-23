@@ -1,7 +1,7 @@
 package app.mumsmums
 
 import app.mumsmums.db.RecipeRepository
-import app.mumsmums.db.RecipesDatabase
+import app.mumsmums.db.SqliteRecipesDatabase
 import app.mumsmums.plugins.configureCORS
 import app.mumsmums.plugins.configureGraphQL
 import io.ktor.server.application.Application
@@ -26,7 +26,7 @@ fun Application.module() {
     }
 
     println("Using database path: $dbPath")
-    val recipeTable = RecipesDatabase(dbPath)
+    val recipeTable = SqliteRecipesDatabase(dbPath)
     val recipeRepository = RecipeRepository(recipeTable)
 
     configureGraphQL(recipeRepository)

@@ -17,15 +17,8 @@ object JsonParser {
     fun parseRecipes(pathToFile: Path): List<Recipe> {
         return FileReader(pathToFile.toString(), Charset.forName("UTF-8")).use {
             val recipes: List<Recipe> = formatter.decodeFromString(it.buffered().readText())
-
-            // the recipes do not yet have IDs, assign them this before continuing with the postprocessing
-            val updatedRecipes = recipes.map { recipe ->
-                val updatedRecipe = recipe.copy(recipeId = idGenerator.generateId())
-                updatedRecipe
-            }
-
             // now, link any ingredients that are also recipes themselves
-            postprocess(updatedRecipes)
+            postprocess(recipes)
         }
     }
 

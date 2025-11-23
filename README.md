@@ -2,6 +2,10 @@
 
 ## Running locally
 
+Build all sources:
+
+`./ci/build-sources.sh`
+
 Start the backend:
 
 `bazel run //src/server/jvmMain/kotlin/app/mumsmums`

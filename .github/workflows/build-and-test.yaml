@@ -36,12 +36,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-# TODO: Since the client build relies on SSR, the server needs to be running. Before
-# enabling the client build, the server needs to be migrated off of AWS.
-#    - name: Use Node.js ${{ matrix.node-version }}
-#      uses: actions/setup-node@v1
-#      with:
-#        node-version: ${{ matrix.node-version }}
-#    - name: Build and test client code
-#      run: |
-#        ./ci/pr-build-client.sh
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Build and test client code
+      run: |
+        ./ci/pr-build-client.sh

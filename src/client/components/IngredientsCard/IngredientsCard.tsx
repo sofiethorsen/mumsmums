@@ -18,7 +18,7 @@ const IngredientsCard: React.FC<IngredientsCardProps> = ({ recipe }) => {
     useEffect(() => {
         const value: number = (recipe.numberOfUnits || recipe.servings || 1) * multiplier
         setOriginalAmount(value)
-    }, [])
+    }, [multiplier, recipe.numberOfUnits, recipe.servings])
 
     const handleMultiplierChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newMultiplier = parseFloat(e.target.value)

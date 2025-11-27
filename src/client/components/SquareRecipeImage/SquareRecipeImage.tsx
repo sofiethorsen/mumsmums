@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import styles from './SquareRecipeImage.module.css'
 import generateHexColor from './colorGenerator'
 
@@ -12,10 +13,12 @@ interface SquareImageProps {
 const placeholder = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAQAAADTdEb+AAACHElEQVR42u3SMQ0AAAzDsJU/6aGo+tgQouSgIBJgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC4yFsTAWGAtjYSwwFsbCWGAsjIWxwFgYC2OBsTAWxgJjYSyMBcbCWBgLjIWxMBYYC2NhLDAWxsJYYCyMhbHAWBgLY4GxMBbGAmNhLIwFxsJYGAuMhbEwFhgLY2EsMBbGwlhgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC2OBsTAWxgJjYSyMBcbCWBgLjIWxMBYYC2NhLDAWxsJYYCyMhbHAWBgLY4GxMBbGAmNhLIwFxsJYGAuMhbEwFhgLY2EsMBbGwlhgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC4yFsTAWGAtjYSwwFsbCWGAsjIWxwFgYC2OBsTAWxgJjYSyMBcbCWBgLjIWxMBbGAmNhLIwFxsJYGAuMhbEwFhgLY2EsMBbGwlhgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC4yFsTAWGAtjYSwwFsbCWGAsjIWxwFgYC2OBsTAWxgJjYSyMBcbCWBgLjIWxMBYYC2NhLDAWxsJYYCyMhbHAWBgLY4GxMBbGAmNhLIwFxsJYGAuMhbEwFhgLY2EsjCUBxsJYGAuMhbEwFhgLY2EsMBbGwlhgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC4yFsTAWGAtjYSwwFsbCWGAsjIWxwFjsPeVaAS0/Qs6MAAAAAElFTkSuQmCC"
 
 const renderImage = (imageUrl: string, imageAltText: string) => {
-    return <img
+    return <Image
         src={imageUrl}
         alt={imageAltText}
         className={styles.squareImage}
+        width={300}
+        height={300}
     />
 }
 
@@ -47,7 +50,7 @@ const SquareRecipeImage: React.FC<SquareImageProps> = ({ imageUrl, imageAltText,
 
     return (
         <div className={styles.imageContainer}>
-            {imageUrl && imageUrl.length > 0 && inView ? renderImage(imageUrl, imageAltText) : <img ref={placeholderRef} src={placeholder} alt={imageAltText} className={styles.squareImage} />}
+            {imageUrl && imageUrl.length > 0 && inView ? renderImage(imageUrl, imageAltText) : <Image ref={placeholderRef} src={placeholder} alt={imageAltText} className={styles.squareImage} width={300} height={300} />}
             {!imageUrl && renderPlaceHolder(recipeId)}
         </div>
     )

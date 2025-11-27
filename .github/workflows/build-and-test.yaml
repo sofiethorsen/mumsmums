@@ -39,4 +39,4 @@ jobs:
 
     - name: Build and test the sources
       run: |
-        ./ci/pr-build-client.sh
+        ./ci/pr-build.sh

@@ -56,9 +56,11 @@ build_all() {
 }
 
 test_all() {
-    echo "### Running all tests..." >&2
-    cd "$GIT_DIR"
-    bazel test //...
+    echo "### Running all server tests..." >&2
+    (cd "$GIT_DIR" && bazel test //...)
+
+    echo "### Running all frontend tests..." >&2
+    (cd "$GIT_DIR/src/client" && npm run test)
 }
 
 wait_for_server() {

@@ -1,0 +1,243 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+GIT_DIR=$(git rev-parse --show-toplevel)
+COMMAND="${1:-}"
+shift || true
+
+show_usage() {
+  1>&2 cat <<EOM
+CLI to manage the mumsmums application.
+
+USAGE:
+    mumsmums <COMMAND> [OPTIONS]
+
+COMMANDS:
+    build              - Build all sources (server + client)
+    test               - Run all tests
+    start [--docker]   - Start the app locally or run it in docker
+    stop [--docker]    - Stop the app locally or the docker containers running it
+EOM
+    exit 1
+}
+
+build_server() {
+  echo "### Building server..." >&2
+  cd "$GIT_DIR"
+  bazel build //...
+  bazel build //src/server/jvmMain/kotlin/app/mumsmums:mumsmums_deploy.jar
+  echo "### Server build complete." >&2
+}
+
+build_client() {
+    echo "### Building client, start a local server for SSR..." >&2
+
+    start_local_server
+
+    echo '### Building client sources...'
+    cd "$GIT_DIR/src/client" || exit 1
+
+    npm ci
+    npm run lint
+    npm run lint:tsc
+
+    # Build with localhost backend for build-time SSR
+    NEXT_PUBLIC_USE_LOCAL_BACKEND=true npm run build --if-present
+
+    echo "### Client build complete, stopping local server" >&2
+
+    stop_local
+}
+
+build_all() {
+    build_server
+    build_client
+}
+
+test_all() {
+    echo "### Running all tests..." >&2
+    cd "$GIT_DIR"
+    bazel test //...
+}
+
+wait_for_server() {
+    local timeout_seconds="${1:-30}"
+    local log_file="${2:-}"
+
+    echo "### Waiting for local server to be ready (timeout: ${timeout_seconds}s)..." >&2
+
+    for i in $(seq 1 "$timeout_seconds"); do
+        if curl -s http://localhost:8080/graphql > /dev/null 2>&1; then
+            return 0
+        fi
+
+        if [ "$i" -eq "$timeout_seconds" ]; then
+            echo "### Server failed to start after ${timeout_seconds} seconds" >&2
+            if [ -n "$log_file" ] && [ -f "$log_file" ]; then
+                echo "### Server logs:" >&2
+                cat "$log_file" >&2
+            fi
+            return 1
+        fi
+
+        sleep 1
+    done
+}
+
+start_local_server() {
+    local log_file="${1:-/tmp/mumsmums-server.log}"
+    local timeout_seconds="${2:-30}"
+
+    echo "### Starting local server..." >&2
+
+    # Start server in background
+    cd "$GIT_DIR"
+    bazel run //src/server/jvmMain/kotlin/app/mumsmums > "$log_file" 2>&1 &
+    local server_pid=$!
+
+    # Wait for server to be ready
+    if wait_for_server "$timeout_seconds" "$log_file"; then
+        echo "### Server with pid: $server_pid started at http://localhost:8080" >&2
+    else
+        kill "$server_pid" 2>/dev/null || true
+        exit 1
+    fi
+}
+
+start_local() {
+    # Start server
+    start_local_server
+
+    # Guard to prevent duplicate cleanup
+    _cleanup_done=0
+    cleanup() {
+        if [ $_cleanup_done -eq 0 ]; then
+            _cleanup_done=1
+            stop_local
+        fi
+    }
+
+    # Ensure server stops when client exits or on Ctrl+C
+    trap cleanup EXIT INT TERM
+
+    # Start client in foreground
+    echo "### Starting client at http://localhost:3000..." >&2
+    cd "$GIT_DIR/src/client"
+    npm run dev
+}
+
+start_docker() {
+    # Clean up any existing containers and network
+    echo "### Cleaning up existing containers..." >&2
+    docker rm -f mumsmums next 2>/dev/null || true
+    docker network rm app_net 2>/dev/null || true
+
+    # Build sources (this builds both backend and frontend with localhost:8080)
+    echo "### Building sources..." >&2
+    cd "$GIT_DIR"
+    build_all
+
+    # Create docker network
+    echo "### Creating docker network..." >&2
+    docker network create app_net
+
+    # Build images
+    echo "### Building docker images..." >&2
+    cd "$GIT_DIR"
+
+    # Create a folder for any sources we want to copy into the docker image
+    rm -rf build
+    mkdir build
+
+    # Copy the deploy jar into the build folder
+    cp bazel-bin/src/server/jvmMain/kotlin/app/mumsmums/mumsmums_deploy.jar build/
+
+    docker build -t mumsmums -f docker/mumsmums.Dockerfile .
+    docker build -t next -f docker/next.Dockerfile .
+
+    # Run backend container
+    echo "### Starting mumsmums server..." >&2
+    docker run -d --network app_net --name mumsmums -p 8080:8080 mumsmums
+
+    # Wait for backend to be ready
+    if wait_for_server 30; then
+        # Run frontend container with link to backend
+        echo "### Starting Next.js frontend..." >&2
+        docker run -d --network app_net --name next -p 3000:3000 --add-host=localhost:host-gateway next
+
+        echo "### Done! Application is running:" >&2
+        echo "  - Backend: http://localhost:8080" >&2
+        echo "  - Frontend: http://localhost:3000" >&2
+    else
+        echo "### Failed to start docker containers" >&2
+        docker logs mumsmums >&2
+        exit 1
+    fi
+}
+
+stop_local() {
+    echo "### Stopping server..." >&2
+
+    local found_processes=0
+
+    # Find and kill any bazel server processes
+    local bazel_pids=$(pgrep -f "bazel-out.*mumsmums" 2>/dev/null || true)
+    if [ -n "$bazel_pids" ]; then
+        echo "### Killing bazel processes: $bazel_pids" >&2
+        echo "$bazel_pids" | xargs kill 2>/dev/null || true
+        found_processes=1
+    fi
+
+    # Kill anything on port 8080
+    local port_pids=$(lsof -ti:8080 2>/dev/null || true)
+    if [ -n "$port_pids" ]; then
+        echo "### Killing processes on port 8080: $port_pids" >&2
+        echo "$port_pids" | xargs kill -9 2>/dev/null || true
+        found_processes=1
+    fi
+
+    if [ $found_processes -eq 0 ]; then
+        echo "### Server is not running, nothing to stop" >&2
+    else
+        echo "### Server stopped" >&2
+    fi
+}
+
+stop_docker() {
+    echo "### Stopping docker containers..." >&2
+    docker stop mumsmums next 2>/dev/null || true
+    docker rm mumsmums next 2>/dev/null || true
+    docker network rm app_net 2>/dev/null || true
+    echo "### Docker containers stopped" >&2
+}
+
+case "$COMMAND" in
+    build)
+        build_all
+        ;;
+
+    test)
+        test_all
+        ;;
+
+    start)
+        if [ "${1:-}" = "--docker" ]; then
+            start_docker
+        else
+            start_local
+        fi
+        ;;
+
+    stop)
+        if [ "${1:-}" = "--docker" ]; then
+            stop_docker
+        else
+            stop_local
+        fi
+        ;;
+
+    *)
+        show_usage
+        ;;
+esac

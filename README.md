@@ -4,16 +4,26 @@
 
 Build all sources:
 
-`./ci/build-sources.sh`
+    ./scripts/mumsmums build
 
-Start the backend:
+Run all tests:
 
-`bazel run //src/server/jvmMain/kotlin/app/mumsmums`
+    ./scripts/mumsmums test
 
-Start the frontend:
+Start the app:
 
-`cd src/client && npm run dev`
+    ./scripts/mumsmums start
+
+Stop the app:
+
+    ./scripts/mumsmums stop
 
 ## Running in Docker
 
-`./bin/run-in-docker.sh`
+Start the app:
+
+    ./scripts/mumsmums start --docker
+
+Stop the app:
+
+    ./scripts/mumsmums stop --docker

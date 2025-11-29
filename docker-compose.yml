@@ -1,0 +1,73 @@
+services:
+  # Kotlin/Ktor backend service
+  backend:
+    build:
+      context: .
+      dockerfile: docker/mumsmums.Dockerfile
+    container_name: mumsmums-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./sqlite:/app/sqlite
+    networks:
+      - mumsmums-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/graphql"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Next.js frontend service
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/next.Dockerfile
+    container_name: mumsmums-frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      # Empty BACKEND_URL makes frontend use relative URLs (e.g., /graphql)
+      # Caddy will proxy these requests to the backend
+      - NEXT_PUBLIC_BACKEND_URL=
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - mumsmums-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Caddy reverse proxy
+  caddy:
+    image: caddy:2-alpine
+    container_name: mumsmums-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"  # HTTP/3
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - mumsmums-network
+
+networks:
+  mumsmums-network:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

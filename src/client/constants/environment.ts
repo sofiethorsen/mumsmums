@@ -1,7 +1,11 @@
-// Allow NEXT_PUBLIC_BACKEND_URL to directly override backend URL (for Docker)
-// Or NEXT_PUBLIC_USE_LOCAL_BACKEND to use localhost (for build scripts)
-const isProd = process.env.NODE_ENV === "production" && !process.env.NEXT_PUBLIC_USE_LOCAL_BACKEND
+// Determine backend URL at runtime - if it's not the browser, we assume it's build time (SSR)
+const isBrowser = typeof window !== 'undefined'
 
-export const BACKEND_BASE_URI =
-  process.env.NEXT_PUBLIC_BACKEND_URL ||
-  (isProd ? "https://mumsmums.app" : "http://localhost:8080")
+// On localhost:3000 -> use localhost:8080 (local dev)
+// On any other host -> use empty string for relative URLs (Caddy proxy)
+const isLocalDev = isBrowser && window.location.hostname === 'localhost'
+
+// For SSR, always use localhost:8080
+export const BACKEND_BASE_URI = isBrowser
+  ? (isLocalDev ? "http://localhost:8080" : "")
+  : "http://localhost:8080"

@@ -16,6 +16,7 @@ USAGE:
 COMMANDS:
     build              - Build all sources (server + client)
     test               - Run all tests
+    deploy <host>      - Deploy the app to remote host (e.g., deploy user@192.168.1.100)
     start [--docker]   - Start the app locally or run it in docker
     stop [--docker]    - Stop the app locally or the docker containers running it
 EOM
@@ -214,6 +215,55 @@ stop_docker() {
     echo "### Docker containers stopped" >&2
 }
 
+deploy() {
+  local deploy_host="$1"
+
+  if [ -z "$deploy_host" ]; then
+    echo "Error: Deploy host not specified" >&2
+    echo "Usage: mumsmums deploy <user@host>" >&2
+    exit 1
+  fi
+
+  echo "### Deploying to $deploy_host..." >&2
+
+  # First, build all sources
+  build_all
+
+  # Copy JAR to stable build directory (bazel-bin symlink can be unstable after bazel processes are killed)
+  cd "$GIT_DIR"
+  rm -rf build
+  mkdir -p build
+  cp bazel-bin/src/server/jvmMain/kotlin/app/mumsmums/mumsmums_deploy.jar build/
+
+  # Remove any existing build directory on the host machine
+  ssh "$deploy_host" 'rm -rf ~/mumsmums'
+
+  # Recreate directories
+  ssh "$deploy_host" 'mkdir -p ~/mumsmums/build'
+  ssh "$deploy_host" 'mkdir -p ~/mumsmums/src/client'
+  ssh "$deploy_host" 'mkdir -p ~/mumsmums/docker'
+  ssh "$deploy_host" 'mkdir -p ~/mumsmums/sqlite'
+
+  # Transfer files
+  scp build/mumsmums_deploy.jar "$deploy_host":~/mumsmums/build/
+  scp src/client/package*.json "$deploy_host":~/mumsmums/src/client/
+  scp -r src/client/{.next,public} "$deploy_host":~/mumsmums/src/client/
+  scp docker/{Caddyfile,mumsmums.Dockerfile,next.Dockerfile} "$deploy_host":~/mumsmums/docker/
+  scp sqlite/recipes.db "$deploy_host":~/mumsmums/sqlite/
+  scp docker-compose.yml "$deploy_host":~/mumsmums/
+
+  # Build the sources
+  ssh "$deploy_host" 'cd ~/mumsmums && docker-compose build'
+
+  # Stop the running app
+  ssh "$deploy_host" 'cd ~/mumsmums && docker-compose down'
+
+  # Start the new containers
+  ssh "$deploy_host" 'cd ~/mumsmums && docker-compose up -d'
+
+  echo "### Deployment to $deploy_host completed" >&2
+}
+
 case "$COMMAND" in
     build)
         build_all
@@ -221,6 +271,10 @@ case "$COMMAND" in
 
     test)
         test_all
+        ;;
+
+    deploy)
+        deploy "$1"
         ;;
 
     start)

@@ -1,0 +1,22 @@
+# Access via: http://localhost or http://<HOST-IP>
+
+:80 {
+    # Enable gzip compression
+    encode gzip
+
+    # GraphQL API endpoint - proxy to backend
+    handle /graphql* {
+        reverse_proxy backend:8080
+    }
+
+    # All other routes - proxy to Next.js frontend
+    handle /* {
+        reverse_proxy frontend:3000
+    }
+
+    # Access logs
+    log {
+        output stdout
+        format console
+    }
+}

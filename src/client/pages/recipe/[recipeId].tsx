@@ -4,6 +4,7 @@ import PageHead from '../../components/PageHead/PageHead'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import client from '../../graphql/client'
 import { gql } from '@apollo/client'
+import { toAbsoluteUrl } from '../../constants/urls'
 
 import { GET_RECIPE_BY_ID } from '../../components/Recipe/queries'
 
@@ -21,8 +22,8 @@ const renderPageHead = (recipe) => {
         description={recipe.description}
         siteType={'article'}
         url={`https://mumsmums.app/recipe/${recipe.recipeId}`}
-        imageUrl={recipe.imageUrl}
-        fbPreviewImageUrl={recipe.fbPreviewImageUrl}
+        imageUrl={toAbsoluteUrl(recipe.imageUrl)}
+        fbPreviewImageUrl={toAbsoluteUrl(recipe.fbPreviewImageUrl)}
     />
 }
 

@@ -8,7 +8,7 @@ RUN apt-get update && \
 WORKDIR /app
 
 COPY build/mumsmums_deploy.jar /app/main.jar
-COPY sqlite/recipes.db /app/sqlite/recipes.db
+COPY sqlite/mumsmums.db /app/sqlite/mumsmums.db
 
 EXPOSE 8080
 

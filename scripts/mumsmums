@@ -249,7 +249,7 @@ deploy() {
   scp src/client/package*.json "$deploy_host":~/mumsmums/src/client/
   scp -r src/client/{.next,public} "$deploy_host":~/mumsmums/src/client/
   scp docker/{Caddyfile,mumsmums.Dockerfile,next.Dockerfile} "$deploy_host":~/mumsmums/docker/
-  scp sqlite/recipes.db "$deploy_host":~/mumsmums/sqlite/
+  scp sqlite/mumsmums.db "$deploy_host":~/mumsmums/sqlite/
   scp docker-compose.yml "$deploy_host":~/mumsmums/
 
   # Build the sources

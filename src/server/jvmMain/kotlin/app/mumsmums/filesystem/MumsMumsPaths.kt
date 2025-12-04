@@ -6,7 +6,7 @@ object MumsMumsPaths {
     private val projectRoot = resolveProjectRoot();
 
     fun getDbPath(): String {
-        return "${projectRoot}/sqlite/recipes.db"
+        return "${projectRoot}/sqlite/mumsmums.db"
     }
 
     fun getRecipeJsonPath(): String {

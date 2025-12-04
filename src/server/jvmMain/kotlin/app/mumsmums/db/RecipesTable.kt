@@ -20,8 +20,8 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
                     recipeId = resultSet.getLong("recipeId"),
                     name = resultSet.getString("name"),
                     description = resultSet.getString("description"),
-                    servings = resultSet.getObject("servings") as Int?,
-                    numberOfUnits = resultSet.getObject("numberOfUnits") as Int?,
+                    servings = resultSet.getNullableInt("servings"),
+                    numberOfUnits = resultSet.getNullableInt("numberOfUnits"),
                     imageUrl = resultSet.getString("imageUrl"),
                     fbPreviewImageUrl = resultSet.getString("fbPreviewImageUrl"),
                     version = resultSet.getLong("version"),
@@ -36,114 +36,78 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         }
     }
 
-    override fun put(recipe: Recipe) {
-        connection.autoCommit = false
-        try {
+    override fun put(recipe: Recipe) = withTransaction {
+        prepareInsert(recipe)
+        println("Inserted recipe: ${recipe.recipeId}")
+    }
+
+    override fun batchPut(recipes: List<Recipe>) = withTransaction {
+        recipes.forEach { recipe ->
             prepareInsert(recipe)
-            connection.commit()
-            println("Inserted recipe: ${recipe.recipeId}")
-        } catch (e: Exception) {
-            connection.rollback()
-            throw e
-        } finally {
-            connection.autoCommit = true
         }
+        println("Loaded ${recipes.size} recipes into SQLite database")
     }
 
-    override fun batchPut(recipes: List<Recipe>) {
-        connection.autoCommit = false
-        try {
-            recipes.forEach { recipe ->
-                prepareInsert(recipe)
-            }
-            connection.commit()
-            println("Loaded ${recipes.size} recipes into SQLite database")
-        } catch (e: Exception) {
-            connection.rollback()
-            throw e
-        } finally {
-            connection.autoCommit = true
+    override fun update(recipeId: Long, recipe: Recipe) = withTransaction {
+        // Delete old data
+        connection.prepareStatement("DELETE FROM recipe_steps WHERE recipeId = ?").use { statement ->
+            statement.setLong(1, recipeId)
+            statement.executeUpdate()
         }
+        connection.prepareStatement(
+            "DELETE FROM ingredients WHERE sectionId IN (SELECT id FROM ingredient_sections WHERE recipeId = ?)"
+        ).use { statement ->
+            statement.setLong(1, recipeId)
+            statement.executeUpdate()
+        }
+        connection.prepareStatement("DELETE FROM ingredient_sections WHERE recipeId = ?").use { statement ->
+            statement.setLong(1, recipeId)
+            statement.executeUpdate()
+        }
+        connection.prepareStatement("DELETE FROM recipes WHERE recipeId = ?").use { statement ->
+            statement.setLong(1, recipeId)
+            statement.executeUpdate()
+        }
+
+        // Insert updated recipe
+        prepareInsert(recipe)
+        println("Updated recipe: ${recipe.name} (ID: ${recipe.recipeId})")
     }
 
-    override fun update(recipeId: Long, recipe: Recipe) {
-        connection.autoCommit = false
-        try {
-            // Delete old data
-            connection.prepareStatement("DELETE FROM recipe_steps WHERE recipeId = ?").use { statement ->
-                statement.setLong(1, recipeId)
-                statement.executeUpdate()
-            }
-            connection.prepareStatement(
-                "DELETE FROM ingredients WHERE sectionId IN (SELECT id FROM ingredient_sections WHERE recipeId = ?)"
-            ).use { statement ->
-                statement.setLong(1, recipeId)
-                statement.executeUpdate()
-            }
-            connection.prepareStatement("DELETE FROM ingredient_sections WHERE recipeId = ?").use { statement ->
-                statement.setLong(1, recipeId)
-                statement.executeUpdate()
-            }
-            connection.prepareStatement("DELETE FROM recipes WHERE recipeId = ?").use { statement ->
-                statement.setLong(1, recipeId)
-                statement.executeUpdate()
-            }
-
-            // Insert updated recipe
-            prepareInsert(recipe)
-            connection.commit()
-            println("Updated recipe: ${recipe.name} (ID: ${recipe.recipeId})")
-        } catch (e: Exception) {
-            connection.rollback()
-            throw e
-        } finally {
-            connection.autoCommit = true
+    override fun delete(recipeId: Long) = withTransaction {
+        // Get recipe name before deleting for confirmation message
+        val recipeName = connection.prepareStatement("SELECT name FROM recipes WHERE recipeId = ?").use { statement ->
+            statement.setLong(1, recipeId)
+            val resultSet = statement.executeQuery()
+            if (resultSet.next()) resultSet.getString("name") else null
         }
-    }
 
-    override fun delete(recipeId: Long) {
-        connection.autoCommit = false
-        try {
-            // Get recipe name before deleting for confirmation message
-            val recipeName = connection.prepareStatement("SELECT name FROM recipes WHERE recipeId = ?").use { statement ->
-                statement.setLong(1, recipeId)
-                val resultSet = statement.executeQuery()
-                if (resultSet.next()) resultSet.getString("name") else null
-            }
-
-            if (recipeName == null) {
-                println("Recipe with ID $recipeId not found")
-                return
-            }
-
-            // Delete related data
-            connection.prepareStatement("DELETE FROM recipe_steps WHERE recipeId = ?").use { statement ->
-                statement.setLong(1, recipeId)
-                statement.executeUpdate()
-            }
-            connection.prepareStatement(
-                "DELETE FROM ingredients WHERE sectionId IN (SELECT id FROM ingredient_sections WHERE recipeId = ?)"
-            ).use { statement ->
-                statement.setLong(1, recipeId)
-                statement.executeUpdate()
-            }
-            connection.prepareStatement("DELETE FROM ingredient_sections WHERE recipeId = ?").use { statement ->
-                statement.setLong(1, recipeId)
-                statement.executeUpdate()
-            }
-            connection.prepareStatement("DELETE FROM recipes WHERE recipeId = ?").use { statement ->
-                statement.setLong(1, recipeId)
-                statement.executeUpdate()
-            }
-
-            connection.commit()
-            println("Deleted recipe: $recipeName (ID: $recipeId)")
-        } catch (e: Exception) {
-            connection.rollback()
-            throw e
-        } finally {
-            connection.autoCommit = true
+        if (recipeName == null) {
+            println("Recipe with ID $recipeId not found")
+            return@withTransaction
         }
+
+        // Delete related data
+        connection.prepareStatement("DELETE FROM recipe_steps WHERE recipeId = ?").use { statement ->
+            statement.setLong(1, recipeId)
+            statement.executeUpdate()
+        }
+        connection.prepareStatement(
+            "DELETE FROM ingredients WHERE sectionId IN (SELECT id FROM ingredient_sections WHERE recipeId = ?)"
+        ).use { statement ->
+            statement.setLong(1, recipeId)
+            statement.executeUpdate()
+        }
+        connection.prepareStatement("DELETE FROM ingredient_sections WHERE recipeId = ?").use { statement ->
+            statement.setLong(1, recipeId)
+            statement.executeUpdate()
+        }
+        connection.prepareStatement("DELETE FROM recipes WHERE recipeId = ?").use { statement ->
+            statement.setLong(1, recipeId)
+            statement.executeUpdate()
+        }
+
+        println("Deleted recipe: $recipeName (ID: $recipeId)")
     }
 
     override fun scan(): List<Recipe> {
@@ -157,8 +121,8 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
                     recipeId = recipeId,
                     name = resultSet.getString("name"),
                     description = resultSet.getString("description"),
-                    servings = resultSet.getObject("servings") as Int?,
-                    numberOfUnits = resultSet.getObject("numberOfUnits") as Int?,
+                    servings = resultSet.getNullableInt("servings"),
+                    numberOfUnits = resultSet.getNullableInt("numberOfUnits"),
                     imageUrl = resultSet.getString("imageUrl"),
                     fbPreviewImageUrl = resultSet.getString("fbPreviewImageUrl"),
                     version = resultSet.getLong("version"),
@@ -274,21 +238,11 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             statement.setLong(1, sectionId)
             val resultSet = statement.executeQuery()
             while (resultSet.next()) {
-                val quantityDouble = resultSet.getObject("quantity") as? Double
-                val recipeIdValue = resultSet.getObject("recipeId")
-
-                // If SQLite returns an INTEGER, JDBC returns it as java.lang.Integer, not java.lang.Long; therefore
-                // let's ensure we can handle both
-                val recipeIdLong = when (recipeIdValue) {
-                    is Long -> recipeIdValue
-                    is Int -> recipeIdValue.toLong()
-                    else -> throw IllegalArgumentException("Unexpected type for recipeId: ${recipeIdValue?.javaClass}")
-                }
                 val ingredient = Ingredient(
                     name = resultSet.getString("name"),
                     volume = resultSet.getString("volume"),
-                    quantity = quantityDouble?.toFloat(),
-                    recipeId = recipeIdLong
+                    quantity = resultSet.getNullableFloat("quantity"),
+                    recipeId = resultSet.getNullableLong("recipeId")
                 )
                 ingredients.add(ingredient)
             }
@@ -311,5 +265,23 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         }
 
         return steps
+    }
+
+
+    /**
+     * Executes a block of code within a transaction, commiting if successful or rolling back on exception.
+     */
+    private inline fun <T> withTransaction(block: () -> T): T {
+        connection.autoCommit = false
+        return try {
+            val result = block()
+            connection.commit()
+            result
+        } catch (e: Exception) {
+            connection.rollback()
+            throw e
+        } finally {
+            connection.autoCommit = true
+        }
     }
 }

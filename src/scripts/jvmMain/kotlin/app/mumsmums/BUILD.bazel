@@ -3,6 +3,7 @@ load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 kt_jvm_library(
     name = "lib",
     srcs = glob(["*.kt"]),
+    data = ["//src/server/jvmMain/resources:recipes.json"],
     plugins = ["//bazel:serialization"],
     deps = [
         "//src/server/jvmMain/kotlin/app/mumsmums/db",

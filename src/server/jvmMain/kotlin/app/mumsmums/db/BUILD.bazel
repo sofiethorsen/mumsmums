@@ -10,7 +10,6 @@ kt_jvm_library(
         "//src/server/jvmTest/kotlin/app/mumsmums:__subpackages__",
     ],
     deps = [
-        "//src/scripts/jvmMain/kotlin/app/mumsmums/resources:recipes",
         "//src/server/jvmMain/kotlin/app/mumsmums/filesystem",
         "//src/server/jvmMain/kotlin/app/mumsmums/identifiers",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",

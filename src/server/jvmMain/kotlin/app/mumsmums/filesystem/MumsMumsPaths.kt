@@ -14,7 +14,7 @@ object MumsMumsPaths {
     }
 
     fun getRecipesJsonPath(): String {
-        return "${projectRoot}/src/scripts/jvmMain/kotlin/app/mumsmums/resources/recipes.json"
+        return "${projectRoot}/src/server/jvmMain/resources/recipes.json"
     }
 
     /**

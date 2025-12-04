@@ -1,5 +1,0 @@
-java_library(
-    name = "recipes",
-    resources = ["recipes.json"],
-    visibility = ["//visibility:public"],
-)

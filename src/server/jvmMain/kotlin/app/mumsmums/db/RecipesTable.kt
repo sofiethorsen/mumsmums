@@ -4,6 +4,7 @@ import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
+import java.sql.ResultSet
 
 /**
  * Handles CRUD operations for the recipes table.
@@ -16,20 +17,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
             if (resultSet.next()) {
-                Recipe(
-                    recipeId = resultSet.getLong("recipeId"),
-                    name = resultSet.getString("name"),
-                    description = resultSet.getString("description"),
-                    servings = resultSet.getNullableInt("servings"),
-                    numberOfUnits = resultSet.getNullableInt("numberOfUnits"),
-                    imageUrl = resultSet.getString("imageUrl"),
-                    fbPreviewImageUrl = resultSet.getString("fbPreviewImageUrl"),
-                    version = resultSet.getLong("version"),
-                    createdAtInMillis = resultSet.getLong("createdAtInMillis"),
-                    lastUpdatedAtInMillis = resultSet.getLong("lastUpdatedAtInMillis"),
-                    ingredientSections = loadIngredientSections(recipeId),
-                    steps = loadSteps(recipeId)
-                )
+                toRecipe(resultSet)
             } else {
                 null
             }
@@ -116,22 +104,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         connection.createStatement().use { statement ->
             val resultSet = statement.executeQuery("SELECT * FROM recipes ORDER BY recipeId")
             while (resultSet.next()) {
-                val recipeId = resultSet.getLong("recipeId")
-                val recipe = Recipe(
-                    recipeId = recipeId,
-                    name = resultSet.getString("name"),
-                    description = resultSet.getString("description"),
-                    servings = resultSet.getNullableInt("servings"),
-                    numberOfUnits = resultSet.getNullableInt("numberOfUnits"),
-                    imageUrl = resultSet.getString("imageUrl"),
-                    fbPreviewImageUrl = resultSet.getString("fbPreviewImageUrl"),
-                    version = resultSet.getLong("version"),
-                    createdAtInMillis = resultSet.getLong("createdAtInMillis"),
-                    lastUpdatedAtInMillis = resultSet.getLong("lastUpdatedAtInMillis"),
-                    ingredientSections = loadIngredientSections(recipeId),
-                    steps = loadSteps(recipeId)
-                )
-                recipes.add(recipe)
+                recipes.add(toRecipe(resultSet))
             }
         }
 
@@ -217,11 +190,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
             while (resultSet.next()) {
-                val sectionId = resultSet.getLong("id")
-                val section = IngredientSection(
-                    name = resultSet.getString("name"),
-                    ingredients = loadIngredients(sectionId)
-                )
+                val section = toIngredientSection(resultSet)
                 sections.add(section)
             }
         }
@@ -238,12 +207,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             statement.setLong(1, sectionId)
             val resultSet = statement.executeQuery()
             while (resultSet.next()) {
-                val ingredient = Ingredient(
-                    name = resultSet.getString("name"),
-                    volume = resultSet.getString("volume"),
-                    quantity = resultSet.getNullableFloat("quantity"),
-                    recipeId = resultSet.getNullableLong("recipeId")
-                )
+                val ingredient = toIngredient(resultSet)
                 ingredients.add(ingredient)
             }
         }
@@ -267,6 +231,41 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         return steps
     }
 
+    private fun toRecipe(resultSet: ResultSet): Recipe {
+        val recipeId = resultSet.getLong("recipeId")
+        return Recipe(
+            recipeId = recipeId,
+            name = resultSet.getString("name"),
+            description = resultSet.getString("description"),
+            servings = resultSet.getNullableInt("servings"),
+            numberOfUnits = resultSet.getNullableInt("numberOfUnits"),
+            imageUrl = resultSet.getString("imageUrl"),
+            fbPreviewImageUrl = resultSet.getString("fbPreviewImageUrl"),
+            version = resultSet.getLong("version"),
+            createdAtInMillis = resultSet.getLong("createdAtInMillis"),
+            lastUpdatedAtInMillis = resultSet.getLong("lastUpdatedAtInMillis"),
+            ingredientSections = loadIngredientSections(recipeId),
+            steps = loadSteps(recipeId)
+        )
+    }
+
+    private fun toIngredient(resultSet: ResultSet): Ingredient {
+        return Ingredient(
+            name = resultSet.getString("name"),
+            volume = resultSet.getString("volume"),
+            quantity = resultSet.getNullableFloat("quantity"),
+            recipeId = resultSet.getNullableLong("recipeId")
+        )
+    }
+
+    // Note that this loads ingredients from the database through another SELECT query
+    private fun toIngredientSection(resultSet: ResultSet): IngredientSection {
+        val sectionId = resultSet.getLong("id")
+        return IngredientSection(
+            name = resultSet.getString("name"),
+            ingredients = loadIngredients(sectionId)
+        )
+    }
 
     /**
      * Executes a block of code within a transaction, commiting if successful or rolling back on exception.

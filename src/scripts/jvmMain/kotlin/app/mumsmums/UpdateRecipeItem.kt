@@ -1,6 +1,8 @@
 package app.mumsmums
 
-import app.mumsmums.db.SqliteRecipesDatabase
+import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.RecipesTable
+import app.mumsmums.identifiers.NumericIdGenerator
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
@@ -15,10 +17,12 @@ fun main(args: Array<String>) {
         exitProcess(1)
     }
 
-    val db = SqliteRecipesDatabase()
+    val database = DatabaseConnection()
+    val numericIdGenerator = NumericIdGenerator()
+    val recipesTable = RecipesTable(database, numericIdGenerator)
 
     println("Fetching recipe with ID: $recipeId")
-    db.get(recipeId)?.let { original ->
+    recipesTable.get(recipeId)?.let { original ->
         println("\n=== Original Recipe ===")
         println("Name: ${original.name}")
         println("Current imageUrl: ${original.imageUrl}")
@@ -35,7 +39,7 @@ fun main(args: Array<String>) {
         println("New imageUrl: ${updated.imageUrl}")
         println("New fbPreviewImageUrl: ${updated.fbPreviewImageUrl}")
 
-        db.update(recipeId, updated)
+        recipesTable.update(recipeId, updated)
 
         println("\n=== Recipe Updated Successfully ===")
     } ?: run {

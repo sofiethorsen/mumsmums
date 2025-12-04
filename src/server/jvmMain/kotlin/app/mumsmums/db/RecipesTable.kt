@@ -1,100 +1,15 @@
 package app.mumsmums.db
 
-import app.mumsmums.filesystem.MumsMumsPaths
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
-import java.sql.Connection
-import java.sql.DriverManager
 
-class SqliteRecipesDatabase(dbPath: String = MumsMumsPaths.getDbPath()) : RecipesDatabase {
-    private val connection: Connection
-    private val idGenerator = NumericIdGenerator()
-
-    init {
-        // Ensure the parent directory exists
-        val dbFile = java.io.File(dbPath)
-        dbFile.parentFile?.mkdirs()
-        connection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
-    }
-
-    /**
-     * Create the necessary tables if they do not exist, used if generating the
-     * database for the first time.
-     */
-    fun createTablesIfNotExists() {
-        connection.createStatement().use { statement ->
-            statement.execute(
-                """
-                CREATE TABLE IF NOT EXISTS recipes (
-                    recipeId INTEGER PRIMARY KEY,
-                    name TEXT NOT NULL,
-                    description TEXT,
-                    servings INTEGER,
-                    numberOfUnits INTEGER,
-                    imageUrl TEXT,
-                    fbPreviewImageUrl TEXT,
-                    version INTEGER DEFAULT 0,
-                    createdAtInMillis INTEGER DEFAULT 0,
-                    lastUpdatedAtInMillis INTEGER DEFAULT 0
-                )
-                """.trimIndent()
-            )
-
-            statement.execute(
-                """
-                CREATE TABLE IF NOT EXISTS ingredient_sections (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    recipeId INTEGER NOT NULL,
-                    name TEXT,
-                    position INTEGER NOT NULL,
-                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId)
-                )
-                """.trimIndent()
-            )
-
-            statement.execute(
-                """
-                CREATE TABLE IF NOT EXISTS ingredients (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    sectionId INTEGER NOT NULL,
-                    name TEXT NOT NULL,
-                    volume TEXT,
-                    quantity REAL,
-                    recipeId INTEGER,
-                    position INTEGER NOT NULL,
-                    FOREIGN KEY (sectionId) REFERENCES ingredient_sections(id),
-                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId)
-                )
-                """.trimIndent()
-            )
-
-            statement.execute(
-                """
-                CREATE TABLE IF NOT EXISTS recipe_steps (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    recipeId INTEGER NOT NULL,
-                    step TEXT NOT NULL,
-                    position INTEGER NOT NULL,
-                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId)
-                )
-                """.trimIndent()
-            )
-        }
-    }
-
-    /**
-     * Drop all tables, used for resetting the database during development.
-     */
-    fun dropTables() {
-        connection.createStatement().use { statement ->
-            statement.execute("DROP TABLE IF EXISTS recipe_steps")
-            statement.execute("DROP TABLE IF EXISTS ingredients")
-            statement.execute("DROP TABLE IF EXISTS ingredient_sections")
-            statement.execute("DROP TABLE IF EXISTS recipes")
-        }
-    }
+/**
+ * Handles CRUD operations for the recipes table.
+ */
+class RecipesTable(database: DatabaseConnection, private val idGenerator: NumericIdGenerator) : RecipesDatabase {
+    private val connection = database.connection
 
     override fun get(recipeId: Long): Recipe? {
         return connection.prepareStatement("SELECT * FROM recipes WHERE recipeId = ?").use { statement ->
@@ -360,7 +275,15 @@ class SqliteRecipesDatabase(dbPath: String = MumsMumsPaths.getDbPath()) : Recipe
             val resultSet = statement.executeQuery()
             while (resultSet.next()) {
                 val quantityDouble = resultSet.getObject("quantity") as? Double
-                val recipeIdLong = resultSet.getObject("recipeId") as? Long
+                val recipeIdValue = resultSet.getObject("recipeId")
+
+                // If SQLite returns an INTEGER, JDBC returns it as java.lang.Integer, not java.lang.Long; therefore
+                // let's ensure we can handle both
+                val recipeIdLong = when (recipeIdValue) {
+                    is Long -> recipeIdValue
+                    is Int -> recipeIdValue.toLong()
+                    else -> throw IllegalArgumentException("Unexpected type for recipeId: ${recipeIdValue?.javaClass}")
+                }
                 val ingredient = Ingredient(
                     name = resultSet.getString("name"),
                     volume = resultSet.getString("volume"),
@@ -388,9 +311,5 @@ class SqliteRecipesDatabase(dbPath: String = MumsMumsPaths.getDbPath()) : Recipe
         }
 
         return steps
-    }
-
-    fun close() {
-        connection.close()
     }
 }

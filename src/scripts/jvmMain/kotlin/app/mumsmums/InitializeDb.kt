@@ -1,7 +1,9 @@
 package app.mumsmums
 
-import app.mumsmums.db.SqliteRecipesDatabase
+import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.RecipesTable
 import app.mumsmums.filesystem.MumsMumsPaths
+import app.mumsmums.identifiers.NumericIdGenerator
 import kotlin.io.path.Path
 import kotlin.system.exitProcess
 
@@ -23,13 +25,15 @@ fun main() {
         println()
 
         // Initialize database connection
-        val db = SqliteRecipesDatabase()
+        val database = DatabaseConnection()
+        val numericIdGenerator = NumericIdGenerator()
+        val recipesTable = RecipesTable(database, numericIdGenerator)
 
         println("Deleting existing tables and recreating them...")
-        db.dropTables()
-        db.createTablesIfNotExists()
+        database.dropTables()
+        database.createTablesIfNotExists()
 
-        db.batchPut(recipes)
+        recipesTable.batchPut(recipes)
 
         println()
         println("=== Database initialization complete! ===")

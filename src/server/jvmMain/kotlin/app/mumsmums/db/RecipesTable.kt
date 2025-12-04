@@ -37,21 +37,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
     }
 
     override fun update(recipeId: Long, recipe: Recipe) = withTransaction {
-        // Delete old data
-        connection.prepareStatement("DELETE FROM recipe_steps WHERE recipeId = ?").use { statement ->
-            statement.setLong(1, recipeId)
-            statement.executeUpdate()
-        }
-        connection.prepareStatement(
-            "DELETE FROM ingredients WHERE sectionId IN (SELECT id FROM ingredient_sections WHERE recipeId = ?)"
-        ).use { statement ->
-            statement.setLong(1, recipeId)
-            statement.executeUpdate()
-        }
-        connection.prepareStatement("DELETE FROM ingredient_sections WHERE recipeId = ?").use { statement ->
-            statement.setLong(1, recipeId)
-            statement.executeUpdate()
-        }
+        // Note that the CASCADE on the recipe table handles deletions for related data
         connection.prepareStatement("DELETE FROM recipes WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
             statement.executeUpdate()
@@ -75,21 +61,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             return@withTransaction
         }
 
-        // Delete related data
-        connection.prepareStatement("DELETE FROM recipe_steps WHERE recipeId = ?").use { statement ->
-            statement.setLong(1, recipeId)
-            statement.executeUpdate()
-        }
-        connection.prepareStatement(
-            "DELETE FROM ingredients WHERE sectionId IN (SELECT id FROM ingredient_sections WHERE recipeId = ?)"
-        ).use { statement ->
-            statement.setLong(1, recipeId)
-            statement.executeUpdate()
-        }
-        connection.prepareStatement("DELETE FROM ingredient_sections WHERE recipeId = ?").use { statement ->
-            statement.setLong(1, recipeId)
-            statement.executeUpdate()
-        }
+        // Note that the CASCADE on the recipe table handles deletions for related data
         connection.prepareStatement("DELETE FROM recipes WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
             statement.executeUpdate()

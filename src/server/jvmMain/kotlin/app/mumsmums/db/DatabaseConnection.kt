@@ -16,6 +16,11 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
         dbFile.parentFile?.mkdirs()
         connection = DriverManager.getConnection("jdbc:sqlite:$dbPath")
 
+        // Enable foreign key constraints (required to use CASCADE for example)
+        connection.createStatement().use { statement ->
+            statement.execute("PRAGMA foreign_keys = ON")
+        }
+
         // Create tables if they don't exist
         createTablesIfNotExists()
     }
@@ -46,7 +51,7 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
                     recipeId INTEGER NOT NULL,
                     name TEXT,
                     position INTEGER NOT NULL,
-                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId)
+                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId) ON DELETE CASCADE
                 )
                 """.trimIndent()
             )
@@ -61,7 +66,7 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
                     quantity REAL,
                     recipeId INTEGER,
                     position INTEGER NOT NULL,
-                    FOREIGN KEY (sectionId) REFERENCES ingredient_sections(id),
+                    FOREIGN KEY (sectionId) REFERENCES ingredient_sections(id) ON DELETE CASCADE,
                     FOREIGN KEY (recipeId) REFERENCES recipes(recipeId)
                 )
                 """.trimIndent()
@@ -74,7 +79,7 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
                     recipeId INTEGER NOT NULL,
                     step TEXT NOT NULL,
                     position INTEGER NOT NULL,
-                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId)
+                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId) ON DELETE CASCADE
                 )
                 """.trimIndent()
             )

@@ -165,17 +165,20 @@ class RecipesTableTest {
 
     @Test
     fun `When storing ingredients with recipe references, they should be preserved`() {
-        val recipeId = 123456789L
-        val linkedRecipeId = 456789123L
-        val recipe = Recipe(
-            recipeId = recipeId,
+        val recipeOneId = 123456789L
+        val recipeOne = createTestRecipe(recipeId = recipeOneId, name = "Garam Masala Recipe")
+        recipesTable.put(recipeOne)
+
+        val recipeTwoId = 456789123L
+        val recipeTwo = Recipe(
+            recipeId = recipeTwoId,
             name = "Recipe with Linked Ingredients",
             description = "Test",
             ingredientSections = listOf(
                 IngredientSection(
                     name = null,
                     ingredients = listOf(
-                        Ingredient(name = "Garam Masala", recipeId = linkedRecipeId),
+                        Ingredient(name = "Garam Masala", recipeId = recipeOneId),
                         Ingredient(name = "Salt", recipeId = null)
                     )
                 )
@@ -183,11 +186,11 @@ class RecipesTableTest {
             steps = listOf()
         )
 
-        recipesTable.put(recipe)
+        recipesTable.put(recipeTwo)
 
-        val retrieved = recipesTable.get(recipeId)
+        val retrieved = recipesTable.get(recipeTwoId)
         val ingredients = retrieved?.ingredientSections?.get(0)?.ingredients
-        assertEquals(linkedRecipeId, ingredients?.get(0)?.recipeId)
+        assertEquals(recipeOneId, ingredients?.get(0)?.recipeId)
         assertNull(ingredients?.get(1)?.recipeId)
     }
 
@@ -249,6 +252,140 @@ class RecipesTableTest {
         val retrieved = recipesTable.get(recipeId)
         assertEquals(1, retrieved?.ingredientSections?.get(0)?.ingredients?.size)
         assertEquals("New Ingredient", retrieved?.ingredientSections?.get(0)?.ingredients?.get(0)?.name)
+    }
+
+    @Test
+    fun `When deleting a recipe, CASCADE should remove all related ingredient sections`() {
+        val recipeId = 123456789L
+        val recipe = Recipe(
+            recipeId = recipeId,
+            name = "Recipe with Sections",
+            description = "Test",
+            ingredientSections = listOf(
+                IngredientSection(
+                    name = "Section 1",
+                    ingredients = listOf(Ingredient(name = "Ingredient 1"))
+                ),
+                IngredientSection(
+                    name = "Section 2",
+                    ingredients = listOf(Ingredient(name = "Ingredient 2"))
+                )
+            ),
+            steps = listOf("Step 1")
+        )
+        recipesTable.put(recipe)
+
+        // Verify sections were created
+        val beforeDelete = recipesTable.get(recipeId)
+        assertEquals(2, beforeDelete?.ingredientSections?.size)
+
+        // Delete recipe
+        recipesTable.delete(recipeId)
+
+        // Verify recipe and all sections are gone
+        val afterDelete = recipesTable.get(recipeId)
+        assertNull(afterDelete)
+
+        // Verify orphaned sections don't exist by checking raw database
+        val sectionCount = connection.connection.prepareStatement(
+            "SELECT COUNT(*) FROM ingredient_sections WHERE recipeId = ?"
+        ).use { statement ->
+            statement.setLong(1, recipeId)
+            val resultSet = statement.executeQuery()
+            resultSet.next()
+            resultSet.getInt(1)
+        }
+        assertEquals(0, sectionCount)
+    }
+
+    @Test
+    fun `When deleting a recipe, CASCADE should remove all related ingredients`() {
+        val recipeId = 123456789L
+        val recipe = Recipe(
+            recipeId = recipeId,
+            name = "Recipe with Ingredients",
+            description = "Test",
+            ingredientSections = listOf(
+                IngredientSection(
+                    name = null,
+                    ingredients = listOf(
+                        Ingredient(name = "Ingredient 1"),
+                        Ingredient(name = "Ingredient 2"),
+                        Ingredient(name = "Ingredient 3")
+                    )
+                )
+            ),
+            steps = listOf()
+        )
+        recipesTable.put(recipe)
+
+        recipesTable.delete(recipeId)
+
+        // Verify orphaned ingredients don't exist by checking raw database
+        val ingredientCount = connection.connection.prepareStatement(
+            "SELECT COUNT(*) FROM ingredients WHERE sectionId IN (SELECT id FROM ingredient_sections WHERE recipeId = ?)"
+        ).use { statement ->
+            statement.setLong(1, recipeId)
+            val resultSet = statement.executeQuery()
+            resultSet.next()
+            resultSet.getInt(1)
+        }
+        assertEquals(0, ingredientCount)
+    }
+
+    @Test
+    fun `When deleting a recipe, CASCADE should remove all related steps`() {
+        val recipeId = 123456789L
+        val recipe = createTestRecipe(
+            recipeId = recipeId,
+            name = "Recipe with Steps",
+            steps = listOf("Step 1", "Step 2", "Step 3")
+        )
+        recipesTable.put(recipe)
+
+        recipesTable.delete(recipeId)
+
+        // Verify orphaned steps don't exist by checking raw database
+        val stepsCount = connection.connection.prepareStatement(
+            "SELECT COUNT(*) FROM recipe_steps WHERE recipeId = ?"
+        ).use { statement ->
+            statement.setLong(1, recipeId)
+            val resultSet = statement.executeQuery()
+            resultSet.next()
+            resultSet.getInt(1)
+        }
+        assertEquals(0, stepsCount)
+    }
+
+    @Test
+    fun `When updating a recipe, CASCADE should remove all old steps`() {
+        val recipeId = 123456789L
+        val original = createTestRecipe(
+            recipeId = recipeId,
+            name = "Original",
+            steps = listOf("Old Step 1", "Old Step 2")
+        )
+        recipesTable.put(original)
+
+        val updated = original.copy(
+            steps = listOf("New Step 1")
+        )
+        recipesTable.update(recipeId, updated)
+
+        val retrieved = recipesTable.get(recipeId)
+        assertEquals(1, retrieved?.steps?.size)
+        assertEquals("New Step 1", retrieved?.steps?.get(0))
+
+        // Verify old steps don't exist by checking count
+        val stepsCount = connection.connection.prepareStatement(
+            "SELECT COUNT(*) FROM recipe_steps WHERE recipeId = ?"
+        ).use { statement ->
+            statement.setLong(1, recipeId)
+            val resultSet = statement.executeQuery()
+            resultSet.next()
+            resultSet.getInt(1)
+        }
+        assertEquals(1, stepsCount)
     }
 
     private fun createTestRecipe(

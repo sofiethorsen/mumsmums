@@ -30,9 +30,41 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
     }
 
     override fun batchPut(recipes: List<Recipe>) = withTransaction {
+        // Start by inserting all 'main' recipes - this to ensure that any foreign key requirements
+        // by linked recipes are satisfied
         recipes.forEach { recipe ->
-            prepareInsert(recipe)
+            val recipeWithId = if (recipe.recipeId == 0L) {
+                recipe.copy(recipeId = idGenerator.generateId())
+            } else {
+                recipe
+            }
+
+            connection.prepareStatement(
+                """
+                INSERT INTO recipes (recipeId, name, description, servings, numberOfUnits,
+                                    imageUrl, fbPreviewImageUrl, version, createdAtInMillis, lastUpdatedAtInMillis)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """.trimIndent()
+            ).use { statement ->
+                statement.setLong(1, recipeWithId.recipeId)
+                statement.setString(2, recipeWithId.name)
+                statement.setString(3, recipeWithId.description)
+                statement.setObject(4, recipeWithId.servings)
+                statement.setObject(5, recipeWithId.numberOfUnits)
+                statement.setString(6, recipeWithId.imageUrl)
+                statement.setString(7, recipeWithId.fbPreviewImageUrl)
+                statement.setLong(8, recipeWithId.version)
+                statement.setLong(9, recipeWithId.createdAtInMillis)
+                statement.setLong(10, recipeWithId.lastUpdatedAtInMillis)
+                statement.executeUpdate()
+            }
         }
+
+        // Now we can insert all related data (sections, ingredients, steps)
+        recipes.forEach { recipe ->
+            insertRelatedData(recipe)
+        }
+
         println("Loaded ${recipes.size} recipes into SQLite database")
     }
 
@@ -111,12 +143,16 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             statement.executeUpdate()
         }
 
-        recipeWithId.ingredientSections.forEachIndexed { sectionIndex, section ->
+        insertRelatedData(recipeWithId)
+    }
+
+    private fun insertRelatedData(recipe: Recipe) {
+        recipe.ingredientSections.forEachIndexed { sectionIndex, section ->
             val sectionId = connection.prepareStatement(
                 "INSERT INTO ingredient_sections (recipeId, name, position) VALUES (?, ?, ?)",
                 java.sql.Statement.RETURN_GENERATED_KEYS
             ).use { statement ->
-                statement.setLong(1, recipeWithId.recipeId)
+                statement.setLong(1, recipe.recipeId)
                 statement.setString(2, section.name)
                 statement.setInt(3, sectionIndex)
                 statement.executeUpdate()
@@ -134,18 +170,23 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
                     statement.setString(2, ingredient.name)
                     statement.setString(3, ingredient.volume)
                     statement.setObject(4, ingredient.quantity)
-                    statement.setObject(5, ingredient.recipeId)
+                    val linkedRecipeId = ingredient.recipeId
+                    if (linkedRecipeId != null) {
+                        statement.setLong(5, linkedRecipeId)
+                    } else {
+                        statement.setNull(5, java.sql.Types.BIGINT)
+                    }
                     statement.setInt(6, ingredientIndex)
                     statement.executeUpdate()
                 }
             }
         }
 
-        recipeWithId.steps.forEachIndexed { stepIndex, step ->
+        recipe.steps.forEachIndexed { stepIndex, step ->
             connection.prepareStatement(
                 "INSERT INTO recipe_steps (recipeId, step, position) VALUES (?, ?, ?)"
             ).use { statement ->
-                statement.setLong(1, recipeWithId.recipeId)
+                statement.setLong(1, recipe.recipeId)
                 statement.setString(2, step)
                 statement.setInt(3, stepIndex)
                 statement.executeUpdate()

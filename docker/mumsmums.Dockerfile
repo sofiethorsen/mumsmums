@@ -8,7 +8,15 @@ RUN apt-get update && \
 WORKDIR /app
 
 COPY build/mumsmums_deploy.jar /app/main.jar
-COPY sqlite/mumsmums.db /app/sqlite/mumsmums.db
+
+# Copy the raw recipes.json - we use this to seed the database if it doesn't already exist on the host
+COPY src/server/jvmMain/resources/recipes.json /app/src/server/jvmMain/resources/recipes.json
+
+# Create sqlite directory for database
+RUN mkdir -p /app/sqlite
+
+# Set database path via environment variable
+ENV MUMSMUMS_DB_PATH=/app/sqlite/mumsmums.db
 
 EXPOSE 8080
 

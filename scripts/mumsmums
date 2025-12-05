@@ -131,6 +131,9 @@ start_local() {
 }
 
 start_docker() {
+    # TODO: We should move this to use docker-compose as well, so it mimics the setup
+    # when deploying
+
     # Clean up any existing containers and network
     echo "### Cleaning up existing containers..." >&2
     docker rm -f mumsmums next 2>/dev/null || true
@@ -241,15 +244,18 @@ deploy() {
   # Recreate directories
   ssh "$deploy_host" 'mkdir -p ~/mumsmums/build'
   ssh "$deploy_host" 'mkdir -p ~/mumsmums/src/client'
+  ssh "$deploy_host" 'mkdir -p ~/mumsmums/src/server/jvmMain/resources'
   ssh "$deploy_host" 'mkdir -p ~/mumsmums/docker'
-  ssh "$deploy_host" 'mkdir -p ~/mumsmums/sqlite'
+
+  # Create persistent data directory (separate from deployment directory)
+  ssh "$deploy_host" 'mkdir -p ~/mumsmums-persist'
 
   # Transfer files
   scp build/mumsmums_deploy.jar "$deploy_host":~/mumsmums/build/
+  scp src/server/jvmMain/resources/recipes.json "$deploy_host":~/mumsmums/src/server/jvmMain/resources/
   scp src/client/package*.json "$deploy_host":~/mumsmums/src/client/
   scp -r src/client/{.next,public} "$deploy_host":~/mumsmums/src/client/
   scp docker/{Caddyfile,mumsmums.Dockerfile,next.Dockerfile} "$deploy_host":~/mumsmums/docker/
-  scp sqlite/mumsmums.db "$deploy_host":~/mumsmums/sqlite/
   scp docker-compose.yml "$deploy_host":~/mumsmums/
 
   # Build the sources

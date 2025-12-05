@@ -7,6 +7,7 @@ kt_jvm_library(
     plugins = ["//bazel:serialization"],
     deps = [
         "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "//src/server/jvmMain/kotlin/app/mumsmums/json",
         "//src/server/jvmMain/kotlin/app/mumsmums/logging",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
@@ -17,35 +18,34 @@ kt_jvm_library(
 java_binary(
     name = "initalize",
     main_class = "app.mumsmums.InitializeDbKt",
+    env = {"MUMSMUMS_DB_PATH": "sqlite/mumsmums.db"},
     runtime_deps = [":lib"],
 )
 
 java_binary(
     name = "update",
     main_class = "app.mumsmums.UpdateRecipeItemKt",
+    env = {"MUMSMUMS_DB_PATH": "sqlite/mumsmums.db"},
     runtime_deps = [":lib"],
 )
 
 java_binary(
     name = "put",
     main_class = "app.mumsmums.PutRecipeItemKt",
+    env = {"MUMSMUMS_DB_PATH": "sqlite/mumsmums.db"},
     runtime_deps = [":lib"],
 )
 
 java_binary(
     name = "delete",
     main_class = "app.mumsmums.DeleteRecipeItemKt",
+    env = {"MUMSMUMS_DB_PATH": "sqlite/mumsmums.db"},
     runtime_deps = [":lib"],
 )
 
 java_binary(
     name = "get",
     main_class = "app.mumsmums.GetRecipeItemKt",
-    runtime_deps = [":lib"],
-)
-
-java_binary(
-    name = "regenerate_database",
-    main_class = "app.mumsmums.InitializeDbKt",
+    env = {"MUMSMUMS_DB_PATH": "sqlite/mumsmums.db"},
     runtime_deps = [":lib"],
 )

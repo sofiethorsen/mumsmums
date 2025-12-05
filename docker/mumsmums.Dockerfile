@@ -15,9 +15,6 @@ COPY src/server/jvmMain/resources/recipes.json /app/src/server/jvmMain/resources
 # Create sqlite directory for database
 RUN mkdir -p /app/sqlite
 
-# Set database path via environment variable
-ENV MUMSMUMS_DB_PATH=/app/sqlite/mumsmums.db
-
 EXPOSE 8080
 
 CMD ["java", "-jar", "/app/main.jar"]

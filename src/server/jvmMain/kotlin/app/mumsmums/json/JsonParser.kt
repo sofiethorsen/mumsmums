@@ -1,4 +1,4 @@
-package app.mumsmums
+package app.mumsmums.json
 
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.Recipe

@@ -3,7 +3,11 @@ load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 kt_jvm_library(
     name = "lib",
     srcs = glob(["*.kt"]),
+    data = ["//src/server/jvmMain/resources:recipes.json"],
     deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "//src/server/jvmMain/kotlin/app/mumsmums/filesystem",
+        "//src/server/jvmMain/kotlin/app/mumsmums/json",
         "//src/server/jvmMain/kotlin/app/mumsmums/logging",
         "//src/server/jvmMain/kotlin/app/mumsmums/plugins",
         "@maven//:io_ktor_ktor_server_core_jvm",
@@ -14,6 +18,7 @@ kt_jvm_library(
 java_binary(
     name = "mumsmums",
     main_class = "app.mumsmums.ApplicationKt",
+    env = {"MUMSMUMS_DB_PATH": "sqlite/mumsmums.db"},
     visibility = ["//visibility:public"],
     runtime_deps = [
         ":lib",

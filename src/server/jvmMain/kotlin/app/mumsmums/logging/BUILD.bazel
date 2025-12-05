@@ -1,0 +1,14 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
+
+kt_jvm_library(
+    name = "logging",
+    srcs = glob(["*.kt"]),
+    resources = ["//src/server/jvmMain/resources:logback.xml"],
+    visibility = [
+        "//src/scripts/jvmMain/kotlin/app/mumsmums:__subpackages__",
+        "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
+    ],
+    deps = [
+        "@maven//:ch_qos_logback_logback_classic",
+    ],
+)

@@ -4,8 +4,11 @@ import app.mumsmums.db.DatabaseConnection
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.filesystem.MumsMumsPaths
 import app.mumsmums.identifiers.NumericIdGenerator
+import app.mumsmums.logging.getLoggerByPackage
 import app.mumsmums.model.Recipe
 import kotlin.io.path.Path
+
+private val logger = getLoggerByPackage()
 
 fun main() {
     val database = DatabaseConnection()
@@ -15,7 +18,7 @@ fun main() {
     // Path to the recipe JSON file
     val recipePath = MumsMumsPaths.getRecipeJsonPath()
 
-    println("Reading recipe from: $recipePath")
+    logger.info("Reading recipe from: $recipePath")
     val recipeWithId = JsonParser.parseRecipe(Path(recipePath))
 
     // store the new recipe (ID will be generated if not present)
@@ -30,7 +33,7 @@ fun main() {
         recipesTable.update(recipe.recipeId, recipe)
     }
 
-    println("Done! Added/updated ${updates.size + 1} recipe(s)")
+    logger.info("Done! Added/updated ${updates.size + 1} recipe(s)")
 }
 
 

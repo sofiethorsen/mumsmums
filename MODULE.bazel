@@ -32,7 +32,7 @@ maven.artifact(
 )
 maven.install(
     artifacts = [
-        "ch.qos.logback:logback-classic:1.2.11",
+        "ch.qos.logback:logback-classic:1.5.12",
         "com.apurebase:kgraphql-ktor:0.19.0",
         "com.apurebase:kgraphql:0.19.0",
         "io.ktor:ktor-server-auth-jvm:2.3.2",

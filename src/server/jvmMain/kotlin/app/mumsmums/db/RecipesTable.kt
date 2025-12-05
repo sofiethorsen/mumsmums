@@ -1,6 +1,7 @@
 package app.mumsmums.db
 
 import app.mumsmums.identifiers.NumericIdGenerator
+import app.mumsmums.logging.getLoggerByClass
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
@@ -11,6 +12,7 @@ import java.sql.ResultSet
  */
 class RecipesTable(database: DatabaseConnection, private val idGenerator: NumericIdGenerator) : RecipesDatabase {
     private val connection = database.connection
+    private val logger = getLoggerByClass<RecipesTable>()
 
     override fun get(recipeId: Long): Recipe? {
         return connection.prepareStatement("SELECT * FROM recipes WHERE recipeId = ?").use { statement ->
@@ -26,7 +28,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
 
     override fun put(recipe: Recipe) = withTransaction {
         prepareInsert(recipe)
-        println("Inserted recipe: ${recipe.recipeId}")
+        logger.info("Inserted recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 
     override fun batchPut(recipes: List<Recipe>) = withTransaction {
@@ -65,7 +67,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             insertRelatedData(recipe)
         }
 
-        println("Loaded ${recipes.size} recipes into SQLite database")
+        logger.info("Loaded {} recipes into SQLite database", recipes.size)
     }
 
     override fun update(recipeId: Long, recipe: Recipe) = withTransaction {
@@ -77,7 +79,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
 
         // Insert updated recipe
         prepareInsert(recipe)
-        println("Updated recipe: ${recipe.name} (ID: ${recipe.recipeId})")
+        logger.info("Updated recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 
     override fun delete(recipeId: Long) = withTransaction {
@@ -89,7 +91,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         }
 
         if (recipeName == null) {
-            println("Recipe with ID $recipeId not found")
+            logger.warn("Attempted to delete non-existent recipe with ID: {}", recipeId)
             return@withTransaction
         }
 
@@ -99,7 +101,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             statement.executeUpdate()
         }
 
-        println("Deleted recipe: $recipeName (ID: $recipeId)")
+        logger.info("Deleted recipe: {} (ID: {})", recipeName, recipeId)
     }
 
     override fun scan(): List<Recipe> {

@@ -3,17 +3,20 @@ package app.mumsmums
 import app.mumsmums.db.DatabaseConnection
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.identifiers.NumericIdGenerator
+import app.mumsmums.logging.getLoggerByPackage
 import kotlin.system.exitProcess
+
+private val logger = getLoggerByPackage()
 
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
-        println("Usage: bazel run //src/scripts/jvmMain/kotlin/app/mumsmums:update -- <recipeId>")
-        println("Example: bazel run //src/scripts/jvmMain/kotlin/app/mumsmums:update -- 123456")
+        logger.info("Usage: bazel run //src/scripts/jvmMain/kotlin/app/mumsmums:update -- <recipeId>")
+        logger.info("Example: bazel run //src/scripts/jvmMain/kotlin/app/mumsmums:update -- 123456")
         exitProcess(1)
     }
 
     val recipeId = args[0].toLongOrNull() ?: run {
-        println("Error: Invalid recipe ID. Must be a number.")
+        logger.error("Invalid recipe ID. Must be a number.")
         exitProcess(1)
     }
 
@@ -21,12 +24,12 @@ fun main(args: Array<String>) {
     val numericIdGenerator = NumericIdGenerator()
     val recipesTable = RecipesTable(database, numericIdGenerator)
 
-    println("Fetching recipe with ID: $recipeId")
+    logger.info("Fetching recipe with ID: $recipeId")
     recipesTable.get(recipeId)?.let { original ->
-        println("\n=== Original Recipe ===")
-        println("Name: ${original.name}")
-        println("Current imageUrl: ${original.imageUrl}")
-        println("Current fbPreviewImageUrl: ${original.fbPreviewImageUrl}")
+        logger.info("\n=== Original Recipe ===")
+        logger.info("Name: ${original.name}")
+        logger.info("Current imageUrl: ${original.imageUrl}")
+        logger.info("Current fbPreviewImageUrl: ${original.fbPreviewImageUrl}")
 
         // Example: Update image URLs
         // Modify this section to update the fields you need
@@ -35,15 +38,15 @@ fun main(args: Array<String>) {
             imageUrl = "https://dmdqeeh0foqsn.cloudfront.net/assets/$recipeId/300-300.webp",
         )
 
-        println("\n=== Updating Recipe ===")
-        println("New imageUrl: ${updated.imageUrl}")
-        println("New fbPreviewImageUrl: ${updated.fbPreviewImageUrl}")
+        logger.info("\n=== Updating Recipe ===")
+        logger.info("New imageUrl: ${updated.imageUrl}")
+        logger.info("New fbPreviewImageUrl: ${updated.fbPreviewImageUrl}")
 
         recipesTable.update(recipeId, updated)
 
-        println("\n=== Recipe Updated Successfully ===")
+        logger.info("\n=== Recipe Updated Successfully ===")
     } ?: run {
-        println("Recipe with ID $recipeId not found")
+        logger.info("Recipe with ID $recipeId not found")
         exitProcess(1)
     }
 }

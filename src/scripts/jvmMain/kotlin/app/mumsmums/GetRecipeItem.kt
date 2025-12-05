@@ -1,6 +1,8 @@
 package app.mumsmums
 
-import app.mumsmums.db.SqliteRecipesDatabase
+import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.RecipesTable
+import app.mumsmums.identifiers.NumericIdGenerator
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
@@ -15,10 +17,12 @@ fun main(args: Array<String>) {
         exitProcess(1)
     }
 
-    val db = SqliteRecipesDatabase()
+    val database = DatabaseConnection()
+    val numericIdGenerator = NumericIdGenerator()
+    val recipesTable = RecipesTable(database, numericIdGenerator)
 
     println("Fetching recipe with ID: $recipeId")
-    val recipe = db.get(recipeId)
+    val recipe = recipesTable.get(recipeId)
 
     if (recipe != null) {
         println("\n=== Recipe Found ===")

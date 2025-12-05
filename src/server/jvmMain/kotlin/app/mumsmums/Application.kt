@@ -1,7 +1,9 @@
 package app.mumsmums
 
 import app.mumsmums.db.RecipeRepository
-import app.mumsmums.db.SqliteRecipesDatabase
+import app.mumsmums.db.RecipesTable
+import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.plugins.configureCORS
 import app.mumsmums.plugins.configureGraphQL
 import io.ktor.server.application.Application
@@ -13,8 +15,10 @@ fun main() {
 }
 
 fun Application.module() {
-    val recipeTable = SqliteRecipesDatabase()
-    val recipeRepository = RecipeRepository(recipeTable)
+    val connection = DatabaseConnection()
+    val idGenerator = NumericIdGenerator()
+    val recipesTable = RecipesTable(connection, idGenerator)
+    val recipeRepository = RecipeRepository(recipesTable)
 
     configureGraphQL(recipeRepository)
     configureCORS()

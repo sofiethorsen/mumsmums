@@ -1,12 +1,16 @@
 package app.mumsmums
 
-import app.mumsmums.db.SqliteRecipesDatabase
+import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.RecipesTable
 import app.mumsmums.filesystem.MumsMumsPaths
+import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.Recipe
 import kotlin.io.path.Path
 
 fun main() {
-    val db = SqliteRecipesDatabase()
+    val database = DatabaseConnection()
+    val numericIdGenerator = NumericIdGenerator()
+    val recipesTable = RecipesTable(database, numericIdGenerator)
 
     // Path to the recipe JSON file
     val recipePath = MumsMumsPaths.getRecipeJsonPath()
@@ -15,15 +19,15 @@ fun main() {
     val recipeWithId = JsonParser.parseRecipe(Path(recipePath))
 
     // store the new recipe (ID will be generated if not present)
-    db.put(recipeWithId)
+    recipesTable.put(recipeWithId)
 
     // now see if we need to make any updates
-    val allRecipes = db.scan()
+    val allRecipes = recipesTable.scan()
 
     val updates = filterNeedUpdate(allRecipes)
 
     updates.forEach { recipe ->
-        db.update(recipe.recipeId, recipe)
+        recipesTable.update(recipe.recipeId, recipe)
     }
 
     println("Done! Added/updated ${updates.size + 1} recipe(s)")

@@ -23,3 +23,17 @@ export interface Recipe {
     imageUrl: string | undefined,
     fbPreviewImageUrl: string | undefined
 }
+
+export type RecipePreview = Pick<Recipe, 'recipeId' | 'name' | 'imageUrl'>
+
+export interface GetRecipeByIdQueryResult {
+    recipe: Recipe
+}
+
+export interface GetRecipesQueryResult {
+    recipes: RecipePreview[]
+}
+
+export interface GetRecipeIdsQueryResult {
+    recipes: Pick<Recipe, 'recipeId'>[]
+}

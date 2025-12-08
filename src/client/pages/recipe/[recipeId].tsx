@@ -5,6 +5,7 @@ import PageFrame from '../../components/PageFrame/PageFrame'
 import client from '../../graphql/client'
 import { gql } from '@apollo/client'
 import { toAbsoluteUrl } from '../../constants/urls'
+import type { Recipe, GetRecipeByIdQueryResult, GetRecipeIdsQueryResult } from '../../graphql/types'
 
 import { GET_RECIPE_BY_ID } from '../../components/Recipe/queries'
 
@@ -16,7 +17,7 @@ const GET_RECIPE_IDS = gql`
   }
 `
 
-const renderPageHead = (recipe) => {
+const renderPageHead = (recipe: Recipe) => {
     return <PageHead
         title={`mumsmums - ${recipe.name}`}
         description={recipe.description}
@@ -27,7 +28,11 @@ const renderPageHead = (recipe) => {
     />
 }
 
-export default function Recipe({ recipe }) {
+interface RecipeProps {
+      recipe: Recipe
+}
+
+export default function Recipe({ recipe }: RecipeProps) {
     return (
         <>
             {renderPageHead(recipe)}
@@ -39,7 +44,7 @@ export default function Recipe({ recipe }) {
 }
 
 export async function getStaticPaths() {
-    const { data } = await client.query({
+    const { data } = await client.query<GetRecipeIdsQueryResult>({
         query: GET_RECIPE_IDS,
     })
 
@@ -53,10 +58,12 @@ export async function getStaticPaths() {
     }
 }
 
-export async function getStaticProps({ params }) {
-    const recipeData = await client.query({
+export async function getStaticProps({ params }: { params: { recipeId: string } }) {
+    // since we get the ID from the URL, we need to convert it to a number to make TS happy
+    const numericRecipeId = parseInt(params.recipeId, 10)
+    const recipeData = await client.query<GetRecipeByIdQueryResult>({
         query: GET_RECIPE_BY_ID,
-        variables: { recipeId: params.recipeId },
+        variables: { recipeId: numericRecipeId },
     })
 
     return {

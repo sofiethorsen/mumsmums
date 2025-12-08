@@ -42,7 +42,9 @@ const SquareRecipeImage: React.FC<SquareImageProps> = ({ imageUrl, imageAltText,
                 }
             }
         }, {})
-        placeholderRef.current && observer.observe(placeholderRef.current)
+        if (placeholderRef.current) {
+            observer.observe(placeholderRef.current)
+        }
         return () => {
             observer.disconnect()
         }

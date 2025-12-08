@@ -14,11 +14,11 @@ USAGE:
     mumsmums <COMMAND> [OPTIONS]
 
 COMMANDS:
-    build              - Build all sources (server + client)
-    test               - Run all tests
-    deploy <host>      - Deploy the app to remote host (e.g., deploy user@192.168.1.100)
-    start [--docker]   - Start the app locally or run it in docker
-    stop [--docker]    - Stop the app locally or the docker containers running it
+    build                   - Build all sources (server + client)
+    test                    - Run all tests
+    deploy <host> <port>    - Deploy the app to remote host (e.g., deploy user@192.168.1.100 2233)
+    start [--docker]        - Start the app locally or run it in docker
+    stop [--docker]         - Stop the app locally or the docker containers running it
 EOM
     exit 1
 }
@@ -220,14 +220,15 @@ stop_docker() {
 
 deploy() {
   local deploy_host="$1"
+  local ssh_port="$2"
 
-  if [ -z "$deploy_host" ]; then
-    echo "Error: Deploy host not specified" >&2
-    echo "Usage: mumsmums deploy <user@host>" >&2
+  if [ -z "$deploy_host" ] || [ -z "$ssh_port" ]; then
+    echo "Error: Missing required arguments" >&2
+    echo "Usage: mumsmums deploy <user@host> <ssh-port>" >&2
     exit 1
   fi
 
-  echo "### Deploying to $deploy_host..." >&2
+  echo "### Deploying to $deploy_host (SSH port: $ssh_port)..." >&2
 
   # First, build all sources
   build_all
@@ -239,33 +240,33 @@ deploy() {
   cp bazel-bin/src/server/jvmMain/kotlin/app/mumsmums/mumsmums_deploy.jar build/
 
   # Remove any existing build directory on the host machine
-  ssh "$deploy_host" 'rm -rf ~/mumsmums'
+  ssh -p "$ssh_port" "$deploy_host" 'rm -rf ~/mumsmums'
 
   # Recreate directories
-  ssh "$deploy_host" 'mkdir -p ~/mumsmums/build'
-  ssh "$deploy_host" 'mkdir -p ~/mumsmums/src/client'
-  ssh "$deploy_host" 'mkdir -p ~/mumsmums/src/server/jvmMain/resources'
-  ssh "$deploy_host" 'mkdir -p ~/mumsmums/docker'
+  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums/build'
+  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums/src/client'
+  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums/src/server/jvmMain/resources'
+  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums/docker'
 
   # Create persistent data directory (separate from deployment directory)
-  ssh "$deploy_host" 'mkdir -p ~/mumsmums-persist'
+  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums-persist'
 
   # Transfer files
-  scp build/mumsmums_deploy.jar "$deploy_host":~/mumsmums/build/
-  scp src/server/jvmMain/resources/recipes.json "$deploy_host":~/mumsmums/src/server/jvmMain/resources/
-  scp src/client/package*.json "$deploy_host":~/mumsmums/src/client/
-  scp -r src/client/{.next,public} "$deploy_host":~/mumsmums/src/client/
-  scp docker/{Caddyfile,mumsmums.Dockerfile,next.Dockerfile} "$deploy_host":~/mumsmums/docker/
-  scp docker-compose.yml "$deploy_host":~/mumsmums/
+  scp -P "$ssh_port" build/mumsmums_deploy.jar "$deploy_host":~/mumsmums/build/
+  scp -P "$ssh_port" src/server/jvmMain/resources/recipes.json "$deploy_host":~/mumsmums/src/server/jvmMain/resources/
+  scp -P "$ssh_port" src/client/package*.json "$deploy_host":~/mumsmums/src/client/
+  scp -P "$ssh_port" -r src/client/{.next,public} "$deploy_host":~/mumsmums/src/client/
+  scp -P "$ssh_port" docker/{Caddyfile,mumsmums.Dockerfile,next.Dockerfile} "$deploy_host":~/mumsmums/docker/
+  scp -P "$ssh_port" docker-compose.yml "$deploy_host":~/mumsmums/
 
   # Build the sources
-  ssh "$deploy_host" 'cd ~/mumsmums && docker-compose build'
+  ssh -p "$ssh_port" "$deploy_host" 'cd ~/mumsmums && docker-compose build'
 
   # Stop the running app
-  ssh "$deploy_host" 'cd ~/mumsmums && docker-compose down'
+  ssh -p "$ssh_port" "$deploy_host" 'cd ~/mumsmums && docker-compose down'
 
   # Start the new containers
-  ssh "$deploy_host" 'cd ~/mumsmums && docker-compose up -d'
+  ssh -p "$ssh_port" "$deploy_host" 'cd ~/mumsmums && docker-compose up -d'
 
   echo "### Deployment to $deploy_host completed" >&2
 }
@@ -280,7 +281,7 @@ case "$COMMAND" in
         ;;
 
     deploy)
-        deploy "$1"
+        deploy "$1" "$2"
         ;;
 
     start)

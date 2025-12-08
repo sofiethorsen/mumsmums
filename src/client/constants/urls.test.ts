@@ -1,6 +1,8 @@
 import { getBaseUrl, toAbsoluteUrl } from './urls'
 
-declare const jsdom: any
+declare const jsdom: {
+  reconfigure(options: { url: string }): void
+}
 
 describe('getBaseUrl', () => {
   afterEach(() => {

@@ -2,7 +2,7 @@ import React from 'react'
 import { useQuery } from '@apollo/client/react'
 import { gql } from '@apollo/client'
 import styles from './RecipeGrid.module.css'
-import { Recipe, GetRecipesQueryResult } from '../../graphql/types'
+import { GetRecipesQueryResult } from '../../graphql/types'
 
 import ImageGrid from '../ImageGrid/ImageGrid'
 

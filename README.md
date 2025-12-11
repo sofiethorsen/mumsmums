@@ -78,4 +78,4 @@ Codename:       noble
 
 ### Deploy
 
-    ./scripts/mumsmums deploy <user@host>
+    ./scripts/mumsmums deploy <user@host> <port>

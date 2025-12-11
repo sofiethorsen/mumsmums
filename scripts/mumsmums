@@ -16,7 +16,7 @@ USAGE:
 COMMANDS:
     build                   - Build all sources (server + client)
     test                    - Run all tests
-    deploy <host> <port>    - Deploy the app to remote host (e.g., deploy user@192.168.1.100 2233)
+    deploy <host> <port>    - Deploy the app to remote host (e.g., deploy user@xxxx.xxx.x.xxx 1234)
     start [--docker]        - Start the app locally or run it in docker
     stop [--docker]         - Stop the app locally or the docker containers running it
 EOM
@@ -131,53 +131,34 @@ start_local() {
 }
 
 start_docker() {
-    # TODO: We should move this to use docker-compose as well, so it mimics the setup
-    # when deploying
-
     # Clean up any existing containers and network
-    echo "### Cleaning up existing containers..." >&2
-    docker rm -f mumsmums next 2>/dev/null || true
-    docker network rm app_net 2>/dev/null || true
+    echo "### Stopping any running containers before starting..." >&2
+    docker-compose down 2>/dev/null || true
 
     # Build sources (this builds both backend and frontend with localhost:8080)
     echo "### Building sources..." >&2
     cd "$GIT_DIR"
     build_all
 
-    # Create docker network
-    echo "### Creating docker network..." >&2
-    docker network create app_net
+    # Create persistent data directory if it doesn't exist
+    mkdir -p ~/mumsmums-persist
 
-    # Build images
-    echo "### Building docker images..." >&2
-    cd "$GIT_DIR"
-
-    # Create a folder for any sources we want to copy into the docker image
-    rm -rf build
-    mkdir build
-
-    # Copy the deploy jar into the build folder
-    cp bazel-bin/src/server/jvmMain/kotlin/app/mumsmums/mumsmums_deploy.jar build/
-
-    docker build -t mumsmums -f docker/mumsmums.Dockerfile .
-    docker build -t next -f docker/next.Dockerfile .
-
-    # Run backend container
-    echo "### Starting mumsmums server..." >&2
-    docker run -d --network app_net --name mumsmums -p 8080:8080 mumsmums
+    # Build and start using docker-compose
+    echo "### Building and starting containers with docker-compose..." >&2
+    docker-compose up -d --build
 
     # Wait for backend to be ready
     if wait_for_server 30; then
-        # Run frontend container with link to backend
-        echo "### Starting Next.js frontend..." >&2
-        docker run -d --network app_net --name next -p 3000:3000 --add-host=localhost:host-gateway next
-
         echo "### Done! Application is running:" >&2
         echo "  - Backend: http://localhost:8080" >&2
         echo "  - Frontend: http://localhost:3000" >&2
+        echo "  - Caddy (reverse proxy): http://localhost:80" >&2
+        echo "" >&2
+        echo "To view logs: docker-compose logs -f" >&2
+        echo "To stop: ./scripts/mumsmums stop --docker" >&2
     else
         echo "### Failed to start docker containers" >&2
-        docker logs mumsmums >&2
+        docker-compose logs backend >&2
         exit 1
     fi
 }
@@ -212,9 +193,8 @@ stop_local() {
 
 stop_docker() {
     echo "### Stopping docker containers..." >&2
-    docker stop mumsmums next 2>/dev/null || true
-    docker rm mumsmums next 2>/dev/null || true
-    docker network rm app_net 2>/dev/null || true
+    cd "$GIT_DIR"
+    docker-compose down
     echo "### Docker containers stopped" >&2
 }
 

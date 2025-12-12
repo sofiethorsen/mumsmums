@@ -103,7 +103,7 @@ IP would change - through the hostup APIs.
         crontab -e
 
         # Update DNS every 15 minutes if IP changes
-        */15 * * * * source ~/mumsmums-persist/dyndns.conf && ~/mumsmums-persist/update-dns.sh >> ~/mumsmums-ddns.log 2>&1
+        */15 * * * * /bin/bash -c "source ~/mumsmums-persist/dyndns.conf && ~/mumsmums-persist/update-dns.sh"
 
     4. Setup log rotation for the ddns log using logrotate:
 
@@ -112,7 +112,6 @@ IP would change - through the hostup APIs.
 
         # Enter config content into the above file:
         /home/nuc/mumsmums-ddns.log {
-            su nuc nuc
             daily
             rotate 3
             missingok

@@ -126,4 +126,25 @@ describe('IngredientsCard', () => {
 
         expect(selector).toHaveTextContent('6 port.')
     })
+
+    it('displays correct options when user selects a new multiplier', () => {
+        const recipe = createMockRecipe({ numberOfUnits: 30 })
+        render(<IngredientsCard recipe={recipe} />)
+
+        const selector = getServingsSelector()
+
+        // Initially should show: 15, 30, 45, 60
+        const initialOptions = Array.from(selector.querySelectorAll('option')).map(opt => opt.textContent)
+        expect(initialOptions).toEqual(['15 st', '30 st', '45 st', '60 st'])
+
+        // User selects 60 (multiplier 2)
+        fireEvent.change(selector, { target: { value: '2' } })
+
+        // Options should still show: 15, 30, 45, 60
+        const optionsAfterChange = Array.from(selector.querySelectorAll('option')).map(opt => opt.textContent)
+        expect(optionsAfterChange).toEqual(['15 st', '30 st', '45 st', '60 st'])
+
+        // Selected value should be 60
+        expect(selector).toHaveTextContent('60 st')
+    })
 })

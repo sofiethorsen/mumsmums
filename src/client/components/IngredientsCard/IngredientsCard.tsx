@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import styles from './IngredientsCard.module.css'
 
@@ -13,12 +13,7 @@ const MULTIPLIERS = [0.5, 1, 1.5, 2]
 
 const IngredientsCard: React.FC<IngredientsCardProps> = ({ recipe }) => {
     const [multiplier, setMultiplier] = useState(1)
-    const [originalAmount, setOriginalAmount] = useState(recipe.numberOfUnits || recipe.servings || 1)
-
-    useEffect(() => {
-        const value: number = (recipe.numberOfUnits || recipe.servings || 1) * multiplier
-        setOriginalAmount(value)
-    }, [multiplier, recipe.numberOfUnits, recipe.servings])
+    const originalAmount = recipe.numberOfUnits || recipe.servings || 1
 
     const handleMultiplierChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newMultiplier = parseFloat(e.target.value)

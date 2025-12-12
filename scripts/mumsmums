@@ -238,6 +238,7 @@ deploy() {
   scp -P "$ssh_port" -r src/client/{.next,public} "$deploy_host":~/mumsmums/src/client/
   scp -P "$ssh_port" docker/{Caddyfile,mumsmums.Dockerfile,next.Dockerfile} "$deploy_host":~/mumsmums/docker/
   scp -P "$ssh_port" docker-compose.yml "$deploy_host":~/mumsmums/
+  scp -P "$ssh_port" scripts/update-dns.sh "$deploy_host":~/mumsmums-persist/
 
   # Build the sources
   ssh -p "$ssh_port" "$deploy_host" 'cd ~/mumsmums && docker-compose build'

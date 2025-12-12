@@ -74,6 +74,53 @@ Codename:       noble
     # Log out and back in for group changes to take effect
     exit
 
+#### DynDNS
+
+The mumsmums.app domain is managed by hostup.se, and we leverage DynDNS to dynamically update the DNS records if the
+IP would change - through the hostup APIs.
+
+    1. Create mumsmums-persist directories in the HOME directory of the host machine:
+
+        # Create directories
+        mkdir ~/mumsmums-persist
+        mkdir ~/mumsmums-persist/logs
+
+        # Let the directories only be writable by you
+        chmod 755 ~/mumsmums-persist
+        chmod 755 ~/mumsmums-persist/logs
+
+    2. In mumsmums-persist, create dyndns.conf store the credentials:
+
+        export HOSTUP_HOSTNAME="mumsmums.app"
+        export HOSTUP_TOKEN="dyndns-token"
+
+    2. Set appropriate permissions on the config file
+        chmod 600 dyndns.conf
+
+    3. Setup cron for automatic updates
+
+        # Edit crontab
+        crontab -e
+
+        # Update DNS every 15 minutes if IP changes
+        */15 * * * * source ~/mumsmums-persist/dyndns.conf && ~/mumsmums-persist/update-dns.sh >> ~/mumsmums-ddns.log 2>&1
+
+    4. Setup log rotation for the ddns log using logrotate:
+
+        # Create logrotate config
+        sudo vi /etc/logrotate.d/mumsmums-ddns
+
+        # Enter config content into the above file:
+        /home/nuc/mumsmums-ddns.log {
+            su nuc nuc
+            daily
+            rotate 3
+            missingok
+            notifempty
+            compress
+            delaycompress
+        }
+
 </details>
 
 ### Deploy

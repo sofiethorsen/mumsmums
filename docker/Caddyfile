@@ -1,6 +1,7 @@
-# Access via: http://localhost or http://<HOST-IP>
+# Access via: https://mumsmums.app
+# Caddy automatically handles HTTPS certificates via Let's Encrypt
 
-:80 {
+mumsmums.app {
     # Enable gzip compression
     encode gzip
 

@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Copy package files and install only production dependencies
 COPY src/client/package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Copy the pre-built Next.js app from local build
 # This was built with localhost:8080 which works with host networking

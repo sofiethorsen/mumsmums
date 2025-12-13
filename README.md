@@ -85,9 +85,13 @@ IP would change - through the hostup APIs.
         mkdir ~/mumsmums-persist
         mkdir ~/mumsmums-persist/logs
 
-        # Let the directories only be writable by you
-        chmod 755 ~/mumsmums-persist
-        chmod 755 ~/mumsmums-persist/logs
+        # Set ownership to UID 1000 (the Docker containers will use this too)
+        sudo chown -R 1000:1000 ~/mumsmums-persist
+
+        # Lets the 1000 owner have full read/write/execute access, the cron can write to the log file
+        # and the Docker container can read/write to the DB. No other groups/other will have access.
+        chmod -R 700 ~/mumsmums-persist
+        chmod -R 700 ~/mumsmums-persist/logs
 
     2. In mumsmums-persist, create dyndns.conf store the credentials:
 

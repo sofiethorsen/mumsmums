@@ -12,6 +12,14 @@ services:
       - ~/mumsmums-persist:/app/sqlite
     networks:
       - mumsmums-network
+    user: "1000:1000"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: false  # SQLite needs write access
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/graphql"]
       interval: 30s
@@ -38,6 +46,14 @@ services:
         condition: service_healthy
     networks:
       - mumsmums-network
+    user: "1001:1001"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: false  # Next.js needs write access for cache
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
@@ -55,7 +71,7 @@ services:
       - "443:443"
       - "443:443/udp"  # HTTP/3
     volumes:
-      - ./docker/Caddyfile:/etc/caddy/Caddyfile
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
@@ -63,6 +79,12 @@ services:
       - frontend
     networks:
       - mumsmums-network
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
 
 networks:
   mumsmums-network:

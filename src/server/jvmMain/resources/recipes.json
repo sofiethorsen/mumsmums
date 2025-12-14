@@ -1,5 +1,94 @@
 [
   {
+    "description": "En klassisk äppelkaka som får en god knäckig kant.",
+    "fbPreviewImageUrl": "/images/recipes/1252842971136-og.webp",
+    "imageUrl": "/images/recipes/1252842971136.webp",
+    "ingredientSections":
+    [
+      {
+        "ingredients":
+        [
+          {
+            "name": "ägg",
+            "quantity": 1,
+            "volume": "st"
+          },
+          {
+            "name": "socker",
+            "quantity": 2,
+            "volume": "dl"
+          },
+          {
+            "name": "smör",
+            "quantity": 100,
+            "volume": "gram"
+          },
+          {
+            "name": "vaniljsocker",
+            "quantity": 2,
+            "volume": "tsk"
+          },
+          {
+            "name": "bakpulver",
+            "quantity": 0.5,
+            "volume": "tsk"
+          },
+          {
+            "name": "mjöl",
+            "quantity": 2,
+            "volume": "dl"
+          },
+          {
+            "name": "koriander, malen",
+            "quantity": 0.125,
+            "volume": "tsk"
+          },
+          {
+            "name": "muskot",
+            "quantity": 0.1,
+            "volume": "tsk"
+          },
+          {
+            "name": "salt",
+            "quantity": 1.5,
+            "volume": "gram"
+          },
+          {
+            "name": "äpple",
+            "quantity": 2,
+            "volume": "st"
+          },
+          {
+            "name": "socker"
+          },
+          {
+            "name": "kanel"
+          },
+          {
+            "name": "ströbröd"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Äppelkaka",
+    "numberOfUnits": 1,
+    "recipeId": 1252842971136,
+    "servings": null,
+    "steps":
+    [
+      "Sätt ugnen på 200C.",
+      "Förbered en springform genom att smöra och bröa den.",
+      "Smält smöret och låt svalna något.",
+      "Vispa ägg och socker pösigt.",
+      "Tillsätt smöret och blanda.",
+      "Blanda mjöl, bakpulver, vaniljsocker, koriander, muskot och salt. Tillsätt det, gärna genom att sila genom en finmaskig sil för att undvika klumpar, och vänd försiktigt ihop tills allt är blandat.",
+      "Häll smeten i springformen och lägg på skivade äpplen.",
+      "Blanda kanel och socker och strö över kakan.",
+      "Grädda i 200C i ca 25 minuter."
+    ]
+  },
+  {
     "description": "Hasselbackspotatis med löjrom och smetana är ett enkelt och festligt tilltugg.",
     "fbPreviewImageUrl": "/images/recipes/43982676217856-og.webp",
     "imageUrl": "/images/recipes/43982676217856.webp",
@@ -10,12 +99,12 @@
         [
           {
             "name": "potatis, små",
-            "quantity": 12.0,
+            "quantity": 12,
             "volume": "st"
           },
           {
             "name": "löjrom",
-            "quantity": 60.0,
+            "quantity": 60,
             "volume": "gram"
           },
           {
@@ -32,12 +121,12 @@
         [
           {
             "name": "vatten",
-            "quantity": 1.0,
+            "quantity": 1,
             "volume": "liter"
           },
           {
             "name": "äppelcidervinäger",
-            "quantity": 2.0,
+            "quantity": 2,
             "volume": "deciliter"
           },
           {
@@ -245,6 +334,7 @@
           {
             "name": "pannkaksmix",
             "quantity": 150,
+            "recipeId": 43982676217860,
             "volume": "gram"
           },
           {
@@ -300,6 +390,8 @@
   },
   {
     "description": "En pannkaksmix som är enkel att förbereda och ha i skafferiet.",
+    "fbPreviewImageUrl": null,
+    "imageUrl": null,
     "ingredientSections":
     [
       {
@@ -476,6 +568,7 @@
           {
             "name": "garam masala",
             "quantity": 0.67,
+            "recipeId": 43983914448896,
             "volume": "tsk"
           },
           {
@@ -720,7 +813,7 @@
         [
           {
             "name": "köttfärs",
-            "quantity": 500,
+            "quantity": 400,
             "volume": "gram"
           },
           {

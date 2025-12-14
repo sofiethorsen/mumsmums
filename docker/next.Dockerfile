@@ -7,16 +7,13 @@ RUN groupadd -r appuser -g 1001 && \
 WORKDIR /app
 
 # Copy package files and install only production dependencies
-COPY src/client/package*.json ./
+COPY --chown=appuser:appuser src/client/package*.json ./
 RUN npm ci --omit=dev
 
-# Copy the pre-built Next.js app from local build
+# Copy the pre-built Next.js app from local build with ownership set during copy
 # This was built with localhost:8080 which works with host networking
-COPY src/client/.next ./.next
-COPY src/client/public ./public
-
-# Set ownership of app directory to non-root user
-RUN chown -R appuser:appuser /app
+COPY --chown=appuser:appuser src/client/.next ./.next
+COPY --chown=appuser:appuser src/client/public ./public
 
 # Switch to non-root user
 USER appuser

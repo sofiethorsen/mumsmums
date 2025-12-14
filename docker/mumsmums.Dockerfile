@@ -11,14 +11,15 @@ RUN groupadd -r appuser -g 1000 && \
 
 WORKDIR /app
 
-COPY build/mumsmums_deploy.jar /app/main.jar
+# Copy files with ownership set during copy
+COPY --chown=appuser:appuser build/mumsmums_deploy.jar /app/main.jar
 
 # Copy the raw recipes.json - we use this to seed the database if it doesn't already exist on the host
-COPY src/server/jvmMain/resources/recipes.json /app/src/server/jvmMain/resources/recipes.json
+COPY --chown=appuser:appuser src/server/jvmMain/resources/recipes.json /app/src/server/jvmMain/resources/recipes.json
 
 # Create sqlite directory for database and set ownership
 RUN mkdir -p /app/sqlite && \
-    chown -R appuser:appuser /app
+    chown appuser:appuser /app/sqlite
 
 # Switch to non-root user
 USER appuser

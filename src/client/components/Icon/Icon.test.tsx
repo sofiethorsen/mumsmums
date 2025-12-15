@@ -6,10 +6,10 @@ import Icon from './Icon'
 describe('Icon', () => {
     describe('decorative icons (no alt text)', () => {
         it('renders an icon with the correct src', () => {
-            render(<Icon name="search" />)
+            render(<Icon name="pan-frying" />)
             // Icons with empty alt have role="presentation"
             const icon = screen.getByRole('presentation')
-            expect(icon).toHaveAttribute('src', '/icons/search.svg')
+            expect(icon).toHaveAttribute('src', '/icons/pan-frying.svg')
         })
 
         it('uses default size of 24px when size is not provided', () => {
@@ -31,7 +31,7 @@ describe('Icon', () => {
         })
 
         it('has empty alt text by default', () => {
-            render(<Icon name="search" />)
+            render(<Icon name="pan-frying" />)
             const icon = screen.getByRole('presentation')
             expect(icon).toHaveAttribute('alt', '')
         })
@@ -39,7 +39,7 @@ describe('Icon', () => {
 
     describe('accessible icons (with alt text)', () => {
         it('renders icon with alt text', () => {
-            render(<Icon name="search" alt="Search recipes" />)
+            render(<Icon name="pan-frying" alt="Search recipes" />)
             const icon = screen.getByRole('img', { name: 'Search recipes' })
             expect(icon).toBeInTheDocument()
         })
@@ -58,9 +58,9 @@ describe('Icon', () => {
     })
 
     it('renders all icon types correctly', () => {
-        const iconNames: Array<'menu-burger' | 'search' | 'circle-user' | 'pan-frying'> = [
+        const iconNames: Array<'menu-burger' | 'home' | 'circle-user' | 'pan-frying'> = [
             'menu-burger',
-            'search',
+            'home',
             'circle-user',
             'pan-frying',
         ]

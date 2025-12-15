@@ -8,13 +8,14 @@ interface IconProps {
     name: IconName
     size?: number
     className?: string
+    alt?: string
 }
 
-const Icon: React.FC<IconProps> = ({ name, size = 24, className }) => {
+const Icon: React.FC<IconProps> = ({ name, size = 24, className, alt = '' }) => {
     return (
         <img
             src={`/icons/${name}.svg`}
-            alt=""
+            alt={alt}
             className={`${style.icon} ${className || ''}`}
             style={{ width: size, height: size }}
         />

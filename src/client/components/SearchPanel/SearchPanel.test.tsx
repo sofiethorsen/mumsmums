@@ -67,7 +67,7 @@ describe('SearchPanel', () => {
     })
 
     it('does not call onClose when clicking the trigger element', () => {
-        const { container } = render(
+        render(
             <>
                 <button ref={triggerRef as React.RefObject<HTMLButtonElement>}>
                     Trigger

@@ -30,7 +30,7 @@ export interface GetRecipeByIdQueryResult {
     recipe: Recipe
 }
 
-export interface GetRecipesQueryResult {
+export interface GetRecipePreviewsQueryResult {
     recipes: RecipePreview[]
 }
 

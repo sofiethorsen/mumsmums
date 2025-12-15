@@ -6,6 +6,6 @@
 
     /* Content */
     --color-content-primary: black;
-    --color-content-secondary: var(--gray-200);
+    --color-content-secondary: var(--gray-400);
     --content-tertiary: var(--black-50);
 }

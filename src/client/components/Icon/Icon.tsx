@@ -2,7 +2,7 @@ import React from 'react'
 import style from './Icon.module.css'
 
 // The name should match one of the svgs under src/client/public/icons
-export type IconName = 'menu-burger' | 'search' | 'circle-user' | 'pan-frying'
+export type IconName = 'menu-burger' | 'home' | 'circle-user' | 'pan-frying'
 
 interface IconProps {
     name: IconName

@@ -4,12 +4,48 @@
 }
 
 .nav {
-    padding: 10px 0;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+}
+
+/* All nav sections share common flex properties */
+.navLeft,
+.navCenter,
+.navRight {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.navCenter {
     justify-content: center;
 }
 
-.link {
-    text-decoration: none;
-    padding: 5px 10px;
+.navRight {
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.home {
+    display: flex;
+    transition: transform 150ms ease;
+}
+
+.home:hover {
+    transform: scale(1.1);
+}
+
+.iconButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    transition: opacity 150ms ease;
+}
+
+.iconButton:hover {
+    opacity: 0.7;
 }

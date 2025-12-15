@@ -1,6 +1,11 @@
 .header {
     width: 100%;
     border-bottom: 1px solid var(--color-content-secondary);
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--page-bg-color);
+    z-index: 1; /* We want the header nav to always be highest index, so we can scroll without page contents overlaying it */
 }
 
 .nav {

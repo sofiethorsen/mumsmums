@@ -2,5 +2,6 @@
     position: relative;
     height: 100%;
     width: 100%;
-    top: 0
+    top: 0;
+    padding-top: calc(57px + 10px); /* Account for fixed navigation height - 57px for the nav, plus 10px for breathing room */
 }

@@ -37,11 +37,11 @@ describe('Navigation', () => {
         expect(homeLink).toHaveAttribute('href', '/')
     })
 
-    it('renders the logo icon', () => {
+    it('renders the home icon', () => {
         render(<Navigation />)
         // Icon is inside a link with aria-label, so it should have empty alt (role="presentation")
-        const logoIcon = screen.getByRole('presentation')
-        expect(logoIcon).toHaveAttribute('src', '/icons/pan-frying.svg')
+        const homeIcon = screen.getByRole('presentation')
+        expect(homeIcon).toHaveAttribute('src', '/icons/home.svg')
     })
 
     describe('with MENU feature flag enabled', () => {

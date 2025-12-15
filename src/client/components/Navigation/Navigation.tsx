@@ -13,26 +13,26 @@ const Navigation = () => {
                 <div className={style.navLeft}>
                     {FEATURE_FLAGS.MENU && (
                         <button className={style.iconButton} aria-label="Meny">
-                            <Icon name="menu-burger" size={32} />
+                            <Icon name="menu-burger" size={26} />
                         </button>
                     )}
                 </div>
 
                 <div className={style.navCenter}>
                     <Link href="/" className={style.home} aria-label="Hem">
-                        <Icon name="pan-frying" size={32} />
+                        <Icon name="home" size={28} />
                     </Link>
                 </div>
 
                 <div className={style.navRight}>
                     {FEATURE_FLAGS.SEARCH && (
                         <button className={style.iconButton} aria-label="Sök">
-                            <Icon name="search" size={32} />
+                            <Icon name="pan-frying" size={26} />
                         </button>
                     )}
                     {FEATURE_FLAGS.LOGIN && (
                         <button className={style.iconButton} aria-label="Logga in">
-                            <Icon name="circle-user" size={32} />
+                            <Icon name="circle-user" size={26} />
                         </button>
                     )}
                 </div>

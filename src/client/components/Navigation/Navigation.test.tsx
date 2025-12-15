@@ -3,10 +3,30 @@ import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Navigation from './Navigation'
 
+// Mock next/router
+jest.mock('next/router', () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+}))
+
+// Mock Apollo Client
+const mockRecipes = [
+    { recipeId: 1, name: 'Kanelbullar', imageUrl: '/images/kanelbullar.jpg' },
+    { recipeId: 2, name: 'Kardemummabullar', imageUrl: '/images/kardemumma.jpg' },
+]
+
+jest.mock('@apollo/client/react', () => ({
+    useQuery: () => ({
+        data: { recipes: mockRecipes },
+        loading: false,
+        error: undefined,
+    }),
+}))
+
 // Mock the feature flags module
 const mockFeatureFlags = {
     MENU: false,
-    SEARCH: false,
     LOGIN: false,
 }
 
@@ -20,7 +40,6 @@ describe('Navigation', () => {
     beforeEach(() => {
         // Reset all flags to false
         mockFeatureFlags.MENU = false
-        mockFeatureFlags.SEARCH = false
         mockFeatureFlags.LOGIN = false
     })
 
@@ -39,9 +58,9 @@ describe('Navigation', () => {
 
     it('renders the home icon', () => {
         render(<Navigation />)
-        // Icon is inside a link with aria-label, so it should have empty alt (role="presentation")
-        const homeIcon = screen.getByRole('presentation')
-        expect(homeIcon).toHaveAttribute('src', '/icons/home.svg')
+        const homeIcon = document.querySelector('img[src="/icons/home.svg"]')
+        expect(homeIcon).toBeInTheDocument()
+        expect(homeIcon).toHaveAttribute('alt', '')
     })
 
     describe('with MENU feature flag enabled', () => {
@@ -62,11 +81,7 @@ describe('Navigation', () => {
         })
     })
 
-    describe('with SEARCH feature flag enabled', () => {
-        beforeEach(() => {
-            mockFeatureFlags.SEARCH = true
-        })
-
+    describe('Search functionality', () => {
         it('renders the search button', () => {
             render(<Navigation />)
             const searchButton = screen.getByRole('button', { name: /sök/i })
@@ -101,7 +116,6 @@ describe('Navigation', () => {
     describe('with all feature flags enabled', () => {
         beforeEach(() => {
             mockFeatureFlags.MENU = true
-            mockFeatureFlags.SEARCH = true
             mockFeatureFlags.LOGIN = true
         })
 
@@ -116,15 +130,15 @@ describe('Navigation', () => {
     })
 
     describe('with all feature flags disabled', () => {
-        it('only renders the logo', () => {
+        it('renders logo and search button (always visible)', () => {
             render(<Navigation />)
 
-            // Logo should be present
+            // Logo and search should be present
             expect(screen.getByRole('link', { name: /hem/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /sök/i })).toBeInTheDocument()
 
-            // Buttons should not be present
+            // Feature-flagged buttons should not be present
             expect(screen.queryByRole('button', { name: /meny/i })).not.toBeInTheDocument()
-            expect(screen.queryByRole('button', { name: /sök/i })).not.toBeInTheDocument()
             expect(screen.queryByRole('button', { name: /logga in/i })).not.toBeInTheDocument()
         })
     })

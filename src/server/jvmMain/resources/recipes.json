@@ -3,11 +3,9 @@
     "description": "En klassisk äppelkaka som får en god knäckig kant.",
     "fbPreviewImageUrl": "/images/recipes/1252842971136-og.webp",
     "imageUrl": "/images/recipes/1252842971136.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "ägg",
             "quantity": 1,
@@ -75,8 +73,7 @@
     "numberOfUnits": 1,
     "recipeId": 1252842971136,
     "servings": null,
-    "steps":
-    [
+    "steps": [
       "Sätt ugnen på 200C.",
       "Förbered en springform genom att smöra och bröa den.",
       "Smält smöret och låt svalna något.",
@@ -92,11 +89,9 @@
     "description": "Hasselbackspotatis med löjrom och smetana är ett enkelt och festligt tilltugg.",
     "fbPreviewImageUrl": "/images/recipes/43982676217856-og.webp",
     "imageUrl": "/images/recipes/43982676217856.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "potatis, små",
             "quantity": 12,
@@ -117,8 +112,7 @@
         "name": null
       },
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "vatten",
             "quantity": 1,
@@ -142,8 +136,7 @@
     "numberOfUnits": 12,
     "recipeId": 43982676217856,
     "servings": null,
-    "steps":
-    [
+    "steps": [
       "Skiva potatisen fint nästan hela vägen igenom, använd antingen en träsked eller en handduk som viks tre gånger från varje sida till en ”ränna” i mitten där potatisen läggs. Lägg potatisen direkt i isvatten när du har skurit den.",
       "Koka upp vatten, vinäger och salt i en kastrull. Lägg ner potatisen och sjud i cirka 90 gradigt varmt vatten utan att det bubblar, 1 timme utan lock. Potatisen ska bli lite mjuk men inte genomkokt, halvrå. Den får inte koka och ska inte bli färdigkokt. Ta upp potatisen med hjälp av en hålslev och låt kallna i isvatten. Så här långt kan potatisen förberedas upp till 3 dagar före servering.",
       "Vid servering: Ta upp potatisarna ur vattnet och låt rinna av något. Fritera i absolut ren 140 grader varm frityrolja cirka 25–30 minuter tills potatisen är krispig rakt igenom. Men håll koll, det kan ta både kortare och längre tid. Det ska nästan sluta bubbla från potatisarna, då är de klara.",
@@ -156,11 +149,9 @@
     "description": "Fantastiskt goda och saftiga kanelbullar - går även utmärkt att frysa.",
     "fbPreviewImageUrl": "/images/recipes/43982676217857-og.webp",
     "imageUrl": "/images/recipes/43982676217857.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "jäst",
             "quantity": 30,
@@ -213,8 +204,7 @@
         "name": "Vetedeg"
       },
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "mandelmassa",
             "quantity": 200,
@@ -239,8 +229,7 @@
         "name": "Kanel och mandelfyllning"
       },
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "vatten",
             "quantity": 150,
@@ -259,8 +248,7 @@
     "numberOfUnits": 30,
     "recipeId": 43982676217857,
     "servings": null,
-    "steps":
-    [
+    "steps": [
       "Smula jästen i bunken till din matberedare. Värm mjölken till ljummen, slå över jästen och blanda runt.",
       "Lägg i resterande ingredienser förutom smöret. Kör ihop degen långsamt med krok. När degen gått ihop ökar du tempot lite och tillsätter smöret lite i taget. Kör degen 10 minuter i maskin tills den bildat gluten och känns elastisk, glansig och fin på ytan.",
       "Lägg ut degen på ett mjölat bord och låt vila 20 minuter.",
@@ -275,11 +263,9 @@
     "description": "Hemmagjord råbiff med enkla goda smaker. Majonäsen bidrar med krämighet och dillen fräschar upp.",
     "fbPreviewImageUrl": "/images/recipes/43982676217858-og.webp",
     "imageUrl": "/images/recipes/43982676217858.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "oxfilé",
             "quantity": 150,
@@ -312,8 +298,7 @@
     "numberOfUnits": null,
     "recipeId": 43982676217858,
     "servings": 2,
-    "steps":
-    [
+    "steps": [
       "Sprita ärterna och förbered ett isbad.",
       "Koka ärterna i vatten och lite salt i ca 2-3 minuter, och lägg sedan i isbadet",
       "Blanda majonäsen med lite dillolja.",
@@ -326,11 +311,9 @@
     "description": "Genom att vispa äggvitan blir dessa amerikanska pannkakor otroligt fluffiga.",
     "fbPreviewImageUrl": "/images/recipes/43982676217859-og.webp",
     "imageUrl": "/images/recipes/43982676217859.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "pannkaksmix",
             "quantity": 150,
@@ -376,8 +359,7 @@
     "numberOfUnits": 8,
     "recipeId": 43982676217859,
     "servings": 2,
-    "steps":
-    [
+    "steps": [
       "Smält smöret och låt svalna något.",
       "Separera äggulan och äggvitan, och blanda sedan äggula, mjölk och yoghurt i en skål.",
       "Tillsätt det smälta smöret under vispning.",
@@ -390,13 +372,9 @@
   },
   {
     "description": "En pannkaksmix som är enkel att förbereda och ha i skafferiet.",
-    "fbPreviewImageUrl": null,
-    "imageUrl": null,
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "mjöl",
             "quantity": 280,
@@ -430,8 +408,7 @@
     "numberOfUnits": null,
     "recipeId": 43982676217860,
     "servings": 4,
-    "steps":
-    [
+    "steps": [
       "Räcker till ca 16 pannkakor.",
       "Kombinera alla ingredienser i en bunke och blanda väl.",
       "Lägg mixen i en lufttät burk.",
@@ -443,11 +420,9 @@
     "description": "Garam masala är en kryddbas i många indiska rätter - denna är välbalanserad med rätt mängd blommighet.",
     "fbPreviewImageUrl": "/images/recipes/43983914448896-og.webp",
     "imageUrl": "/images/recipes/43983914448896.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "svart kardemumma",
             "quantity": 1,
@@ -516,8 +491,7 @@
     "numberOfUnits": 1,
     "recipeId": 43983914448896,
     "servings": null,
-    "steps":
-    [
+    "steps": [
       "Gör ca 50 gram.",
       "Värm ugnen till 50C. Sprid ut alla kryddor förutom vallmofrön och rosblad på en plåt.",
       "Ställ in i ugnen i ca 2.5h.",
@@ -530,11 +504,9 @@
     "description": "Denna svarta daal kan ätas som en sidorätt eller som huvudrätt med ris.",
     "fbPreviewImageUrl": "/images/recipes/43983918127104-og.webp",
     "imageUrl": "/images/recipes/43983918127104.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "belugalinser",
             "quantity": 300,
@@ -589,8 +561,7 @@
     "numberOfUnits": null,
     "recipeId": 43983918127104,
     "servings": 8,
-    "steps":
-    [
+    "steps": [
       "Lägg linserna i en stor skål, täck med vatten och blanda ca 10 sekunder. Häll sedan ut vattnet och upprepa, 3-4 gånger, tills vattnet är klart.",
       "Häll linserna i en stor kastrull och fyll med 4 liter vatten. Låt koka upp, och koka sedan i 2-3 timmar. Skumma av och ta bort tomma skal som stiger till ytan allteftersom, och addera vatten när det behövs för att täcka linserna ordentligt. Linserna behöver bli helt mjuka, skalen ska lossna. Om du pressar en lins så ska konsistensen vara krämig snarare än smulig. När linserna är tillräckligt tillagade, slå av värmen och låt kastrullen sitta i ca 15 minuter.",
       "I en skål, mixa vitlöks och ingefärspasta, tomatpuré, salt, deggi mirch och garam masala till en pasta.",
@@ -603,11 +574,9 @@
     "description": "Gyoza är perfekt att förbereda och frysa in, lika bra färska som från frysen.",
     "fbPreviewImageUrl": "/images/recipes/43985745104896-og.webp",
     "imageUrl": "/images/recipes/43985745104896.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "vitkål, finhackad",
             "quantity": 450,
@@ -660,8 +629,7 @@
         "name": "Dumplings"
       },
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "risvinäger",
             "quantity": 1.2,
@@ -685,8 +653,7 @@
     "numberOfUnits": null,
     "recipeId": 43985745104896,
     "servings": 6,
-    "steps":
-    [
+    "steps": [
       "Kombinera kål och 2 tsk salt i en stor skål och blanda.",
       "För över till en sil och låt sila av i rumstemperatur i cirka 15 minuter",
       "Lägg kålen i en ren kökshandduk och samla upp kanterna, vrid handduken och pressa kålen för att få ut så mycket vätska som möjligt.",
@@ -705,11 +672,9 @@
     "description": "Genom att låta äggen stå efter saltning så bryts enzymer ner och vätskan binds bättre - vilket resulterar i en perfekt krämig äggröra.",
     "fbPreviewImageUrl": "/images/recipes/43986376914944-og.webp",
     "imageUrl": "/images/recipes/43986376914944.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "ägg",
             "quantity": 6,
@@ -743,8 +708,7 @@
     "numberOfUnits": null,
     "recipeId": 43986376914944,
     "servings": 6,
-    "steps":
-    [
+    "steps": [
       "Kombinera ägg, äggula och salt i en skål och vispa tills blandat och skummigt. Låt vila i rumstemperatur i 15 minuter. Äggen ska mörkna i färgen.",
       "Skär kuber av smöret och lägg i äggblandningen, och häll sedan i en non-stick kastrull eller stekpanna, och tillaga på medellåg värme. Rör tills smöret har smält och äggen börjar stelna. Rör snabbare för att bryta upp större bitar och fortsätt tillaga tills all äggvätska är tillagad.",
       "Ta bort pannan från värmen, häll i grädden och rör i ca 15 sekunder tills allt är blandat. Servera."
@@ -754,11 +718,9 @@
     "description": "Snabb och kryddig rätt där den picklade gurkan bidrar med textur och crunch.",
     "fbPreviewImageUrl": "/images/recipes/43987089885184-og.webp",
     "imageUrl": "/images/recipes/43987089885184.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "gurka",
             "quantity": 0.5,
@@ -793,8 +755,7 @@
         "name": "Picklad gurka"
       },
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "majonäs",
             "quantity": 70,
@@ -809,8 +770,7 @@
         "name": "Gochujang-majonäs"
       },
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "köttfärs",
             "quantity": 400,
@@ -864,8 +824,7 @@
     "numberOfUnits": null,
     "recipeId": 43987089885184,
     "servings": 2,
-    "steps":
-    [
+    "steps": [
       "Förbered ris för att servera till rätten.",
       "För den picklade gurkan, börja med att blanda soja, risvinäger, vitlökspulver, chiliflakes och sesamfrön. Skiva gurkan och vänd runt i blandningen. Ställ åt sidan.",
       "För majonäsen, blanda majonäs och gochujang. Ställ åt sidan.",
@@ -878,11 +837,9 @@
     "description": "Muffins packade med blåbär som inte blir lika tunga och söta som vanliga muffins.",
     "fbPreviewImageUrl": "/images/recipes/43987442419712-og.webp",
     "imageUrl": "/images/recipes/43987442419712.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "mjöl",
             "quantity": 170,
@@ -954,8 +911,7 @@
     "numberOfUnits": 6,
     "recipeId": 43987442419712,
     "servings": null,
-    "steps":
-    [
+    "steps": [
       "Sätt ugnen på 180C.",
       "Förbered en muffinsplåt genom att smöra den, eller sätt i pappersformar.",
       "Kombinera mjöl, socker, vaniljsocker, bakpulver, bikarbonat, koriander, muskot och smör i skålen på en köksmixer, med en flatblandare/paddel.",
@@ -969,11 +925,9 @@
     "description": "Smakar precis som påskryddan, men utan socker.",
     "fbPreviewImageUrl": "/images/recipes/43988867856384-og.webp",
     "imageUrl": "/images/recipes/43988867856384.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "paprikapulver",
             "quantity": 1,
@@ -1022,8 +976,7 @@
     "numberOfUnits": 1,
     "recipeId": 43988867856384,
     "servings": null,
-    "steps":
-    [
+    "steps": [
       "En sats gör ca 30 gram och är lagom till 500 gram köttfärs.",
       "Blanda alla kryddor och häll över i en lufttät burk med lock."
     ]
@@ -1032,11 +985,9 @@
     "description": "Festlig huvudrätt som ändå är snabblagad",
     "fbPreviewImageUrl": "/images/recipes/43988905564160-og.webp",
     "imageUrl": "/images/recipes/43988905564160.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "torskrygg",
             "quantity": 600,
@@ -1052,8 +1003,7 @@
         "name": "Torskrygg"
       },
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "spetskål",
             "quantity": 2,
@@ -1078,8 +1028,7 @@
         "name": "Ugnsbakad spetskål med brynt smör och hasselnötter"
       },
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "schalottenlök",
             "quantity": 1,
@@ -1130,8 +1079,7 @@
         "name": "Champagnesås"
       },
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "ärter",
             "quantity": 50,
@@ -1151,8 +1099,7 @@
     "numberOfUnits": null,
     "recipeId": 43988905564160,
     "servings": 4,
-    "steps":
-    [
+    "steps": [
       "Skala och finhacka sharlottenlök, ställ åt sidan",
       "Bryn hasselnötterna försiktigt och ta bort överflödigt skal (du kan gnugga nötterna mot varandra i händerna eller i en handduk). Hacka grovt och ställ åt sidan.",
       "Lägg torskryggen i en ugnsform med skinnet nedåt. Salta och låt stå och dra i kylskåpet ca 15 min.",
@@ -1174,11 +1121,9 @@
     "description": "Enkel klassiker som är löjligt god",
     "fbPreviewImageUrl": "/images/recipes/43988908120064-og.webp",
     "imageUrl": "/images/recipes/43988908120064.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "smör",
             "quantity": 150,
@@ -1220,8 +1165,7 @@
     "numberOfUnits": 25,
     "recipeId": 43988908120064,
     "servings": null,
-    "steps":
-    [
+    "steps": [
       "Rör ihop smör och socker.",
       "Rör i kakao, vaniljsocker, kaffe och havregryn.",
       "Forma runda bollar och rulla dem i pärlsocker.",
@@ -1232,11 +1176,9 @@
     "description": "Enkel focaccia som sköter sig själv. Degen kan jäsa över natten och bakas ut dagen efter.",
     "fbPreviewImageUrl": "/images/recipes/43998781233152-og.webp",
     "imageUrl": "/images/recipes/43998781233152.webp",
-    "ingredientSections":
-    [
+    "ingredientSections": [
       {
-        "ingredients":
-        [
+        "ingredients": [
           {
             "name": "mjöl",
             "quantity": 500,
@@ -1283,8 +1225,7 @@
     "numberOfUnits": 1,
     "recipeId": 43998781233152,
     "servings": null,
-    "steps":
-    [
+    "steps": [
       "Kombinera mjöl, salt, jäst och vatten i en stor skål. Mixa med händerna eller en träslev tills inget torrt mjöl kvarstår. Skålen bör vara stor nog för att kunna jäsa till 4-6 ggr storleken på degen.",
       "Täck skålen ordentligt med plast och se till att kanterna är väl inslagna så att luft inte kommer in. Låt jäsa i rumstemperatur i åtminstone 8 timmar, upp till 24 timmar. Degen ska jäsa ordentligt i storlek.",
       "Pudra lite mjöl på degen och vänd sedan ut den på en mjölad arbetsyta. Forma till en boll genom att vika in kanterna under degen själv.",

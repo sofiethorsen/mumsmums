@@ -2,8 +2,7 @@
   "description": "Enkel focaccia som sköter sig själv. Degen kan jäsa över natten och bakas ut dagen efter.",
   "fbPreviewImageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43998781233152/1200-600.webp",
   "imageUrl": "https://dmdqeeh0foqsn.cloudfront.net/assets/43998781233152/300-300.webp",
-  "ingredientSections":
-  [
+  "ingredientSections": [
     {
       "ingredients": [
         {
@@ -52,8 +51,7 @@
   "numberOfUnits": 1,
   "recipeId": 43998781233152,
   "servings": null,
-  "steps":
-  [
+  "steps": [
     "Kombinera mjöl, salt, jäst och vatten i en stor skål. Mixa med händerna eller en träslev tills inget torrt mjöl kvarstår. Skålen bör vara stor nog för att kunna jäsa till 4-6 ggr storleken på degen.",
     "Täck skålen ordentligt med plast och se till att kanterna är väl inslagna så att luft inte kommer in. Låt jäsa i rumstemperatur i åtminstone 8 timmar, upp till 24 timmar. Degen ska jäsa ordentligt i storlek.",
     "Pudra lite mjöl på degen och vänd sedan ut den på en mjölad arbetsyta. Forma till en boll genom att vika in kanterna under degen själv.",

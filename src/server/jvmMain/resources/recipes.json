@@ -86,6 +86,181 @@
     ]
   },
   {
+    "description": "Cocktailtomater blir härligt söta efter en längre tid i ugnen. Passar perfekt som tillbehör eller i en pasta.",
+    "fbPreviewImageUrl": "/images/recipes/1253196478464-og.webp",
+    "imageUrl": "/images/recipes/1253196478464.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "name": "cocktailtomat",
+            "quantity": 500,
+            "volume": "gram"
+          },
+          {
+            "name": "vitlöksklyfta",
+            "quantity": 2,
+            "volume": "st"
+          },
+          {
+            "name": "olivolja",
+            "quantity": 2,
+            "volume": "msk"
+          },
+          {
+            "name": "timjan, färsk",
+            "quantity": 0.5,
+            "volume": "msk"
+          },
+          {
+            "name": "chiliflakes",
+            "quantity": 0.5,
+            "volume": "tsk"
+          },
+          {
+            "name": "salt",
+            "quantity": 2,
+            "volume": "gram"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Långbakade tomater",
+    "numberOfUnits": null,
+    "recipeId": 1253196478464,
+    "servings": 1,
+    "steps": [
+      "Sätt ugnen på 120C och förbered en plåt med bakplåtspapper.",
+      "Finhacka eller riv vitlöken. ",
+      "Plocka bladen från timjanen, undvik kvistarna.",
+      "Dela tomaterna och lägg i en skål. Häll på olja, vitlök, timjan, chiliflakes och salt. Blanda försiktigt så tomaterna är intakta.",
+      "Lägg upp tomaterna på plåten med snittytan uppåt.",
+      "Baka i ugnen i 2-3 timmar, tomaterna blir torrare men mer intensiva i smaken ju längre tid i ugnen. "
+    ]
+  },
+  {
+    "description": "En varm sallad med härlig textur.",
+    "fbPreviewImageUrl": "/images/recipes/1253201258496-og.webp",
+    "imageUrl": "/images/recipes/1253201258496.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "name": "quinoa, vit",
+            "quantity": 1,
+            "volume": "dl"
+          },
+          {
+            "name": "salt",
+            "quantity": 1,
+            "volume": "krm"
+          },
+          {
+            "name": "sesamolja",
+            "quantity": 1,
+            "volume": "msk"
+          }
+        ],
+        "name": "Krispig quinoa"
+      },
+      {
+        "ingredients": [
+          {
+            "name": "vitkål",
+            "quantity": 250,
+            "volume": "gram"
+          },
+          {
+            "name": "grönkål",
+            "quantity": 200,
+            "volume": "gram"
+          },
+          {
+            "name": "olivolja",
+            "quantity": 2,
+            "volume": "msk"
+          },
+          {
+            "name": "salt"
+          }
+        ],
+        "name": "Ugnsbakad kål"
+      },
+      {
+        "ingredients": [
+          {
+            "name": "kycklinglårfilé",
+            "quantity": 400,
+            "volume": "gram"
+          },
+          {
+            "name": "paprika",
+            "quantity": 200,
+            "volume": "gram"
+          },
+          {
+            "name": "morot",
+            "quantity": 200,
+            "volume": "gram"
+          },
+          {
+            "name": "edamame",
+            "quantity": 100,
+            "volume": "gram"
+          },
+          {
+            "name": "olja"
+          }
+        ],
+        "name": "Sallad"
+      },
+      {
+        "ingredients": [
+          {
+            "name": "soja",
+            "quantity": 4,
+            "volume": "msk"
+          },
+          {
+            "name": "limejuice",
+            "quantity": 2,
+            "volume": "msk"
+          },
+          {
+            "name": "mirin",
+            "quantity": 2,
+            "volume": "msk"
+          },
+          {
+            "name": "jordnötssmör",
+            "quantity": 30,
+            "volume": "gram"
+          },
+          {
+            "name": "crispy chili oil, Laoganma",
+            "quantity": 1,
+            "volume": "msk"
+          }
+        ],
+        "name": "Jordnötsdressing"
+      }
+    ],
+    "name": "Varm thaisallad",
+    "numberOfUnits": null,
+    "recipeId": 1253201258496,
+    "servings": 2,
+    "steps": [
+      "Sätt ugnen på 190C och förbered två plåtar med bakplåtspapper.",
+      "Beräkna två delar vatten till en del quinoa och koka upp med quinoan i. Koka på svag värme i ca 10 minuter. Låt quinoan vila utan värme med lock i ca 5 min. ",
+      "Häll upp quinoan på an av plåtarna och ringla sesamolja över. Baka i ugnen i ca 20 minuter.",
+      "Strimla vitkål och grönkål och lägg i separata skålar. Häll olivolja på och salta. När quinoan har gått klart i ugnen så höj värmen till 220C. Lägg ut vitkålen på den andra plåten och sätt in i ugnen. När det gått 15 minuter, ta ut plåten och lägg på grönkålen och kör i 5 minuter till. ",
+      "Strimla kycklingen, paprikan och morötterna i lagom bitar. Stek kycklingen i lite olja tills den fått fin yta och är genomstekt. Ta ur kycklingen ur pannan och stek sedan paprikan, morötterna samt edamamebönorna. ",
+      "Gör dressingen genom att i en skål blanda jordnötssmör, soja, limejuice, mirin och crispy chili oil. ",
+      "Blanda ihop alla delar av salladen i en stor skål medan komponenterna fortfarande är varma. Servera genast. "
+    ]
+  },
+  {
     "description": "Hasselbackspotatis med löjrom och smetana är ett enkelt och festligt tilltugg.",
     "fbPreviewImageUrl": "/images/recipes/43982676217856-og.webp",
     "imageUrl": "/images/recipes/43982676217856.webp",

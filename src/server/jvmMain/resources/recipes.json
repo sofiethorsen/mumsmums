@@ -890,7 +890,7 @@
     ]
   },
   {
-    "description": "Snabb och kryddig rätt där den picklade gurkan bidrar med textur och crunch.",
+    "description": "Snabb och kryddig rätt där gurksalladen bidrar med textur och crunch.",
     "fbPreviewImageUrl": "/images/recipes/43987089885184-og.webp",
     "imageUrl": "/images/recipes/43987089885184.webp",
     "ingredientSections": [
@@ -925,15 +925,20 @@
             "name": "svarta sesamfrön",
             "quantity": 1,
             "volume": "tsk"
+          },
+          {
+            "name": "chiliolja",
+            "quantity": 1,
+            "volume": "tsk"
           }
         ],
-        "name": "Picklad gurka"
+        "name": "Gurksallad"
       },
       {
         "ingredients": [
           {
             "name": "majonäs",
-            "quantity": 70,
+            "quantity": 65,
             "volume": "gram"
           },
           {
@@ -948,7 +953,7 @@
         "ingredients": [
           {
             "name": "köttfärs",
-            "quantity": 400,
+            "quantity": 300,
             "volume": "gram"
           },
           {
@@ -995,13 +1000,13 @@
         "name": "Köttfärs"
       }
     ],
-    "name": "Koreansk köttfärs med picklad gurka",
+    "name": "Koreansk köttfärs med het gurksallad",
     "numberOfUnits": null,
     "recipeId": 43987089885184,
     "servings": 2,
     "steps": [
       "Förbered ris för att servera till rätten.",
-      "För den picklade gurkan, börja med att blanda soja, risvinäger, vitlökspulver, chiliflakes och sesamfrön. Skiva gurkan och vänd runt i blandningen. Ställ åt sidan.",
+      "För gurksalladen, börja med att blanda soja, risvinäger, vitlökspulver, chiliflakes, chiliolja och sesamfrön. Ta en kavel eller dylikt och slå gurkan så den krossas delvis. Skär sedan upp gurkan så du får irreguljära bitar. Vänd runt i blandningen och ställ åt sidan.",
       "För majonäsen, blanda majonäs och gochujang. Ställ åt sidan.",
       "För köttfärsen, börja med att skiva salladslöken och ställ åt sidan. Blanda sedan soja, honung, sesamolja, gochujang och sesamfrön i en skål. Riv ner vitlöken.",
       "Stek sedan köttfärsen i lite olja tills den är tillagad. Häll ner blandningen och stek. När mestadels av vätskan har kokats bort, häll i salladslök, men spara lite för att toppa med. När vätskan har kokat bort är köttfärsen klar.",

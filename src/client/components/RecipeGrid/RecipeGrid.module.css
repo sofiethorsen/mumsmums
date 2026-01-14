@@ -1,5 +1,22 @@
-.grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.searchResults {
+  color: var(--color-content-secondary);
+  margin-bottom: 24px;
+  font-size: 15px;
+  text-align: center;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 64px 16px;
+}
+
+.emptyState p {
+  font-size: 18px;
+  color: var(--color-content-secondary);
 }

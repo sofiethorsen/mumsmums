@@ -36,6 +36,7 @@
 .instructionCard {
     background-color: var(--card-bg-color);
     border-radius: 6px;
+    box-shadow: var(--card-box-shadow);
 }
 
 .rightColumn {

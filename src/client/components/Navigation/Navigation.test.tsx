@@ -10,19 +10,6 @@ jest.mock('next/router', () => ({
     }),
 }))
 
-// Mock Apollo Client
-const mockRecipes = [
-    { recipeId: 1, name: 'Kanelbullar', imageUrl: '/images/kanelbullar.jpg' },
-    { recipeId: 2, name: 'Kardemummabullar', imageUrl: '/images/kardemumma.jpg' },
-]
-
-jest.mock('@apollo/client/react', () => ({
-    useQuery: () => ({
-        data: { recipes: mockRecipes },
-        loading: false,
-        error: undefined,
-    }),
-}))
 
 // Mock the feature flags module
 const mockFeatureFlags = {
@@ -81,19 +68,6 @@ describe('Navigation', () => {
         })
     })
 
-    describe('Search functionality', () => {
-        it('renders the search button', () => {
-            render(<Navigation />)
-            const searchButton = screen.getByRole('button', { name: /sök/i })
-            expect(searchButton).toBeInTheDocument()
-        })
-
-        it('search button has accessible label', () => {
-            render(<Navigation />)
-            const searchButton = screen.getByLabelText('Sök')
-            expect(searchButton).toBeInTheDocument()
-        })
-    })
 
     describe('with LOGIN feature flag enabled', () => {
         beforeEach(() => {
@@ -124,18 +98,16 @@ describe('Navigation', () => {
 
             expect(screen.getByRole('link', { name: /hem/i })).toBeInTheDocument()
             expect(screen.getByRole('button', { name: /meny/i })).toBeInTheDocument()
-            expect(screen.getByRole('button', { name: /sök/i })).toBeInTheDocument()
             expect(screen.getByRole('button', { name: /logga in/i })).toBeInTheDocument()
         })
     })
 
     describe('with all feature flags disabled', () => {
-        it('renders logo and search button (always visible)', () => {
+        it('renders only the logo (always visible)', () => {
             render(<Navigation />)
 
-            // Logo and search should be present
+            // Logo should be present
             expect(screen.getByRole('link', { name: /hem/i })).toBeInTheDocument()
-            expect(screen.getByRole('button', { name: /sök/i })).toBeInTheDocument()
 
             // Feature-flagged buttons should not be present
             expect(screen.queryByRole('button', { name: /meny/i })).not.toBeInTheDocument()

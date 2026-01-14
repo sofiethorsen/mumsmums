@@ -28,11 +28,9 @@ jest.mock('../../components/HeroSection/HeroSection', () => ({
     default: ({
         searchQuery,
         onSearchChange,
-        recipeCount,
     }: {
         searchQuery: string
         onSearchChange: (query: string) => void
-        recipeCount: number
     }) => (
         <div data-testid="hero-section">
             <input
@@ -40,7 +38,6 @@ jest.mock('../../components/HeroSection/HeroSection', () => ({
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
             />
-            <span data-testid="recipe-count">{recipeCount}</span>
         </div>
     ),
 }))
@@ -89,11 +86,6 @@ describe('HomePage', () => {
         expect(screen.getByTestId('recipe-2')).toHaveTextContent('Kardemummabullar')
         expect(screen.getByTestId('recipe-3')).toHaveTextContent('Semlor')
         expect(screen.getByTestId('recipe-4')).toHaveTextContent('Chokladbollar')
-    })
-
-    it('displays the total recipe count in hero', () => {
-        render(<HomePage recipes={mockRecipes} />)
-        expect(screen.getByTestId('recipe-count')).toHaveTextContent('4')
     })
 
     describe('Search filtering', () => {
@@ -170,6 +162,5 @@ describe('HomePage', () => {
     it('handles empty recipe list', () => {
         render(<HomePage recipes={[]} />)
         expect(screen.getByTestId('filtered-count')).toHaveTextContent('0')
-        expect(screen.getByTestId('recipe-count')).toHaveTextContent('0')
     })
 })

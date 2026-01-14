@@ -5,13 +5,11 @@ import style from './HeroSection.module.css'
 interface HeroSectionProps {
     searchQuery: string
     onSearchChange: (query: string) => void
-    recipeCount: number
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
     searchQuery,
     onSearchChange,
-    recipeCount,
 }) => {
     return (
         <section className={style.hero}>

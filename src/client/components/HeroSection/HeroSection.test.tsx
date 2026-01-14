@@ -8,7 +8,6 @@ describe('HeroSection', () => {
     const defaultProps = {
         searchQuery: '',
         onSearchChange: mockOnSearchChange,
-        recipeCount: 42,
     }
 
     beforeEach(() => {
@@ -31,12 +30,6 @@ describe('HeroSection', () => {
         render(<HeroSection {...defaultProps} />)
         const subtitle = screen.getByText(/recept utan livshistorier/i)
         expect(subtitle).toBeInTheDocument()
-    })
-
-    it('displays the recipe count', () => {
-        render(<HeroSection {...defaultProps} recipeCount={42} />)
-        // The count is part of the subtitle text but not rendered separately
-        expect(screen.getByText(/recept utan livshistorier/i)).toBeInTheDocument()
     })
 
     describe('Search input', () => {

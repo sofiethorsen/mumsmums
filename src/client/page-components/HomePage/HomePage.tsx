@@ -37,7 +37,6 @@ export default function HomePage({ recipes }: HomePageProps) {
                 <HeroSection
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
-                    recipeCount={recipes?.length || 0}
                 />
                 <RecipeGrid
                     recipes={filteredRecipes}

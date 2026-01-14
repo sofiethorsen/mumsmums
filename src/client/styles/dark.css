@@ -1,11 +1,25 @@
 [data-theme="dark"] {
-    /* Surfaces */
-    --color-surface-background: var(--black-900);
-    --color-surface-pagebg: var(--black-150);
-    --color-surface-card: var(--black-800);
+    /* Surfaces - warm charcoal backgrounds */
+    --color-surface-background: var(--charcoal-900);
+    --color-surface-pagebg: var(--charcoal-900);
+    --color-surface-card: var(--charcoal-800);
 
-    /* Content */
-    --color-content-primary: white;
-    --color-content-secondary: var(--gray-200);
-    --content-tertiary: var(--black-50);
+    /* Content - warm light tones for text */
+    --color-content-primary: var(--brown-50);
+    --color-content-secondary: var(--stone-300);
+    --content-tertiary: var(--brown-200);
+
+    /* Accents - brighter for dark mode */
+    --color-accent-primary: var(--terracotta-400);
+    --color-accent-primary-hover: var(--terracotta-300);
+    --color-accent-secondary: var(--sage-300);
+    --color-accent-secondary-hover: var(--sage-400);
+
+    /* Borders and inputs */
+    --color-border: var(--charcoal-700);
+    --color-input-bg: var(--charcoal-800);
+    --color-input-border: var(--charcoal-600);
+    --color-input-focus: var(--terracotta-400);
+
+    --card-box-shadow: 0 4px 20px -2px hsl(25 20% 15% / .08)
 }

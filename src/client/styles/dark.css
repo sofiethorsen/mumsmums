@@ -3,6 +3,7 @@
     --color-surface-background: var(--charcoal-900);
     --color-surface-pagebg: var(--charcoal-900);
     --color-surface-card: var(--charcoal-800);
+    --color-nav-backdrop: rgba(61, 52, 45, 0.9);
 
     /* Content - warm light tones for text */
     --color-content-primary: var(--brown-50);

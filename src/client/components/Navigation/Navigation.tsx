@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 import { FEATURE_FLAGS } from '../../constants/featureFlags'
 import Icon from '../Icon/Icon'
+import HomeIcon from '../HomeIcon/HomeIcon'
 import style from './Navigation.module.css'
 
 const Navigation = () => {
@@ -10,23 +11,23 @@ const Navigation = () => {
         <div className={style.header}>
             <nav className={style.nav}>
                 <div className={style.navLeft}>
+                    <Link href="/" className={style.home} aria-label="Hem">
+                        <HomeIcon size={28} />
+                    </Link>
                     {FEATURE_FLAGS.MENU && (
                         <button className={style.iconButton} aria-label="Meny">
-                            <Icon name="menu-burger" size={26} />
+                            <Icon name="menu-burger" size={30} />
                         </button>
                     )}
                 </div>
 
                 <div className={style.navCenter}>
-                    <Link href="/" className={style.home} aria-label="Hem">
-                        <Icon name="home" size={28} />
-                    </Link>
                 </div>
 
                 <div className={style.navRight}>
                     {FEATURE_FLAGS.LOGIN && (
                         <button className={style.iconButton} aria-label="Logga in">
-                            <Icon name="circle-user" size={26} />
+                            <Icon name="circle-user" size={30} />
                         </button>
                     )}
                 </div>

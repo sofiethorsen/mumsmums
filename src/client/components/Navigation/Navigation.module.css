@@ -1,10 +1,11 @@
 .header {
     width: 100%;
-    border-bottom: 1px solid var(--color-content-secondary);
+    border: 1px solid var(--color-border);
     position: fixed;
     top: 0;
     left: 0;
-    background: var(--page-bg-color);
+    background: var(--color-nav-backdrop);
+    backdrop-filter: blur(12px);
     z-index: 1; /* We want the header nav to always be highest index, so we can scroll without page contents overlaying it */
 }
 
@@ -12,7 +13,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
+    padding: 20px 32px;
 }
 
 /* All nav sections share common flex properties */
@@ -35,11 +36,13 @@
 
 .home {
     display: flex;
-    transition: transform 150ms ease;
+    color: var(--color-content-secondary);
+    transition: transform 150ms ease, opacity 150ms ease;
 }
 
 .home:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    opacity: 0.7;
 }
 
 .iconButton {

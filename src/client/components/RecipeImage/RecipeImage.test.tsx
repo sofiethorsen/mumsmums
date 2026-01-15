@@ -8,6 +8,7 @@ jest.mock('next/image', () => ({
     __esModule: true,
     default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean; sizes?: string }) => {
         // Filter out Next.js-specific props
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { fill, priority, sizes, ...imgProps } = props
         return <img {...imgProps} />
     },

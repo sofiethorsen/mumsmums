@@ -1,13 +1,15 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import RecipeImage from './RecipeImage'
 
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
     __esModule: true,
-    default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
-        return <img {...props} />
+    default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean; sizes?: string }) => {
+        // Filter out Next.js-specific props
+        const { fill, priority, sizes, ...imgProps } = props
+        return <img {...imgProps} />
     },
 }))
 
@@ -163,7 +165,9 @@ describe('RecipeImage', () => {
 
             // Simulate element coming into view
             const observerCallback = mockIntersectionObserver.mock.results[0].value.callback
-            observerCallback([{ isIntersecting: true }], mockIntersectionObserver.mock.results[0].value)
+            await act(async () => {
+                observerCallback([{ isIntersecting: true }], mockIntersectionObserver.mock.results[0].value)
+            })
 
             await waitFor(() => {
                 const img = container.querySelector('img[src*="-og.webp"]')
@@ -200,7 +204,9 @@ describe('RecipeImage', () => {
             const observerCallback = observerInstance.callback
 
             // Simulate element coming into view
-            observerCallback([{ isIntersecting: true }], observerInstance)
+            await act(async () => {
+                observerCallback([{ isIntersecting: true }], observerInstance)
+            })
 
             await waitFor(() => {
                 expect(mockDisconnect).toHaveBeenCalled()

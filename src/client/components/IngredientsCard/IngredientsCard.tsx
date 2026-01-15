@@ -7,17 +7,24 @@ import IngredientSection from './IngredientSection/IngredientSection'
 
 interface IngredientsCardProps {
     recipe: Recipe
+    multiplier?: number
+    onMultiplierChange?: (multiplier: number) => void
 }
 
 const MULTIPLIERS = [0.5, 1, 1.5, 2]
 
-const IngredientsCard: React.FC<IngredientsCardProps> = ({ recipe }) => {
-    const [multiplier, setMultiplier] = useState(1)
+const IngredientsCard: React.FC<IngredientsCardProps> = ({ recipe, multiplier: externalMultiplier, onMultiplierChange }) => {
+    const [internalMultiplier, setInternalMultiplier] = useState(1)
+    const multiplier = externalMultiplier !== undefined ? externalMultiplier : internalMultiplier
     const originalAmount = recipe.numberOfUnits || recipe.servings || 1
 
     const handleMultiplierChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newMultiplier = parseFloat(e.target.value)
-        setMultiplier(newMultiplier)
+        if (onMultiplierChange) {
+            onMultiplierChange(newMultiplier)
+        } else {
+            setInternalMultiplier(newMultiplier)
+        }
     }
 
     const scaledRecipe = {
@@ -28,7 +35,7 @@ const IngredientsCard: React.FC<IngredientsCardProps> = ({ recipe }) => {
             ...section,
             ingredients: section.ingredients.map((ingredient) => ({
                 ...ingredient,
-                quantity: (ingredient.quantity && ingredient.quantity * multiplier) || ingredient.quantity,
+                quantity: ingredient.quantity ? ingredient.quantity * multiplier : ingredient.quantity,
             })),
         })),
     }

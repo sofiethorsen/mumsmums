@@ -147,4 +147,90 @@ describe('IngredientsCard', () => {
         // Selected value should be 60
         expect(selector).toHaveTextContent('60 st')
     })
+
+    describe('Controlled multiplier behavior', () => {
+        it('uses external multiplier prop when provided', () => {
+            const recipe = createMockRecipe({ servings: 4 })
+            render(<IngredientsCard recipe={recipe} multiplier={2} />)
+
+            const selector = getServingsSelector() as HTMLSelectElement
+            expect(selector.value).toBe('2')
+            expect(selector).toHaveTextContent('8 port.')
+        })
+
+        it('calls onMultiplierChange when user changes selection', () => {
+            const recipe = createMockRecipe({ servings: 4 })
+            const handleChange = jest.fn()
+            render(<IngredientsCard recipe={recipe} multiplier={1} onMultiplierChange={handleChange} />)
+
+            const selector = getServingsSelector()
+            fireEvent.change(selector, { target: { value: '2' } })
+
+            expect(handleChange).toHaveBeenCalledWith(2)
+        })
+
+        it('does not call onMultiplierChange when used in uncontrolled mode', () => {
+            const recipe = createMockRecipe({ servings: 4 })
+            render(<IngredientsCard recipe={recipe} />)
+
+            const selector = getServingsSelector()
+            // This should work fine with internal state, no callback needed
+            fireEvent.change(selector, { target: { value: '2' } })
+
+            expect(selector).toHaveTextContent('8 port.')
+        })
+
+        it('maintains backwards compatibility when no multiplier props provided', () => {
+            const recipe = createMockRecipe({ servings: 4 })
+            render(<IngredientsCard recipe={recipe} />)
+
+            const selector = getServingsSelector() as HTMLSelectElement
+
+            // Starts at 1x
+            expect(selector.value).toBe('1')
+
+            // Can change internally
+            fireEvent.change(selector, { target: { value: '1.5' } })
+            expect(selector.value).toBe('1.5')
+            expect(selector).toHaveTextContent('6 port.')
+        })
+    })
+
+    describe('Quantity formatting', () => {
+        it('displays clean decimal numbers without floating point errors', () => {
+            const recipe = createMockRecipe({
+                servings: 3,
+                ingredientSections: [
+                    {
+                        name: 'Test',
+                        ingredients: [
+                            { name: 'Test Ingredient', quantity: 1.5, volume: 'cups', recipeId: null },
+                        ],
+                    },
+                ],
+            })
+            render(<IngredientsCard recipe={recipe} />)
+
+            // 1.5 cups should display as "1.5" not "1.5000000002"
+            expect(screen.getByText(/1\.5\s+cups/)).toBeInTheDocument()
+        })
+
+        it('removes trailing zeros after decimal point', () => {
+            const recipe = createMockRecipe({
+                servings: 2,
+                ingredientSections: [
+                    {
+                        name: 'Test',
+                        ingredients: [
+                            { name: 'Test Ingredient', quantity: 2.0, volume: 'cups', recipeId: null },
+                        ],
+                    },
+                ],
+            })
+            render(<IngredientsCard recipe={recipe} />)
+
+            // 2.0 should display as "2" not "2.0"
+            expect(screen.getByText(/^2\s+cups/)).toBeInTheDocument()
+        })
+    })
 })

@@ -9,8 +9,16 @@ interface IngredientRowProps {
     ingredient: Ingredient
 }
 
+// Format quantity to remove floating point errors and unnecessary decimals
+const formatQuantity = (quantity: number): string => {
+    // Round to 2 decimal places to avoid floating point precision errors
+    const rounded = Math.round(quantity * 100) / 100
+    // Convert to string and remove trailing zeros ONLY after decimal point
+    return rounded.toString().replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '')
+}
+
 const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient }) => {
-    const quantity = ingredient.quantity && `${ingredient.quantity} `
+    const quantity = ingredient.quantity ? `${formatQuantity(ingredient.quantity)} ` : ''
     const volume = ingredient.volume && `${ingredient.volume} `
     const hasRecipeId = Boolean(ingredient.recipeId)
 

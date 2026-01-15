@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './RecipeDesktop.module.css'
 
-import SquareRecipeImage from '../SquareRecipeImage/SquareRecipeImage'
 import IngredientsCard from '../IngredientsCard/IngredientsCard'
+import RecipeImage from '../RecipeImage/RecipeImage'
+import { ClockIcon, UsersIcon } from '../icons'
 
 import { Recipe } from '../../graphql/types'
 
@@ -11,40 +12,72 @@ interface RecipeProps {
 }
 
 const RecipeDesktop: React.FC<RecipeProps> = ({ recipe }) => {
+    const [multiplier, setMultiplier] = useState(1)
+
+    const scaledServings = recipe.servings ? recipe.servings * multiplier : null
+    const scaledUnits = recipe.numberOfUnits ? recipe.numberOfUnits * multiplier : null
+
     return (
-        <>
-            <div className={styles.wrapper}>
-                <div className={styles.recipeName}>{recipe.name}</div>
-                <div className={styles.columns}>
-                    <div className={styles.leftColumn}>
-                        <IngredientsCard recipe={recipe} />
-                    </div>
-                    <div className={styles.middleColumn}>
-                        <div className={styles.instruction}>
-                            <div className={styles.instructionCard} >
-                                <div className={styles.title}>Gör så här</div>
-                                <div className={styles.steps}>
-                                    <ol>
-                                        {recipe.steps.map((step: string, index: number) => (
-                                            <li className={styles.listItem} key={`step-${index}`}>{step}</li>)
-                                        )}
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={styles.rightColumn}>
-                        <div className={styles.imageWrapper}>
-                            <SquareRecipeImage
-                                imageUrl={recipe.imageUrl}
-                                imageAltText={recipe.name}
-                                recipeId={recipe.recipeId}
-                            />
-                        </div>
+        <div className={styles.wrapper}>
+            {/* Hero image section */}
+            <div className={styles.heroSection}>
+                <div className={styles.imageContainer}>
+                    <RecipeImage
+                        imageUrl={recipe.imageUrl}
+                        imageAltText={recipe.name}
+                        priority
+                    />
+                    <div className={styles.imageOverlay} />
+                    <div className={styles.heroTitle}>
+                        <h1 className={styles.recipeName}>{recipe.name}</h1>
                     </div>
                 </div>
-            </div >
-        </>
+            </div>
+
+            {/* Meta information */}
+            <div className={styles.metaSection}>
+                {recipe.description && (
+                    <p className={styles.description}>{recipe.description}</p>
+                )}
+                <div className={styles.metaInfo}>
+                    <span className={styles.metaItem}>
+                        <ClockIcon size={16} />
+                        {recipe.steps.length} steg
+                    </span>
+                    {scaledServings && (
+                        <span className={styles.metaItem}>
+                            <UsersIcon size={16} />
+                            {scaledServings} portioner
+                        </span>
+                    )}
+                    {scaledUnits && (
+                        <span className={styles.metaItem}>
+                            <UsersIcon size={16} />
+                            {scaledUnits} st
+                        </span>
+                    )}
+                </div>
+            </div>
+
+            {/* Content columns */}
+            <div className={styles.contentSection}>
+                <div className={styles.ingredientsColumn}>
+                    <IngredientsCard recipe={recipe} multiplier={multiplier} onMultiplierChange={setMultiplier} />
+                </div>
+                <div className={styles.instructionsColumn}>
+                    <div className={styles.instructionCard}>
+                        <h2 className={styles.sectionTitle}>Gör så här</h2>
+                        <ol className={styles.stepsList}>
+                            {recipe.steps.map((step: string, index: number) => (
+                                <li className={styles.stepItem} key={`step-${index}`}>
+                                    {step}
+                                </li>
+                            ))}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
 

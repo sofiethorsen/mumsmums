@@ -1,53 +1,117 @@
 .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 20px;
+    max-width: 100%;
+    padding-top: 24px;
+    padding-bottom: 32px;
 }
 
-.details {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Hero section */
+.heroSection {
+    margin-bottom: 24px;
+    padding: 0 16px;
+}
+
+.imageContainer {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px -2px rgba(46, 38, 32, 0.08);
+}
+
+.imageOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+.heroTitle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 16px;
 }
 
 .recipeName {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--cream-50);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Meta section */
+.metaSection {
+    padding: 0 16px 24px;
     text-align: center;
-    padding: 10px;
-    display: block;
-    font-size: 1.5em;
-    font-weight: bold;
 }
 
-.title {
-    text-align: center;
-    padding: 10px;
-    display: block;
-    font-size: 1.25em;
-    font-weight: bold;
+.description {
+    font-size: 16px;
+    color: var(--color-content-secondary);
+    margin: 0 0 16px;
+    line-height: 1.6;
 }
 
-.ingredients {
-    padding-top: 20px;
-    width: 300px;
+.metaInfo {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 14px;
+    color: var(--color-content-secondary);
 }
 
-.instructions {
-    width: 300px;
-    padding-top: 20px;
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.instructionsCard {
-    background-color: var(--card-bg-color);
-    border-radius: 6px;
+/* Content section */
+.contentSection {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 16px;
+}
+
+.ingredientsSection {
+    width: 100%;
+}
+
+.instructionsSection {
+    width: 100%;
+}
+
+.instructionCard {
+    background-color: var(--color-surface-card);
+    border-radius: 8px;
     box-shadow: var(--card-box-shadow);
+    padding: 24px;
 }
 
-.steps {
-    padding-right: 20px;
-    padding-bottom: 5px;
+.sectionTitle {
+    margin: 0 0 16px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-content-primary);
 }
 
-.listItem {
-    padding-top: 10px;
+.stepsList {
+    margin: 0;
+    padding-left: 24px;
+}
+
+.stepItem {
+    padding-top: 12px;
+    color: var(--color-content-primary);
+    line-height: 1.6;
+}
+
+.stepItem:first-child {
+    padding-top: 0;
 }

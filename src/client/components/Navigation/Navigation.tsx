@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { FEATURE_FLAGS } from '../../constants/featureFlags'
 import Icon from '../Icon/Icon'
-import HomeIcon from '../HomeIcon/HomeIcon'
+import { HomeIcon } from '../icons'
 import style from './Navigation.module.css'
 
 const Navigation = () => {

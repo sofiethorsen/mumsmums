@@ -1,11 +1,19 @@
 import React from 'react'
 
-interface HomeIconProps {
+export interface LineIconProps {
     size?: number
     className?: string
 }
 
-const HomeIcon: React.FC<HomeIconProps> = ({ size = 20, className = '' }) => {
+interface BaseLineIconProps extends LineIconProps {
+    children: React.ReactNode
+}
+
+/**
+ * Base component for line-style SVG icons
+ * All icons use the same SVG attributes (24x24 viewBox, stroke-based, rounded)
+ */
+export const LineIcon: React.FC<BaseLineIconProps> = ({ size = 20, className = '', children }) => {
     return (
         <svg
             className={className}
@@ -18,10 +26,7 @@ const HomeIcon: React.FC<HomeIconProps> = ({ size = 20, className = '' }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
+            {children}
         </svg>
     )
 }
-
-export default HomeIcon

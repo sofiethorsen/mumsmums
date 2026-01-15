@@ -15,9 +15,9 @@ describe('SearchPanel', () => {
     const mockOnClose = jest.fn()
     const triggerRef = createRef<HTMLButtonElement>()
     const mockRecipes: RecipePreview[] = [
-        { recipeId: 1, name: 'Kanelbullar', imageUrl: '/images/kanelbullar.jpg' },
-        { recipeId: 2, name: 'Kardemummabullar', imageUrl: '/images/kardemumma.jpg' },
-        { recipeId: 3, name: 'Chokladbollar', imageUrl: '/images/choklad.jpg' },
+        { recipeId: 1, name: 'Kanelbullar', imageUrl: '/images/kanelbullar.jpg', description: 'Delicious cinnamon buns', steps: ['Step 1', 'Step 2'], servings: 12, numberOfUnits: undefined },
+        { recipeId: 2, name: 'Kardemummabullar', imageUrl: '/images/kardemumma.jpg', description: 'Tasty cardamom buns', steps: ['Step 1'], servings: 10, numberOfUnits: undefined },
+        { recipeId: 3, name: 'Chokladbollar', imageUrl: '/images/choklad.jpg', description: 'Chocolate balls', steps: ['Step 1', 'Step 2', 'Step 3'], servings: undefined, numberOfUnits: 20 },
     ]
 
     beforeEach(() => {

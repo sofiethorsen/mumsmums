@@ -3,6 +3,7 @@
     --color-surface-background: var(--cream-50);
     --color-surface-pagebg: var(--cream-50);
     --color-surface-card: var(--gray-50);
+    --color-nav-backdrop: rgba(245, 244, 240, 0.9);
 
     /* Content - warm brown text tones */
     --color-content-primary: var(--brown-900);

@@ -45,9 +45,9 @@ describe('Navigation', () => {
 
     it('renders the home icon', () => {
         render(<Navigation />)
-        const homeIcon = document.querySelector('img[src="/icons/home.svg"]')
+        const homeLink = screen.getByRole('link', { name: /hem/i })
+        const homeIcon = homeLink.querySelector('svg')
         expect(homeIcon).toBeInTheDocument()
-        expect(homeIcon).toHaveAttribute('alt', '')
     })
 
     describe('with MENU feature flag enabled', () => {

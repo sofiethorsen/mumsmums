@@ -1,0 +1,25 @@
+.imageWrapper {
+    position: absolute;
+    inset: 0;
+    transition: transform 500ms ease;
+    background-color: var(--color-surface-card);
+}
+
+.recipeImage {
+    object-fit: cover;
+    animation: fadeIn 400ms ease-in;
+}
+
+.placeholderImage {
+    object-fit: cover;
+    background-color: transparent;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

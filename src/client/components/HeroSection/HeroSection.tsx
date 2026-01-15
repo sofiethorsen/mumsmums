@@ -1,5 +1,5 @@
 import React from 'react'
-import SearchIcon from '../SearchIcon/SearchIcon'
+import { SearchIcon } from '../icons'
 import style from './HeroSection.module.css'
 
 interface HeroSectionProps {

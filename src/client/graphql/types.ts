@@ -24,7 +24,7 @@ export interface Recipe {
     fbPreviewImageUrl: string | undefined
 }
 
-export type RecipePreview = Pick<Recipe, 'recipeId' | 'name' | 'imageUrl'>
+export type RecipePreview = Pick<Recipe, 'recipeId' | 'name' | 'imageUrl' | 'description' | 'steps' | 'servings' | 'numberOfUnits'>
 
 export interface GetRecipeByIdQueryResult {
     recipe: Recipe

@@ -6,6 +6,10 @@ export const GET_RECIPE_PREVIEWS = gql`
             recipeId
             name
             imageUrl
+            description
+            steps
+            servings
+            numberOfUnits
         }
     }
 `

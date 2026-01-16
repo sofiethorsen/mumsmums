@@ -3,7 +3,8 @@ import styles from './ImageGrid.module.css'
 
 import Link from 'next/link'
 import { RecipePreview } from '../../graphql/types'
-import SquareRecipeImage from '../SquareRecipeImage/SquareRecipeImage'
+import RecipeImage from '../RecipeImage/RecipeImage'
+import { ClockIcon, UsersIcon } from '../icons'
 
 interface ImageGridProps {
     recipes: RecipePreview[]
@@ -14,14 +15,39 @@ const ImageGrid: React.FC<ImageGridProps> = ({ recipes }) => {
     return (
         <div className={styles.grid}>
             {recipes.map((recipe: RecipePreview, index: number) => (
-                <Link className={styles.link} href={`/recipe/${recipe.recipeId}`} key={index}>
-                    <SquareRecipeImage
-                        imageUrl={recipe.imageUrl}
-                        imageAltText={recipe.name}
-                        recipeId={recipe.recipeId}
-                    />
-                    <div className={styles.name}>
-                        {recipe.name}
+                <Link className={styles.card} href={`/recipe/${recipe.recipeId}`} key={index}>
+                    <div className={styles.imageContainer}>
+                        <RecipeImage
+                            imageUrl={recipe.imageUrl}
+                            imageAltText={recipe.name}
+                        />
+                        <div className={styles.imageOverlay} />
+                        <div className={styles.recipeName}>
+                            {recipe.name}
+                        </div>
+                    </div>
+                    <div className={styles.cardContent}>
+                        {recipe.description && (
+                            <p className={styles.description}>{recipe.description}</p>
+                        )}
+                        <div className={styles.metadata}>
+                            <span className={styles.metaItem}>
+                                <ClockIcon size={16} />
+                                {recipe.steps.length} steg
+                            </span>
+                            {recipe.servings && (
+                                <span className={styles.metaItem}>
+                                    <UsersIcon size={16} />
+                                    {recipe.servings} portioner
+                                </span>
+                            )}
+                            {recipe.numberOfUnits && (
+                                <span className={styles.metaItem}>
+                                    <UsersIcon size={16} />
+                                    {recipe.numberOfUnits} st
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </Link>
             ))}

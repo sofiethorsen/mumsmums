@@ -31,6 +31,6 @@ export default [
         },
     },
     {
-        ignores: ['.next/**', 'node_modules/**', 'out/**'],
+        ignores: ['.next/**', 'node_modules/**', 'out/**', 'next.config.js'],
     },
 ]

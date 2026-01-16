@@ -19,7 +19,6 @@ export const GET_RECIPE_BY_ID = gql`
         }
       }
       imageUrl,
-      fbPreviewImageUrl,
     }
   }
 `

@@ -20,8 +20,7 @@ export interface Recipe {
     numberOfUnits: number | undefined,
     ingredientSections: IngredientSection[],
     steps: string[],
-    imageUrl: string | undefined,
-    fbPreviewImageUrl: string | undefined
+    imageUrl: string | undefined
 }
 
 export type RecipePreview = Pick<Recipe, 'recipeId' | 'name' | 'imageUrl' | 'description' | 'steps' | 'servings' | 'numberOfUnits'>

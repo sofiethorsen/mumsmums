@@ -43,18 +43,12 @@ const RecipeImage: React.FC<RecipeImageProps> = ({
         }
     }, [priority])
 
-    // TODO: Since this component will use a much larger image, we want bigger resolution. We do have the
-    // open graph images which are larger - so we're picking these here. Once we've swapped out the square
-    // images everywhere, we should actually migrate to only keep the og images
-    const hasImage = imageUrl && imageUrl.startsWith('/images/')
-    const ogImageUrl = hasImage ? imageUrl.replace(/\.webp$/, '-og.webp') : imageUrl
-
     // For priority images (above-the-fold), always render immediately to avoid layout shift
-    if (priority && hasImage) {
+    if (priority && imageUrl) {
         return (
             <div className={styles.imageWrapper}>
                 <Image
-                    src={ogImageUrl}
+                    src={imageUrl}
                     alt={imageAltText}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -68,9 +62,9 @@ const RecipeImage: React.FC<RecipeImageProps> = ({
     // For non-priority images, use lazy loading with IntersectionObserver
     return (
         <div ref={placeholderRef} className={styles.imageWrapper}>
-            {hasImage && inView ? (
+            {imageUrl && inView ? (
                 <Image
-                    src={ogImageUrl}
+                    src={imageUrl}
                     alt={imageAltText}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

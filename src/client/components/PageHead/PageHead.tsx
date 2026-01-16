@@ -7,24 +7,15 @@ interface PageMeta {
     url: string
     description?: string | undefined
     imageUrl?: string | undefined
-    fbPreviewImageUrl?: string | undefined
 }
 
 const renderPreviewImageTag = (meta: PageMeta) => {
-    if (meta.fbPreviewImageUrl) {
-        return (
-            <>
-                <meta property="og:image" content={meta.fbPreviewImageUrl} />
-                <meta property="og:image:width" content="1200" />
-                <meta property="og:image:height" content="600" />
-            </>
-        )
-    } else if (meta.imageUrl) {
+    if (meta.imageUrl) {
         return (
             <>
                 <meta property="og:image" content={meta.imageUrl} />
-                <meta property="og:image:width" content="300" />
-                <meta property="og:image:height" content="300" />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="600" />
             </>
         )
     } else {

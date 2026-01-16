@@ -11,7 +11,6 @@ const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
     servings: 4,
     numberOfUnits: null,
     imageUrl: null,
-    fbPreviewImageUrl: null,
     ingredientSections: [
         {
             name: 'Main Ingredients',

@@ -36,7 +36,6 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
                     servings INTEGER,
                     numberOfUnits INTEGER,
                     imageUrl TEXT,
-                    fbPreviewImageUrl TEXT,
                     version INTEGER DEFAULT 0,
                     createdAtInMillis INTEGER DEFAULT 0,
                     lastUpdatedAtInMillis INTEGER DEFAULT 0

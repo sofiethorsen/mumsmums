@@ -49,6 +49,23 @@ const RecipeImage: React.FC<RecipeImageProps> = ({
     const hasImage = imageUrl && imageUrl.startsWith('/images/')
     const ogImageUrl = hasImage ? imageUrl.replace(/\.webp$/, '-og.webp') : imageUrl
 
+    // For priority images (above-the-fold), always render immediately to avoid layout shift
+    if (priority && hasImage) {
+        return (
+            <div className={styles.imageWrapper}>
+                <Image
+                    src={ogImageUrl}
+                    alt={imageAltText}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className={styles.recipeImage}
+                    priority={true}
+                />
+            </div>
+        )
+    }
+
+    // For non-priority images, use lazy loading with IntersectionObserver
     return (
         <div ref={placeholderRef} className={styles.imageWrapper}>
             {hasImage && inView ? (
@@ -58,7 +75,6 @@ const RecipeImage: React.FC<RecipeImageProps> = ({
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className={styles.recipeImage}
-                    priority={priority}
                 />
             ) : (
                 <Image

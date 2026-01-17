@@ -35,7 +35,6 @@ fun main(args: Array<String>) {
         logger.info("Servings: ${recipe.servings}")
         logger.info("Number of Units: ${recipe.numberOfUnits}")
         logger.info("Image URL: ${recipe.imageUrl}")
-        logger.info("FB Preview Image URL: ${recipe.fbPreviewImageUrl}")
         logger.info("Version: ${recipe.version}")
         logger.info("Created At: ${recipe.createdAtInMillis}")
         logger.info("Last Updated At: ${recipe.lastUpdatedAtInMillis}")

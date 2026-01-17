@@ -12,7 +12,6 @@ data class Recipe(
         val servings: Int? = null,
         val numberOfUnits: Int? = null,
         val imageUrl: String? = null,
-        val fbPreviewImageUrl: String? = null,
         val version: Long = 0L,
         val createdAtInMillis: Long = 0L,
         val lastUpdatedAtInMillis: Long = 0L,

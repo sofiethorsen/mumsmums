@@ -29,18 +29,15 @@ fun main(args: Array<String>) {
         logger.info("\n=== Original Recipe ===")
         logger.info("Name: ${original.name}")
         logger.info("Current imageUrl: ${original.imageUrl}")
-        logger.info("Current fbPreviewImageUrl: ${original.fbPreviewImageUrl}")
 
         // Example: Update image URLs
         // Modify this section to update the fields you need
         val updated = original.copy(
-            fbPreviewImageUrl = "https://dmdqeeh0foqsn.cloudfront.net/assets/$recipeId/1200-600.webp",
             imageUrl = "https://dmdqeeh0foqsn.cloudfront.net/assets/$recipeId/300-300.webp",
         )
 
         logger.info("\n=== Updating Recipe ===")
         logger.info("New imageUrl: ${updated.imageUrl}")
-        logger.info("New fbPreviewImageUrl: ${updated.fbPreviewImageUrl}")
 
         recipesTable.update(recipeId, updated)
 

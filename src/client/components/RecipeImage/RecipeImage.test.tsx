@@ -79,23 +79,7 @@ describe('RecipeImage', () => {
         })
     })
 
-    describe('Image URL transformation', () => {
-        it('transforms .webp URLs to -og.webp format', async () => {
-            const { container } = render(
-                <RecipeImage
-                    imageUrl="/images/recipe.webp"
-                    imageAltText="Test Recipe"
-                    priority
-                />
-            )
-
-            await waitFor(() => {
-                const img = container.querySelector('img[src*="-og.webp"]')
-                expect(img).toBeInTheDocument()
-                expect(img).toHaveAttribute('src', '/images/recipe-og.webp')
-            })
-        })
-
+    describe('Image URL handling', () => {
         it('handles URLs without .webp extension', async () => {
             const { container } = render(
                 <RecipeImage
@@ -171,7 +155,7 @@ describe('RecipeImage', () => {
             })
 
             await waitFor(() => {
-                const img = container.querySelector('img[src*="-og.webp"]')
+                const img = container.querySelector('img[src*=".webp"]')
                 expect(img).toBeInTheDocument()
             })
         })
@@ -189,7 +173,7 @@ describe('RecipeImage', () => {
             observerCallback([{ isIntersecting: false }], mockIntersectionObserver.mock.results[0].value)
 
             // Should still show placeholder
-            const img = container.querySelector('img[src*="-og.webp"]')
+            const img = container.querySelector('img[src*=".webp"]')
             expect(img).not.toBeInTheDocument()
         })
 

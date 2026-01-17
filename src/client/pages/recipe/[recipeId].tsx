@@ -24,7 +24,6 @@ const renderPageHead = (recipe: Recipe) => {
         siteType={'article'}
         url={`https://mumsmums.app/recipe/${recipe.recipeId}`}
         imageUrl={toAbsoluteUrl(recipe.imageUrl)}
-        fbPreviewImageUrl={toAbsoluteUrl(recipe.fbPreviewImageUrl)}
     />
 }
 

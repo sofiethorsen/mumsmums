@@ -32,7 +32,7 @@ cursor = conn.cursor()
 
 # Get all recipes
 cursor.execute("""
-    SELECT recipeId, name, description, servings, numberOfUnits, imageUrl, fbPreviewImageUrl
+    SELECT recipeId, name, description, servings, numberOfUnits, imageUrl
     FROM recipes
     ORDER BY recipeId
 """)
@@ -48,10 +48,6 @@ for recipe_row in cursor.fetchall():
     # Add description first (alphabetically)
     if recipe_row['description'] is not None:
         recipe['description'] = recipe_row['description']
-
-    # Add fbPreviewImageUrl
-    if recipe_row['fbPreviewImageUrl'] is not None:
-        recipe['fbPreviewImageUrl'] = recipe_row['fbPreviewImageUrl']
 
     # Add imageUrl
     if recipe_row['imageUrl'] is not None:

@@ -44,8 +44,8 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             connection.prepareStatement(
                 """
                 INSERT INTO recipes (recipeId, name, description, servings, numberOfUnits,
-                                    imageUrl, fbPreviewImageUrl, version, createdAtInMillis, lastUpdatedAtInMillis)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                    imageUrl, version, createdAtInMillis, lastUpdatedAtInMillis)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """.trimIndent()
             ).use { statement ->
                 statement.setLong(1, recipeWithId.recipeId)
@@ -54,10 +54,9 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
                 statement.setObject(4, recipeWithId.servings)
                 statement.setObject(5, recipeWithId.numberOfUnits)
                 statement.setString(6, recipeWithId.imageUrl)
-                statement.setString(7, recipeWithId.fbPreviewImageUrl)
-                statement.setLong(8, recipeWithId.version)
-                statement.setLong(9, recipeWithId.createdAtInMillis)
-                statement.setLong(10, recipeWithId.lastUpdatedAtInMillis)
+                statement.setLong(7, recipeWithId.version)
+                statement.setLong(8, recipeWithId.createdAtInMillis)
+                statement.setLong(9, recipeWithId.lastUpdatedAtInMillis)
                 statement.executeUpdate()
             }
         }
@@ -128,8 +127,8 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         connection.prepareStatement(
             """
             INSERT INTO recipes (recipeId, name, description, servings, numberOfUnits,
-                                imageUrl, fbPreviewImageUrl, version, createdAtInMillis, lastUpdatedAtInMillis)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                imageUrl, version, createdAtInMillis, lastUpdatedAtInMillis)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """.trimIndent()
         ).use { statement ->
             statement.setLong(1, recipeWithId.recipeId)
@@ -138,10 +137,9 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             statement.setObject(4, recipeWithId.servings)
             statement.setObject(5, recipeWithId.numberOfUnits)
             statement.setString(6, recipeWithId.imageUrl)
-            statement.setString(7, recipeWithId.fbPreviewImageUrl)
-            statement.setLong(8, recipeWithId.version)
-            statement.setLong(9, recipeWithId.createdAtInMillis)
-            statement.setLong(10, recipeWithId.lastUpdatedAtInMillis)
+            statement.setLong(7, recipeWithId.version)
+            statement.setLong(8, recipeWithId.createdAtInMillis)
+            statement.setLong(9, recipeWithId.lastUpdatedAtInMillis)
             statement.executeUpdate()
         }
 
@@ -255,7 +253,6 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             servings = resultSet.getNullableInt("servings"),
             numberOfUnits = resultSet.getNullableInt("numberOfUnits"),
             imageUrl = resultSet.getString("imageUrl"),
-            fbPreviewImageUrl = resultSet.getString("fbPreviewImageUrl"),
             version = resultSet.getLong("version"),
             createdAtInMillis = resultSet.getLong("createdAtInMillis"),
             lastUpdatedAtInMillis = resultSet.getLong("lastUpdatedAtInMillis"),

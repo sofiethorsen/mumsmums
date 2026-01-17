@@ -258,6 +258,89 @@
     ]
   },
   {
+    "description": "En thailändsk rätt som görs på färs. För en äkta Pad Kra Pao skall man använda helig basilika (kryddigare) men om man ej får tag i det kan man använda thaibasilka som istället har en sötare lakritston.",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "name": "vitlöksklyfta",
+            "quantity": 4,
+            "volume": "st"
+          },
+          {
+            "name": "chili, röd",
+            "quantity": 6,
+            "volume": "st"
+          },
+          {
+            "name": "rapsolja",
+            "quantity": 2,
+            "volume": "msk"
+          },
+          {
+            "name": "fläskfärs",
+            "quantity": 300,
+            "volume": "gram"
+          },
+          {
+            "name": "ostronsås",
+            "quantity": 2,
+            "volume": "msk"
+          },
+          {
+            "name": "soja",
+            "quantity": 2,
+            "volume": "msk"
+          },
+          {
+            "name": "fisksås",
+            "quantity": 0.5,
+            "volume": "msk"
+          },
+          {
+            "name": "socker",
+            "quantity": 1,
+            "volume": "msk"
+          },
+          {
+            "name": "kycklingbuljong",
+            "quantity": 0.5,
+            "volume": "st"
+          },
+          {
+            "name": "msg",
+            "quantity": 1,
+            "volume": "tsk"
+          },
+          {
+            "name": "helig basilka",
+            "quantity": 2.5,
+            "volume": "dl"
+          },
+          {
+            "name": "ägg",
+            "quantity": 2,
+            "volume": "st"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Pad Kra Pao",
+    "numberOfUnits": null,
+    "recipeId": 1258849921024,
+    "servings": 2,
+    "steps": [
+      "Förbered ris för att servera till rätten.",
+      "Mortla vitlök och chili grovt.",
+      "Värm upp oljan i en stekpanna på medelhög värme och stek den mortlade vitlöken och chilin tills vitlöken är gyllenbrun.",
+      "Lägg i färsen och stek tills all färs är genomstekt och utan klumpar.",
+      "Häll i ostronsås, fisksås, socker, soja, buljong och msg. Stek tills allt har blandats och sockret lösts upp.",
+      "Lägg i basilikabladen och kasta försiktigt runt tills bladen \"slokar\".",
+      "Servera färsen med ris samt toppa med stekt ägg."
+    ]
+  },
+  {
     "description": "Hasselbackspotatis med löjrom och smetana är ett enkelt och festligt tilltugg.",
     "imageUrl": "/images/recipes/43982676217856.webp",
     "ingredientSections": [

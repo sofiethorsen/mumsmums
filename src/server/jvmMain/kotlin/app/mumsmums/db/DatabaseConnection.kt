@@ -82,6 +82,18 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
                 )
                 """.trimIndent()
             )
+
+            statement.execute(
+                """
+                CREATE TABLE IF NOT EXISTS users (
+                    userId INTEGER PRIMARY KEY,
+                    email TEXT NOT NULL UNIQUE,
+                    passwordHash TEXT NOT NULL,
+                    createdAtInMillis INTEGER DEFAULT 0,
+                    lastUpdatedAtInMillis INTEGER DEFAULT 0
+                )
+                """.trimIndent()
+            )
         }
     }
 
@@ -94,6 +106,7 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
             statement.execute("DROP TABLE IF EXISTS ingredients")
             statement.execute("DROP TABLE IF EXISTS ingredient_sections")
             statement.execute("DROP TABLE IF EXISTS recipes")
+            statement.execute("DROP TABLE IF EXISTS users")
         }
     }
 }

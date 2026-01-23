@@ -1,0 +1,10 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
+
+kt_jvm_library(
+    name = "time",
+    srcs = glob(["*.kt"]),
+    visibility = [
+        "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
+        "//src/server/jvmTest/kotlin/app/mumsmums:__subpackages__",
+    ],
+)

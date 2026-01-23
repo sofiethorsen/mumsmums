@@ -2,7 +2,6 @@ package app.mumsmums.db.test
 
 import app.mumsmums.db.DatabaseConnection
 import app.mumsmums.db.UsersTable
-import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.time.TimeProvider
 import io.mockk.every
 import io.mockk.mockk
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.assertThrows
 import java.sql.SQLException
 
 class UsersTableTest {
-    private val mockIdGenerator = mockk<NumericIdGenerator>()
     private val mockTimeProvider = mockk<TimeProvider>()
     private lateinit var connection: DatabaseConnection
     private lateinit var usersTable: UsersTable
@@ -21,36 +19,18 @@ class UsersTableTest {
     @BeforeEach
     fun setUp() {
         connection = DatabaseConnection(":memory:")
-        usersTable = UsersTable(connection, mockIdGenerator, mockTimeProvider)
-    }
-
-    @Test
-    fun `When creating a user, it should be stored with generated ID`() {
-        val userId = 123456789L
-        val timestamp = 1000000L
-        every { mockIdGenerator.generateId() } returns userId
-        every { mockTimeProvider.currentTimeMillis() } returns timestamp
-
-        val user = usersTable.createUser("test@example.com", "hashedPassword123")
-
-        assertEquals(userId, user.userId)
-        assertEquals("test@example.com", user.email)
-        assertEquals("hashedPassword123", user.passwordHash)
-        assertEquals(timestamp, user.createdAtInMillis)
-        assertEquals(timestamp, user.lastUpdatedAtInMillis)
+        usersTable = UsersTable(connection, mockTimeProvider)
     }
 
     @Test
     fun `When finding a user by email, it should return the user`() {
-        val userId = 123456789L
-        every { mockIdGenerator.generateId() } returns userId
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L
-        usersTable.createUser("test@example.com", "hashedPassword123")
+        val created = usersTable.createUser("test@example.com", "hashedPassword123")
 
         val found = usersTable.findByEmail("test@example.com")
 
         assertNotNull(found)
-        assertEquals(userId, found?.userId)
+        assertEquals(created.userId, found?.userId)
         assertEquals("test@example.com", found?.email)
         assertEquals("hashedPassword123", found?.passwordHash)
     }
@@ -64,12 +44,10 @@ class UsersTableTest {
 
     @Test
     fun `When finding a user by ID, it should return the user`() {
-        val userId = 123456789L
-        every { mockIdGenerator.generateId() } returns userId
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L
-        usersTable.createUser("test@example.com", "hashedPassword123")
+        val created = usersTable.createUser("test@example.com", "hashedPassword123")
 
-        val found = usersTable.findById(userId)
+        val found = usersTable.findById(created.userId)
 
         assertNotNull(found)
         assertEquals("test@example.com", found?.email)
@@ -84,19 +62,17 @@ class UsersTableTest {
 
     @Test
     fun `When updating password hash, it should update and return true`() {
-        val userId = 123456789L
         val createTime = 1000000L
         val updateTime = 2000000L
-        every { mockIdGenerator.generateId() } returns userId
         every { mockTimeProvider.currentTimeMillis() } returns createTime
 
-        usersTable.createUser("test@example.com", "oldPassword")
+        val created = usersTable.createUser("test@example.com", "oldPassword")
 
         every { mockTimeProvider.currentTimeMillis() } returns updateTime
-        val result = usersTable.updatePasswordHash(userId, "newPassword")
+        val result = usersTable.updatePasswordHash(created.userId, "newPassword")
 
         assertTrue(result)
-        val updated = usersTable.findById(userId)
+        val updated = usersTable.findById(created.userId)
         assertEquals("newPassword", updated?.passwordHash)
         assertEquals(createTime, updated?.createdAtInMillis)
         assertEquals(updateTime, updated?.lastUpdatedAtInMillis)
@@ -113,9 +89,6 @@ class UsersTableTest {
 
     @Test
     fun `When creating a user with duplicate email, it should throw exception`() {
-        val userIdOne = 123456789L
-        val userIdTwo = 987654321L
-        every { mockIdGenerator.generateId() } returns userIdOne andThen userIdTwo
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L
 
         usersTable.createUser("duplicate@example.com", "password1")

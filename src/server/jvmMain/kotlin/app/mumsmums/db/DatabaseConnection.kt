@@ -86,7 +86,7 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
             statement.execute(
                 """
                 CREATE TABLE IF NOT EXISTS users (
-                    userId INTEGER PRIMARY KEY,
+                    userId INTEGER PRIMARY KEY AUTOINCREMENT,
                     email TEXT NOT NULL UNIQUE,
                     passwordHash TEXT NOT NULL,
                     createdAtInMillis INTEGER DEFAULT 0,

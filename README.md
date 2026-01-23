@@ -42,7 +42,7 @@ Release:        24.04
 Codename:       noble
 ```
 
-#### Setup Docker on Host
+#### Setup environment on host
 
     # Add Docker's official GPG key:
     sudo apt update
@@ -65,6 +65,10 @@ Codename:       noble
     # Install Docker Engine, CLI, and Containerd:
     sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
+    # Install sqlite3 and apache2-utils for htpasswd (used to manually create admin users)
+    sudo apt install sqlite3
+    sudo apt install apache2-utils
+
     # Install Docker compose
     sudo apt install docker-compose
 
@@ -74,12 +78,7 @@ Codename:       noble
     # Log out and back in for group changes to take effect
     exit
 
-#### DynDNS
-
-The mumsmums.app domain is managed by hostup.se, and we leverage DynDNS to dynamically update the DNS records if the
-IP would change - through the hostup APIs.
-
-    1. Create mumsmums-persist directories in the HOME directory of the host machine:
+    # Create mumsmums-persist directories in the HOME directory of the host machine:
 
         # Create directories
         mkdir ~/mumsmums-persist
@@ -93,7 +92,23 @@ IP would change - through the hostup APIs.
         chmod -R 700 ~/mumsmums-persist
         chmod -R 700 ~/mumsmums-persist/logs
 
-    2. In mumsmums-persist, create dyndns.conf store the credentials:
+    # In mumsmums-persist, create .env store the JWT_SECRET and SECURE_COOKIES vars:
+
+        touch ~/mumsmums-persist/.env
+        vi ~/mumsmums-persist/.env
+
+        JWT_SECRET=the-secret
+        SECURE_COOKIES=true
+
+        chmod 600 ~/mumsmums-persist/.env
+
+
+#### DynDNS
+
+The mumsmums.app domain is managed by hostup.se, and we leverage DynDNS to dynamically update the DNS records if the
+IP would change - through the hostup APIs.
+
+    1. In mumsmums-persist, create dyndns.conf store the credentials:
 
         export HOSTUP_HOSTNAME="mumsmums.app"
         export HOSTUP_TOKEN="dyndns-token"
@@ -123,11 +138,6 @@ IP would change - through the hostup APIs.
             compress
             delaycompress
         }
-
-    5. In mumsmums-persist, create .env store the JWT_SECRET:
-
-        echo "JWT_SECRET=the-secret" > ~/mumsmums-persist/.env
-        chmod 600 ~/mumsmums-persist/.env
 
 </details>
 

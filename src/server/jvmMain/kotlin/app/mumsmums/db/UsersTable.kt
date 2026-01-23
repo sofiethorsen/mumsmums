@@ -1,18 +1,17 @@
 package app.mumsmums.db
 
-import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.logging.getLoggerByClass
 import app.mumsmums.model.User
 import app.mumsmums.time.SystemTimeProvider
 import app.mumsmums.time.TimeProvider
 import java.sql.ResultSet
+import java.sql.Statement
 
 /**
  * Handles CRUD operations for the users table.
  */
 class UsersTable(
     database: DatabaseConnection,
-    private val idGenerator: NumericIdGenerator,
     private val timeProvider: TimeProvider,
 ) {
     private val connection = database.connection
@@ -47,21 +46,27 @@ class UsersTable(
     }
 
     fun createUser(email: String, passwordHash: String): User {
-        val userId = idGenerator.generateId()
         val currentTime = timeProvider.currentTimeMillis()
 
-        connection.prepareStatement(
+        val userId = connection.prepareStatement(
             """
-            INSERT INTO users (userId, email, passwordHash, createdAtInMillis, lastUpdatedAtInMillis)
-            VALUES (?, ?, ?, ?, ?)
-            """.trimIndent()
+            INSERT INTO users (email, passwordHash, createdAtInMillis, lastUpdatedAtInMillis)
+            VALUES (?, ?, ?, ?)
+            """.trimIndent(),
+            Statement.RETURN_GENERATED_KEYS
         ).use { statement ->
-            statement.setLong(1, userId)
-            statement.setString(2, email)
-            statement.setString(3, passwordHash)
+            statement.setString(1, email)
+            statement.setString(2, passwordHash)
+            statement.setLong(3, currentTime)
             statement.setLong(4, currentTime)
-            statement.setLong(5, currentTime)
             statement.executeUpdate()
+
+            val generatedKeys = statement.generatedKeys
+            if (generatedKeys.next()) {
+                generatedKeys.getLong(1)
+            } else {
+                throw IllegalStateException("Failed to retrieve generated user ID")
+            }
         }
 
         logger.info("Created user with email: {}", email)

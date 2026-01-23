@@ -29,12 +29,4 @@ class AuthHandler(private val usersTable: UsersTable) {
             AuthResult.InvalidPassword
         }
     }
-
-    /**
-     * Creates a new admin user with the given email and password.
-     */
-    fun createAdminUser(email: String, password: String): User {
-        val passwordHash = PasswordHasher.hash(password)
-        return usersTable.createUser(email, passwordHash)
-    }
 }

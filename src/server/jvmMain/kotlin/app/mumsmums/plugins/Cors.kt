@@ -15,6 +15,8 @@ fun Application.configureCORS() {
         allowMethod(HttpMethod.Get)
         allowHeader(HttpHeaders.AccessControlAllowOrigin)
         allowHeader(HttpHeaders.ContentType)
+        allowHeader(HttpHeaders.Cookie)
+        exposeHeader(HttpHeaders.SetCookie)
         allowHost("localhost:3000")
         allowHost("localhost:8080")
         allowHost("mumsmums.app", schemes = listOf("http", "https"))

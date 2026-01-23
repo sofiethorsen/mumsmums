@@ -25,6 +25,8 @@ class JwtConfig(
         .withAudience(audience.value)
         .build()
 
+    val validitySeconds: Int = (validityMs / 1000).toInt()
+
     fun generateToken(userId: Long, email: String): String {
         return JWT.create()
             .withIssuer(issuer.value)

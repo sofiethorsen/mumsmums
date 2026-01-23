@@ -1,0 +1,29 @@
+load("//bazel/junit5:defs.bzl", "kt_jvm_junit5_test")
+
+kt_jvm_junit5_test(
+    name = "PasswordHasherTest",
+    size = "small",
+    srcs = ["PasswordHasherTest.kt"],
+    associates = ["//src/server/jvmMain/kotlin/app/mumsmums/auth"],
+    test_package = "app.mumsmums.auth.test",
+    deps = [
+        "@maven//:at_favre_lib_bcrypt",
+    ],
+)
+
+kt_jvm_junit5_test(
+    name = "AuthHandlerTest",
+    size = "small",
+    srcs = ["AuthHandlerTest.kt"],
+    associates = ["//src/server/jvmMain/kotlin/app/mumsmums/auth"],
+    test_package = "app.mumsmums.auth.test",
+    deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "//src/server/jvmMain/kotlin/app/mumsmums/model",
+        "//src/server/jvmMain/kotlin/app/mumsmums/time",
+        "@maven//:at_favre_lib_bcrypt",
+        "@maven//:io_mockk_mockk",
+        "@maven//:io_mockk_mockk_jvm",
+        "@maven//:org_xerial_sqlite_jdbc",
+    ],
+)

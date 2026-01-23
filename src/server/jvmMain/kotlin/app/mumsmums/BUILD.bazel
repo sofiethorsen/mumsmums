@@ -5,6 +5,7 @@ kt_jvm_library(
     srcs = glob(["*.kt"]),
     data = ["//src/server/jvmMain/resources:recipes.json"],
     deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/auth",
         "//src/server/jvmMain/kotlin/app/mumsmums/db",
         "//src/server/jvmMain/kotlin/app/mumsmums/filesystem",
         "//src/server/jvmMain/kotlin/app/mumsmums/json",

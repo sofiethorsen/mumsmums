@@ -27,3 +27,14 @@ kt_jvm_junit5_test(
         "@maven//:org_xerial_sqlite_jdbc",
     ],
 )
+
+kt_jvm_junit5_test(
+    name = "JwtConfigTest",
+    size = "small",
+    srcs = ["JwtConfigTest.kt"],
+    associates = ["//src/server/jvmMain/kotlin/app/mumsmums/auth"],
+    test_package = "app.mumsmums.auth.test",
+    deps = [
+        "@maven//:com_auth0_java_jwt",
+    ],
+)

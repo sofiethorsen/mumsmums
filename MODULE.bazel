@@ -34,9 +34,11 @@ maven.install(
     artifacts = [
         "at.favre.lib:bcrypt:0.10.2",
         "ch.qos.logback:logback-classic:1.5.12",
+        "com.auth0:java-jwt:4.4.0",
         "com.apurebase:kgraphql-ktor:0.19.0",
         "com.apurebase:kgraphql:0.19.0",
         "io.ktor:ktor-server-auth-jvm:2.3.2",
+        "io.ktor:ktor-server-auth-jwt-jvm:2.3.2",
         "io.ktor:ktor-server-core-jvm:2.3.2",
         "io.ktor:ktor-server-cors-jvm:2.3.2",
         "io.ktor:ktor-server-host-common-jvm:2.3.2",

@@ -1,5 +1,6 @@
 package app.mumsmums
 
+import app.mumsmums.auth.JwtConfig
 import app.mumsmums.db.RecipeRepository
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.db.DatabaseConnection
@@ -7,6 +8,7 @@ import app.mumsmums.filesystem.MumsMumsPaths
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.json.JsonParser
 import app.mumsmums.logging.getLoggerByPackage
+import app.mumsmums.plugins.configureAuth
 import app.mumsmums.plugins.configureCORS
 import app.mumsmums.plugins.configureGraphQL
 import io.ktor.server.application.Application
@@ -15,6 +17,8 @@ import io.ktor.server.netty.Netty
 import kotlin.io.path.Path
 
 private val logger = getLoggerByPackage()
+
+private const val JWT_SECRET_ENV_VAR = "JWT_SECRET"
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module).start(wait = true)
@@ -25,11 +29,19 @@ fun Application.module() {
     val idGenerator = NumericIdGenerator()
     val recipesTable = RecipesTable(connection, idGenerator)
 
+    // JWT setup
+    val jwtSecret = System.getenv(JWT_SECRET_ENV_VAR) ?: throw IllegalStateException("$JWT_SECRET_ENV_VAR environment variable is required")
+    val secret = JwtConfig.Secret(jwtSecret)
+    val issuer = JwtConfig.Issuer("mumsmums")
+    val audience = JwtConfig.Audience("mumsmums-admins")
+    val jwtConfig = JwtConfig(secret, issuer, audience)
+
     // Initialize database from recipes.json if empty
     initializeDatabaseIfEmpty(recipesTable)
 
     val recipeRepository = RecipeRepository(recipesTable)
 
+    configureAuth(jwtConfig)
     configureGraphQL(recipeRepository)
     configureCORS()
 

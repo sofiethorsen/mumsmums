@@ -5,10 +5,13 @@ kt_jvm_library(
     srcs = glob(["*.kt"]),
     visibility = ["//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__"],
     deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/auth",
         "//src/server/jvmMain/kotlin/app/mumsmums/db",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
         "@maven//:com_apurebase_kgraphql",
         "@maven//:com_apurebase_kgraphql_ktor",
+        "@maven//:io_ktor_ktor_server_auth_jvm",
+        "@maven//:io_ktor_ktor_server_auth_jwt_jvm",
         "@maven//:io_ktor_ktor_server_core_jvm",
         "@maven//:io_ktor_ktor_server_cors_jvm",
     ],

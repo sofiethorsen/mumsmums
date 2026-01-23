@@ -6,6 +6,8 @@ services:
       dockerfile: docker/mumsmums.Dockerfile
     container_name: mumsmums-backend
     restart: unless-stopped
+    env_file:
+      - ~/mumsmums-persist/.env
     ports:
       - "8080:8080"
     volumes:

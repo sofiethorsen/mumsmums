@@ -11,5 +11,6 @@ kt_jvm_library(
         "//src/server/jvmMain/kotlin/app/mumsmums/db",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
         "@maven//:at_favre_lib_bcrypt",
+        "@maven//:com_auth0_java_jwt",
     ],
 )

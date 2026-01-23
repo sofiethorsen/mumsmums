@@ -124,6 +124,11 @@ IP would change - through the hostup APIs.
             delaycompress
         }
 
+    5. In mumsmums-persist, create .env store the JWT_SECRET:
+
+        echo "JWT_SECRET=the-secret" > ~/mumsmums-persist/.env
+        chmod 600 ~/mumsmums-persist/.env
+
 </details>
 
 ### Deploy

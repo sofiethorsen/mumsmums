@@ -14,6 +14,7 @@ kt_jvm_library(
         "//src/server/jvmMain/kotlin/app/mumsmums/identifiers",
         "//src/server/jvmMain/kotlin/app/mumsmums/logging",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
+        "//src/server/jvmMain/kotlin/app/mumsmums/time",
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
         "@maven//:org_xerial_sqlite_jdbc",
     ],

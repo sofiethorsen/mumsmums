@@ -8,6 +8,7 @@ kt_jvm_junit5_test(
     test_package = "app.mumsmums.db.test",
     deps = [
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
+        "//src/server/jvmMain/kotlin/app/mumsmums/time",
         "@maven//:io_mockk_mockk",
         "@maven//:io_mockk_mockk_jvm",
         "@maven//:org_xerial_sqlite_jdbc",

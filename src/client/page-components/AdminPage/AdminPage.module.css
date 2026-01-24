@@ -1,0 +1,328 @@
+.adminPage {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.adminPage h1 {
+    margin: 0;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--color-content-primary);
+}
+
+.logoutButton {
+    padding: 10px 20px;
+    background-color: var(--stone-400);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+.logoutButton:hover {
+    background-color: var(--stone-500);
+}
+
+.listView {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.createButton {
+    padding: 12px 24px;
+    background-color: var(--color-accent-primary);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    align-self: flex-start;
+    transition: background-color 0.2s ease;
+}
+
+.createButton:hover {
+    background-color: var(--color-accent-primary-hover);
+}
+
+.recipeList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.recipeItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background-color: var(--color-surface-card);
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.recipeName {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-content-primary);
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+.actions button:first-child {
+    background-color: var(--color-accent-secondary);
+    color: var(--cream-50);
+}
+
+.actions button:first-child:hover {
+    background-color: var(--color-accent-secondary-hover);
+}
+
+.actions button:last-child {
+    background-color: var(--terracotta-700);
+    color: var(--cream-50);
+}
+
+.actions button:last-child:hover {
+    background-color: var(--terracotta-800);
+}
+
+.recipeForm {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.recipeForm h2 {
+    margin-bottom: 8px;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-content-primary);
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formGroup label {
+    font-weight: 500;
+    color: var(--color-content-primary);
+}
+
+.formGroup input,
+.formGroup textarea {
+    padding: 8px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+    outline: none;
+    border-color: var(--color-input-focus);
+}
+
+.formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    background-color: var(--color-surface-card);
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.formSection h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-content-primary);
+}
+
+.ingredientSection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background-color: var(--color-surface-background);
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.sectionHeader {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.sectionHeader input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+}
+
+.sectionHeader button {
+    padding: 8px 16px;
+    background-color: var(--terracotta-700);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.sectionHeader button:hover {
+    background-color: var(--terracotta-800);
+}
+
+.ingredient {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 8px;
+    align-items: center;
+}
+
+.ingredient input {
+    padding: 8px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+}
+
+.ingredient button {
+    padding: 4px 8px;
+    background-color: var(--terracotta-700);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.ingredient button:hover {
+    background-color: var(--terracotta-800);
+}
+
+.step {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    align-items: start;
+}
+
+.step span {
+    padding-top: 8px;
+    font-weight: 500;
+    color: var(--color-content-primary);
+}
+
+.step textarea {
+    padding: 8px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    resize: vertical;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+}
+
+.step button {
+    padding: 4px 8px;
+    background-color: var(--terracotta-700);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.step button:hover {
+    background-color: var(--terracotta-800);
+}
+
+.addButton {
+    padding: 8px 16px;
+    background-color: var(--color-accent-secondary);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background-color 0.2s ease;
+}
+
+.addButton:hover {
+    background-color: var(--color-accent-secondary-hover);
+}
+
+.formActions {
+    display: flex;
+    gap: 16px;
+    padding-top: 16px;
+}
+
+.submitButton {
+    padding: 12px 32px;
+    background-color: var(--color-accent-primary);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.submitButton:hover {
+    background-color: var(--color-accent-primary-hover);
+}
+
+.cancelButton {
+    padding: 12px 32px;
+    background-color: var(--stone-400);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.cancelButton:hover {
+    background-color: var(--stone-500);
+}

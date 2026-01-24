@@ -56,12 +56,12 @@ fun Application.module() {
     // Initialize database from recipes.json if empty
     initializeDatabaseIfEmpty(recipesTable)
 
-    val recipeRepository = RecipeRepository(recipesTable)
+    val recipeRepository = RecipeRepository(recipesTable, idGenerator)
 
     configureSerialization()
     configureAuth(jwtConfig)
     configureAuthRoutes(authHandler, jwtConfig, secureCookies)
-    configureGraphQL(recipeRepository)
+    configureGraphQL(recipeRepository, jwtConfig)
     configureCORS()
     configureHeaders()
 

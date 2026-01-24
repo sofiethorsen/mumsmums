@@ -83,7 +83,7 @@ const LoginPage: React.FC = () => {
                         </div>
 
                         <div className={styles.formGroup}>
-                            <label htmlFor="password">Password</label>
+                            <label htmlFor="password">Lösenord</label>
                             <input
                                 type="password"
                                 id="password"

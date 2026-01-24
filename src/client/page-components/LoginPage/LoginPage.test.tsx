@@ -44,11 +44,11 @@ describe('LoginPage', () => {
         render(<LoginPage />)
 
         await waitFor(() => {
-            expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument()
+            expect(screen.getByRole('heading', { name: /logga in/i })).toBeInTheDocument()
         })
 
         expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
-        expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+        expect(screen.getByLabelText(/lösenord/i)).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /logga in/i })).toBeInTheDocument()
     })
 
@@ -91,11 +91,11 @@ describe('LoginPage', () => {
         render(<LoginPage />)
 
         await waitFor(() => {
-            expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument()
+            expect(screen.getByRole('heading', { name: /logga in/i })).toBeInTheDocument()
         })
 
         const emailInput = screen.getByLabelText(/email/i)
-        const passwordInput = screen.getByLabelText(/password/i)
+        const passwordInput = screen.getByLabelText(/lösenord/i)
         const submitButton = screen.getByRole('button', { name: /logga in/i })
 
         fireEvent.change(emailInput, { target: { value: 'test@example.com' } })

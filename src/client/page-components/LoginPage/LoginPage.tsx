@@ -67,7 +67,7 @@ const LoginPage: React.FC = () => {
         <PageFrame>
             <div className={styles.loginPage}>
                 <div className={styles.loginCard}>
-                    <h1>Login</h1>
+                    <h1>Logga in</h1>
                     <form onSubmit={handleSubmit} className={styles.loginForm}>
                         <div className={styles.formGroup}>
                             <label htmlFor="email">Email</label>

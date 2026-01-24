@@ -10,6 +10,11 @@ mumsmums.app {
         reverse_proxy backend:8080
     }
 
+    # Auth API endpoints - proxy to backend
+    handle /api/auth/* {
+        reverse_proxy backend:8080
+    }
+
     # All other routes - proxy to Next.js frontend
     handle /* {
         reverse_proxy frontend:3000

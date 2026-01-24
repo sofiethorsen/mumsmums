@@ -4,7 +4,10 @@ kt_jvm_library(
     name = "plugins",
     srcs = glob(["*.kt"]),
     plugins = ["//bazel:serialization"],
-    visibility = ["//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__"],
+    visibility = [
+        "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
+        "//src/server/jvmTest/kotlin/app/mumsmums/plugins/test:__pkg__",
+    ],
     deps = [
         "//src/server/jvmMain/kotlin/app/mumsmums/auth",
         "//src/server/jvmMain/kotlin/app/mumsmums/db",

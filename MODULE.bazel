@@ -30,6 +30,12 @@ maven.artifact(
     group = "io.mockk",
     version = "1.13.5",
 )
+maven.artifact(
+    testonly = True,
+    artifact = "ktor-server-test-host-jvm",
+    group = "io.ktor",
+    version = "2.3.2",
+)
 maven.install(
     artifacts = [
         "at.favre.lib:bcrypt:0.10.2",

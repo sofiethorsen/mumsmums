@@ -1,0 +1,28 @@
+load("//bazel/junit5:defs.bzl", "kt_jvm_junit5_test")
+
+kt_jvm_junit5_test(
+    name = "GraphQLAuthTest",
+    size = "small",
+    srcs = ["GraphQLAuthTest.kt"],
+    associates = ["//src/server/jvmMain/kotlin/app/mumsmums/plugins"],
+    test_package = "app.mumsmums.plugins.test",
+    deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/auth",
+        "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "//src/server/jvmMain/kotlin/app/mumsmums/identifiers",
+        "//src/server/jvmMain/kotlin/app/mumsmums/model",
+        "//src/server/jvmMain/kotlin/app/mumsmums/time",
+        "@maven//:at_favre_lib_bcrypt",
+        "@maven//:com_auth0_java_jwt",
+        "@maven//:io_ktor_ktor_serialization_kotlinx_json_jvm",
+        "@maven//:io_ktor_ktor_server_auth_jvm",
+        "@maven//:io_ktor_ktor_server_auth_jwt_jvm",
+        "@maven//:io_ktor_ktor_server_content_negotiation_jvm",
+        "@maven//:io_ktor_ktor_server_core_jvm",
+        "@maven//:io_ktor_ktor_server_test_host_jvm",
+        "@maven//:io_mockk_mockk",
+        "@maven//:io_mockk_mockk_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json_jvm",
+        "@maven//:org_xerial_sqlite_jdbc",
+    ],
+)

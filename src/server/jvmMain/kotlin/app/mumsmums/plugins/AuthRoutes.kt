@@ -71,11 +71,11 @@ fun Application.configureAuthRoutes(authHandler: AuthHandler, jwtConfig: JwtConf
                 }
                 is AuthResult.UserNotFound -> {
                     logger.warn("Login attempt for non-existent user: {}", result.email)
-                    call.respond(HttpStatusCode.Unauthorized, LoginResponse(success = false, message = "Invalid credentials"))
+                    call.respond(HttpStatusCode.Unauthorized, LoginResponse(success = false, message = "Ogiltiga inloggningsuppgifter"))
                 }
                 is AuthResult.InvalidPassword -> {
                     logger.warn("Invalid password attempt for user: {}", request.email)
-                    call.respond(HttpStatusCode.Unauthorized, LoginResponse(success = false, message = "Invalid credentials"))
+                    call.respond(HttpStatusCode.Unauthorized, LoginResponse(success = false, message = "Ogiltiga inloggningsuppgifter"))
                 }
             }
         }

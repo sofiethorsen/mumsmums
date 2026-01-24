@@ -1,0 +1,94 @@
+.loginPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 32px;
+}
+
+.loginCard {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background-color: var(--color-surface-card);
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.loginCard h1 {
+    margin-bottom: 32px;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-content-primary);
+    text-align: center;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formGroup label {
+    font-weight: 500;
+    color: var(--color-content-primary);
+    font-size: 14px;
+}
+
+.formGroup input {
+    padding: 12px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+    transition: border-color 0.2s ease;
+}
+
+.formGroup input:focus {
+    outline: none;
+    border-color: var(--color-input-focus);
+}
+
+.formGroup input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error {
+    padding: 12px;
+    background-color: rgba(185, 28, 28, 0.1);
+    border: 1px solid var(--terracotta-700);
+    border-radius: 8px;
+    color: var(--terracotta-700);
+    font-size: 14px;
+    text-align: center;
+}
+
+.submitButton {
+    padding: 14px 32px;
+    background-color: var(--color-accent-primary);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+    background-color: var(--color-accent-primary-hover);
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

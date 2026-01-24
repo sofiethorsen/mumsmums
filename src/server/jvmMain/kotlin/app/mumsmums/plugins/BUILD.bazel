@@ -3,8 +3,8 @@ load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 kt_jvm_library(
     name = "plugins",
     srcs = glob(["*.kt"]),
-    visibility = ["//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__"],
     plugins = ["//bazel:serialization"],
+    visibility = ["//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__"],
     deps = [
         "//src/server/jvmMain/kotlin/app/mumsmums/auth",
         "//src/server/jvmMain/kotlin/app/mumsmums/db",
@@ -18,6 +18,7 @@ kt_jvm_library(
         "@maven//:io_ktor_ktor_server_content_negotiation_jvm",
         "@maven//:io_ktor_ktor_server_core_jvm",
         "@maven//:io_ktor_ktor_server_cors_jvm",
+        "@maven//:io_ktor_ktor_server_forwarded_header_jvm",
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
     ],
 )

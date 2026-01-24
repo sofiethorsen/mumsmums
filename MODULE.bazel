@@ -43,6 +43,7 @@ maven.install(
         "io.ktor:ktor-server-content-negotiation-jvm:2.3.2",
         "io.ktor:ktor-server-core-jvm:2.3.2",
         "io.ktor:ktor-server-cors-jvm:2.3.2",
+        "io.ktor:ktor-server-forwarded-header-jvm:2.3.2",
         "io.ktor:ktor-server-host-common-jvm:2.3.2",
         "io.ktor:ktor-server-netty-jvm:2.3.2",
         "org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0",

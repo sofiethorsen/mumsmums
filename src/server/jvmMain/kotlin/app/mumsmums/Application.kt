@@ -14,6 +14,7 @@ import app.mumsmums.plugins.configureAuth
 import app.mumsmums.plugins.configureAuthRoutes
 import app.mumsmums.plugins.configureCORS
 import app.mumsmums.plugins.configureGraphQL
+import app.mumsmums.plugins.configureHeaders
 import app.mumsmums.plugins.configureSerialization
 import app.mumsmums.time.SystemTimeProvider
 import io.ktor.server.application.Application
@@ -62,6 +63,7 @@ fun Application.module() {
     configureAuthRoutes(authHandler, jwtConfig, secureCookies)
     configureGraphQL(recipeRepository)
     configureCORS()
+    configureHeaders()
 
     logger.info("Server started on http://localhost:8080")
 }

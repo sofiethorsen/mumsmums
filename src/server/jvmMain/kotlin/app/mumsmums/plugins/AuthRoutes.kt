@@ -40,17 +40,32 @@ fun Application.configureAuthRoutes(authHandler: AuthHandler, jwtConfig: JwtConf
             when (val result = authHandler.authenticate(request.email, request.password)) {
                 is AuthResult.Success -> {
                     val token = jwtConfig.generateToken(result.user.userId, result.user.email)
-                    call.response.cookies.append(
-                        Cookie(
-                            name = AUTH_COOKIE_NAME,
-                            value = token,
-                            httpOnly = true,
-                            secure = secureCookies,
-                            path = "/",
-                            maxAge = jwtConfig.validitySeconds,
-                            extensions = mapOf("SameSite" to "Strict")
+
+                    // Manually set cookie to bypass Ktor's HTTPS check when behind reverse proxy
+                    if (secureCookies) {
+                        val cookieHeader = buildString {
+                            append("$AUTH_COOKIE_NAME=$token; ")
+                            append("Path=/; ")
+                            append("Max-Age=${jwtConfig.validitySeconds}; ")
+                            append("HttpOnly; ")
+                            append("Secure; ")
+                            append("SameSite=Strict")
+                        }
+                        call.response.headers.append("Set-Cookie", cookieHeader)
+                    } else {
+                        call.response.cookies.append(
+                            Cookie(
+                                name = AUTH_COOKIE_NAME,
+                                value = token,
+                                httpOnly = true,
+                                secure = false,
+                                path = "/",
+                                maxAge = jwtConfig.validitySeconds,
+                                extensions = mapOf("SameSite" to "Strict")
+                            )
                         )
-                    )
+                    }
+
                     logger.info("User logged in: {}", result.user.email)
                     call.respond(LoginResponse(success = true, message = "Login successful"))
                 }

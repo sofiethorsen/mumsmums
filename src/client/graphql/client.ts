@@ -6,6 +6,8 @@ const client = new ApolloClient({
         uri: `${BACKEND_BASE_URI}/graphql`,
         // Apollo Client 4.0 includes extensions by default, but our Ktor backend doesn't support it, disable
         includeExtensions: false,
+        // Include cookies for authentication
+        credentials: 'include',
     }),
     cache: new InMemoryCache(),
 })

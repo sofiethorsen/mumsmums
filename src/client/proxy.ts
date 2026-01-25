@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-import { BACKEND_BASE_URI } from './constants/environment'
+// Server-side middleware uses BACKEND_URL to communicate with backend container
+// In production Docker: http://backend:8080 (service name, set via env var)
+// In local dev: http://localhost:8080 (default)
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080'
 
 export async function proxy(request: NextRequest) {
     // Only protect /admin routes
@@ -21,7 +24,7 @@ export async function proxy(request: NextRequest) {
         }
 
         // Verify the token with the backend
-        const response = await fetch(`${BACKEND_BASE_URI}/api/auth/status`, {
+        const response = await fetch(`${BACKEND_URL}/api/auth/status`, {
             headers: {
                 Cookie: `auth_token=${authToken}`,
             },

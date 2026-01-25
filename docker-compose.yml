@@ -23,7 +23,7 @@ services:
       - NET_BIND_SERVICE
     read_only: false  # SQLite needs write access
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/graphql"]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -38,7 +38,9 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-      # Empty BACKEND_URL makes frontend use relative URLs (e.g., /graphql)
+      # BACKEND_URL is for server-side middleware to communicate with backend
+      - BACKEND_URL=http://backend:8080
+      # Empty NEXT_PUBLIC_BACKEND_URL makes frontend use relative URLs (e.g., /graphql)
       # Caddy will proxy these requests to the backend
       - NEXT_PUBLIC_BACKEND_URL=
     ports:

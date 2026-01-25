@@ -94,6 +94,10 @@ fun Application.configureAuthRoutes(authHandler: AuthHandler, jwtConfig: JwtConf
             call.respond(LoginResponse(success = true, message = "Logged out"))
         }
 
+        get("/health") {
+            call.respond(HttpStatusCode.OK, mapOf("status" to "healthy"))
+        }
+
         authenticate(AUTH_JWT_NAME) {
             get("/api/auth/status") {
                 val principal = call.principal<JWTPrincipal>()

@@ -9,10 +9,13 @@ services:
     restart: unless-stopped
     env_file:
       - ~/mumsmums-persist/.env
+    environment:
+      - IMAGE_STORAGE_PATH=/app/images
     ports:
       - "8080:8080"
     volumes:
       - ~/mumsmums-persist:/app/sqlite
+      - ~/mumsmums-persist/images:/app/images
     networks:
       - mumsmums-network
     user: "1000:1000"
@@ -47,6 +50,9 @@ services:
       # Empty NEXT_PUBLIC_BACKEND_URL makes frontend use relative URLs (e.g., /graphql)
       # Caddy will proxy these requests to the backend
       - NEXT_PUBLIC_BACKEND_URL=
+    volumes:
+      # Mount images into Next.js public directory for Image Optimization
+      - ~/mumsmums-persist/images:/app/public/images:ro
     ports:
       - "3000:3000"
     depends_on:
@@ -83,6 +89,7 @@ services:
       - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
+      - ~/mumsmums-persist/images:/images:ro
     depends_on:
       - backend
       - frontend

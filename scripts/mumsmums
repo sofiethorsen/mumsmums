@@ -148,7 +148,7 @@ build_docker() {
     echo "### Starting backend temporarily for frontend SSR build..." >&2
 
     # Create a temporary persistent data directory for the build backend
-    mkdir -p /tmp/mumsmums-build-persist
+    mkdir -p /tmp/mumsmums-build-persist/images
 
     # Start backend on port 8081 to avoid conflicts
     # Use the image name that docker compose created (dir_name-backend)
@@ -156,8 +156,10 @@ build_docker() {
         --name mumsmums-build-backend-temp \
         -p 8081:8080 \
         -v /tmp/mumsmums-build-persist:/app/sqlite \
+        -v /tmp/mumsmums-build-persist/images:/app/images \
         -e JWT_SECRET=build-temp-secret \
         -e SECURE_COOKIES=false \
+        -e IMAGE_STORAGE_PATH=/app/images \
         ${dir_name}-backend
 
     # Wait for backend to be healthy

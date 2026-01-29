@@ -1,0 +1,15 @@
+load("//bazel/junit5:defs.bzl", "kt_jvm_junit5_test")
+
+kt_jvm_junit5_test(
+    name = "ImageUploadHandlerTest",
+    size = "small",
+    srcs = ["ImageUploadHandlerTest.kt"],
+    associates = ["//src/server/jvmMain/kotlin/app/mumsmums/images"],
+    test_package = "app.mumsmums.images.test",
+    deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "//src/server/jvmMain/kotlin/app/mumsmums/model",
+        "@maven//:io_mockk_mockk",
+        "@maven//:io_mockk_mockk_jvm",
+    ],
+)

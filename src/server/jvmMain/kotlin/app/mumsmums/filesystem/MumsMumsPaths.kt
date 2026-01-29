@@ -4,7 +4,7 @@ import app.mumsmums.constants.Constants.DB_PATH_RELATIVE
 import java.io.File
 
 object MumsMumsPaths {
-    private val projectRoot = resolveProjectRoot();
+    private val projectRoot = resolveProjectRoot()
 
     fun getDbPath(): String {
         // When running mumsmums locally in a Bazel context (not in docker), we want to ensure that we grab the db file
@@ -19,6 +19,14 @@ object MumsMumsPaths {
 
     fun getRecipesJsonPath(): String {
         return "${projectRoot}/src/server/jvmMain/resources/recipes.json"
+    }
+
+    // Get image storage path from environment - in a Docker context, this will
+    // be /app/images as per the docker-compose.yml configuration; however in local
+    // dev, we'll simply default to a directory in the user's home folder.
+    fun getImagePath(): String {
+        return System.getenv("IMAGE_STORAGE_PATH")
+            ?: "${System.getProperty("user.home")}/mumsmums-persist/images"
     }
 
     /**

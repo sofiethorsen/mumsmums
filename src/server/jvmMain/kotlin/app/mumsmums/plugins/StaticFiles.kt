@@ -1,5 +1,6 @@
 package app.mumsmums.plugins
 
+import app.mumsmums.filesystem.MumsMumsPaths
 import app.mumsmums.logging.getLoggerByClass
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -15,16 +16,8 @@ private val logger = getLoggerByClass<StaticFiles>()
 // Marker class for logger
 private class StaticFiles
 
-// Get image storage path from environment - in a Docker context, this will
-// be /app/images as per the docker-compose.yml configuration; however in local
-// dev, we'll simply default to a directory in the user's home folder.
-private fun getImageStoragePath(): String {
-    return System.getenv("IMAGE_STORAGE_PATH")
-        ?: "${System.getProperty("user.home")}/mumsmums-persist/images"
-}
-
 fun Application.configureStaticFiles() {
-    val imageStoragePath = getImageStoragePath()
+    val imageStoragePath = MumsMumsPaths.getImagePath()
     val imageDir = File(imageStoragePath)
 
     if (!imageDir.exists()) {

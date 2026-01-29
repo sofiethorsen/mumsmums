@@ -15,6 +15,7 @@ import app.mumsmums.plugins.configureAuthRoutes
 import app.mumsmums.plugins.configureCORS
 import app.mumsmums.plugins.configureGraphQL
 import app.mumsmums.plugins.configureHeaders
+import app.mumsmums.plugins.configureImageUpload
 import app.mumsmums.plugins.configureSerialization
 import app.mumsmums.plugins.configureStaticFiles
 import app.mumsmums.time.SystemTimeProvider
@@ -63,6 +64,7 @@ fun Application.module() {
     configureAuth(jwtConfig)
     configureAuthRoutes(authHandler, jwtConfig, secureCookies)
     configureGraphQL(recipeRepository, jwtConfig)
+    configureImageUpload(recipeRepository)
     configureCORS()
     configureHeaders()
     configureStaticFiles()

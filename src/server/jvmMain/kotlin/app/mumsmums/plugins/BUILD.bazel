@@ -11,6 +11,7 @@ kt_jvm_library(
     deps = [
         "//src/server/jvmMain/kotlin/app/mumsmums/auth",
         "//src/server/jvmMain/kotlin/app/mumsmums/db",
+        "//src/server/jvmMain/kotlin/app/mumsmums/images",
         "//src/server/jvmMain/kotlin/app/mumsmums/logging",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
         "@maven//:com_apurebase_kgraphql",

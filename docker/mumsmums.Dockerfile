@@ -24,8 +24,8 @@ RUN curl -Lo /usr/local/bin/bazel https://github.com/bazelbuild/bazelisk/release
     chmod +x /usr/local/bin/bazel
 
 # Create non-root user for building (Bazel's Python rules require non-root)
-RUN groupadd -r builder -g 1000 && \
-    useradd -r -u 1000 -g builder -m -d /home/builder builder
+RUN groupadd builder -g 1000 && \
+    useradd -u 1000 -g builder -m -d /home/builder builder
 
 # Set up build directory with correct ownership
 WORKDIR /build
@@ -57,8 +57,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user and group
-RUN groupadd -r appuser -g 1000 && \
-    useradd -r -u 1000 -g appuser appuser
+RUN groupadd appuser -g 1000 && \
+    useradd -u 1000 -g appuser appuser
 
 WORKDIR /app
 

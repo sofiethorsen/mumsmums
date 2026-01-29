@@ -40,8 +40,8 @@ RUN npm run build
 FROM node:20
 
 # Create a non-root user and group
-RUN groupadd -r appuser -g 1001 && \
-    useradd -r -u 1001 -g appuser appuser
+RUN groupadd appuser -g 1001 && \
+    useradd -u 1001 -g appuser appuser
 
 WORKDIR /app
 

@@ -1,5 +1,7 @@
 # mumsmums
 
+Live app at: https://mumsmums.app
+
 ## Running locally
 
 Build all sources:
@@ -140,7 +142,3 @@ IP would change - through the hostup APIs.
         }
 
 </details>
-
-### Deploy
-
-    ./scripts/mumsmums deploy <user@host> <port>

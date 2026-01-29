@@ -14,7 +14,7 @@ USAGE:
     mumsmums <COMMAND> [OPTIONS]
 
 COMMANDS:
-    build                   - Build all sources (server + client)
+    build [--docker]        - Build all sources (server + client) or build Docker images
     test                    - Run all tests
     deploy <host> <port>    - Deploy the app to remote host (e.g., deploy user@xxxx.xxx.x.xxx 1234)
     start [--docker]        - Start the app locally or run it in docker
@@ -130,37 +130,85 @@ start_local() {
     npm run dev
 }
 
-start_docker() {
-    # Clean up any existing containers and network
-    echo "### Stopping any running containers before starting..." >&2
-    docker-compose down 2>/dev/null || true
-
-    # Build sources (this builds both backend and frontend with localhost:8080)
-    echo "### Building sources..." >&2
+build_docker() {
+    echo "### Building Docker images with multi-stage builds..." >&2
     cd "$GIT_DIR"
-    build_all
 
+    # Get the directory name to determine the image prefix
+    local dir_name=$(basename "$GIT_DIR")
+
+    # Clean up any leftover build containers from previous attempts
+    docker rm -f mumsmums-build-backend-temp 2>/dev/null || true
+    rm -rf /tmp/mumsmums-build-persist
+
+    # Step 1: Build backend image
+    echo "### Building backend image..." >&2
+    docker compose build backend
+
+    # Step 2: Start backend temporarily using docker run to avoid port conflicts
+    echo "### Starting backend temporarily for frontend SSR build..." >&2
+
+    # Create a temporary persistent data directory for the build backend
+    mkdir -p /tmp/mumsmums-build-persist
+
+    # Start backend on port 8081 to avoid conflicts
+    # Use the image name that docker compose created (dir_name-backend)
+    docker run -d \
+        --name mumsmums-build-backend-temp \
+        -p 8081:8080 \
+        -v /tmp/mumsmums-build-persist:/app/sqlite \
+        -e JWT_SECRET=build-temp-secret \
+        -e SECURE_COOKIES=false \
+        ${dir_name}-backend
+
+    # Wait for backend to be healthy
+    echo "### Waiting for backend to be healthy..." >&2
+    local timeout=60
+    local elapsed=0
+    until curl -f http://localhost:8081/health > /dev/null 2>&1; do
+        if [ $elapsed -ge $timeout ]; then
+            echo "### Backend failed to start within ${timeout}s" >&2
+            docker logs mumsmums-build-backend-temp >&2
+            docker rm -f mumsmums-build-backend-temp
+            rm -rf /tmp/mumsmums-build-persist
+            exit 1
+        fi
+        sleep 1
+        elapsed=$((elapsed + 1))
+    done
+    echo "### Backend is healthy" >&2
+
+    # Step 3: Build frontend image (connects to backend via host.docker.internal during build)
+    echo "### Building frontend image with SSR..." >&2
+    docker compose build --build-arg NEXT_PUBLIC_BACKEND_URL=http://host.docker.internal:8081 frontend
+
+    # Step 4: Stop and remove temporary backend
+    echo "### Stopping temporary backend..." >&2
+    docker rm -f mumsmums-build-backend-temp
+    rm -rf /tmp/mumsmums-build-persist
+
+    echo "### Docker images built successfully" >&2
+}
+
+start_docker() {
     # Create persistent data directory if it doesn't exist
     mkdir -p ~/mumsmums-persist
 
-    # Build and start using docker-compose
-    echo "### Building and starting containers with docker-compose..." >&2
-    docker-compose up -d --build
+    # Build Docker images
+    build_docker
 
-    # Wait for backend to be ready
-    if wait_for_server 30; then
-        echo "### Done! Application is running:" >&2
-        echo "  - Backend: http://localhost:8080" >&2
-        echo "  - Frontend: http://localhost:3000" >&2
-        echo "  - Caddy (reverse proxy): http://localhost:80" >&2
-        echo "" >&2
-        echo "To view logs: docker-compose logs -f" >&2
-        echo "To stop: ./scripts/mumsmums stop --docker" >&2
-    else
-        echo "### Failed to start docker containers" >&2
-        docker-compose logs backend >&2
-        exit 1
-    fi
+    # Start all services
+    echo "### Starting containers with docker compose..." >&2
+    cd "$GIT_DIR"
+    docker compose up -d
+
+    echo "### Done! Application is running:" >&2
+    echo "  - Backend: http://localhost:8080" >&2
+    echo "  - Frontend: http://localhost:3000" >&2
+    echo "  - Caddy (reverse proxy): http://localhost:80" >&2
+    echo "" >&2
+    echo "To view logs: docker compose logs -f" >&2
+    echo "To stop: ./scripts/mumsmums stop --docker" >&2
 }
 
 stop_local() {
@@ -194,7 +242,7 @@ stop_local() {
 stop_docker() {
     echo "### Stopping docker containers..." >&2
     cd "$GIT_DIR"
-    docker-compose down
+    docker compose down
     echo "### Docker containers stopped" >&2
 }
 
@@ -254,7 +302,11 @@ deploy() {
 
 case "$COMMAND" in
     build)
-        build_all
+        if [ "${1:-}" = "--docker" ]; then
+            build_docker
+        else
+            build_all
+        fi
         ;;
 
     test)

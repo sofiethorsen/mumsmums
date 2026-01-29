@@ -1,6 +1,7 @@
 services:
   # Kotlin/Ktor backend service
   backend:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: docker/mumsmums.Dockerfile
@@ -31,9 +32,12 @@ services:
 
   # Next.js frontend service
   frontend:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: docker/next.Dockerfile
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
     container_name: mumsmums-frontend
     restart: unless-stopped
     environment:
@@ -67,6 +71,7 @@ services:
 
   # Caddy reverse proxy
   caddy:
+    platform: linux/amd64
     image: caddy:2-alpine
     container_name: mumsmums-caddy
     restart: unless-stopped

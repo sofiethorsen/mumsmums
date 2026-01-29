@@ -16,6 +16,7 @@ import app.mumsmums.plugins.configureCORS
 import app.mumsmums.plugins.configureGraphQL
 import app.mumsmums.plugins.configureHeaders
 import app.mumsmums.plugins.configureSerialization
+import app.mumsmums.plugins.configureStaticFiles
 import app.mumsmums.time.SystemTimeProvider
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
@@ -64,6 +65,7 @@ fun Application.module() {
     configureGraphQL(recipeRepository, jwtConfig)
     configureCORS()
     configureHeaders()
+    configureStaticFiles()
 
     logger.info("Server started on http://localhost:8080")
 }

@@ -15,6 +15,12 @@ mumsmums.app {
         reverse_proxy backend:8080
     }
 
+    # Serve uploaded images directly from persistent storage
+    handle /images/* {
+        root * /
+        file_server
+    }
+
     # All other routes - proxy to Next.js frontend
     handle /* {
         reverse_proxy frontend:3000

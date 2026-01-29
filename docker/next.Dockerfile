@@ -56,6 +56,9 @@ COPY --from=builder --chown=appuser:appuser /build/public ./public
 # Copy next.config.js if it exists
 COPY --from=builder /build/next.config.* ./
 
+# Create images directory for volume mount
+RUN mkdir -p /app/public/images && chown appuser:appuser /app/public/images
+
 # Switch to non-root user
 USER appuser
 

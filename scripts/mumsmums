@@ -190,8 +190,8 @@ build_docker() {
 }
 
 start_docker() {
-    # Create persistent data directory if it doesn't exist
-    mkdir -p ~/mumsmums-persist
+    # Create persistent data directories if they don't exist
+    mkdir -p ~/mumsmums-persist/images/recipes
 
     # Build Docker images
     build_docker

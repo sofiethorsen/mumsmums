@@ -23,6 +23,9 @@ jobs:
             cd /home/nuc/mumsmums
             git pull origin main
 
+            echo "### Creating persistent directories if needed..."
+            mkdir -p ~/mumsmums-persist/images/recipes
+
             echo "### Building Docker images..."
             ./scripts/mumsmums build --docker
 

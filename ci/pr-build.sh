@@ -9,6 +9,9 @@ cd "$GIT_DIR" || exit 1
 export JWT_SECRET="ci-secret"
 export SECURE_COOKIES=false
 
+# Ensure that the image directory exists since we require it
+mkdir -p /home/runner/mumsmums-persist/images
+
 # Build all sources
 ./scripts/mumsmums build
 

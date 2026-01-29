@@ -27,15 +27,9 @@ fun Application.configureStaticFiles() {
     val imageStoragePath = getImageStoragePath()
     val imageDir = File(imageStoragePath)
 
-    // On fresh deployments and in CI, the image directory does not exist yet and we need to create it
     if (!imageDir.exists()) {
-        logger.info("Image storage directory does not exist: $imageStoragePath")
-        logger.info("Creating image storage directory...")
-        if (!imageDir.mkdirs()) {
-            logger.error("Failed to create image storage directory: $imageStoragePath")
-            throw IllegalStateException("Failed to create image storage directory: $imageStoragePath")
-        }
-        logger.info("Successfully created image storage directory")
+        logger.error("Image storage directory does not exist: $imageStoragePath")
+        throw IllegalStateException("Image storage directory does not exist: $imageStoragePath. Please ensure the directory is created before starting the application.")
     }
 
     logger.info("Serving static images from: $imageStoragePath")

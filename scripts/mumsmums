@@ -16,7 +16,6 @@ USAGE:
 COMMANDS:
     build [--docker]        - Build all sources (server + client) or build Docker images
     test                    - Run all tests
-    deploy <host> <port>    - Deploy the app to remote host (e.g., deploy user@xxxx.xxx.x.xxx 1234)
     start [--docker]        - Start the app locally or run it in docker
     stop [--docker]         - Stop the app locally or the docker containers running it
 EOM
@@ -244,60 +243,6 @@ stop_docker() {
     cd "$GIT_DIR"
     docker compose down
     echo "### Docker containers stopped" >&2
-}
-
-deploy() {
-  local deploy_host="$1"
-  local ssh_port="$2"
-
-  if [ -z "$deploy_host" ] || [ -z "$ssh_port" ]; then
-    echo "Error: Missing required arguments" >&2
-    echo "Usage: mumsmums deploy <user@host> <ssh-port>" >&2
-    exit 1
-  fi
-
-  echo "### Deploying to $deploy_host (SSH port: $ssh_port)..." >&2
-
-  # First, build all sources
-  build_all
-
-  # Copy JAR to stable build directory (bazel-bin symlink can be unstable after bazel processes are killed)
-  cd "$GIT_DIR"
-  rm -rf build
-  mkdir -p build
-  cp bazel-bin/src/server/jvmMain/kotlin/app/mumsmums/mumsmums_deploy.jar build/
-
-  # Remove any existing build directory on the host machine
-  ssh -p "$ssh_port" "$deploy_host" 'rm -rf ~/mumsmums'
-
-  # Recreate directories
-  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums/build'
-  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums/src/client'
-  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums/src/server/jvmMain/resources'
-  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums/docker'
-
-  # Create persistent data directory (separate from deployment directory)
-  ssh -p "$ssh_port" "$deploy_host" 'mkdir -p ~/mumsmums-persist'
-
-  # Transfer files
-  scp -P "$ssh_port" build/mumsmums_deploy.jar "$deploy_host":~/mumsmums/build/
-  scp -P "$ssh_port" src/server/jvmMain/resources/recipes.json "$deploy_host":~/mumsmums/src/server/jvmMain/resources/
-  scp -P "$ssh_port" src/client/package*.json "$deploy_host":~/mumsmums/src/client/
-  scp -P "$ssh_port" -r src/client/{.next,public} "$deploy_host":~/mumsmums/src/client/
-  scp -P "$ssh_port" docker/{Caddyfile,mumsmums.Dockerfile,next.Dockerfile} "$deploy_host":~/mumsmums/docker/
-  scp -P "$ssh_port" docker-compose.yml "$deploy_host":~/mumsmums/
-  scp -P "$ssh_port" scripts/update-dns.sh "$deploy_host":~/mumsmums-persist/
-
-  # Build the sources
-  ssh -p "$ssh_port" "$deploy_host" 'cd ~/mumsmums && docker-compose build'
-
-  # Stop the running app
-  ssh -p "$ssh_port" "$deploy_host" 'cd ~/mumsmums && docker-compose down'
-
-  # Start the new containers
-  ssh -p "$ssh_port" "$deploy_host" 'cd ~/mumsmums && docker-compose up -d'
-
-  echo "### Deployment to $deploy_host completed" >&2
 }
 
 case "$COMMAND" in

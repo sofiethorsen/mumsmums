@@ -1,16 +1,14 @@
 package app.mumsmums.filesystem
 
-import app.mumsmums.constants.Constants.DB_PATH_RELATIVE
 import java.io.File
 
 object MumsMumsPaths {
     private val projectRoot = resolveProjectRoot()
 
     fun getDbPath(): String {
-        // When running mumsmums locally in a Bazel context (not in docker), we want to ensure that we grab the db file
-        // relative to the _Bazel_ workspace. If in docker, relative to the project root
-        val workspaceDir = System.getenv("BUILD_WORKSPACE_DIRECTORY") ?: projectRoot.absolutePath
-        return "${workspaceDir}/${DB_PATH_RELATIVE}"
+        // Use DB_PATH environment variable if set (Docker), otherwise default to ~/mumsmums-persist/mumsmums.db (local)
+        return System.getenv("DB_PATH")
+            ?: "${System.getProperty("user.home")}/mumsmums-persist/mumsmums.db"
     }
 
     fun getRecipeJsonPath(): String {

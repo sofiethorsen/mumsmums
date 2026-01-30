@@ -10,11 +10,12 @@ services:
     env_file:
       - ~/mumsmums-persist/.env
     environment:
+      - DB_PATH=/app/data/mumsmums.db
       - IMAGE_STORAGE_PATH=/app/images
     ports:
       - "8080:8080"
     volumes:
-      - ~/mumsmums-persist:/app/sqlite
+      - ~/mumsmums-persist:/app/data
       - ~/mumsmums-persist/images:/app/images
     networks:
       - mumsmums-network

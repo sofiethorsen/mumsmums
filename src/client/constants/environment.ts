@@ -1,15 +1,20 @@
-// Determine backend URL at runtime - if it's not the browser, we assume it's build time (SSR)
+/**
+ * Determines the backend URL for API requests across different environments.
+ */
+
+// Determine execution environment
 const isBrowser = typeof window !== 'undefined'
+const isServerSide = !isBrowser
 
-// On localhost:3000 -> use localhost:8080 (local dev)
-// On any other host -> use empty string for relative URLs (Caddy proxy)
-const isLocalDev = isBrowser && window.location.hostname === 'localhost'
+// Browser environment detection
+const isLocalDevBrowser = isBrowser && window.location.hostname === 'localhost'
+const isProductionBrowser = isBrowser && !isLocalDevBrowser
 
-// For SSR/build time:
-// - Use NEXT_PUBLIC_BACKEND_URL if set (Docker multi-stage builds)
-// - Otherwise default to localhost:8080 (local dev)
-const serverSideBackendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080"
+// Server-side environment detection (SSR/build time)
+const isDockerBuild = isServerSide && !!process.env.BACKEND_URL
 
-export const BACKEND_BASE_URI = isBrowser
-  ? (isLocalDev ? "http://localhost:8080" : "")
-  : serverSideBackendUrl
+export const BACKEND_BASE_URI =
+  isLocalDevBrowser ? 'http://localhost:8080' :  // Local dev browser: direct connection to local backend
+  isProductionBrowser ? '' :                      // Production browser: relative URLs (proxied by Caddy)
+  isDockerBuild ? process.env.BACKEND_URL! :     // Docker build: use container network (e.g., http://backend:8080)
+  'http://localhost:8080'                         // Local dev SSR: direct connection to local backend

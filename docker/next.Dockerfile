@@ -27,11 +27,11 @@ COPY src/client/ ./
 
 # Build argument for backend URL during build (for SSR/SSG)
 # Default to backend:8080 (works in production), but can be overridden to host.docker.internal:8080 for local builds
-ARG NEXT_PUBLIC_BACKEND_URL=http://backend:8080
+ARG BACKEND_URL=http://backend:8080
 
 # Build the application
 # This will run getStaticProps and connect to the backend
-ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+ENV BACKEND_URL=${BACKEND_URL}
 RUN npm run build
 
 # =============================================================================

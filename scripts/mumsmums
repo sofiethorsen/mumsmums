@@ -180,7 +180,7 @@ build_docker() {
 
     # Step 3: Build frontend image (connects to backend via host.docker.internal during build)
     echo "### Building frontend image with SSR..." >&2
-    docker compose build --build-arg NEXT_PUBLIC_BACKEND_URL=http://host.docker.internal:8081 frontend
+    docker compose build --build-arg BACKEND_URL=http://host.docker.internal:8081 frontend
 
     # Step 4: Stop and remove temporary backend
     echo "### Stopping temporary backend..." >&2

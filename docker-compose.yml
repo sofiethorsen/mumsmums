@@ -43,11 +43,8 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-      # BACKEND_URL is for server-side middleware to communicate with backend
+      # Server-side (SSR/ISR) requests use this to reach backend container
       - BACKEND_URL=http://backend:8080
-      # Empty NEXT_PUBLIC_BACKEND_URL makes frontend use relative URLs (e.g., /graphql)
-      # Caddy will proxy these requests to the backend
-      - NEXT_PUBLIC_BACKEND_URL=
     volumes:
       # Mount images into Next.js public directory for Image Optimization
       - ~/mumsmums-persist/images:/app/public/images:ro

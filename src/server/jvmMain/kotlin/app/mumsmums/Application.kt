@@ -53,7 +53,7 @@ fun Application.module() {
     // Auth handler
     val authHandler = AuthHandler(usersTable)
 
-    val recipeRepository = RecipeRepository(recipesTable, idGenerator)
+    val recipeRepository = RecipeRepository(recipesTable, idGenerator, MumsMumsPaths.getImagePath())
 
     configureSerialization()
     configureAuth(jwtConfig)

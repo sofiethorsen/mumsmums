@@ -96,21 +96,6 @@ fun Application.configureImageUpload(recipeRepository: RecipeRepository) {
                                 ImageUploadResponse(false, "Invalid file format. Expected ${result.expected}, got ${result.actual}")
                             )
                         }
-                        is ImageUploadResult.InvalidImageData -> {
-                            call.respond(
-                                HttpStatusCode.BadRequest,
-                                ImageUploadResponse(false, "Invalid image file")
-                            )
-                        }
-                        is ImageUploadResult.InvalidDimensions -> {
-                            call.respond(
-                                HttpStatusCode.BadRequest,
-                                ImageUploadResponse(
-                                    false,
-                                    "Invalid image dimensions. Expected ${result.expectedWidth}x${result.expectedHeight}, got ${result.actualWidth}x${result.actualHeight}"
-                                )
-                            )
-                        }
                         is ImageUploadResult.IOError -> {
                             call.respond(
                                 HttpStatusCode.InternalServerError,

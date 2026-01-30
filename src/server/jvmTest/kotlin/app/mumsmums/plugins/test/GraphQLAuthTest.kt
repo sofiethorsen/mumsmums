@@ -30,6 +30,8 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.io.File
 
 class GraphQLAuthTest {
     private val mockTimeProvider = mockk<TimeProvider>()
@@ -41,12 +43,14 @@ class GraphQLAuthTest {
     private lateinit var jwtConfig: JwtConfig
 
     @BeforeEach
-    fun setUp() {
+    fun setUp(@TempDir tempDir: File) {
         connection = DatabaseConnection(":memory:")
         usersTable = UsersTable(connection, mockTimeProvider)
         val idGenerator = NumericIdGenerator()
         recipesTable = RecipesTable(connection, idGenerator)
-        recipeRepository = RecipeRepository(recipesTable, idGenerator)
+        // Create recipes directory for image deletion tests
+        File(tempDir, "recipes").mkdirs()
+        recipeRepository = RecipeRepository(recipesTable, idGenerator, tempDir.absolutePath)
         authHandler = AuthHandler(usersTable)
 
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L

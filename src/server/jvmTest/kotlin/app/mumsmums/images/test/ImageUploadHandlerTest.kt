@@ -63,10 +63,10 @@ class ImageUploadHandlerTest {
     }
 
     @Test
-    fun `uploadImage should succeed with valid 1200x600 WebP image`() {
+    fun `uploadImage should succeed with valid WebP image`() {
         val recipeId = 123L
         val recipe = createMockRecipe(recipeId)
-        val imageBytes = createTestImage(1200, 600)
+        val imageBytes = createTestImage(100, 100)
 
         every { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
         every { mockRecipeRepository.updateRecipe(recipeId, any()) } returns Unit
@@ -87,7 +87,7 @@ class ImageUploadHandlerTest {
     @Test
     fun `uploadImage should return RecipeNotFound when recipe does not exist`() {
         val recipeId = 999L
-        val imageBytes = createTestImage(1200, 600)
+        val imageBytes = createTestImage(100, 100)
 
         every { mockRecipeRepository.getRecipeById(recipeId) } returns null
 
@@ -116,7 +116,7 @@ class ImageUploadHandlerTest {
     fun `uploadImage should return InvalidFormat when content type is not webp`() {
         val recipeId = 123L
         val recipe = createMockRecipe(recipeId)
-        val imageBytes = createTestImage(1200, 600)
+        val imageBytes = createTestImage(100, 100)
 
         every { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
 
@@ -128,60 +128,11 @@ class ImageUploadHandlerTest {
     }
 
     @Test
-    fun `uploadImage should return InvalidDimensions when width is incorrect`() {
-        val recipeId = 123L
-        val recipe = createMockRecipe(recipeId)
-        val imageBytes = createTestImage(800, 600)
-
-        every { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
-
-        val result = handler.uploadImage(recipeId, imageBytes, "image/webp")
-
-        assertTrue(result is ImageUploadResult.InvalidDimensions)
-        val dimensions = result as ImageUploadResult.InvalidDimensions
-        assertEquals(1200, dimensions.expectedWidth)
-        assertEquals(600, dimensions.expectedHeight)
-        assertEquals(800, dimensions.actualWidth)
-        assertEquals(600, dimensions.actualHeight)
-    }
-
-    @Test
-    fun `uploadImage should return InvalidDimensions when height is incorrect`() {
-        val recipeId = 123L
-        val recipe = createMockRecipe(recipeId)
-        val imageBytes = createTestImage(1200, 400)
-
-        every { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
-
-        val result = handler.uploadImage(recipeId, imageBytes, "image/webp")
-
-        assertTrue(result is ImageUploadResult.InvalidDimensions)
-        val dimensions = result as ImageUploadResult.InvalidDimensions
-        assertEquals(1200, dimensions.expectedWidth)
-        assertEquals(600, dimensions.expectedHeight)
-        assertEquals(1200, dimensions.actualWidth)
-        assertEquals(400, dimensions.actualHeight)
-    }
-
-    @Test
-    fun `uploadImage should return InvalidImageData when image bytes are corrupted`() {
-        val recipeId = 123L
-        val recipe = createMockRecipe(recipeId)
-        val corruptedBytes = ByteArray(100) { 0 } // Not a valid image
-
-        every { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
-
-        val result = handler.uploadImage(recipeId, corruptedBytes, "image/webp")
-
-        assertTrue(result is ImageUploadResult.InvalidImageData)
-    }
-
-    @Test
     fun `uploadImage should overwrite existing image for the same recipe`() {
         val recipeId = 123L
         val recipe = createMockRecipe(recipeId)
-        val firstImageBytes = createTestImage(1200, 600)
-        val secondImageBytes = createTestImage(1200, 600)
+        val firstImageBytes = createTestImage(100, 100)
+        val secondImageBytes = createTestImage(100, 100)
 
         every { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
         every { mockRecipeRepository.updateRecipe(recipeId, any()) } returns Unit

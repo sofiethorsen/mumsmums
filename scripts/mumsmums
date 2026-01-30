@@ -138,7 +138,6 @@ build_docker() {
 
     # Clean up any leftover build containers from previous attempts
     docker rm -f mumsmums-build-backend-temp 2>/dev/null || true
-    rm -rf /tmp/mumsmums-build-persist
 
     # Step 1: Build backend image
     echo "### Building backend image..." >&2
@@ -147,16 +146,20 @@ build_docker() {
     # Step 2: Start backend temporarily using docker run to avoid port conflicts
     echo "### Starting backend temporarily for frontend SSR build..." >&2
 
-    # Create a temporary persistent data directory for the build backend
-    mkdir -p /tmp/mumsmums-build-persist/images
+    # Check that mumsmums-persist exists
+    if [ ! -f ~/mumsmums-persist/mumsmums.db ]; then
+        echo "### Error: ~/mumsmums-persist/mumsmums.db not found. Run ./scripts/setup-local-env.sh first." >&2
+        exit 1
+    fi
 
-    # Start backend on port 8081 to avoid conflicts
+    # Start backend on port 8081 to avoid conflicts, mounting the real persistent directory
     # Use the image name that docker compose created (dir_name-backend)
     docker run -d \
         --name mumsmums-build-backend-temp \
         -p 8081:8080 \
-        -v /tmp/mumsmums-build-persist:/app/sqlite \
-        -v /tmp/mumsmums-build-persist/images:/app/images \
+        -v ~/mumsmums-persist:/app/data \
+        -v ~/mumsmums-persist/images:/app/images \
+        -e DB_PATH=/app/data/mumsmums.db \
         -e JWT_SECRET=build-temp-secret \
         -e SECURE_COOKIES=false \
         -e IMAGE_STORAGE_PATH=/app/images \
@@ -171,7 +174,6 @@ build_docker() {
             echo "### Backend failed to start within ${timeout}s" >&2
             docker logs mumsmums-build-backend-temp >&2
             docker rm -f mumsmums-build-backend-temp
-            rm -rf /tmp/mumsmums-build-persist
             exit 1
         fi
         sleep 1
@@ -186,7 +188,6 @@ build_docker() {
     # Step 4: Stop and remove temporary backend
     echo "### Stopping temporary backend..." >&2
     docker rm -f mumsmums-build-backend-temp
-    rm -rf /tmp/mumsmums-build-persist
 
     echo "### Docker images built successfully" >&2
 }

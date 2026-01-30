@@ -4,6 +4,10 @@ Live app at: https://mumsmums.app
 
 ## Running locally
 
+Setup local env (requires SSH access to the prod host to copy state):
+
+    ./scripts/setup-local-env.sh
+
 Build all sources:
 
     ./scripts/mumsmums build

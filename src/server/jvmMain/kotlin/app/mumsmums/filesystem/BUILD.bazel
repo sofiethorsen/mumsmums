@@ -8,5 +8,5 @@ kt_jvm_library(
         "//src/server/jvmMain/kotlin/app/mumsmums:__subpackages__",
         "//src/server/jvmTest/kotlin/app/mumsmums:__subpackages__",
     ],
-    deps = ["//src/server/jvmMain/kotlin/app/mumsmums/constants"],
+    deps = [],
 )

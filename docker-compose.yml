@@ -9,9 +9,6 @@ services:
     restart: unless-stopped
     env_file:
       - ~/mumsmums-persist/.env
-    environment:
-      - DB_PATH=/app/data/mumsmums.db
-      - IMAGE_STORAGE_PATH=/app/images
     ports:
       - "8080:8080"
     volumes:

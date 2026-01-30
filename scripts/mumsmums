@@ -159,10 +159,7 @@ build_docker() {
         -p 8081:8080 \
         -v ~/mumsmums-persist:/app/data \
         -v ~/mumsmums-persist/images:/app/images \
-        -e DB_PATH=/app/data/mumsmums.db \
-        -e JWT_SECRET=build-temp-secret \
-        -e SECURE_COOKIES=false \
-        -e IMAGE_STORAGE_PATH=/app/images \
+        --env-file ~/mumsmums-persist/.env \
         ${dir_name}-backend
 
     # Wait for backend to be healthy

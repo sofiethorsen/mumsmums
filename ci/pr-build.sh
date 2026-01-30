@@ -9,8 +9,14 @@ cd "$GIT_DIR" || exit 1
 export JWT_SECRET="ci-secret"
 export SECURE_COOKIES=false
 
-# Ensure that the image directory exists since we require it
-mkdir -p /home/runner/mumsmums-persist/images
+# Use temp directory for CI database and images
+mkdir -p /tmp/mumsmums-ci/images
+export DB_PATH=/tmp/mumsmums-ci/mumsmums.db
+export IMAGE_STORAGE_PATH=/tmp/mumsmums-ci/images
+
+
+# Initialize database from recipes.json
+bazel run //src/scripts/jvmMain/kotlin/app/mumsmums:initalize
 
 # Build all sources
 ./scripts/mumsmums build

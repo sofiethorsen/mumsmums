@@ -87,8 +87,8 @@ Codename:       noble
     # Create mumsmums-persist directories in the HOME directory of the host machine:
 
         # Create directories
-        mkdir ~/mumsmums-persist
-        mkdir ~/mumsmums-persist/logs
+        mkdir -p ~/mumsmums-persist/logs
+        mkdir -p ~/mumsmums-persist/images/recipes
 
         # Set ownership to UID 1000 (the Docker containers will use this too)
         sudo chown -R 1000:1000 ~/mumsmums-persist
@@ -96,17 +96,26 @@ Codename:       noble
         # Lets the 1000 owner have full read/write/execute access, the cron can write to the log file
         # and the Docker container can read/write to the DB. No other groups/other will have access.
         chmod -R 700 ~/mumsmums-persist
-        chmod -R 700 ~/mumsmums-persist/logs
 
-    # In mumsmums-persist, create .env store the JWT_SECRET and SECURE_COOKIES vars:
+    # In mumsmums-persist, create .env with all required environment variables:
 
         touch ~/mumsmums-persist/.env
         vi ~/mumsmums-persist/.env
 
-        JWT_SECRET=the-secret
+        # Generate JWT_SECRET with: openssl rand -base64 32
+
+        # Env vars
+        JWT_SECRET=<your-secret-here>
         SECURE_COOKIES=true
 
+        # Docker specific paths
+        DB_PATH=/app/data/mumsmums.db
+        IMAGE_STORAGE_PATH=/app/images
+
         chmod 600 ~/mumsmums-persist/.env
+
+    # Note: For local development, scripts/setup-local-env.sh will automatically
+    # download this .env and set SECURE_COOKIES=false for HTTP connections.
 
 
 #### DynDNS

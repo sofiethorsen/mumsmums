@@ -8,5 +8,6 @@ kt_jvm_library(
         "//src/server/jvmMain/kotlin/app/mumsmums/db",
         "//src/server/jvmMain/kotlin/app/mumsmums/logging",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
+        "//src/server/jvmMain/kotlin/app/mumsmums/revalidation",
     ],
 )

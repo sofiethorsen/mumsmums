@@ -2,6 +2,7 @@ package app.mumsmums.images
 
 import app.mumsmums.db.RecipeRepository
 import app.mumsmums.logging.getLoggerByClass
+import app.mumsmums.revalidation.RevalidationClient
 import java.io.File
 
 sealed class ImageUploadResult {
@@ -20,7 +21,8 @@ private val logger = getLoggerByClass<ImageUploadHandler>()
 
 class ImageUploadHandler(
     private val recipeRepository: RecipeRepository,
-    private val imageStoragePath: String
+    private val imageStoragePath: String,
+    private val revalidationClient: RevalidationClient? = null
 ) {
     /**
      * Upload and validate an image for a recipe.
@@ -31,6 +33,7 @@ class ImageUploadHandler(
      * 3. Validates image format (WebP content type)
      * 4. Saves the image to disk
      * 5. Updates the recipe's imageUrl in the database
+     * 6. Triggers revalidation of the recipe page (if client provided)
      *
      * Note: Dimension and image data validation are skipped as the client-side code
      * guarantees valid 1200x600 WebP images.
@@ -38,9 +41,10 @@ class ImageUploadHandler(
      * @param recipeId The ID of the recipe to attach the image to
      * @param fileBytes The raw image file bytes
      * @param contentType The MIME type of the uploaded file (e.g., "image/webp")
+     * @param jwtToken Optional JWT token for triggering revalidation
      * @return ImageUploadResult indicating success or specific failure reason
      */
-    fun uploadImage(recipeId: Long, fileBytes: ByteArray, contentType: String): ImageUploadResult {
+    suspend fun uploadImage(recipeId: Long, fileBytes: ByteArray, contentType: String, jwtToken: String? = null): ImageUploadResult {
         // 1. Check if recipe exists
         val recipe = recipeRepository.getRecipeById(recipeId)
             ?: return ImageUploadResult.RecipeNotFound(recipeId)
@@ -84,6 +88,17 @@ class ImageUploadHandler(
         } catch (e: Exception) {
             logger.error("Failed to update recipe in database", e)
             return ImageUploadResult.IOError("Failed to update recipe: ${e.message}")
+        }
+
+        // 6. Trigger revalidation of homepage and recipe page
+        if (revalidationClient != null && jwtToken != null) {
+            try {
+                revalidationClient.revalidateRecipe(recipeId, jwtToken)
+                logger.info("Triggered revalidation for recipe $recipeId")
+            } catch (e: Exception) {
+                logger.error("Failed to trigger revalidation for recipe $recipeId", e)
+                // Don't fail the upload if revalidation fails
+            }
         }
 
         return ImageUploadResult.Success(imageUrl)

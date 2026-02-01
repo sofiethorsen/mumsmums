@@ -1,6 +1,50 @@
 # Access via: https://mumsmums.app
 # Caddy automatically handles HTTPS certificates via Let's Encrypt
 
+# Local development configuration (http://localhost)
+:80 {
+    # Enable gzip compression
+    encode gzip
+
+    # GraphQL API endpoint - proxy to backend
+    handle /graphql* {
+        reverse_proxy backend:8080
+    }
+
+    # Auth API endpoints - proxy to backend
+    handle /api/auth/* {
+        reverse_proxy backend:8080
+    }
+
+    # Image upload API - proxy to backend
+    handle /api/images/* {
+        reverse_proxy backend:8080
+    }
+
+    # Revalidation API - proxy to frontend (Next.js API route)
+    handle /api/revalidate {
+        reverse_proxy frontend:3000
+    }
+
+    # Serve uploaded images directly from persistent storage
+    handle /images/* {
+        root * /
+        file_server
+    }
+
+    # All other routes - proxy to Next.js frontend
+    handle /* {
+        reverse_proxy frontend:3000
+    }
+
+    # Access logs
+    log {
+        output stdout
+        format console
+    }
+}
+
+# Production configuration (mumsmums.app)
 mumsmums.app {
     # Enable gzip compression
     encode gzip
@@ -13,6 +57,16 @@ mumsmums.app {
     # Auth API endpoints - proxy to backend
     handle /api/auth/* {
         reverse_proxy backend:8080
+    }
+
+    # Image upload API - proxy to backend
+    handle /api/images/* {
+        reverse_proxy backend:8080
+    }
+
+    # Revalidation API - proxy to frontend (Next.js API route)
+    handle /api/revalidate {
+        reverse_proxy frontend:3000
     }
 
     # Serve uploaded images directly from persistent storage

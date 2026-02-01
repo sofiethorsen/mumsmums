@@ -5,6 +5,7 @@ import app.mumsmums.db.RecipeRepository
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
+import app.mumsmums.revalidation.RevalidationClient
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQL
 import com.auth0.jwt.exceptions.JWTVerificationException
@@ -13,6 +14,7 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.install
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.principal
+import kotlinx.coroutines.runBlocking
 
 class UnauthorizedException : Exception("Authentication required")
 
@@ -33,6 +35,11 @@ private fun Context.requireAuth(jwtConfig: JwtConfig) {
     } catch (e: JWTVerificationException) {
         throw UnauthorizedException()
     }
+}
+
+private fun Context.getJwtToken(): String {
+    val call = get<ApplicationCall>()
+    return call?.request?.cookies?.get(AUTH_COOKIE_NAME) ?: throw UnauthorizedException()
 }
 
 data class IngredientInput(
@@ -57,7 +64,11 @@ data class RecipeInput(
     val imageUrl: String? = null,
 )
 
-fun Application.configureGraphQL(recipeRepository: RecipeRepository, jwtConfig: JwtConfig) {
+fun Application.configureGraphQL(
+    recipeRepository: RecipeRepository,
+    jwtConfig: JwtConfig,
+    revalidationClient: RevalidationClient
+) {
     install(GraphQL) {
         // Provide ApplicationCall in the context for each request
         context { call ->
@@ -120,6 +131,13 @@ fun Application.configureGraphQL(recipeRepository: RecipeRepository, jwtConfig: 
                     )
 
                     recipeRepository.createRecipe(recipe)
+
+                    // Trigger revalidation of homepage and new recipe page
+                    runBlocking {
+                        val jwtToken = ctx.getJwtToken()
+                        revalidationClient.revalidateRecipe(recipeId, jwtToken)
+                    }
+
                     recipe
                 }
             }
@@ -157,6 +175,13 @@ fun Application.configureGraphQL(recipeRepository: RecipeRepository, jwtConfig: 
                     )
 
                     recipeRepository.updateRecipe(recipeId, updatedRecipe)
+
+                    // Trigger revalidation of homepage and updated recipe page
+                    runBlocking {
+                        val jwtToken = ctx.getJwtToken()
+                        revalidationClient.revalidateRecipe(recipeId, jwtToken)
+                    }
+
                     updatedRecipe
                 }
             }
@@ -168,6 +193,13 @@ fun Application.configureGraphQL(recipeRepository: RecipeRepository, jwtConfig: 
                         ?: throw IllegalArgumentException("Recipe with ID $recipeId not found")
 
                     recipeRepository.deleteRecipe(recipeId)
+
+                    // Trigger revalidation of homepage (recipe page will 404)
+                    runBlocking {
+                        val jwtToken = ctx.getJwtToken()
+                        revalidationClient.revalidateHomepage(jwtToken)
+                    }
+
                     true
                 }
             }

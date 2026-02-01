@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Server-side middleware uses BACKEND_URL to communicate with backend container
-// In production Docker: http://backend:8080 (service name, set via env var)
+// Server-side middleware uses DOCKER_BACKEND_URL to communicate with backend container
+// In Docker: http://backend:8080 (container network)
 // In local dev: http://localhost:8080 (default)
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080'
+const BACKEND_URL = process.env.DOCKER_BACKEND_URL || 'http://localhost:8080'
 
 export async function proxy(request: NextRequest) {
     // Only protect /admin routes

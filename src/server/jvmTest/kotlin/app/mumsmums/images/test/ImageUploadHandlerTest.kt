@@ -7,6 +7,7 @@ import app.mumsmums.model.Recipe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -63,7 +64,7 @@ class ImageUploadHandlerTest {
     }
 
     @Test
-    fun `uploadImage should succeed with valid WebP image`() {
+    fun `uploadImage should succeed with valid WebP image`() = runTest {
         val recipeId = 123L
         val recipe = createMockRecipe(recipeId)
         val imageBytes = createTestImage(100, 100)
@@ -85,7 +86,7 @@ class ImageUploadHandlerTest {
     }
 
     @Test
-    fun `uploadImage should return RecipeNotFound when recipe does not exist`() {
+    fun `uploadImage should return RecipeNotFound when recipe does not exist`() = runTest {
         val recipeId = 999L
         val imageBytes = createTestImage(100, 100)
 
@@ -98,7 +99,7 @@ class ImageUploadHandlerTest {
     }
 
     @Test
-    fun `uploadImage should return FileTooLarge when file exceeds 5MB`() {
+    fun `uploadImage should return FileTooLarge when file exceeds 5MB`() = runTest {
         val recipeId = 123L
         val recipe = createMockRecipe(recipeId)
         val largeImageBytes = ByteArray(6 * 1024 * 1024) // 6MB
@@ -113,7 +114,7 @@ class ImageUploadHandlerTest {
     }
 
     @Test
-    fun `uploadImage should return InvalidFormat when content type is not webp`() {
+    fun `uploadImage should return InvalidFormat when content type is not webp`() = runTest {
         val recipeId = 123L
         val recipe = createMockRecipe(recipeId)
         val imageBytes = createTestImage(100, 100)
@@ -128,7 +129,7 @@ class ImageUploadHandlerTest {
     }
 
     @Test
-    fun `uploadImage should overwrite existing image for the same recipe`() {
+    fun `uploadImage should overwrite existing image for the same recipe`() = runTest {
         val recipeId = 123L
         val recipe = createMockRecipe(recipeId)
         val firstImageBytes = createTestImage(100, 100)

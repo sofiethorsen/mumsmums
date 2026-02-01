@@ -8,6 +8,7 @@ import app.mumsmums.db.UsersTable
 import app.mumsmums.db.DatabaseConnection
 import app.mumsmums.filesystem.MumsMumsPaths
 import app.mumsmums.identifiers.NumericIdGenerator
+import app.mumsmums.images.ImageUploadHandler
 import app.mumsmums.logging.getLoggerByPackage
 import app.mumsmums.plugins.configureAuth
 import app.mumsmums.plugins.configureAuthRoutes
@@ -17,6 +18,7 @@ import app.mumsmums.plugins.configureHeaders
 import app.mumsmums.plugins.configureImageUpload
 import app.mumsmums.plugins.configureSerialization
 import app.mumsmums.plugins.configureStaticFiles
+import app.mumsmums.revalidation.RevalidationClient
 import app.mumsmums.time.SystemTimeProvider
 import io.ktor.server.application.Application
 import io.ktor.server.engine.embeddedServer
@@ -26,6 +28,7 @@ private val logger = getLoggerByPackage()
 
 private const val JWT_SECRET_ENV_VAR = "JWT_SECRET"
 private const val SECURE_COOKIES_ENV_VAR = "SECURE_COOKIES"
+private const val FRONTEND_URL_ENV_VAR = "FRONTEND_URL"
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module).start(wait = true)
@@ -54,12 +57,17 @@ fun Application.module() {
     val authHandler = AuthHandler(usersTable)
 
     val recipeRepository = RecipeRepository(recipesTable, idGenerator, MumsMumsPaths.getImagePath())
+    val frontendUrl = System.getenv(FRONTEND_URL_ENV_VAR) ?: "http://localhost:3000"
+    val revalidationClient = RevalidationClient(frontendUrl)
+
+    // Image upload handler
+    val uploadHandler = ImageUploadHandler(recipeRepository, MumsMumsPaths.getImagePath(), revalidationClient)
 
     configureSerialization()
     configureAuth(jwtConfig)
     configureAuthRoutes(authHandler, jwtConfig, secureCookies)
-    configureGraphQL(recipeRepository, jwtConfig)
-    configureImageUpload(recipeRepository)
+    configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
+    configureImageUpload(uploadHandler)
     configureCORS()
     configureHeaders()
     configureStaticFiles()

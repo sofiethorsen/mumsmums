@@ -9,6 +9,9 @@ services:
     restart: unless-stopped
     env_file:
       - ~/mumsmums-persist/.env
+    environment:
+      # Frontend URL for triggering ISR revalidation
+      - FRONTEND_URL=http://frontend:3000
     ports:
       - "8080:8080"
     volumes:
@@ -41,10 +44,12 @@ services:
         - "host.docker.internal:host-gateway"
     container_name: mumsmums-frontend
     restart: unless-stopped
+    env_file:
+      - ~/mumsmums-persist/.env
     environment:
       - NODE_ENV=production
       # Server-side (SSR/ISR) requests use this to reach backend container
-      - BACKEND_URL=http://backend:8080
+      - DOCKER_BACKEND_URL=http://backend:8080
     volumes:
       # Mount images into Next.js public directory for Image Optimization
       - ~/mumsmums-persist/images:/app/public/images:ro

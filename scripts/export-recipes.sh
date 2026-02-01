@@ -5,7 +5,7 @@
 set -euo pipefail
 
 GIT_DIR=$(git rev-parse --show-toplevel)
-DB_PATH="$GIT_DIR/sqlite/mumsmums.db"
+DB_PATH="$HOME"/mumsmums-persist/mumsmums.db
 OUTPUT_FILE="$GIT_DIR/src/server/jvmMain/resources/recipes.json"
 
 if [ ! -f "$DB_PATH" ]; then
@@ -23,7 +23,7 @@ import os
 
 # Get paths from environment
 GIT_DIR = os.popen('git rev-parse --show-toplevel').read().strip()
-DB_PATH = os.path.join(GIT_DIR, "sqlite/mumsmums.db")
+DB_PATH = os.path.join(os.path.expanduser("~"), "mumsmums-persist/mumsmums.db")
 OUTPUT_FILE = os.path.join(GIT_DIR, "src/server/jvmMain/resources/recipes.json")
 
 conn = sqlite3.connect(DB_PATH)

@@ -342,6 +342,224 @@
     ]
   },
   {
+    "description": "Den här krämiga såsen används som bas till flera olika härliga indiska recept.",
+    "imageUrl": "/images/recipes/2361015904256.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "name": "vitlök",
+            "quantity": 35,
+            "volume": "gram"
+          },
+          {
+            "name": "ingefära",
+            "quantity": 20,
+            "volume": "gram"
+          },
+          {
+            "name": "rapsolja",
+            "quantity": 175,
+            "volume": "ml"
+          },
+          {
+            "name": "burktomater, hela",
+            "quantity": 800,
+            "volume": "gram"
+          },
+          {
+            "name": "lagerblad",
+            "quantity": 2,
+            "volume": "st"
+          },
+          {
+            "name": "grön kardemumma, hel",
+            "quantity": 6,
+            "volume": "st"
+          },
+          {
+            "name": "svart kardemumma, hel",
+            "quantity": 2,
+            "volume": "st"
+          },
+          {
+            "name": "kanelstång",
+            "quantity": 2,
+            "volume": "st"
+          },
+          {
+            "name": "flingsalt",
+            "quantity": 2,
+            "volume": "tsk"
+          },
+          {
+            "name": "deggi mirch",
+            "quantity": 1.5,
+            "volume": "tsk"
+          },
+          {
+            "name": "smör",
+            "quantity": 30,
+            "volume": "gram"
+          },
+          {
+            "name": "garam masala",
+            "quantity": 1,
+            "recipeId": 43983914448896,
+            "volume": "tsk"
+          },
+          {
+            "name": "socker",
+            "quantity": 20,
+            "volume": "gram"
+          },
+          {
+            "name": "flytande honung",
+            "quantity": 1,
+            "volume": "msk"
+          },
+          {
+            "name": "spiskummin",
+            "quantity": 1,
+            "volume": "tsk"
+          },
+          {
+            "name": "bockhornsklöver, torkad",
+            "quantity": 1,
+            "volume": "tsk"
+          },
+          {
+            "name": "dill, färsk",
+            "quantity": 0.5,
+            "volume": "tsk"
+          },
+          {
+            "name": "grädde",
+            "quantity": 80,
+            "volume": "ml"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Makhani sauce",
+    "numberOfUnits": 1,
+    "recipeId": 2361015904256,
+    "servings": null,
+    "steps": [
+      "Ta 15 gram av vitöken och finhacka. ",
+      "Värm en stor gryta på medelhög värme och häll i oljan. Lägg i vitlöken och fritera tills den är ljust gyllenbrun. Ta av grytan från värmen och ta ur vitlöken med en hålslev och lägg på hushållspapper.",
+      "Riv den resterande vitlöken och ingefäran på ett rivjärn eller krossa till en pasta med mortel. ",
+      "Med en stavmixer, mixa tomaterna släta.",
+      "Ställ tillbaka grytan med olja på medelhög värme och lägg i lagerbladen, grön kardemumma, svart kardemumma och kanelen. Låt knastra i någon minut eller två medan du rör om.",
+      "Ställ ner värmen och lägg i vitlöks och ingefärspastan. Tillaga i ca 5 minuter och låt pastan ta färg men ej brännas.",
+      "Lägg i tomaterna, salt och deggi mirch. Låt småkoka och reducera till hälften, medan du rör ofta så det ej bränns. Detta tar ca 30 minuter.",
+      "Lägg i smöret och låt sjuda i ca 5 minuter. ",
+      "Lägg i garam masala, socker, honung, spiskummin, den friterade vitlöken, bockhornsklövern och dillen och sjud i ytterligare 15 minuter.",
+      "Om du ska använda såsen direkt, lägg i grädden och sjud i ca 5 minuter. Annars, låt såsen svalna och kyl den. Lägg sedan i grädden när du värmer såsen för att sätta ihop din rätt."
+    ]
+  },
+  {
+    "description": "Detta är en variant på butter chicken som är omöjlig att inte älska. ",
+    "imageUrl": "/images/recipes/2361017253888.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "name": "ingefära",
+            "quantity": 10,
+            "volume": "gram"
+          },
+          {
+            "name": "vitlök",
+            "quantity": 20,
+            "volume": "gram"
+          },
+          {
+            "name": "flingsalt",
+            "quantity": 5,
+            "volume": "gram"
+          },
+          {
+            "name": "deggi mirch",
+            "quantity": 1,
+            "volume": "tsk"
+          },
+          {
+            "name": "spiskummin",
+            "quantity": 1.5,
+            "volume": "tsk"
+          },
+          {
+            "name": "garam masala",
+            "quantity": 0.5,
+            "recipeId": 43983914448896,
+            "volume": "tsk"
+          },
+          {
+            "name": "limejuice",
+            "quantity": 2,
+            "volume": "tsk"
+          },
+          {
+            "name": "rapsolja",
+            "quantity": 2,
+            "volume": "tsk"
+          },
+          {
+            "name": "grekisk yoghurt",
+            "quantity": 75,
+            "volume": "gram"
+          }
+        ],
+        "name": "Marinad"
+      },
+      {
+        "ingredients": [
+          {
+            "name": "kycklinglårfilé",
+            "quantity": 700,
+            "volume": "gram"
+          },
+          {
+            "name": "makhani sauce",
+            "quantity": 1,
+            "recipeId": 2361015904256,
+            "volume": "st"
+          },
+          {
+            "name": "grädde",
+            "quantity": 50,
+            "volume": "ml"
+          },
+          {
+            "name": "ingefära, juliennad"
+          },
+          {
+            "name": "koriander"
+          },
+          {
+            "name": "granatäpple",
+            "quantity": 1,
+            "volume": "msk"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Chicken Ruby",
+    "numberOfUnits": null,
+    "recipeId": 2361017253888,
+    "servings": 4,
+    "steps": [
+      "För marinaden, kombinera alla ingredienserna i en mixer och mixa tills det blir en slät pasta.",
+      "Skär kycklingen i mindre bitar och täck sedan i marinaden. Lägg i en lufttät förpackning och låt marinera i kylen i 6-24 timmar.",
+      "Värm en stekpanna med lite olja på hög värme. Stek sedan kycklingen tills den är genomstekt och har en fin yta. ",
+      "I en stor gryta, lägg i din makhani sauce, grädda och kyckling och låt sjuda försiktigt i 10 minuter.",
+      "Servera grytan med juliennad/tändsticksskuren ingefära, koriander och granatäppelkärnor samt ris."
+    ]
+  },
+  {
     "description": "Hasselbackspotatis med löjrom och smetana är ett enkelt och festligt tilltugg.",
     "imageUrl": "/images/recipes/43982676217856.webp",
     "ingredientSections": [

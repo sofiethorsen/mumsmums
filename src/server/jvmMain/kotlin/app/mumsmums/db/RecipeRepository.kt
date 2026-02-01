@@ -3,6 +3,7 @@ package app.mumsmums.db
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.logging.getLoggerByClass
 import app.mumsmums.model.Recipe
+import app.mumsmums.model.RecipeReference
 import java.io.File
 
 private val logger = getLoggerByClass<RecipeRepository>()
@@ -20,6 +21,10 @@ class RecipeRepository(
 
     fun getRecipeById(id: Long): Recipe? {
         return recipesDatabase.get(id)
+    }
+
+    fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> {
+        return recipesDatabase.getRecipesUsingAsIngredient(recipeId)
     }
 
     fun createRecipeId(): Long {

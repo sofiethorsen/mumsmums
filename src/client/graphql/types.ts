@@ -12,6 +12,12 @@ export interface IngredientSection {
     ingredients: Ingredient[],
 }
 
+export interface RecipeReference {
+    recipeId: number,
+    name: string,
+    imageUrl: string | undefined,
+}
+
 export interface Recipe {
     recipeId: number,
     name: string,
@@ -20,7 +26,8 @@ export interface Recipe {
     numberOfUnits: number | undefined,
     ingredientSections: IngredientSection[],
     steps: string[],
-    imageUrl: string | undefined
+    imageUrl: string | undefined,
+    usedIn?: RecipeReference[],
 }
 
 export type RecipePreview = Pick<Recipe, 'recipeId' | 'name' | 'imageUrl' | 'description' | 'steps' | 'servings' | 'numberOfUnits'>

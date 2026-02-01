@@ -1,6 +1,7 @@
 package app.mumsmums.db
 
 import app.mumsmums.model.Recipe
+import app.mumsmums.model.RecipeReference
 
 /**
  * Interface for database operations on recipes.
@@ -37,4 +38,9 @@ interface RecipesDatabase {
      * Delete a recipe by its ID.
      */
     fun delete(recipeId: Long)
+
+    /**
+     * Find recipes that use the given recipe as an ingredient.
+     */
+    fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference>
 }

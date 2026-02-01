@@ -388,6 +388,132 @@ class RecipesTableTest {
         assertEquals(1, stepsCount)
     }
 
+    @Test
+    fun `When a recipe is used as ingredient, getRecipesUsingAsIngredient should return the parent recipe`() {
+        // Create a base recipe (e.g., "Garam Masala")
+        val baseRecipeId = 111L
+        val baseRecipe = createTestRecipe(recipeId = baseRecipeId, name = "Garam Masala")
+        recipesTable.put(baseRecipe)
+
+        // Create a recipe that uses the base recipe as an ingredient
+        val parentRecipeId = 222L
+        val parentRecipe = Recipe(
+            recipeId = parentRecipeId,
+            name = "Curry",
+            description = "A curry recipe",
+            imageUrl = "/images/curry.webp",
+            ingredientSections = listOf(
+                IngredientSection(
+                    name = null,
+                    ingredients = listOf(
+                        Ingredient(name = "Garam Masala", recipeId = baseRecipeId),
+                        Ingredient(name = "Chicken")
+                    )
+                )
+            ),
+            steps = listOf("Cook")
+        )
+        recipesTable.put(parentRecipe)
+
+        val usedIn = recipesTable.getRecipesUsingAsIngredient(baseRecipeId)
+
+        assertEquals(1, usedIn.size)
+        assertEquals(parentRecipeId, usedIn[0].recipeId)
+        assertEquals("Curry", usedIn[0].name)
+        assertEquals("/images/curry.webp", usedIn[0].imageUrl)
+    }
+
+    @Test
+    fun `When a recipe is used in multiple recipes, getRecipesUsingAsIngredient should return all`() {
+        // Create a base recipe
+        val baseRecipeId = 111L
+        val baseRecipe = createTestRecipe(recipeId = baseRecipeId, name = "Taco Seasoning")
+        recipesTable.put(baseRecipe)
+
+        // Create multiple recipes that use the base recipe
+        val tacoRecipeId = 222L
+        val tacoRecipe = Recipe(
+            recipeId = tacoRecipeId,
+            name = "Tacos",
+            description = null,
+            ingredientSections = listOf(
+                IngredientSection(
+                    name = null,
+                    ingredients = listOf(Ingredient(name = "Taco Seasoning", recipeId = baseRecipeId))
+                )
+            ),
+            steps = listOf()
+        )
+        recipesTable.put(tacoRecipe)
+
+        val burritoRecipeId = 333L
+        val burritoRecipe = Recipe(
+            recipeId = burritoRecipeId,
+            name = "Burritos",
+            description = null,
+            ingredientSections = listOf(
+                IngredientSection(
+                    name = null,
+                    ingredients = listOf(Ingredient(name = "Taco Seasoning", recipeId = baseRecipeId))
+                )
+            ),
+            steps = listOf()
+        )
+        recipesTable.put(burritoRecipe)
+
+        val usedIn = recipesTable.getRecipesUsingAsIngredient(baseRecipeId)
+
+        assertEquals(2, usedIn.size)
+        // Results should be sorted by name
+        assertEquals("Burritos", usedIn[0].name)
+        assertEquals("Tacos", usedIn[1].name)
+    }
+
+    @Test
+    fun `When a recipe is not used anywhere, getRecipesUsingAsIngredient should return empty list`() {
+        val recipeId = 111L
+        val recipe = createTestRecipe(recipeId = recipeId, name = "Standalone Recipe")
+        recipesTable.put(recipe)
+
+        val usedIn = recipesTable.getRecipesUsingAsIngredient(recipeId)
+
+        assertTrue(usedIn.isEmpty())
+    }
+
+    @Test
+    fun `When recipe is used multiple times in same parent, getRecipesUsingAsIngredient should return it once`() {
+        // Create a base recipe
+        val baseRecipeId = 111L
+        val baseRecipe = createTestRecipe(recipeId = baseRecipeId, name = "Spice Mix")
+        recipesTable.put(baseRecipe)
+
+        // Create a recipe that uses the base recipe twice (in different sections)
+        val parentRecipeId = 222L
+        val parentRecipe = Recipe(
+            recipeId = parentRecipeId,
+            name = "Complex Dish",
+            description = null,
+            ingredientSections = listOf(
+                IngredientSection(
+                    name = "Marinade",
+                    ingredients = listOf(Ingredient(name = "Spice Mix", recipeId = baseRecipeId))
+                ),
+                IngredientSection(
+                    name = "Sauce",
+                    ingredients = listOf(Ingredient(name = "Spice Mix", recipeId = baseRecipeId))
+                )
+            ),
+            steps = listOf()
+        )
+        recipesTable.put(parentRecipe)
+
+        val usedIn = recipesTable.getRecipesUsingAsIngredient(baseRecipeId)
+
+        // Should only return once due to DISTINCT
+        assertEquals(1, usedIn.size)
+        assertEquals("Complex Dish", usedIn[0].name)
+    }
+
     private fun createTestRecipe(
         recipeId: Long,
         name: String,

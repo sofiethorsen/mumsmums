@@ -3,6 +3,7 @@ import styles from './RecipeDesktop.module.css'
 
 import IngredientsCard from '../IngredientsCard/IngredientsCard'
 import RecipeImage from '../RecipeImage/RecipeImage'
+import UsedInSection from '../UsedInSection/UsedInSection'
 import { ClockIcon, UsersIcon } from '../icons'
 
 import { Recipe } from '../../graphql/types'
@@ -19,7 +20,7 @@ const RecipeDesktop: React.FC<RecipeProps> = ({ recipe }) => {
 
     return (
         <div className={styles.wrapper}>
-            {/* Hero image section */}
+
             <div className={styles.heroSection}>
                 <div className={styles.imageContainer}>
                     <RecipeImage
@@ -34,7 +35,6 @@ const RecipeDesktop: React.FC<RecipeProps> = ({ recipe }) => {
                 </div>
             </div>
 
-            {/* Meta information */}
             <div className={styles.metaSection}>
                 {recipe.description && (
                     <p className={styles.description}>{recipe.description}</p>
@@ -59,7 +59,6 @@ const RecipeDesktop: React.FC<RecipeProps> = ({ recipe }) => {
                 </div>
             </div>
 
-            {/* Content columns */}
             <div className={styles.contentSection}>
                 <div className={styles.ingredientsColumn}>
                     <IngredientsCard recipe={recipe} multiplier={multiplier} onMultiplierChange={setMultiplier} />
@@ -77,6 +76,12 @@ const RecipeDesktop: React.FC<RecipeProps> = ({ recipe }) => {
                     </div>
                 </div>
             </div>
+
+            {recipe.usedIn && recipe.usedIn.length > 0 && (
+                <div className={styles.usedInSection}>
+                    <UsedInSection recipes={recipe.usedIn} />
+                </div>
+            )}
         </div>
     )
 }

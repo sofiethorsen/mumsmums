@@ -5,6 +5,7 @@ import app.mumsmums.db.RecipeRepository
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
+import app.mumsmums.model.RecipeReference
 import app.mumsmums.revalidation.RevalidationClient
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQL
@@ -77,6 +78,16 @@ fun Application.configureGraphQL(
         schema {
             type<Recipe>() {
                 description = "Recipe object"
+                property<List<RecipeReference>>("usedIn") {
+                    description = "Recipes that use this recipe as an ingredient"
+                    resolver { recipe: Recipe ->
+                        recipeRepository.getRecipesUsingAsIngredient(recipe.recipeId)
+                    }
+                }
+            }
+
+            type<RecipeReference>() {
+                description = "A lightweight reference to a recipe"
             }
 
             inputType<IngredientInput>() {

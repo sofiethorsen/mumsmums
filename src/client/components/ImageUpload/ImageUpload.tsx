@@ -31,7 +31,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     const [cropArea, setCropArea] = useState<CropArea | null>(null)
     const [isDragging, setIsDragging] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
-    const canvasRef = useRef<HTMLCanvasElement>(null)
     const imageRef = useRef<HTMLImageElement>(null)
     const dragStart = useRef<{ x: number; y: number } | null>(null)
 

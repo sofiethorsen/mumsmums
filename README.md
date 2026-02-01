@@ -34,7 +34,7 @@ Stop the app:
 
     ./scripts/mumsmums stop --docker
 
-## Deploying
+## Host configuration
 
 <details>
 <summary>Prerequisites</summary>

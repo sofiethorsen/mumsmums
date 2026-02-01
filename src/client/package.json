@@ -36,6 +36,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
+    "baseline-browser-mapping": "^2.9.19",
     "eslint": "^9.39.1",
     "eslint-config-next": "16.0.7",
     "eslint-plugin-react": "^7.37.5",

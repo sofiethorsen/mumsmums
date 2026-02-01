@@ -120,3 +120,7 @@
 .stepItem:first-child {
     padding-top: 0;
 }
+
+.usedInSection {
+    padding: 0 32px 32px;
+}

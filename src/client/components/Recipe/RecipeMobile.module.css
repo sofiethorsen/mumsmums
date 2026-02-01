@@ -119,3 +119,7 @@
 .stepItem:first-child {
     padding-top: 0;
 }
+
+.usedInSection {
+    width: 100%;
+}

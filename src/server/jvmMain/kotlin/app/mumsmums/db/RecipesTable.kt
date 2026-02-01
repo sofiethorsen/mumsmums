@@ -5,6 +5,7 @@ import app.mumsmums.logging.getLoggerByClass
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
+import app.mumsmums.model.RecipeReference
 import java.sql.ResultSet
 
 /**
@@ -294,5 +295,34 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         } finally {
             connection.autoCommit = true
         }
+    }
+
+    override fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> {
+        val references = mutableListOf<RecipeReference>()
+
+        connection.prepareStatement(
+            """
+            SELECT DISTINCT r.recipeId, r.name, r.imageUrl
+            FROM recipes r
+            JOIN ingredient_sections s ON s.recipeId = r.recipeId
+            JOIN ingredients i ON i.sectionId = s.id
+            WHERE i.recipeId = ?
+            ORDER BY r.name
+            """.trimIndent()
+        ).use { statement ->
+            statement.setLong(1, recipeId)
+            val resultSet = statement.executeQuery()
+            while (resultSet.next()) {
+                references.add(
+                    RecipeReference(
+                        recipeId = resultSet.getLong("recipeId"),
+                        name = resultSet.getString("name"),
+                        imageUrl = resultSet.getString("imageUrl")
+                    )
+                )
+            }
+        }
+
+        return references
     }
 }

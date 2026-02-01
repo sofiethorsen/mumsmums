@@ -3,6 +3,7 @@ import styles from './RecipeMobile.module.css'
 
 import IngredientsCard from '../IngredientsCard/IngredientsCard'
 import RecipeImage from '../RecipeImage/RecipeImage'
+import UsedInSection from '../UsedInSection/UsedInSection'
 import { ClockIcon, UsersIcon } from '../icons'
 
 import { Recipe } from '../../graphql/types'
@@ -77,6 +78,12 @@ const RecipeMobile: React.FC<RecipeProps> = ({ recipe }) => {
                         </ol>
                     </div>
                 </div>
+
+                {recipe.usedIn && recipe.usedIn.length > 0 && (
+                    <div className={styles.usedInSection}>
+                        <UsedInSection recipes={recipe.usedIn} />
+                    </div>
+                )}
             </div>
         </div>
     )

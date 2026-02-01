@@ -12,6 +12,7 @@ import app.mumsmums.plugins.configureAuth
 import app.mumsmums.plugins.configureAuthRoutes
 import app.mumsmums.plugins.configureGraphQL
 import app.mumsmums.plugins.configureSerialization
+import app.mumsmums.revalidation.RevalidationClient
 import app.mumsmums.time.TimeProvider
 import io.ktor.client.request.cookie
 import io.ktor.client.request.header
@@ -22,6 +23,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.server.testing.testApplication
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.serialization.json.Json
@@ -41,6 +43,7 @@ class GraphQLAuthTest {
     private lateinit var recipeRepository: RecipeRepository
     private lateinit var authHandler: AuthHandler
     private lateinit var jwtConfig: JwtConfig
+    private val revalidationClient = mockk<RevalidationClient>()
 
     @BeforeEach
     fun setUp(@TempDir tempDir: File) {
@@ -72,7 +75,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
         }
 
         val response = client.post("/graphql") {
@@ -95,7 +98,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
         }
 
         val response = client.post("/graphql") {
@@ -129,8 +132,10 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
         }
+
+        coEvery { revalidationClient.revalidateRecipe(any(), any()) } answers {}
 
         // First, login to get auth token
         val loginResponse = client.post("/api/auth/login") {
@@ -180,7 +185,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
         }
 
         val response = client.post("/graphql") {
@@ -215,7 +220,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
         }
 
         val response = client.post("/graphql") {

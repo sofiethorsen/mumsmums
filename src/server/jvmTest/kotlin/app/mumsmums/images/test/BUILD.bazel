@@ -11,5 +11,6 @@ kt_jvm_junit5_test(
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
         "@maven//:io_mockk_mockk",
         "@maven//:io_mockk_mockk_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_coroutines_test",
     ],
 )

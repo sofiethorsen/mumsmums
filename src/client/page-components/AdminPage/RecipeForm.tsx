@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './AdminPage.module.css'
 import { Recipe } from '../../graphql/types'
+import ImageUpload from '../../components/ImageUpload/ImageUpload'
 
 export interface RecipeInput {
     name: string
@@ -44,6 +45,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
     const [servings, setServings] = useState('')
     const [numberOfUnits, setNumberOfUnits] = useState('')
     const [imageUrl, setImageUrl] = useState('')
+    const [uploadError, setUploadError] = useState<string | null>(null)
     const [ingredientSections, setIngredientSections] = useState<IngredientSectionInput[]>([
         { name: '', ingredients: [{ name: '', volume: '', quantity: '', recipeId: '' }] },
     ])
@@ -79,7 +81,8 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
             description: description || null,
             servings: servings ? parseInt(servings) : null,
             numberOfUnits: numberOfUnits ? parseInt(numberOfUnits) : null,
-            imageUrl: imageUrl || null,
+            // Use imageUrl state (updated after upload), stripping any cache-busting query params
+            imageUrl: imageUrl ? imageUrl.split('?')[0] : null,
             ingredientSections: ingredientSections.map((section) => ({
                 name: section.name || null,
                 ingredients: section.ingredients
@@ -149,6 +152,17 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
         setSteps(newSteps)
     }
 
+    const handleUploadSuccess = (newImageUrl: string) => {
+        // Add timestamp to force browser to reload the image (cache busting)
+        const urlWithCacheBust = `${newImageUrl}?t=${Date.now()}`
+        setImageUrl(urlWithCacheBust)
+        setUploadError(null)
+    }
+
+    const handleUploadError = (error: string) => {
+        setUploadError(error)
+    }
+
     return (
         <form onSubmit={handleSubmit} className={styles.recipeForm}>
             <h2>{recipe ? 'Editera recept' : 'Nytt recept'}</h2>
@@ -175,10 +189,21 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
                 </div>
             </div>
 
-            <div className={styles.formGroup}>
-                <label>Bild URL</label>
-                <input type="text" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
-            </div>
+            {recipe ? (
+                <>
+                    <ImageUpload
+                        recipeId={recipe.recipeId}
+                        currentImageUrl={imageUrl}
+                        onUploadSuccess={handleUploadSuccess}
+                        onUploadError={handleUploadError}
+                    />
+                    {uploadError && <div className={styles.error}>{uploadError}</div>}
+                </>
+            ) : (
+                <div className={styles.imageUploadPlaceholder}>
+                    <p>💡 Spara receptet först för att ladda upp en bild</p>
+                </div>
+            )}
 
             <div className={styles.formSection}>
                 <h3>Ingredienssektioner</h3>

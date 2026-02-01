@@ -1,7 +1,5 @@
 package app.mumsmums.plugins
 
-import app.mumsmums.db.RecipeRepository
-import app.mumsmums.filesystem.MumsMumsPaths
 import app.mumsmums.images.ImageUploadHandler
 import app.mumsmums.images.ImageUploadResult
 import app.mumsmums.logging.getLoggerByClass
@@ -26,9 +24,7 @@ private val logger = getLoggerByClass<ImageUploadRoutes>()
 // Marker class for logger
 private class ImageUploadRoutes
 
-fun Application.configureImageUpload(recipeRepository: RecipeRepository) {
-    val uploadHandler = ImageUploadHandler(recipeRepository, MumsMumsPaths.getImagePath())
-
+fun Application.configureImageUpload(uploadHandler: ImageUploadHandler) {
     routing {
         authenticate(AUTH_JWT_NAME) {
             post("/api/images/recipe/{recipeId}") {
@@ -67,8 +63,11 @@ fun Application.configureImageUpload(recipeRepository: RecipeRepository) {
                         )
                     }
 
+                    // Get JWT token from cookie for revalidation
+                    val jwtToken = call.request.cookies[AUTH_COOKIE_NAME]
+
                     // Delegate to handler
-                    val result = uploadHandler.uploadImage(recipeId, fileBytes, contentType ?: "application/octet-stream")
+                    val result = uploadHandler.uploadImage(recipeId, fileBytes, contentType ?: "application/octet-stream", jwtToken)
 
                     // Convert result to HTTP response
                     when (result) {

@@ -14,11 +14,15 @@ export default function Home({ recipes }: HomeProps) {
 export async function getStaticProps() {
     const { data } = await client.query<GetRecipePreviewsQueryResult>({
         query: GET_RECIPE_PREVIEWS,
+        // Always fetch fresh data for SSR/ISR - Apollo cache is for client-side only
+        fetchPolicy: 'network-only',
     })
 
     return {
         props: {
             recipes: data.recipes,
         },
+        // Revalidate every 60 seconds (ISR - Incremental Static Regeneration)
+        revalidate: 60,
     }
 }

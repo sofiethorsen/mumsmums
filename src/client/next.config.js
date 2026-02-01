@@ -26,6 +26,23 @@ const nextConfig = {
         removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
     },
 
+    // Proxy /images to appropriate location based on environment
+    // - Docker: proxy to Caddy which serves from volume mount
+    // - Local dev: proxy to backend at localhost:8080
+    async rewrites() {
+        const isDocker = !!process.env.DOCKER_BACKEND_URL
+        const imageDestination = isDocker
+            ? 'http://caddy:80/images/:path*'
+            : 'http://localhost:8080/images/:path*'
+
+        return [
+            {
+                source: '/images/:path*',
+                destination: imageDestination,
+            },
+        ]
+    },
+
     ...(process.env.NODE_ENV === 'production' && {
         // Compress output files
         compress: true,

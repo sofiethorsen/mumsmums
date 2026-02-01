@@ -53,7 +53,8 @@ export async function getStaticPaths() {
 
     return {
         paths: paths,
-        fallback: false,
+        // 'blocking' allows new recipes to be rendered on-demand, not just at build time
+        fallback: 'blocking',
     }
 }
 
@@ -63,11 +64,20 @@ export async function getStaticProps({ params }: { params: { recipeId: string } 
     const recipeData = await client.query<GetRecipeByIdQueryResult>({
         query: GET_RECIPE_BY_ID,
         variables: { recipeId: numericRecipeId },
+        // Always fetch fresh data for SSR/ISR - Apollo cache is for client-side only
+        fetchPolicy: 'network-only',
     })
+
+    // Return 404 if recipe doesn't exist (e.g., was deleted)
+    if (!recipeData.data.recipe) {
+        return { notFound: true }
+    }
 
     return {
         props: {
             recipe: recipeData.data.recipe,
         },
+        // Revalidate every 60 seconds (ISR - Incremental Static Regeneration)
+        revalidate: 60,
     }
 }

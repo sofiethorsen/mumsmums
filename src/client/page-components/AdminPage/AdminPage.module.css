@@ -326,3 +326,26 @@
 .cancelButton:hover {
     background-color: var(--stone-500);
 }
+
+.error {
+    padding: 12px;
+    background-color: #fee;
+    border: 1px solid #fcc;
+    border-radius: 8px;
+    color: #c33;
+    font-size: 14px;
+}
+
+.imageUploadPlaceholder {
+    padding: 20px;
+    background-color: var(--color-surface-card);
+    border: 2px dashed var(--color-border);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.imageUploadPlaceholder p {
+    margin: 0;
+    color: var(--color-content-secondary);
+    font-size: 14px;
+}

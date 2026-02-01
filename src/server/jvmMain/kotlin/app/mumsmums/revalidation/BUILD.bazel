@@ -1,0 +1,14 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
+
+kt_jvm_library(
+    name = "revalidation",
+    srcs = glob(["*.kt"]),
+    plugins = ["//bazel:serialization"],
+    visibility = ["//src/server:__subpackages__"],
+    deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/logging",
+        "@maven//:io_ktor_ktor_client_core_jvm",
+        "@maven//:io_ktor_ktor_client_cio_jvm",
+        "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
+    ],
+)

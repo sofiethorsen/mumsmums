@@ -98,22 +98,28 @@ const AdminPage: React.FC = () => {
         setLoading(true)
         try {
             if (mode === 'create') {
-                await client.mutate({
+                const { data } = await client.mutate<{ createRecipe: { recipeId: number; name: string } }>({
                     mutation: CREATE_RECIPE,
                     variables: { input: recipeInput },
                 })
-                alert('Recept skapat.')
+
+                if (data?.createRecipe) {
+                    alert('Recept skapat.')
+                    // Switch to edit mode with the newly created recipe
+                    await loadRecipes()
+                    setSelectedRecipeId(data.createRecipe.recipeId)
+                    setMode('edit')
+                }
             } else if (mode === 'edit' && selectedRecipeId) {
                 await client.mutate({
                     mutation: UPDATE_RECIPE,
                     variables: { recipeId: selectedRecipeId, input: recipeInput },
                 })
                 alert('Recept uppdaterades.')
+                await loadRecipes()
+                // Reload the recipe to get updated data
+                await loadRecipe(selectedRecipeId)
             }
-            await loadRecipes()
-            setMode('list')
-            setSelectedRecipeId(null)
-            setSelectedRecipe(null)
         } catch (error) {
             console.error('Error saving recipe:', error)
             alert('Failed to save recipe')

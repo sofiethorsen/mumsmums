@@ -11,6 +11,7 @@ kt_jvm_library(
         "//src/server/jvmMain/kotlin/app/mumsmums/json",
         "//src/server/jvmMain/kotlin/app/mumsmums/logging",
         "//src/server/jvmMain/kotlin/app/mumsmums/plugins",
+        "//src/server/jvmMain/kotlin/app/mumsmums/revalidation",
         "@maven//:io_ktor_ktor_server_core_jvm",
         "@maven//:io_ktor_ktor_server_netty_jvm",
     ],

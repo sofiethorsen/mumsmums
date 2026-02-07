@@ -1,8 +1,0 @@
-.icon {
-    display: block;
-}
-
-/* Invert icon colors in dark mode */
-[data-theme="dark"] .icon {
-    filter: invert(1);
-}

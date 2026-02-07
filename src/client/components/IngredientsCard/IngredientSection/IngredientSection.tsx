@@ -2,7 +2,7 @@ import React from 'react'
 
 import styles from './IngredientSection.module.css'
 
-import { Ingredient, IngredientSection as IngredientSectionType } from '../../../graphql/types'
+import type { Ingredient, IngredientSection as IngredientSectionType } from '../../../graphql/generated'
 import IngredientRow from './IngredientRow/IngredientRow'
 
 interface IngredientSectionProps {

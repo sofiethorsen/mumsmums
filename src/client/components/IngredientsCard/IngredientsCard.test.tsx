@@ -2,7 +2,9 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import IngredientsCard from './IngredientsCard'
-import { Recipe } from '../../graphql/types'
+import type { GetRecipeByIdQuery } from '../../graphql/generated'
+
+type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
 const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
     recipeId: 1,
@@ -22,6 +24,7 @@ const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
         },
     ],
     steps: [],
+    usedIn: [],
     ...overrides,
 })
 

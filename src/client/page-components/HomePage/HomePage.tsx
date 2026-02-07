@@ -4,7 +4,9 @@ import PageFrame from '../../components/PageFrame/PageFrame'
 import PageHead from '../../components/PageHead/PageHead'
 import RecipeGrid from '../../components/RecipeGrid/RecipeGrid'
 import HeroSection from '../../components/HeroSection/HeroSection'
-import type { RecipePreview } from '../../graphql/types'
+import type { GetRecipePreviewsQuery } from '../../graphql/generated'
+
+type RecipePreview = GetRecipePreviewsQuery['recipes'][number]
 
 interface HomePageProps {
     recipes: RecipePreview[]

@@ -3,7 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import styles from './IngredientRow.module.css'
 
-import { Ingredient } from '../../../../graphql/types'
+import type { Ingredient } from '../../../../graphql/generated'
 
 interface IngredientRowProps {
     ingredient: Ingredient

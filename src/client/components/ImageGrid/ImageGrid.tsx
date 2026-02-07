@@ -2,9 +2,11 @@ import React from 'react'
 import styles from './ImageGrid.module.css'
 
 import Link from 'next/link'
-import { RecipePreview } from '../../graphql/types'
+import type { GetRecipePreviewsQuery } from '../../graphql/generated'
 import RecipeImage from '../RecipeImage/RecipeImage'
 import { ClockIcon, UsersIcon } from '../icons'
+
+type RecipePreview = GetRecipePreviewsQuery['recipes'][number]
 
 interface ImageGridProps {
     recipes: RecipePreview[]

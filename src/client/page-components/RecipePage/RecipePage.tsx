@@ -4,7 +4,9 @@ import { useMediaQuery } from 'react-responsive'
 import RecipeDesktop from '../../components/Recipe/RecipeDesktop'
 import RecipeMobile from '../../components/Recipe/RecipeMobile'
 
-import { Recipe } from '../../graphql/types'
+import type { GetRecipeByIdQuery } from '../../graphql/generated'
+
+type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
 interface RecipePageProps {
     recipe: Recipe

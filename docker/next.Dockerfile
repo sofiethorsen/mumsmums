@@ -25,10 +25,14 @@ COPY src/client/package*.json ./
 # Copy source code
 COPY src/client/ ./
 
-# Build argument for backend URL during build (for SSR/SSG)
+# Build argument for backend URL during build (for SSR/SSG and codegen)
 # Set to backend container URL for Docker builds
 ARG DOCKER_BACKEND_URL=http://backend:8080
 ENV DOCKER_BACKEND_URL=${DOCKER_BACKEND_URL}
+
+# Generate TypeScript types from GraphQL schema
+RUN npm run codegen
+
 RUN npm run build
 
 # =============================================================================

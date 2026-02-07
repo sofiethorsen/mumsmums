@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import styles from './UsedInSection.module.css'
 import RecipeImage from '../RecipeImage/RecipeImage'
-import { RecipeReference } from '../../graphql/types'
+import type { RecipeReference } from '../../graphql/generated'
 
 interface UsedInSectionProps {
     recipes: RecipeReference[]

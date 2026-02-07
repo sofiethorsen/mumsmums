@@ -560,6 +560,154 @@
     ]
   },
   {
+    "description": "En bolognese som får djup genom att tillagas flera timmar i ugn. ",
+    "imageUrl": "/images/recipes/2362094778368.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "name": "morot",
+            "quantity": 250,
+            "volume": "gram"
+          },
+          {
+            "name": "lök, gul",
+            "quantity": 250,
+            "volume": "gram"
+          },
+          {
+            "name": "selleri",
+            "quantity": 150,
+            "volume": "gram"
+          },
+          {
+            "name": "vitlöksklyfta",
+            "quantity": 4,
+            "volume": "st"
+          },
+          {
+            "name": "pancetta",
+            "quantity": 100,
+            "volume": "gram"
+          },
+          {
+            "name": "köttfärs",
+            "quantity": 1000,
+            "volume": "gram"
+          },
+          {
+            "name": "tomatpuré",
+            "quantity": 3,
+            "volume": "msk"
+          },
+          {
+            "name": "sardeller",
+            "quantity": 6,
+            "volume": "st"
+          },
+          {
+            "name": "vin",
+            "quantity": 750,
+            "volume": "ml"
+          },
+          {
+            "name": "marmite",
+            "quantity": 1,
+            "volume": "tsk"
+          },
+          {
+            "name": "kycklingbuljong",
+            "quantity": 1,
+            "volume": "st"
+          },
+          {
+            "name": "lagerblad",
+            "quantity": 4,
+            "volume": "st"
+          },
+          {
+            "name": "soja",
+            "quantity": 1,
+            "volume": "tsk"
+          },
+          {
+            "name": "persilja"
+          },
+          {
+            "name": "parmesan"
+          },
+          {
+            "name": "rapsolja"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Bolognese ",
+    "numberOfUnits": null,
+    "recipeId": 2362094778368,
+    "servings": 8,
+    "steps": [
+      "Skala morot och lök och vitlök, tvätta sellerin från ev jord.",
+      "I en matberedare, mixa sedan morot, lök, selleri och vitlök till en fin mix. ",
+      "Tärna pancettan och ställ åt sidan. ",
+      "Sätt ugnen på 120C.",
+      "Värm en stor gryta på medelhög värme med lite rapsolja. Stek sedan grönsaksmixen, framförallt för att få ur överflödig vätska.",
+      "Medan grönsaksmixen steker, värm en stekpanna på medelhög värme och börja stek pancettan. Den ska bli genomskinlig och börja bli krispig. ",
+      "Häll i pancettan i grönsaksmixen, men spara gärna fettet i stekpannan som stekfett till köttfärsen (annars kan du steka i lite vanlig rapsolja).",
+      "Stek sedan köttfärsen i omgångar så du får en brynt yta - du kan lägga den stekta köttfärsen i en skål medan du håller på.",
+      "Fös sedan undan grönsaksmixen något i grytan så du gör utrymme för att steka tomatpurén. Häll i tomatpurén och stek ur.",
+      "När köttfärsen är stekt kan du sen hälla i alltihopa i grytan med grönsaksmixen och blanda runt.",
+      "Häll i allt vin i grytan.",
+      "Ta sardellerna och hacka fint. Häll i grytan. ",
+      "Tillsätt marmite, soja, kycklingbuljong och lagerblad.",
+      "Ställ in hela grytan i ugnen med lock och låt koka i ca 3-4 timmar; Kolla till grytan lite då och då för att se till om du behöver tillsätta mer vatten. ",
+      "Ta ut grytan och ställ på spisen igen. ",
+      "Låt koka ner till den konsistens du föredrar.",
+      "Riv parmesan i önskad mängd och häll i grytan.",
+      "Hacka persilja i önskad mängd och häll i grytan.",
+      "Låt sjuda i några minuter till.",
+      "Servera bolognesen med valfri pasta, och toppa med mer parmesan och persilja."
+    ]
+  },
+  {
+    "description": "En fräsch och het sockerlag som är perfekt smaksättning i både cocktail och mocktail.",
+    "imageUrl": "/images/recipes/2362096320512.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "name": "gurka",
+            "quantity": 1,
+            "volume": "st"
+          },
+          {
+            "name": "jalapeño",
+            "quantity": 1,
+            "volume": "st"
+          },
+          {
+            "name": "socker",
+            "quantity": 2,
+            "volume": "dl"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Gurk- och jalapeñosockerlag",
+    "numberOfUnits": 1,
+    "recipeId": 2362096320512,
+    "servings": null,
+    "steps": [
+      "Skär gurkan i lite mindre bitar och kör i en mixer.",
+      "Lägg en handduk i en sil och sila sedan av mixen. Du kan med fördel (när den mesta vätskan har silats igenom och du mest har fruktkött kvar) \"stänga ihop\" handduken och pressa ur ytterligare vätska - det finns mer än du tror. ",
+      "Mät upp gurkjuicen i en kastrull och ha sedan lika del socker (för en gurka så blir det ungefär 2 dl socker). Skiva jalapeñon och lägg i kastrullen, behåll kärnorna för extra hetta.",
+      "Värm upp tills allt socker har löst sig. ",
+      "Låt svalna och sila av jalapeñon. Nu är sockerlagen färdig!"
+    ]
+  },
+  {
     "description": "Hasselbackspotatis med löjrom och smetana är ett enkelt och festligt tilltugg.",
     "imageUrl": "/images/recipes/43982676217856.webp",
     "ingredientSections": [
@@ -1391,7 +1539,7 @@
     ]
   },
   {
-    "description": "Smakar precis som påskryddan, men utan socker.",
+    "description": "Smakar precis som påskryddan.",
     "imageUrl": "/images/recipes/43988867856384.webp",
     "ingredientSections": [
       {
@@ -1445,7 +1593,7 @@
     "recipeId": 43988867856384,
     "servings": null,
     "steps": [
-      "En sats gör ca 30 gram och är lagom till 500 gram köttfärs.",
+      "En sats gör ca 30 gram och är lagom till 400 gram köttfärs.",
       "Blanda alla kryddor och häll över i en lufttät burk med lock."
     ]
   },

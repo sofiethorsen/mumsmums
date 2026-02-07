@@ -6,7 +6,9 @@ import RecipeImage from '../RecipeImage/RecipeImage'
 import UsedInSection from '../UsedInSection/UsedInSection'
 import { ClockIcon, UsersIcon } from '../icons'
 
-import { Recipe } from '../../graphql/types'
+import type { GetRecipeByIdQuery } from '../../graphql/generated'
+
+type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
 interface RecipeProps {
     recipe: Recipe

@@ -6,6 +6,7 @@
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:tsc": "tsc --noemit",
+    "codegen": "graphql-codegen",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -29,6 +30,10 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
+    "@graphql-codegen/cli": "^6.1.1",
+    "@graphql-codegen/typed-document-node": "^6.1.5",
+    "@graphql-codegen/typescript": "^5.0.7",
+    "@graphql-codegen/typescript-operations": "^5.0.7",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",

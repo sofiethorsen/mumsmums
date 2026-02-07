@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import UsedInSection from './UsedInSection'
-import { RecipeReference } from '../../graphql/types'
+import type { RecipeReference } from '../../graphql/generated'
 
 // Mock Next.js Link component
 jest.mock('next/link', () => ({

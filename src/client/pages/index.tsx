@@ -1,7 +1,8 @@
 import HomePage from '../page-components/HomePage/HomePage'
 import client from '../graphql/client'
-import { GET_RECIPE_PREVIEWS } from '../graphql/queries'
-import type { GetRecipePreviewsQueryResult, RecipePreview } from '../graphql/types'
+import { GetRecipePreviewsDocument, GetRecipePreviewsQuery } from '../graphql/generated'
+
+type RecipePreview = GetRecipePreviewsQuery['recipes'][number]
 
 interface HomeProps {
     recipes: RecipePreview[]
@@ -12,8 +13,8 @@ export default function Home({ recipes }: HomeProps) {
 }
 
 export async function getStaticProps() {
-    const { data } = await client.query<GetRecipePreviewsQueryResult>({
-        query: GET_RECIPE_PREVIEWS,
+    const { data } = await client.query({
+        query: GetRecipePreviewsDocument,
         // Always fetch fresh data for SSR/ISR - Apollo cache is for client-side only
         fetchPolicy: 'network-only',
     })

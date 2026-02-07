@@ -3,17 +3,27 @@ import { useRouter } from 'next/router'
 import client from '../../graphql/client'
 import RecipeForm, { RecipeInput } from './RecipeForm'
 import styles from './AdminPage.module.css'
-import { Recipe } from '../../graphql/types'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import { BACKEND_BASE_URI } from '../../constants/environment'
-import { CREATE_RECIPE, DELETE_RECIPE, GET_FULL_RECIPE, GET_RECIPES, UPDATE_RECIPE } from '../../graphql/queries'
+import {
+    CreateRecipeDocument,
+    DeleteRecipeDocument,
+    GetRecipeByIdDocument,
+    GetRecipeByIdQuery,
+    GetRecipesDocument,
+    GetRecipesQuery,
+    UpdateRecipeDocument,
+} from '../../graphql/generated'
+
+type RecipeListItem = GetRecipesQuery['recipes'][number]
+type RecipeDetails = NonNullable<GetRecipeByIdQuery['recipe']>
 
 const AdminPage: React.FC = () => {
     const router = useRouter()
     const [selectedRecipeId, setSelectedRecipeId] = useState<number | null>(null)
     const [mode, setMode] = useState<'list' | 'create' | 'edit'>('list')
-    const [recipes, setRecipes] = useState<Recipe[]>([])
-    const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
+    const [recipes, setRecipes] = useState<RecipeListItem[]>([])
+    const [selectedRecipe, setSelectedRecipe] = useState<RecipeDetails | null>(null)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -29,8 +39,8 @@ const AdminPage: React.FC = () => {
     const loadRecipes = async () => {
         setLoading(true)
         try {
-            const { data } = await client.query<{ recipes: Recipe[] }>({
-                query: GET_RECIPES,
+            const { data } = await client.query({
+                query: GetRecipesDocument,
                 fetchPolicy: 'network-only',
             })
             setRecipes(data.recipes)
@@ -45,8 +55,8 @@ const AdminPage: React.FC = () => {
     const loadRecipe = async (recipeId: number) => {
         setLoading(true)
         try {
-            const { data } = await client.query<{ recipe: Recipe }>({
-                query: GET_FULL_RECIPE,
+            const { data } = await client.query({
+                query: GetRecipeByIdDocument,
                 variables: { recipeId },
                 fetchPolicy: 'network-only',
             })
@@ -74,7 +84,7 @@ const AdminPage: React.FC = () => {
             setLoading(true)
             try {
                 await client.mutate({
-                    mutation: DELETE_RECIPE,
+                    mutation: DeleteRecipeDocument,
                     variables: { recipeId },
                 })
                 await loadRecipes()
@@ -98,8 +108,8 @@ const AdminPage: React.FC = () => {
         setLoading(true)
         try {
             if (mode === 'create') {
-                const { data } = await client.mutate<{ createRecipe: { recipeId: number; name: string } }>({
-                    mutation: CREATE_RECIPE,
+                const { data } = await client.mutate({
+                    mutation: CreateRecipeDocument,
                     variables: { input: recipeInput },
                 })
 
@@ -112,7 +122,7 @@ const AdminPage: React.FC = () => {
                 }
             } else if (mode === 'edit' && selectedRecipeId) {
                 await client.mutate({
-                    mutation: UPDATE_RECIPE,
+                    mutation: UpdateRecipeDocument,
                     variables: { recipeId: selectedRecipeId, input: recipeInput },
                 })
                 alert('Recept uppdaterades.')
@@ -160,7 +170,7 @@ const AdminPage: React.FC = () => {
                         </button>
 
                         <div className={styles.recipeList}>
-                            {recipes.map((recipe: Recipe) => (
+                            {recipes.map((recipe: RecipeListItem) => (
                                 <div key={recipe.recipeId} className={styles.recipeItem}>
                                     <span className={styles.recipeName}>{recipe.name}</span>
                                     <div className={styles.actions}>

@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GET_RECIPE_PREVIEWS = gql`
-    query {
+    query GetRecipePreviews {
         recipes {
             recipeId
             name
@@ -23,8 +23,8 @@ export const GET_RECIPES = gql`
     }
 `
 
-export const GET_FULL_RECIPE = gql`
-    query GetRecipe($recipeId: Long!) {
+export const GET_RECIPE_BY_ID = gql`
+    query GetRecipeById($recipeId: Long!) {
         recipe(recipeId: $recipeId) {
             recipeId
             name
@@ -42,6 +42,11 @@ export const GET_FULL_RECIPE = gql`
                 }
             }
             steps
+            usedIn {
+                recipeId
+                name
+                imageUrl
+            }
         }
     }
 `

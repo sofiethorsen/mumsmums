@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import styles from './AdminPage.module.css'
-import { Recipe } from '../../graphql/types'
+import { GetRecipeByIdQuery } from '../../graphql/generated'
 import ImageUpload from '../../components/ImageUpload/ImageUpload'
+
+// Use the query result type - we only need the fields the form actually uses
+type RecipeDetails = NonNullable<GetRecipeByIdQuery['recipe']>
 
 export interface RecipeInput {
     name: string
@@ -22,7 +25,7 @@ export interface RecipeInput {
 }
 
 interface RecipeFormProps {
-    recipe?: Recipe | null
+    recipe?: RecipeDetails | null
     onSubmit: (recipeInput: RecipeInput) => void
     onCancel: () => void
 }

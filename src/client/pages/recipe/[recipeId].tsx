@@ -3,19 +3,10 @@ import RecipePage from '../../page-components/RecipePage/RecipePage'
 import PageHead from '../../components/PageHead/PageHead'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import client from '../../graphql/client'
-import { gql } from '@apollo/client'
 import { toAbsoluteUrl } from '../../constants/urls'
-import type { Recipe, GetRecipeByIdQueryResult, GetRecipeIdsQueryResult } from '../../graphql/types'
+import { GetRecipeByIdDocument, GetRecipeByIdQuery, GetRecipesDocument } from '../../graphql/generated'
 
-import { GET_RECIPE_BY_ID } from '../../components/Recipe/queries'
-
-const GET_RECIPE_IDS = gql`
-  query {
-    recipes {
-      recipeId,
-    }
-  }
-`
+type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
 const renderPageHead = (recipe: Recipe) => {
     return <PageHead
@@ -43,8 +34,8 @@ export default function Recipe({ recipe }: RecipeProps) {
 }
 
 export async function getStaticPaths() {
-    const { data } = await client.query<GetRecipeIdsQueryResult>({
-        query: GET_RECIPE_IDS,
+    const { data } = await client.query({
+        query: GetRecipesDocument,
     })
 
     const paths = data.recipes.map((recipe) => ({
@@ -61,8 +52,8 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }: { params: { recipeId: string } }) {
     // since we get the ID from the URL, we need to convert it to a number to make TS happy
     const numericRecipeId = parseInt(params.recipeId, 10)
-    const recipeData = await client.query<GetRecipeByIdQueryResult>({
-        query: GET_RECIPE_BY_ID,
+    const recipeData = await client.query({
+        query: GetRecipeByIdDocument,
         variables: { recipeId: numericRecipeId },
         // Always fetch fresh data for SSR/ISR - Apollo cache is for client-side only
         fetchPolicy: 'network-only',

@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 
 import styles from './IngredientsCard.module.css'
 
-import { Recipe } from '../../graphql/types'
+import type { GetRecipeByIdQuery } from '../../graphql/generated'
 import IngredientSection from './IngredientSection/IngredientSection'
+
+type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
 interface IngredientsCardProps {
     recipe: Recipe

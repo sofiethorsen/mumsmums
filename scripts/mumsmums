@@ -39,6 +39,7 @@ build_client() {
     cd "$GIT_DIR/src/client" || exit 1
 
     npm ci
+    npm run codegen
     npm run lint
     npm run lint:tsc
 

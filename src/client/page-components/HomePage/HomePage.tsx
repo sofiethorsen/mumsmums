@@ -4,6 +4,7 @@ import PageFrame from '../../components/PageFrame/PageFrame'
 import PageHead from '../../components/PageHead/PageHead'
 import RecipeGrid from '../../components/RecipeGrid/RecipeGrid'
 import HeroSection from '../../components/HeroSection/HeroSection'
+import { toAbsoluteUrl } from '../../constants/urls'
 import type { GetRecipePreviewsQuery } from '../../graphql/generated'
 
 type RecipePreview = GetRecipePreviewsQuery['recipes'][number]
@@ -32,8 +33,10 @@ export default function HomePage({ recipes }: HomePageProps) {
         <>
             <PageHead
                 title={`mumsmums`}
+                description="Recept utan livshistorier"
                 siteType={'website'}
                 url={`https://mumsmums.app`}
+                imageUrl={toAbsoluteUrl('/images/og-home.webp')}
             />
             <PageFrame>
                 <HeroSection

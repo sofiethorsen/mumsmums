@@ -4,6 +4,7 @@ import PageHead from '../../components/PageHead/PageHead'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import client from '../../graphql/client'
 import { toAbsoluteUrl } from '../../constants/urls'
+import { generateRecipeJsonLd } from '../../seo/recipeJsonLd'
 import { GetRecipeByIdDocument, GetRecipeByIdQuery, GetRecipesDocument } from '../../graphql/generated'
 
 type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
@@ -23,9 +24,18 @@ interface RecipeProps {
 }
 
 export default function Recipe({ recipe }: RecipeProps) {
+    const jsonLd = generateRecipeJsonLd(recipe)
+
+    // See: https://nextjs.org/docs/app/guides/json-ld
     return (
         <>
             {renderPageHead(recipe)}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+                }}
+            />
             <PageFrame>
                 <RecipePage recipe={recipe} />
             </PageFrame>

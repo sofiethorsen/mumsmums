@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import client from '../../graphql/client'
 import RecipeForm, { RecipeInput } from './RecipeForm'
+import IngredientAdmin from './IngredientAdmin'
+import UnitAdmin from './UnitAdmin'
 import styles from './AdminPage.module.css'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import { BACKEND_BASE_URI } from '../../constants/environment'
@@ -18,8 +20,11 @@ import {
 type RecipeListItem = GetRecipesQuery['recipes'][number]
 type RecipeDetails = NonNullable<GetRecipeByIdQuery['recipe']>
 
+type Tab = 'recipes' | 'ingredients' | 'units'
+
 const AdminPage: React.FC = () => {
     const router = useRouter()
+    const [activeTab, setActiveTab] = useState<Tab>('recipes')
     const [selectedRecipeId, setSelectedRecipeId] = useState<number | null>(null)
     const [mode, setMode] = useState<'list' | 'create' | 'edit'>('list')
     const [recipes, setRecipes] = useState<RecipeListItem[]>([])
@@ -163,35 +168,64 @@ const AdminPage: React.FC = () => {
                     </button>
                 </div>
 
-                {loading && <div>Laddar...</div>}
+                <div className={styles.tabs}>
+                    <button
+                        className={`${styles.tab} ${activeTab === 'recipes' ? styles.tabActive : ''}`}
+                        onClick={() => { setActiveTab('recipes'); handleCancel() }}
+                    >
+                        Recept
+                    </button>
+                    <button
+                        className={`${styles.tab} ${activeTab === 'ingredients' ? styles.tabActive : ''}`}
+                        onClick={() => { setActiveTab('ingredients'); handleCancel() }}
+                    >
+                        Ingredienser
+                    </button>
+                    <button
+                        className={`${styles.tab} ${activeTab === 'units' ? styles.tabActive : ''}`}
+                        onClick={() => { setActiveTab('units'); handleCancel() }}
+                    >
+                        Enheter
+                    </button>
+                </div>
 
-                {mode === 'list' && !loading && (
-                    <div className={styles.listView}>
-                        <button onClick={handleCreateNew} className={styles.createButton}>
-                            Skapa nytt recept
-                        </button>
+                {activeTab === 'recipes' && (
+                    <>
+                        {loading && <div>Laddar...</div>}
 
-                        <div className={styles.recipeList}>
-                            {recipes.map((recipe: RecipeListItem) => (
-                                <div key={recipe.recipeId} className={styles.recipeItem}>
-                                    <span className={styles.recipeName}>{recipe.name}</span>
-                                    <div className={styles.actions}>
-                                        <button onClick={() => handleEdit(recipe.recipeId)}>Editera</button>
-                                        <button onClick={() => handleDelete(recipe.recipeId)}>Radera</button>
-                                    </div>
+                        {mode === 'list' && !loading && (
+                            <div className={styles.listView}>
+                                <button onClick={handleCreateNew} className={styles.createButton}>
+                                    Skapa nytt recept
+                                </button>
+
+                                <div className={styles.recipeList}>
+                                    {recipes.map((recipe: RecipeListItem) => (
+                                        <div key={recipe.recipeId} className={styles.recipeItem}>
+                                            <span className={styles.recipeName}>{recipe.name}</span>
+                                            <div className={styles.actions}>
+                                                <button onClick={() => handleEdit(recipe.recipeId)}>Editera</button>
+                                                <button onClick={() => handleDelete(recipe.recipeId)}>Radera</button>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            </div>
+                        )}
+
+                        {(mode === 'create' || mode === 'edit') && !loading && (
+                            <RecipeForm
+                                recipe={mode === 'edit' ? selectedRecipe : undefined}
+                                onSubmit={handleSubmit}
+                                onCancel={handleCancel}
+                            />
+                        )}
+                    </>
                 )}
 
-                {(mode === 'create' || mode === 'edit') && !loading && (
-                    <RecipeForm
-                        recipe={mode === 'edit' ? selectedRecipe : undefined}
-                        onSubmit={handleSubmit}
-                        onCancel={handleCancel}
-                    />
-                )}
+                {activeTab === 'ingredients' && <IngredientAdmin />}
+
+                {activeTab === 'units' && <UnitAdmin />}
             </div>
         </PageFrame>
     )

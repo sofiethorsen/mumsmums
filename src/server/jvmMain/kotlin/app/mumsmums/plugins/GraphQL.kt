@@ -1,11 +1,18 @@
 package app.mumsmums.plugins
 
 import app.mumsmums.auth.JwtConfig
+import app.mumsmums.db.IngredientBaseTable
+import app.mumsmums.db.IngredientLibraryTable
 import app.mumsmums.db.RecipeRepository
+import app.mumsmums.db.UnitLibraryTable
 import app.mumsmums.model.Ingredient
+import app.mumsmums.model.IngredientBase
 import app.mumsmums.model.IngredientSection
+import app.mumsmums.model.LibraryIngredient
+import app.mumsmums.model.LibraryUnit
 import app.mumsmums.model.Recipe
 import app.mumsmums.model.RecipeReference
+import app.mumsmums.model.UnitType
 import app.mumsmums.revalidation.RevalidationClient
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQL
@@ -65,10 +72,38 @@ data class RecipeInput(
     val imageUrl: String? = null,
 )
 
+// Ingredient library inputs
+data class IngredientBaseInput(
+    val nameSv: String,
+    val nameEn: String? = null
+)
+
+data class LibraryIngredientInput(
+    val baseId: Long,
+    val qualifierSv: String? = null,
+    val qualifierEn: String? = null,
+    val derivesFromId: Long? = null,
+    val fullNameSv: String,
+    val fullNameEn: String? = null
+)
+
+data class LibraryUnitInput(
+    val shortNameSv: String,
+    val shortNameEn: String? = null,
+    val nameSv: String,
+    val nameEn: String? = null,
+    val type: UnitType,
+    val mlEquivalent: Float? = null,
+    val gEquivalent: Float? = null
+)
+
 fun Application.configureGraphQL(
     recipeRepository: RecipeRepository,
     jwtConfig: JwtConfig,
-    revalidationClient: RevalidationClient
+    revalidationClient: RevalidationClient,
+    ingredientBaseTable: IngredientBaseTable,
+    ingredientLibraryTable: IngredientLibraryTable,
+    unitLibraryTable: UnitLibraryTable
 ) {
     install(GraphQL) {
         // Provide ApplicationCall in the context for each request
@@ -102,11 +137,73 @@ fun Application.configureGraphQL(
                 description = "Input for creating or updating a recipe"
             }
 
+            // Library types
+            type<IngredientBase>() {
+                description = "Base ingredient concept (e.g., 'koriander', 'lime')"
+            }
+
+            type<LibraryIngredient>() {
+                description = "Specific ingredient variant from the library"
+            }
+
+            type<LibraryUnit>() {
+                description = "Unit from the unit library"
+            }
+
+            enum<UnitType>() {
+                description = "Type of unit (VOLUME, WEIGHT, COUNT, OTHER)"
+            }
+
+            inputType<IngredientBaseInput>() {
+                description = "Input for creating or updating a base ingredient"
+            }
+
+            inputType<LibraryIngredientInput>() {
+                description = "Input for creating or updating a library ingredient"
+            }
+
+            inputType<LibraryUnitInput>() {
+                description = "Input for creating or updating a library unit"
+            }
+
             query("recipes") {
                 resolver { -> recipeRepository.getAllRecipes() }
             }
             query("recipe") {
                 resolver { recipeId: Long -> recipeRepository.getRecipeById(recipeId) }
+            }
+
+            // Ingredient base queries
+            query("ingredientBases") {
+                resolver { -> ingredientBaseTable.getAll() }
+            }
+            query("ingredientBase") {
+                resolver { id: Long -> ingredientBaseTable.getById(id) }
+            }
+            query("searchIngredientBases") {
+                resolver { query: String -> ingredientBaseTable.search(query) }
+            }
+
+            // Library ingredient queries
+            query("libraryIngredients") {
+                resolver { -> ingredientLibraryTable.getAll() }
+            }
+            query("libraryIngredient") {
+                resolver { id: Long -> ingredientLibraryTable.getById(id) }
+            }
+            query("libraryIngredientsByBase") {
+                resolver { baseId: Long -> ingredientLibraryTable.getByBaseId(baseId) }
+            }
+            query("searchLibraryIngredients") {
+                resolver { query: String -> ingredientLibraryTable.search(query) }
+            }
+
+            // Unit library queries
+            query("libraryUnits") {
+                resolver { -> unitLibraryTable.getAll() }
+            }
+            query("libraryUnit") {
+                resolver { id: Long -> unitLibraryTable.getById(id) }
             }
 
             mutation("createRecipe") {
@@ -211,6 +308,135 @@ fun Application.configureGraphQL(
                         revalidationClient.revalidateHomepage(jwtToken)
                     }
 
+                    true
+                }
+            }
+
+            // Ingredient base mutations
+            mutation("createIngredientBase") {
+                resolver { ctx: Context, input: IngredientBaseInput ->
+                    ctx.requireAuth(jwtConfig)
+                    val id = ingredientBaseTable.insert(
+                        IngredientBase(
+                            id = 0,
+                            nameSv = input.nameSv,
+                            nameEn = input.nameEn
+                        )
+                    )
+                    ingredientBaseTable.getById(id)
+                }
+            }
+
+            mutation("updateIngredientBase") {
+                resolver { ctx: Context, id: Long, input: IngredientBaseInput ->
+                    ctx.requireAuth(jwtConfig)
+                    ingredientBaseTable.update(
+                        IngredientBase(
+                            id = id,
+                            nameSv = input.nameSv,
+                            nameEn = input.nameEn
+                        )
+                    )
+                    ingredientBaseTable.getById(id)
+                }
+            }
+
+            mutation("deleteIngredientBase") {
+                resolver { ctx: Context, id: Long ->
+                    ctx.requireAuth(jwtConfig)
+                    ingredientBaseTable.delete(id)
+                    true
+                }
+            }
+
+            // Library ingredient mutations
+            mutation("createLibraryIngredient") {
+                resolver { ctx: Context, input: LibraryIngredientInput ->
+                    ctx.requireAuth(jwtConfig)
+                    val id = ingredientLibraryTable.insert(
+                        LibraryIngredient(
+                            id = 0,
+                            baseId = input.baseId,
+                            qualifierSv = input.qualifierSv,
+                            qualifierEn = input.qualifierEn,
+                            derivesFromId = input.derivesFromId,
+                            fullNameSv = input.fullNameSv,
+                            fullNameEn = input.fullNameEn
+                        )
+                    )
+                    ingredientLibraryTable.getById(id)
+                }
+            }
+
+            mutation("updateLibraryIngredient") {
+                resolver { ctx: Context, id: Long, input: LibraryIngredientInput ->
+                    ctx.requireAuth(jwtConfig)
+                    ingredientLibraryTable.update(
+                        LibraryIngredient(
+                            id = id,
+                            baseId = input.baseId,
+                            qualifierSv = input.qualifierSv,
+                            qualifierEn = input.qualifierEn,
+                            derivesFromId = input.derivesFromId,
+                            fullNameSv = input.fullNameSv,
+                            fullNameEn = input.fullNameEn
+                        )
+                    )
+                    ingredientLibraryTable.getById(id)
+                }
+            }
+
+            mutation("deleteLibraryIngredient") {
+                resolver { ctx: Context, id: Long ->
+                    ctx.requireAuth(jwtConfig)
+                    ingredientLibraryTable.delete(id)
+                    true
+                }
+            }
+
+            // Unit library mutations
+            mutation("createLibraryUnit") {
+                resolver { ctx: Context, input: LibraryUnitInput ->
+                    ctx.requireAuth(jwtConfig)
+                    val id = unitLibraryTable.insert(
+                        LibraryUnit(
+                            id = 0,
+                            shortNameSv = input.shortNameSv,
+                            shortNameEn = input.shortNameEn,
+                            nameSv = input.nameSv,
+                            nameEn = input.nameEn,
+                            type = input.type,
+                            mlEquivalent = input.mlEquivalent,
+                            gEquivalent = input.gEquivalent
+                        )
+                    )
+                    unitLibraryTable.getById(id)
+                }
+            }
+
+            mutation("updateLibraryUnit") {
+                resolver { ctx: Context, id: Long, input: LibraryUnitInput ->
+                    ctx.requireAuth(jwtConfig)
+                    unitLibraryTable.update(
+                        LibraryUnit(
+                            id = id,
+                            shortNameSv = input.shortNameSv,
+                            shortNameEn = input.shortNameEn,
+                            nameSv = input.nameSv,
+                            nameEn = input.nameEn,
+                            type = input.type,
+                            mlEquivalent = input.mlEquivalent,
+                            gEquivalent = input.gEquivalent
+                        )
+                    )
+                    unitLibraryTable.getById(id)
+                }
+            }
+
+            mutation("deleteLibraryUnit") {
+                resolver { ctx: Context, id: Long ->
+                    ctx.requireAuth(jwtConfig)
+                    unitLibraryTable.delete(id)
                     true
                 }
             }

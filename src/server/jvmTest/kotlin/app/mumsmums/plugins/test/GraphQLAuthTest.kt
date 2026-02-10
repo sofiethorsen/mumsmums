@@ -4,8 +4,11 @@ import app.mumsmums.auth.AuthHandler
 import app.mumsmums.auth.JwtConfig
 import app.mumsmums.auth.PasswordHasher
 import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.IngredientBaseTable
+import app.mumsmums.db.IngredientLibraryTable
 import app.mumsmums.db.RecipeRepository
 import app.mumsmums.db.RecipesTable
+import app.mumsmums.db.UnitLibraryTable
 import app.mumsmums.db.UsersTable
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.plugins.configureAuth
@@ -41,6 +44,9 @@ class GraphQLAuthTest {
     private lateinit var usersTable: UsersTable
     private lateinit var recipesTable: RecipesTable
     private lateinit var recipeRepository: RecipeRepository
+    private lateinit var ingredientBaseTable: IngredientBaseTable
+    private lateinit var ingredientLibraryTable: IngredientLibraryTable
+    private lateinit var unitLibraryTable: UnitLibraryTable
     private lateinit var authHandler: AuthHandler
     private lateinit var jwtConfig: JwtConfig
     private val revalidationClient = mockk<RevalidationClient>()
@@ -51,6 +57,9 @@ class GraphQLAuthTest {
         usersTable = UsersTable(connection, mockTimeProvider)
         val idGenerator = NumericIdGenerator()
         recipesTable = RecipesTable(connection, idGenerator)
+        ingredientBaseTable = IngredientBaseTable(connection, idGenerator)
+        ingredientLibraryTable = IngredientLibraryTable(connection, idGenerator)
+        unitLibraryTable = UnitLibraryTable(connection, idGenerator)
         // Create recipes directory for image deletion tests
         File(tempDir, "recipes").mkdirs()
         recipeRepository = RecipeRepository(recipesTable, idGenerator, tempDir.absolutePath)
@@ -75,7 +84,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientBaseTable, ingredientLibraryTable, unitLibraryTable)
         }
 
         val response = client.post("/graphql") {
@@ -98,7 +107,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientBaseTable, ingredientLibraryTable, unitLibraryTable)
         }
 
         val response = client.post("/graphql") {
@@ -132,7 +141,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientBaseTable, ingredientLibraryTable, unitLibraryTable)
         }
 
         coEvery { revalidationClient.revalidateRecipe(any(), any()) } answers {}
@@ -185,7 +194,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientBaseTable, ingredientLibraryTable, unitLibraryTable)
         }
 
         val response = client.post("/graphql") {
@@ -220,7 +229,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientBaseTable, ingredientLibraryTable, unitLibraryTable)
         }
 
         val response = client.post("/graphql") {
@@ -242,5 +251,71 @@ class GraphQLAuthTest {
         assertTrue(json.containsKey("errors"))
         val errorMessage = json["errors"]?.toString() ?: ""
         assertTrue(errorMessage.contains("Authentication required"))
+    }
+
+    // Library mutations auth tests - one test per entity type is sufficient
+    // since all mutations use the same ctx.requireAuth(jwtConfig) pattern
+
+    @Test
+    fun `When mutating ingredient base without authentication, it should fail`() = testApplication {
+        application {
+            configureSerialization()
+            configureAuth(jwtConfig)
+            configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientBaseTable, ingredientLibraryTable, unitLibraryTable)
+        }
+
+        val response = client.post("/graphql") {
+            contentType(ContentType.Application.Json)
+            setBody("""{"query": "mutation { deleteIngredientBase(id: 1) }"}""")
+        }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        val body = response.bodyAsText()
+        val json = Json.parseToJsonElement(body).jsonObject
+        assertTrue(json.containsKey("errors"))
+        assertTrue(json["errors"].toString().contains("Authentication required"))
+    }
+
+    @Test
+    fun `When mutating library ingredient without authentication, it should fail`() = testApplication {
+        application {
+            configureSerialization()
+            configureAuth(jwtConfig)
+            configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientBaseTable, ingredientLibraryTable, unitLibraryTable)
+        }
+
+        val response = client.post("/graphql") {
+            contentType(ContentType.Application.Json)
+            setBody("""{"query": "mutation { deleteLibraryIngredient(id: 1) }"}""")
+        }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        val body = response.bodyAsText()
+        val json = Json.parseToJsonElement(body).jsonObject
+        assertTrue(json.containsKey("errors"))
+        assertTrue(json["errors"].toString().contains("Authentication required"))
+    }
+
+    @Test
+    fun `When mutating library unit without authentication, it should fail`() = testApplication {
+        application {
+            configureSerialization()
+            configureAuth(jwtConfig)
+            configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
+            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientBaseTable, ingredientLibraryTable, unitLibraryTable)
+        }
+
+        val response = client.post("/graphql") {
+            contentType(ContentType.Application.Json)
+            setBody("""{"query": "mutation { deleteLibraryUnit(id: 1) }"}""")
+        }
+
+        assertEquals(HttpStatusCode.OK, response.status)
+        val body = response.bodyAsText()
+        val json = Json.parseToJsonElement(body).jsonObject
+        assertTrue(json.containsKey("errors"))
+        assertTrue(json["errors"].toString().contains("Authentication required"))
     }
 }

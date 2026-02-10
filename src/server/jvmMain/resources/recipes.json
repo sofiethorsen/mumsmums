@@ -708,6 +708,140 @@
     ]
   },
   {
+    "description": "En silkeslen spaghetti carbonara med guanciale är aldrig fel.",
+    "imageUrl": "/images/recipes/2362130233344.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "name": "pasta",
+            "quantity": 450,
+            "volume": "gram"
+          },
+          {
+            "name": "guanciale",
+            "quantity": 100,
+            "volume": "gram"
+          },
+          {
+            "name": "olivolja",
+            "quantity": 3,
+            "volume": "msk"
+          },
+          {
+            "name": "ägg",
+            "quantity": 2,
+            "volume": "st"
+          },
+          {
+            "name": "äggula",
+            "quantity": 6,
+            "volume": "st"
+          },
+          {
+            "name": "pecorino",
+            "quantity": 25,
+            "volume": "gram"
+          },
+          {
+            "name": "parmesan",
+            "quantity": 25,
+            "volume": "gram"
+          },
+          {
+            "name": "svartpeppar",
+            "quantity": 1,
+            "volume": "tsk"
+          },
+          {
+            "name": "salt"
+          },
+          {
+            "name": "pastavatten",
+            "quantity": 120,
+            "volume": "ml"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Carbonara",
+    "numberOfUnits": null,
+    "recipeId": 2362130233344,
+    "servings": 4,
+    "steps": [
+      "Tärna guancialen i små tärningar.",
+      "I en stor metallskål (värmetålig), blanda samman de hela äggen och äggulorna, pecorinon, parmesanen och svartpepparn.  ",
+      "Koka upp vatten i en kastrull och salta. Häll i pastan och koka tills al dente. ",
+      "Under tiden, häll 2/3 av olivoljan i en stor stekpanna och stek guancialen på medelvärme, tills fettet har renderats och guancialen är krispig.",
+      "När pastan är färdig, för över den till stekpannan med den krispiga guancialen - men se till att spara pastavattnet. Tillsätt resterande olivolja till pastan och rör runt. Låt svalna något.",
+      "Häll sedan pastan med guancialen ner i äggblandningen. ",
+      "Häll ner pastan med guancialen i äggblandningen. Häll i pastavattnet i blandningen och blanda väl.",
+      "Sätt skålen med pastan tillbaks över kastrullen med varmt/kokande pastavatten (se till att bottnen av skålen ej rör vattnet) och koka, under konstant omrörning tills såsen tjocknar till en silkeslen konsistens.",
+      "Ta av från värmen och salta om det behövs, och lägg sedan upp på varma tallrikar. Toppa med mer riven ost och svartpeppar och servera direkt."
+    ]
+  },
+  {
+    "description": "Ingen maskin behövs, och förutom en viss tidsåtgång ett enkelt och gott bröd. ",
+    "imageUrl": "/images/recipes/2362252089344.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "name": "jäst",
+            "quantity": 25,
+            "volume": "gram"
+          },
+          {
+            "name": "kallt vatten",
+            "quantity": 500,
+            "volume": "gram"
+          },
+          {
+            "name": "olivolja",
+            "quantity": 2,
+            "volume": "msk"
+          },
+          {
+            "name": "flytande honung",
+            "quantity": 1,
+            "volume": "msk"
+          },
+          {
+            "name": "kosher salt",
+            "quantity": 4,
+            "volume": "tsk"
+          },
+          {
+            "name": "mjöl, manitoba cream",
+            "quantity": 540,
+            "volume": "gram"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Kalljästa frallor",
+    "numberOfUnits": 10,
+    "recipeId": 2362252089344,
+    "servings": null,
+    "steps": [
+      "Smula ner jästen i en stor bunke och blanda med lite av vattnet (är enklare att mixa), och häll sedan i resten av vattnet när jästen löst sig.",
+      "Häll i olivolja, honung och salt. Har du ej kosher salt kan du använda vanligt bordssalt - men använd då hälften så mycket. Blanda. ",
+      "Häll i allt mjöl och blanda ihop tills det inte finns något torrt mjöl kvar. Degen ska vara kladdig.",
+      "Täck bunken med plastfolie och låt vila i rumstemperatur i 30 minuter.",
+      "Blöt sedan din hand och ta tag i en sida av degen, sträck upp och vik över sig själv. Rotera bunken ett kvarts varv och upprepa så du har vikt degen fyra gånger totalt. Låt vila övertäckt i 10 minuter. ",
+      "Upprepa sträckning/vikning och låt vila övertäckt i 10 minuter. ",
+      "Gör en sista omgång av sträckning/vikning. Låt nu vila övertäckt i rumstemperatur i 45 minuter (degen ska öka 30-50% i storlek).",
+      "Se till att bunken fortfarande är väl övertäckt med plastfolie så den ej torkar ut - ställ den nu i kylen över natten; gärna 12h+, men ej mer än 24h.",
+      "På morgonen, sätt ugnen på 250C och ställ en ugnsäker form eller plåt i botten av ugnen (detta för att hälla iskuber eller vatten i utan att riskera att skada ugnsbottnen själv). Låt ugnen värma gärna 30-45 minuter innan du bakar ut. ",
+      "Ta ut bunken ur kylen, och pudra generöst med mjöl på toppen. Mjöla även ytan där du ska hälla ut degen. ",
+      "Tippa försiktigt ut degen på den mjölade ytan - och försök hantera degen så lite som möjligt, du ska ej knåda eller forma degen då det riskerar att förstöra luftbubblorna. Degen ska vara rejält klibbig.",
+      "Skär degen i bitar (du brukar få ut cirka 10 bröd på en sats deg) och lägg sedan upp på plåt med bakplåtspapper. ",
+      "Ställ in plåten med bröd i ugnen - men se även till att hälla några isbitar eller lite vatten i ugnsformen/plåten i bottnen av ugnen. Låt baka i 15 minuter och ta sedan ut för att svalna."
+    ]
+  },
+  {
     "description": "Hasselbackspotatis med löjrom och smetana är ett enkelt och festligt tilltugg.",
     "imageUrl": "/images/recipes/43982676217856.webp",
     "ingredientSections": [

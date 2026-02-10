@@ -3,7 +3,7 @@ import Image from 'next/image'
 import styles from './RecipeImage.module.css'
 
 interface RecipeImageProps {
-    imageUrl: string | undefined
+    imageUrl: string | null | undefined
     imageAltText: string
     priority?: boolean // Set to true for above-the-fold images (hero)
 }

@@ -48,7 +48,8 @@ export async function getStaticPaths() {
         query: GetRecipesDocument,
     })
 
-    const paths = data.recipes.map((recipe) => ({
+    const recipes = data?.recipes ?? []
+    const paths = recipes.map((recipe) => ({
         params: { recipeId: String(recipe.recipeId) },
     }))
 
@@ -70,13 +71,14 @@ export async function getStaticProps({ params }: { params: { recipeId: string } 
     })
 
     // Return 404 if recipe doesn't exist (e.g., was deleted)
-    if (!recipeData.data.recipe) {
+    const recipe = recipeData.data?.recipe
+    if (!recipe) {
         return { notFound: true }
     }
 
     return {
         props: {
-            recipe: recipeData.data.recipe,
+            recipe,
         },
         // Revalidate every 60 seconds (ISR - Incremental Static Regeneration)
         revalidate: 60,

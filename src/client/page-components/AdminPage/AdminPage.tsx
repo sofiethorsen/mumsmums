@@ -43,7 +43,8 @@ const AdminPage: React.FC = () => {
                 query: GetRecipesDocument,
                 fetchPolicy: 'network-only',
             })
-            setRecipes(data.recipes)
+            const recipes = data?.recipes ?? []
+            setRecipes(recipes)
         } catch (error) {
             console.error('Error loading recipes:', error)
             alert('Failed to load recipes')
@@ -60,7 +61,8 @@ const AdminPage: React.FC = () => {
                 variables: { recipeId },
                 fetchPolicy: 'network-only',
             })
-            setSelectedRecipe(data.recipe)
+            const recipe = data?.recipe ?? null
+            setSelectedRecipe(recipe)
         } catch (error) {
             console.error('Error loading recipe:', error)
             alert('Failed to load recipe')

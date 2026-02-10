@@ -5,7 +5,7 @@ type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 type Ingredient = Recipe['ingredientSections'][number]['ingredients'][number]
 
 export function formatIngredient(ingredient: Ingredient): string {
-    const parts = []
+    const parts: (string | number)[] = []
     if (ingredient.quantity) parts.push(ingredient.quantity)
     if (ingredient.volume) parts.push(ingredient.volume)
     parts.push(ingredient.name)

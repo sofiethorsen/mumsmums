@@ -19,9 +19,10 @@ export async function getStaticProps() {
         fetchPolicy: 'network-only',
     })
 
+    const recipes = data?.recipes ?? []
     return {
         props: {
-            recipes: data.recipes,
+            recipes,
         },
         // Revalidate every 60 seconds (ISR - Incremental Static Regeneration)
         revalidate: 60,

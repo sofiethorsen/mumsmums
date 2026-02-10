@@ -5,8 +5,8 @@ interface PageMeta {
     title: string
     siteType: string
     url: string
-    description?: string | undefined
-    imageUrl?: string | undefined
+    description?: string | null
+    imageUrl?: string | null
 }
 
 const renderPreviewImageTag = (meta: PageMeta) => {

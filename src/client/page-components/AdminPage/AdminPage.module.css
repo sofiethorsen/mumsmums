@@ -349,3 +349,155 @@
     color: var(--color-content-secondary);
     font-size: 14px;
 }
+
+/* Navigation tabs */
+.tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0;
+}
+
+.tab {
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-content-secondary);
+    transition: all 0.2s ease;
+    margin-bottom: -1px;
+}
+
+.tab:hover {
+    color: var(--color-content-primary);
+}
+
+.tabActive {
+    color: var(--color-accent-primary);
+    border-bottom-color: var(--color-accent-primary);
+}
+
+/* Library item styles */
+.libraryItem {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 16px;
+    background-color: var(--color-surface-card);
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.libraryItemWide {
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+}
+
+.libraryItemInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.libraryItemName {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-content-primary);
+}
+
+.libraryItemMeta {
+    font-size: 14px;
+    color: var(--color-content-secondary);
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 4px;
+    background-color: var(--color-accent-secondary);
+    color: var(--cream-50);
+}
+
+/* Library form styles */
+.libraryForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    background-color: var(--color-surface-card);
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    margin-bottom: 24px;
+}
+
+.libraryForm h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-content-primary);
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.formInline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+.formInline .formGroup {
+    flex: 1;
+    min-width: 150px;
+}
+
+.formInline .formGroup.narrow {
+    flex: 0 0 120px;
+    min-width: 120px;
+}
+
+.formInline .formGroup.wide {
+    flex: 2;
+    min-width: 200px;
+}
+
+.formGroup select {
+    padding: 8px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+}
+
+.formGroup select:focus {
+    outline: none;
+    border-color: var(--color-input-focus);
+}
+
+.searchInput {
+    padding: 8px 16px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 16px;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--color-input-focus);
+}

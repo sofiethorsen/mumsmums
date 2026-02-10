@@ -3,11 +3,10 @@ package app.mumsmums
 import app.mumsmums.auth.AuthHandler
 import app.mumsmums.auth.JwtConfig
 import app.mumsmums.db.DatabaseConnection
-import app.mumsmums.db.IngredientBaseTable
-import app.mumsmums.db.IngredientLibraryTable
+import app.mumsmums.db.IngredientTable
 import app.mumsmums.db.RecipeRepository
 import app.mumsmums.db.RecipesTable
-import app.mumsmums.db.UnitLibraryTable
+import app.mumsmums.db.UnitTable
 import app.mumsmums.db.UsersTable
 import app.mumsmums.filesystem.MumsMumsPaths
 import app.mumsmums.identifiers.NumericIdGenerator
@@ -49,9 +48,8 @@ fun Application.module() {
     val idGenerator = NumericIdGenerator()
     val recipesTable = RecipesTable(connection, idGenerator)
     val usersTable = UsersTable(connection, SystemTimeProvider)
-    val ingredientBaseTable = IngredientBaseTable(connection, idGenerator)
-    val ingredientLibraryTable = IngredientLibraryTable(connection, idGenerator)
-    val unitLibraryTable = UnitLibraryTable(connection, idGenerator)
+    val ingredientTable = IngredientTable(connection, idGenerator)
+    val unitTable = UnitTable(connection, idGenerator)
 
     // JWT setup
     val secret = JwtConfig.Secret(jwtSecret)
@@ -76,9 +74,8 @@ fun Application.module() {
         recipeRepository,
         jwtConfig,
         revalidationClient,
-        ingredientBaseTable,
-        ingredientLibraryTable,
-        unitLibraryTable
+        ingredientTable,
+        unitTable
     )
     configureImageUpload(uploadHandler)
     configureCORS()

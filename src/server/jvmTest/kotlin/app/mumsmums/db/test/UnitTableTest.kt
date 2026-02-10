@@ -1,7 +1,7 @@
 package app.mumsmums.db.test
 
 import app.mumsmums.db.DatabaseConnection
-import app.mumsmums.db.UnitLibraryTable
+import app.mumsmums.db.UnitTable
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.LibraryUnit
 import app.mumsmums.model.UnitType
@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.sql.SQLException
 
-class UnitLibraryTableTest {
+class UnitTableTest {
     private val mockIdGenerator = mockk<NumericIdGenerator>()
     private lateinit var connection: DatabaseConnection
-    private lateinit var table: UnitLibraryTable
+    private lateinit var table: UnitTable
     private var nextId = 1L
 
     @BeforeEach
@@ -24,7 +24,7 @@ class UnitLibraryTableTest {
         connection = DatabaseConnection(":memory:")
         nextId = 1L
         every { mockIdGenerator.generateId() } answers { nextId++ }
-        table = UnitLibraryTable(connection, mockIdGenerator)
+        table = UnitTable(connection, mockIdGenerator)
     }
 
     @Test

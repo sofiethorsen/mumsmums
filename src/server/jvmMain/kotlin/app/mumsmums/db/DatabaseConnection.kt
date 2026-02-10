@@ -95,29 +95,18 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
                 """.trimIndent()
             )
 
-            // Base ingredient concepts (e.g., "koriander", "lime")
-            statement.execute(
-                """
-                CREATE TABLE IF NOT EXISTS ingredient_base (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name_sv TEXT NOT NULL UNIQUE,
-                    name_en TEXT
-                )
-                """.trimIndent()
-            )
-
-            // Specific ingredient variants with qualifiers and derivation
+            // Ingredient library with optional qualifier and derivation
             statement.execute(
                 """
                 CREATE TABLE IF NOT EXISTS ingredient_library (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    base_id INTEGER NOT NULL,
+                    name_sv TEXT NOT NULL,
+                    name_en TEXT,
                     qualifier_sv TEXT,
                     qualifier_en TEXT,
                     derives_from_id INTEGER,
                     full_name_sv TEXT NOT NULL UNIQUE,
                     full_name_en TEXT,
-                    FOREIGN KEY (base_id) REFERENCES ingredient_base(id),
                     FOREIGN KEY (derives_from_id) REFERENCES ingredient_library(id)
                 )
                 """.trimIndent()
@@ -152,7 +141,6 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
             statement.execute("DROP TABLE IF EXISTS recipes")
             statement.execute("DROP TABLE IF EXISTS users")
             statement.execute("DROP TABLE IF EXISTS ingredient_library")
-            statement.execute("DROP TABLE IF EXISTS ingredient_base")
             statement.execute("DROP TABLE IF EXISTS unit_library")
         }
     }

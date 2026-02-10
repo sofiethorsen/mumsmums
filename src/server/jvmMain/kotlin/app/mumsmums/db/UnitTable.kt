@@ -7,7 +7,7 @@ import app.mumsmums.model.UnitType
 /**
  * Handles CRUD operations for the unit_library table.
  */
-class UnitLibraryTable(database: DatabaseConnection, private val idGenerator: NumericIdGenerator) {
+class UnitTable(database: DatabaseConnection, private val idGenerator: NumericIdGenerator) {
     private val connection = database.connection
 
     fun getAll(): List<LibraryUnit> {

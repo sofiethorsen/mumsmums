@@ -1,10 +1,8 @@
 package app.mumsmums.db.test
 
 import app.mumsmums.db.DatabaseConnection
-import app.mumsmums.db.IngredientBaseTable
-import app.mumsmums.db.IngredientLibraryTable
+import app.mumsmums.db.IngredientTable
 import app.mumsmums.identifiers.NumericIdGenerator
-import app.mumsmums.model.IngredientBase
 import app.mumsmums.model.LibraryIngredient
 import io.mockk.every
 import io.mockk.mockk
@@ -14,13 +12,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.sql.SQLException
 
-class IngredientLibraryTableTest {
+class IngredientTableTest {
     private val mockIdGenerator = mockk<NumericIdGenerator>()
     private lateinit var connection: DatabaseConnection
-    private lateinit var baseTable: IngredientBaseTable
-    private lateinit var table: IngredientLibraryTable
-    private var korianderBaseId: Long = 0
-    private var limeBaseId: Long = 0
+    private lateinit var table: IngredientTable
     private var nextId = 1L
 
     @BeforeEach
@@ -28,20 +23,16 @@ class IngredientLibraryTableTest {
         connection = DatabaseConnection(":memory:")
         nextId = 1L
         every { mockIdGenerator.generateId() } answers { nextId++ }
-        baseTable = IngredientBaseTable(connection, mockIdGenerator)
-        table = IngredientLibraryTable(connection, mockIdGenerator)
-
-        // Create base ingredients for tests
-        korianderBaseId = baseTable.insert(IngredientBase(0, "koriander", "coriander"))
-        limeBaseId = baseTable.insert(IngredientBase(0, "lime", "lime"))
+        table = IngredientTable(connection, mockIdGenerator)
     }
 
     @Test
-    fun `insert creates a new library ingredient and returns its id`() {
+    fun `insert creates a new ingredient and returns its id`() {
         val id = table.insert(
             LibraryIngredient(
                 id = 0,
-                baseId = korianderBaseId,
+                nameSv = "koriander",
+                nameEn = "coriander",
                 qualifierSv = "malen",
                 qualifierEn = "ground",
                 derivesFromId = null,
@@ -53,7 +44,8 @@ class IngredientLibraryTableTest {
         assertTrue(id > 0)
         val found = table.getById(id)
         assertNotNull(found)
-        assertEquals(korianderBaseId, found?.baseId)
+        assertEquals("koriander", found?.nameSv)
+        assertEquals("coriander", found?.nameEn)
         assertEquals("malen", found?.qualifierSv)
         assertEquals("ground", found?.qualifierEn)
         assertEquals("koriander, malen", found?.fullNameSv)
@@ -66,7 +58,8 @@ class IngredientLibraryTableTest {
         val id = table.insert(
             LibraryIngredient(
                 id = 0,
-                baseId = limeBaseId,
+                nameSv = "lime",
+                nameEn = null,
                 qualifierSv = null,
                 qualifierEn = null,
                 derivesFromId = null,
@@ -77,6 +70,7 @@ class IngredientLibraryTableTest {
 
         val found = table.getById(id)
         assertNotNull(found)
+        assertNull(found?.nameEn)
         assertNull(found?.qualifierSv)
         assertNull(found?.qualifierEn)
         assertNull(found?.fullNameEn)
@@ -84,26 +78,26 @@ class IngredientLibraryTableTest {
 
     @Test
     fun `insert with derivesFromId creates derivation relationship`() {
-        val limeId = table.insert(
-            LibraryIngredient(0, limeBaseId, null, null, null, "lime", "lime")
+        val eggId = table.insert(
+            LibraryIngredient(0, "ägg", "egg", null, null, null, "ägg", "egg")
         )
-        val limeJuiceId = table.insert(
-            LibraryIngredient(0, limeBaseId, "juice", "juice", limeId, "limejuice", "lime juice")
+        val eggYolkId = table.insert(
+            LibraryIngredient(0, "äggula", "egg yolk", null, null, eggId, "äggula", "egg yolk")
         )
 
-        val limeJuice = table.getById(limeJuiceId)
-        assertEquals(limeId, limeJuice?.derivesFromId)
+        val eggYolk = table.getById(eggYolkId)
+        assertEquals(eggId, eggYolk?.derivesFromId)
     }
 
     @Test
     fun `insert with duplicate fullNameSv throws exception`() {
         table.insert(
-            LibraryIngredient(0, korianderBaseId, null, null, null, "koriander", null)
+            LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null)
         )
 
         assertThrows<SQLException> {
             table.insert(
-                LibraryIngredient(0, korianderBaseId, "färsk", null, null, "koriander", null)
+                LibraryIngredient(0, "koriander", null, "färsk", null, null, "koriander", null)
             )
         }
     }
@@ -117,9 +111,9 @@ class IngredientLibraryTableTest {
 
     @Test
     fun `getAll returns all ingredients sorted by Swedish name`() {
-        table.insert(LibraryIngredient(0, korianderBaseId, null, null, null, "koriander", null))
-        table.insert(LibraryIngredient(0, limeBaseId, null, null, null, "lime", null))
-        table.insert(LibraryIngredient(0, korianderBaseId, "malen", null, null, "koriander, malen", null))
+        table.insert(LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null))
+        table.insert(LibraryIngredient(0, "lime", null, null, null, null, "lime", null))
+        table.insert(LibraryIngredient(0, "koriander", null, "malen", null, null, "koriander, malen", null))
 
         val all = table.getAll()
 
@@ -130,46 +124,27 @@ class IngredientLibraryTableTest {
     }
 
     @Test
-    fun `getByBaseId returns all ingredients with given base`() {
-        table.insert(LibraryIngredient(0, korianderBaseId, null, null, null, "koriander", null))
-        table.insert(LibraryIngredient(0, korianderBaseId, "malen", null, null, "koriander, malen", null))
-        table.insert(LibraryIngredient(0, limeBaseId, null, null, null, "lime", null))
-
-        val korianderIngredients = table.getByBaseId(korianderBaseId)
-
-        assertEquals(2, korianderIngredients.size)
-        assertTrue(korianderIngredients.all { it.baseId == korianderBaseId })
-    }
-
-    @Test
-    fun `getByBaseId returns empty list when no ingredients have base`() {
-        val results = table.getByBaseId(999999L)
-
-        assertTrue(results.isEmpty())
-    }
-
-    @Test
     fun `getDerivedFrom returns all ingredients derived from given ingredient`() {
-        val limeId = table.insert(
-            LibraryIngredient(0, limeBaseId, null, null, null, "lime", null)
+        val eggId = table.insert(
+            LibraryIngredient(0, "ägg", null, null, null, null, "ägg", null)
         )
         table.insert(
-            LibraryIngredient(0, limeBaseId, "juice", null, limeId, "limejuice", null)
+            LibraryIngredient(0, "äggula", null, null, null, eggId, "äggula", null)
         )
         table.insert(
-            LibraryIngredient(0, limeBaseId, "skal", null, limeId, "limeskal", null)
+            LibraryIngredient(0, "äggvita", null, null, null, eggId, "äggvita", null)
         )
 
-        val derived = table.getDerivedFrom(limeId)
+        val derived = table.getDerivedFrom(eggId)
 
         assertEquals(2, derived.size)
-        assertTrue(derived.all { it.derivesFromId == limeId })
+        assertTrue(derived.all { it.derivesFromId == eggId })
     }
 
     @Test
     fun `getDerivedFrom returns empty list when no derivations exist`() {
         val limeId = table.insert(
-            LibraryIngredient(0, limeBaseId, null, null, null, "lime", null)
+            LibraryIngredient(0, "lime", null, null, null, null, "lime", null)
         )
 
         val derived = table.getDerivedFrom(limeId)
@@ -178,10 +153,10 @@ class IngredientLibraryTableTest {
     }
 
     @Test
-    fun `search finds ingredients by Swedish name`() {
-        table.insert(LibraryIngredient(0, korianderBaseId, null, null, null, "koriander", null))
-        table.insert(LibraryIngredient(0, korianderBaseId, "malen", null, null, "koriander, malen", null))
-        table.insert(LibraryIngredient(0, limeBaseId, null, null, null, "lime", null))
+    fun `search finds ingredients by Swedish full name`() {
+        table.insert(LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null))
+        table.insert(LibraryIngredient(0, "koriander", null, "malen", null, null, "koriander, malen", null))
+        table.insert(LibraryIngredient(0, "lime", null, null, null, null, "lime", null))
 
         val results = table.search("koriander")
 
@@ -190,9 +165,20 @@ class IngredientLibraryTableTest {
     }
 
     @Test
+    fun `search finds ingredients by base name`() {
+        table.insert(LibraryIngredient(0, "koriander", null, "blad", null, null, "koriander, blad", null))
+        table.insert(LibraryIngredient(0, "lime", null, null, null, null, "lime", null))
+
+        val results = table.search("koriander")
+
+        assertEquals(1, results.size)
+        assertEquals("koriander", results[0].nameSv)
+    }
+
+    @Test
     fun `search finds ingredients by English name`() {
-        table.insert(LibraryIngredient(0, korianderBaseId, null, null, null, "koriander", "coriander"))
-        table.insert(LibraryIngredient(0, limeBaseId, null, null, null, "lime", "lime"))
+        table.insert(LibraryIngredient(0, "koriander", "coriander", null, null, null, "koriander", "coriander"))
+        table.insert(LibraryIngredient(0, "lime", "lime", null, null, null, "lime", "lime"))
 
         val results = table.search("coriander")
 
@@ -202,7 +188,7 @@ class IngredientLibraryTableTest {
 
     @Test
     fun `search returns empty list when no matches`() {
-        table.insert(LibraryIngredient(0, korianderBaseId, null, null, null, "koriander", null))
+        table.insert(LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null))
 
         val results = table.search("xyz")
 
@@ -210,16 +196,17 @@ class IngredientLibraryTableTest {
     }
 
     @Test
-    fun `update modifies library ingredient`() {
+    fun `update modifies ingredient`() {
         val id = table.insert(
-            LibraryIngredient(0, korianderBaseId, null, null, null, "koriander", null)
+            LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null)
         )
 
         table.update(
-            LibraryIngredient(id, korianderBaseId, "färsk", "fresh", null, "koriander, färsk", "fresh coriander")
+            LibraryIngredient(id, "koriander", "coriander", "färsk", "fresh", null, "koriander, färsk", "fresh coriander")
         )
 
         val updated = table.getById(id)
+        assertEquals("coriander", updated?.nameEn)
         assertEquals("färsk", updated?.qualifierSv)
         assertEquals("fresh", updated?.qualifierEn)
         assertEquals("koriander, färsk", updated?.fullNameSv)
@@ -227,9 +214,9 @@ class IngredientLibraryTableTest {
     }
 
     @Test
-    fun `delete removes library ingredient`() {
+    fun `delete removes ingredient`() {
         val id = table.insert(
-            LibraryIngredient(0, korianderBaseId, null, null, null, "koriander", null)
+            LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null)
         )
 
         table.delete(id)
@@ -242,5 +229,26 @@ class IngredientLibraryTableTest {
         assertDoesNotThrow {
             table.delete(999999L)
         }
+    }
+
+    @Test
+    fun `getByName returns ingredient without qualifier`() {
+        table.insert(LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null))
+        table.insert(LibraryIngredient(0, "koriander", null, "malen", null, null, "koriander, malen", null))
+
+        val found = table.getByName("koriander")
+
+        assertNotNull(found)
+        assertNull(found?.qualifierSv)
+        assertEquals("koriander", found?.fullNameSv)
+    }
+
+    @Test
+    fun `getByName returns null when name has qualifier`() {
+        table.insert(LibraryIngredient(0, "koriander", null, "malen", null, null, "koriander, malen", null))
+
+        val found = table.getByName("koriander")
+
+        assertNull(found)
     }
 }

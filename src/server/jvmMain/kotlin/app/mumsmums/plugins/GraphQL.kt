@@ -1,12 +1,10 @@
 package app.mumsmums.plugins
 
 import app.mumsmums.auth.JwtConfig
-import app.mumsmums.db.IngredientBaseTable
-import app.mumsmums.db.IngredientLibraryTable
+import app.mumsmums.db.IngredientTable
 import app.mumsmums.db.RecipeRepository
-import app.mumsmums.db.UnitLibraryTable
+import app.mumsmums.db.UnitTable
 import app.mumsmums.model.Ingredient
-import app.mumsmums.model.IngredientBase
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.LibraryIngredient
 import app.mumsmums.model.LibraryUnit
@@ -72,14 +70,10 @@ data class RecipeInput(
     val imageUrl: String? = null,
 )
 
-// Ingredient library inputs
-data class IngredientBaseInput(
-    val nameSv: String,
-    val nameEn: String? = null
-)
-
+// Ingredient library input
 data class LibraryIngredientInput(
-    val baseId: Long,
+    val nameSv: String,
+    val nameEn: String? = null,
     val qualifierSv: String? = null,
     val qualifierEn: String? = null,
     val derivesFromId: Long? = null,
@@ -101,9 +95,8 @@ fun Application.configureGraphQL(
     recipeRepository: RecipeRepository,
     jwtConfig: JwtConfig,
     revalidationClient: RevalidationClient,
-    ingredientBaseTable: IngredientBaseTable,
-    ingredientLibraryTable: IngredientLibraryTable,
-    unitLibraryTable: UnitLibraryTable
+    ingredientTable: IngredientTable,
+    unitTable: UnitTable
 ) {
     install(GraphQL) {
         // Provide ApplicationCall in the context for each request
@@ -138,12 +131,8 @@ fun Application.configureGraphQL(
             }
 
             // Library types
-            type<IngredientBase>() {
-                description = "Base ingredient concept (e.g., 'koriander', 'lime')"
-            }
-
             type<LibraryIngredient>() {
-                description = "Specific ingredient variant from the library"
+                description = "Ingredient from the ingredient library"
             }
 
             type<LibraryUnit>() {
@@ -152,10 +141,6 @@ fun Application.configureGraphQL(
 
             enum<UnitType>() {
                 description = "Type of unit (VOLUME, WEIGHT, COUNT, OTHER)"
-            }
-
-            inputType<IngredientBaseInput>() {
-                description = "Input for creating or updating a base ingredient"
             }
 
             inputType<LibraryIngredientInput>() {
@@ -173,37 +158,23 @@ fun Application.configureGraphQL(
                 resolver { recipeId: Long -> recipeRepository.getRecipeById(recipeId) }
             }
 
-            // Ingredient base queries
-            query("ingredientBases") {
-                resolver { -> ingredientBaseTable.getAll() }
+            // Ingredient queries
+            query("ingredients") {
+                resolver { -> ingredientTable.getAll() }
             }
-            query("ingredientBase") {
-                resolver { id: Long -> ingredientBaseTable.getById(id) }
+            query("ingredient") {
+                resolver { id: Long -> ingredientTable.getById(id) }
             }
-            query("searchIngredientBases") {
-                resolver { query: String -> ingredientBaseTable.search(query) }
-            }
-
-            // Library ingredient queries
-            query("libraryIngredients") {
-                resolver { -> ingredientLibraryTable.getAll() }
-            }
-            query("libraryIngredient") {
-                resolver { id: Long -> ingredientLibraryTable.getById(id) }
-            }
-            query("libraryIngredientsByBase") {
-                resolver { baseId: Long -> ingredientLibraryTable.getByBaseId(baseId) }
-            }
-            query("searchLibraryIngredients") {
-                resolver { query: String -> ingredientLibraryTable.search(query) }
+            query("searchIngredients") {
+                resolver { query: String -> ingredientTable.search(query) }
             }
 
-            // Unit library queries
-            query("libraryUnits") {
-                resolver { -> unitLibraryTable.getAll() }
+            // Unit queries
+            query("units") {
+                resolver { -> unitTable.getAll() }
             }
-            query("libraryUnit") {
-                resolver { id: Long -> unitLibraryTable.getById(id) }
+            query("unit") {
+                resolver { id: Long -> unitTable.getById(id) }
             }
 
             mutation("createRecipe") {
@@ -312,51 +283,15 @@ fun Application.configureGraphQL(
                 }
             }
 
-            // Ingredient base mutations
-            mutation("createIngredientBase") {
-                resolver { ctx: Context, input: IngredientBaseInput ->
-                    ctx.requireAuth(jwtConfig)
-                    val id = ingredientBaseTable.insert(
-                        IngredientBase(
-                            id = 0,
-                            nameSv = input.nameSv,
-                            nameEn = input.nameEn
-                        )
-                    )
-                    ingredientBaseTable.getById(id)
-                }
-            }
-
-            mutation("updateIngredientBase") {
-                resolver { ctx: Context, id: Long, input: IngredientBaseInput ->
-                    ctx.requireAuth(jwtConfig)
-                    ingredientBaseTable.update(
-                        IngredientBase(
-                            id = id,
-                            nameSv = input.nameSv,
-                            nameEn = input.nameEn
-                        )
-                    )
-                    ingredientBaseTable.getById(id)
-                }
-            }
-
-            mutation("deleteIngredientBase") {
-                resolver { ctx: Context, id: Long ->
-                    ctx.requireAuth(jwtConfig)
-                    ingredientBaseTable.delete(id)
-                    true
-                }
-            }
-
-            // Library ingredient mutations
-            mutation("createLibraryIngredient") {
+            // Ingredient mutations
+            mutation("createIngredient") {
                 resolver { ctx: Context, input: LibraryIngredientInput ->
                     ctx.requireAuth(jwtConfig)
-                    val id = ingredientLibraryTable.insert(
+                    val id = ingredientTable.insert(
                         LibraryIngredient(
                             id = 0,
-                            baseId = input.baseId,
+                            nameSv = input.nameSv,
+                            nameEn = input.nameEn,
                             qualifierSv = input.qualifierSv,
                             qualifierEn = input.qualifierEn,
                             derivesFromId = input.derivesFromId,
@@ -364,17 +299,18 @@ fun Application.configureGraphQL(
                             fullNameEn = input.fullNameEn
                         )
                     )
-                    ingredientLibraryTable.getById(id)
+                    ingredientTable.getById(id)
                 }
             }
 
-            mutation("updateLibraryIngredient") {
+            mutation("updateIngredient") {
                 resolver { ctx: Context, id: Long, input: LibraryIngredientInput ->
                     ctx.requireAuth(jwtConfig)
-                    ingredientLibraryTable.update(
+                    ingredientTable.update(
                         LibraryIngredient(
                             id = id,
-                            baseId = input.baseId,
+                            nameSv = input.nameSv,
+                            nameEn = input.nameEn,
                             qualifierSv = input.qualifierSv,
                             qualifierEn = input.qualifierEn,
                             derivesFromId = input.derivesFromId,
@@ -382,23 +318,23 @@ fun Application.configureGraphQL(
                             fullNameEn = input.fullNameEn
                         )
                     )
-                    ingredientLibraryTable.getById(id)
+                    ingredientTable.getById(id)
                 }
             }
 
-            mutation("deleteLibraryIngredient") {
+            mutation("deleteIngredient") {
                 resolver { ctx: Context, id: Long ->
                     ctx.requireAuth(jwtConfig)
-                    ingredientLibraryTable.delete(id)
+                    ingredientTable.delete(id)
                     true
                 }
             }
 
-            // Unit library mutations
-            mutation("createLibraryUnit") {
+            // Unit mutations
+            mutation("createUnit") {
                 resolver { ctx: Context, input: LibraryUnitInput ->
                     ctx.requireAuth(jwtConfig)
-                    val id = unitLibraryTable.insert(
+                    val id = unitTable.insert(
                         LibraryUnit(
                             id = 0,
                             shortNameSv = input.shortNameSv,
@@ -410,14 +346,14 @@ fun Application.configureGraphQL(
                             gEquivalent = input.gEquivalent
                         )
                     )
-                    unitLibraryTable.getById(id)
+                    unitTable.getById(id)
                 }
             }
 
-            mutation("updateLibraryUnit") {
+            mutation("updateUnit") {
                 resolver { ctx: Context, id: Long, input: LibraryUnitInput ->
                     ctx.requireAuth(jwtConfig)
-                    unitLibraryTable.update(
+                    unitTable.update(
                         LibraryUnit(
                             id = id,
                             shortNameSv = input.shortNameSv,
@@ -429,14 +365,14 @@ fun Application.configureGraphQL(
                             gEquivalent = input.gEquivalent
                         )
                     )
-                    unitLibraryTable.getById(id)
+                    unitTable.getById(id)
                 }
             }
 
-            mutation("deleteLibraryUnit") {
+            mutation("deleteUnit") {
                 resolver { ctx: Context, id: Long ->
                     ctx.requireAuth(jwtConfig)
-                    unitLibraryTable.delete(id)
+                    unitTable.delete(id)
                     true
                 }
             }

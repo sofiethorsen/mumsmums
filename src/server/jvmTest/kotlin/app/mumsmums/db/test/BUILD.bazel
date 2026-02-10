@@ -7,6 +7,7 @@ kt_jvm_junit5_test(
     associates = ["//src/server/jvmMain/kotlin/app/mumsmums/db"],
     test_package = "app.mumsmums.db.test",
     deps = [
+        "//src/server/jvmMain/kotlin/app/mumsmums/identifiers",
         "//src/server/jvmMain/kotlin/app/mumsmums/model",
         "//src/server/jvmMain/kotlin/app/mumsmums/time",
         "@maven//:io_mockk_mockk",

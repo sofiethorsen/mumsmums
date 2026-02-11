@@ -71,14 +71,37 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
     }
 
     override fun update(recipeId: Long, recipe: Recipe) = withTransaction {
-        // Note that the CASCADE on the recipe table handles deletions for related data
-        connection.prepareStatement("DELETE FROM recipes WHERE recipeId = ?").use { statement ->
+        // Update the main recipe row (don't delete it - other recipes may reference it)
+        connection.prepareStatement(
+            """
+            UPDATE recipes SET name = ?, description = ?, servings = ?, numberOfUnits = ?,
+                              imageUrl = ?, version = ?, lastUpdatedAtInMillis = ?
+            WHERE recipeId = ?
+            """.trimIndent()
+        ).use { statement ->
+            statement.setString(1, recipe.name)
+            statement.setString(2, recipe.description)
+            statement.setObject(3, recipe.servings)
+            statement.setObject(4, recipe.numberOfUnits)
+            statement.setString(5, recipe.imageUrl)
+            statement.setLong(6, recipe.version)
+            statement.setLong(7, recipe.lastUpdatedAtInMillis)
+            statement.setLong(8, recipeId)
+            statement.executeUpdate()
+        }
+
+        // Delete and re-insert related data (these have CASCADE and no external references)
+        connection.prepareStatement("DELETE FROM ingredient_sections WHERE recipeId = ?").use { statement ->
+            statement.setLong(1, recipeId)
+            statement.executeUpdate()
+        }
+        connection.prepareStatement("DELETE FROM recipe_steps WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
             statement.executeUpdate()
         }
 
-        // Insert updated recipe
-        prepareInsert(recipe)
+        // Re-insert the related data
+        insertRelatedData(recipe)
         logger.info("Updated recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 

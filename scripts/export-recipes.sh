@@ -25,6 +25,8 @@ import os
 GIT_DIR = os.popen('git rev-parse --show-toplevel').read().strip()
 DB_PATH = os.path.join(os.path.expanduser("~"), "mumsmums-persist/mumsmums.db")
 OUTPUT_FILE = os.path.join(GIT_DIR, "src/server/jvmMain/resources/recipes.json")
+INGREDIENTS_FILE = os.path.join(GIT_DIR, "src/server/jvmMain/resources/ingredients.json")
+UNITS_FILE = os.path.join(GIT_DIR, "src/server/jvmMain/resources/units.json")
 
 conn = sqlite3.connect(DB_PATH)
 conn.row_factory = sqlite3.Row
@@ -75,7 +77,7 @@ for recipe_row in cursor.fetchall():
 
         # Get ingredients for this section
         cursor.execute("""
-            SELECT name, volume, quantity, recipeId as linkedRecipeId
+            SELECT name, volume, quantity, recipeId as linkedRecipeId, ingredientId, unitId
             FROM ingredients
             WHERE sectionId = ?
             ORDER BY position
@@ -84,8 +86,12 @@ for recipe_row in cursor.fetchall():
         ingredients = cursor.fetchall()
 
         for ing_row in ingredients:
-            # Build ingredient dict with fields in alphabetical order: name, quantity, recipeId, volume
+            # Build ingredient dict with fields in alphabetical order
             ingredient = {}
+
+            # ingredientId (optional, for library-linked ingredients)
+            if ing_row['ingredientId'] is not None:
+                ingredient['ingredientId'] = ing_row['ingredientId']
 
             # name (always present)
             ingredient['name'] = ing_row['name']
@@ -102,6 +108,10 @@ for recipe_row in cursor.fetchall():
             # recipeId (optional, for linked recipes)
             if ing_row['linkedRecipeId'] is not None:
                 ingredient['recipeId'] = ing_row['linkedRecipeId']
+
+            # unitId (optional, for library-linked units)
+            if ing_row['unitId'] is not None:
+                ingredient['unitId'] = ing_row['unitId']
 
             # volume (optional)
             if ing_row['volume'] is not None:
@@ -139,13 +149,75 @@ for recipe_row in cursor.fetchall():
 
     recipes.append(recipe)
 
+# Export ingredient library
+cursor.execute("""
+    SELECT id, name_sv, name_en, qualifier_sv, qualifier_en, derives_from_id, full_name_sv, full_name_en
+    FROM ingredient_library
+    ORDER BY id
+""")
+
+ingredients_library = []
+for row in cursor.fetchall():
+    ingredient = {'id': row['id']}
+    if row['name_sv']:
+        ingredient['nameSv'] = row['name_sv']
+    if row['name_en']:
+        ingredient['nameEn'] = row['name_en']
+    if row['qualifier_sv']:
+        ingredient['qualifierSv'] = row['qualifier_sv']
+    if row['qualifier_en']:
+        ingredient['qualifierEn'] = row['qualifier_en']
+    if row['derives_from_id']:
+        ingredient['derivesFromId'] = row['derives_from_id']
+    if row['full_name_sv']:
+        ingredient['fullNameSv'] = row['full_name_sv']
+    if row['full_name_en']:
+        ingredient['fullNameEn'] = row['full_name_en']
+    ingredients_library.append(ingredient)
+
+# Export unit library
+cursor.execute("""
+    SELECT id, short_name_sv, short_name_en, name_sv, name_en, type, ml_equivalent, g_equivalent
+    FROM unit_library
+    ORDER BY id
+""")
+
+units_library = []
+for row in cursor.fetchall():
+    unit = {'id': row['id']}
+    if row['short_name_sv']:
+        unit['shortNameSv'] = row['short_name_sv']
+    if row['short_name_en']:
+        unit['shortNameEn'] = row['short_name_en']
+    if row['name_sv']:
+        unit['nameSv'] = row['name_sv']
+    if row['name_en']:
+        unit['nameEn'] = row['name_en']
+    if row['type']:
+        unit['type'] = row['type']
+    if row['ml_equivalent'] is not None:
+        unit['mlEquivalent'] = row['ml_equivalent']
+    if row['g_equivalent'] is not None:
+        unit['gEquivalent'] = row['g_equivalent']
+    units_library.append(unit)
+
 conn.close()
 
 with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
     json.dump(recipes, f, indent=2, ensure_ascii=False)
     f.write('\n')  # Add trailing newline
 
+with open(INGREDIENTS_FILE, 'w', encoding='utf-8') as f:
+    json.dump(ingredients_library, f, indent=2, ensure_ascii=False)
+    f.write('\n')
+
+with open(UNITS_FILE, 'w', encoding='utf-8') as f:
+    json.dump(units_library, f, indent=2, ensure_ascii=False)
+    f.write('\n')
+
 print(f"Exported {len(recipes)} recipes to {OUTPUT_FILE}")
+print(f"Exported {len(ingredients_library)} ingredients to {INGREDIENTS_FILE}")
+print(f"Exported {len(units_library)} units to {UNITS_FILE}")
 
 PYTHON_SCRIPT
 

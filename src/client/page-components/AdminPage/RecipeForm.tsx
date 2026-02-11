@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styles from './AdminPage.module.css'
-import { GetRecipeByIdQuery } from '../../graphql/generated'
+import { GetRecipeByIdQuery, LibraryIngredient, LibraryUnit } from '../../graphql/generated'
 import ImageUpload from '../../components/ImageUpload/ImageUpload'
+import client from '../../graphql/client'
+import { GET_INGREDIENTS, GET_UNITS } from '../../graphql/queries'
 
 // Use the query result type - we only need the fields the form actually uses
 type RecipeDetails = NonNullable<GetRecipeByIdQuery['recipe']>
@@ -19,6 +21,8 @@ export interface RecipeInput {
             volume: string | null
             quantity: number | null
             recipeId: number | null
+            ingredientId: number | null
+            unitId: number | null
         }[]
     }[]
     steps: string[]
@@ -35,6 +39,8 @@ interface IngredientInput {
     volume: string
     quantity: string
     recipeId: string
+    ingredientId: string
+    unitId: string
 }
 
 interface IngredientSectionInput {
@@ -50,9 +56,36 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
     const [imageUrl, setImageUrl] = useState('')
     const [uploadError, setUploadError] = useState<string | null>(null)
     const [ingredientSections, setIngredientSections] = useState<IngredientSectionInput[]>([
-        { name: '', ingredients: [{ name: '', volume: '', quantity: '', recipeId: '' }] },
+        { name: '', ingredients: [{ name: '', volume: '', quantity: '', recipeId: '', ingredientId: '', unitId: '' }] },
     ])
     const [steps, setSteps] = useState<string[]>([''])
+
+    // Library data
+    const [libraryIngredients, setLibraryIngredients] = useState<LibraryIngredient[]>([])
+    const [libraryUnits, setLibraryUnits] = useState<LibraryUnit[]>([])
+
+    // Fetch library data on mount
+    useEffect(() => {
+        const fetchLibraryData = async () => {
+            try {
+                const [ingredientsResult, unitsResult] = await Promise.all([
+                    client.query<{ ingredients: LibraryIngredient[] }>({
+                        query: GET_INGREDIENTS,
+                        fetchPolicy: 'cache-first',
+                    }),
+                    client.query<{ units: LibraryUnit[] }>({
+                        query: GET_UNITS,
+                        fetchPolicy: 'cache-first',
+                    }),
+                ])
+                setLibraryIngredients(ingredientsResult.data?.ingredients ?? [])
+                setLibraryUnits(unitsResult.data?.units ?? [])
+            } catch (error) {
+                console.error('Error loading library data:', error)
+            }
+        }
+        fetchLibraryData()
+    }, [])
 
     useEffect(() => {
         if (recipe) {
@@ -69,6 +102,8 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
                         volume: ing.volume || '',
                         quantity: ing.quantity?.toString() || '',
                         recipeId: ing.recipeId?.toString() || '',
+                        ingredientId: ing.ingredientId?.toString() || '',
+                        unitId: ing.unitId?.toString() || '',
                     })),
                 }))
             )
@@ -95,6 +130,8 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
                         volume: ing.volume || null,
                         quantity: ing.quantity ? parseFloat(ing.quantity) : null,
                         recipeId: ing.recipeId ? parseInt(ing.recipeId) : null,
+                        ingredientId: ing.ingredientId ? parseInt(ing.ingredientId) : null,
+                        unitId: ing.unitId && ing.unitId !== 'none' ? parseInt(ing.unitId) : null,
                     })),
             })),
             steps: steps.filter((step) => step.trim()),
@@ -106,7 +143,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
     const addIngredientSection = () => {
         setIngredientSections([
             ...ingredientSections,
-            { name: '', ingredients: [{ name: '', volume: '', quantity: '', recipeId: '' }] },
+            { name: '', ingredients: [{ name: '', volume: '', quantity: '', recipeId: '', ingredientId: '', unitId: '' }] },
         ])
     }
 
@@ -116,7 +153,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
 
     const addIngredient = (sectionIndex: number) => {
         const newSections = [...ingredientSections]
-        newSections[sectionIndex].ingredients.push({ name: '', volume: '', quantity: '', recipeId: '' })
+        newSections[sectionIndex].ingredients.push({ name: '', volume: '', quantity: '', recipeId: '', ingredientId: '', unitId: '' })
         setIngredientSections(newSections)
     }
 
@@ -138,6 +175,45 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
             ...newSections[sectionIndex].ingredients[ingredientIndex],
             [field]: value,
         }
+        setIngredientSections(newSections)
+    }
+
+    const handleIngredientSelect = (sectionIndex: number, ingredientIndex: number, ingredientId: string) => {
+        const newSections = [...ingredientSections]
+        const ingredient = newSections[sectionIndex].ingredients[ingredientIndex]
+
+        if (ingredientId) {
+            const libraryIngredient = libraryIngredients.find(i => i.id.toString() === ingredientId)
+            if (libraryIngredient) {
+                ingredient.ingredientId = ingredientId
+                ingredient.name = libraryIngredient.fullNameSv
+            }
+        } else {
+            ingredient.ingredientId = ''
+        }
+
+        setIngredientSections(newSections)
+    }
+
+    const handleUnitSelect = (sectionIndex: number, ingredientIndex: number, unitId: string) => {
+        const newSections = [...ingredientSections]
+        const ingredient = newSections[sectionIndex].ingredients[ingredientIndex]
+
+        if (unitId === 'none') {
+            // Explicitly no unit
+            ingredient.unitId = 'none'
+            ingredient.volume = ''
+        } else if (unitId) {
+            const libraryUnit = libraryUnits.find(u => u.id.toString() === unitId)
+            if (libraryUnit) {
+                ingredient.unitId = unitId
+                ingredient.volume = libraryUnit.shortNameSv
+            }
+        } else {
+            ingredient.unitId = ''
+            ingredient.volume = ''
+        }
+
         setIngredientSections(newSections)
     }
 
@@ -210,6 +286,19 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
 
             <div className={styles.formSection}>
                 <h3>Ingredienssektioner</h3>
+                {(() => {
+                    const allIngredients = ingredientSections.flatMap(s => s.ingredients)
+                    const needsMigration = allIngredients.filter(i => !i.ingredientId || !i.unitId).length
+                    const total = allIngredients.filter(i => i.name.trim()).length
+                    if (needsMigration > 0 && total > 0) {
+                        return (
+                            <div className={styles.migrationSummary}>
+                                {needsMigration} av {total} ingredienser behöver länkas
+                            </div>
+                        )
+                    }
+                    return null
+                })()}
                 {ingredientSections.map((section, sectionIndex) => (
                     <div key={sectionIndex} className={styles.ingredientSection}>
                         <div className={styles.sectionHeader}>
@@ -226,40 +315,97 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
                             )}
                         </div>
 
-                        {section.ingredients.map((ingredient, ingredientIndex) => (
-                            <div key={ingredientIndex} className={styles.ingredient}>
-                                <input
-                                    type="text"
-                                    placeholder="Ingrediensnamn *"
-                                    value={ingredient.name}
-                                    onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'name', e.target.value)}
-                                />
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    placeholder="Kvantitet"
-                                    value={ingredient.quantity}
-                                    onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'quantity', e.target.value)}
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Volym"
-                                    value={ingredient.volume}
-                                    onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'volume', e.target.value)}
-                                />
-                                <input
-                                    type="number"
-                                    placeholder="Recept ID (om ett recept)"
-                                    value={ingredient.recipeId}
-                                    onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'recipeId', e.target.value)}
-                                />
-                                {section.ingredients.length > 1 && (
-                                    <button type="button" onClick={() => removeIngredient(sectionIndex, ingredientIndex)}>
-                                        ✕
-                                    </button>
-                                )}
-                            </div>
-                        ))}
+                        {section.ingredients.map((ingredient, ingredientIndex) => {
+                            const isLinked = !!ingredient.ingredientId
+                            const hasUnit = !!ingredient.unitId || ingredient.unitId === 'none'
+                            const needsMigration = !isLinked || !hasUnit
+
+                            return (
+                                <div
+                                    key={ingredientIndex}
+                                    className={`${styles.ingredientRow} ${isLinked ? styles.ingredientLinked : styles.ingredientNeedsMigration}`}
+                                >
+                                    {needsMigration && (
+                                        <div className={styles.migrationBanner}>
+                                            <span className={styles.migrationLabel}>
+                                                Behöver länkas: {!isLinked && 'ingrediens'}{!isLinked && !hasUnit && ' + '}{!hasUnit && 'enhet'}
+                                            </span>
+                                            <span className={styles.oldValue}>
+                                                Nuvarande: {ingredient.name}{ingredient.volume ? ` (${ingredient.quantity || ''} ${ingredient.volume})` : ''}
+                                            </span>
+                                        </div>
+                                    )}
+                                    <div className={styles.ingredientMain}>
+                                        <select
+                                            value={ingredient.ingredientId}
+                                            onChange={(e) => handleIngredientSelect(sectionIndex, ingredientIndex, e.target.value)}
+                                            className={`${styles.librarySelect} ${!isLinked ? styles.needsSelection : ''}`}
+                                        >
+                                            <option value="">Välj ingrediens...</option>
+                                            {libraryIngredients.map(lib => (
+                                                <option key={lib.id} value={lib.id}>
+                                                    {lib.fullNameSv}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {!isLinked && (
+                                            <input
+                                                type="text"
+                                                placeholder="Ingrediensnamn *"
+                                                value={ingredient.name}
+                                                onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'name', e.target.value)}
+                                                className={styles.oldInput}
+                                            />
+                                        )}
+                                    </div>
+                                    <div className={styles.ingredientQuantity}>
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            placeholder="Mängd"
+                                            value={ingredient.quantity}
+                                            onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'quantity', e.target.value)}
+                                        />
+                                        <select
+                                            value={ingredient.unitId}
+                                            onChange={(e) => handleUnitSelect(sectionIndex, ingredientIndex, e.target.value)}
+                                            className={`${styles.unitSelect} ${!hasUnit && ingredient.volume ? styles.needsSelection : ''}`}
+                                        >
+                                            <option value="">Välj enhet...</option>
+                                            <option value="none">Ingen enhet</option>
+                                            {libraryUnits.map(unit => (
+                                                <option key={unit.id} value={unit.id}>
+                                                    {unit.shortNameSv} ({unit.nameSv})
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {!hasUnit && (
+                                            <input
+                                                type="text"
+                                                placeholder="Enhet (fritext)"
+                                                value={ingredient.volume}
+                                                onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'volume', e.target.value)}
+                                                className={`${styles.volumeInput} ${styles.oldInput}`}
+                                            />
+                                        )}
+                                    </div>
+                                    <div className={styles.ingredientActions}>
+                                        <input
+                                            type="number"
+                                            placeholder="Recept-ID"
+                                            value={ingredient.recipeId}
+                                            onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'recipeId', e.target.value)}
+                                            className={styles.recipeIdInput}
+                                        />
+                                        {section.ingredients.length > 1 && (
+                                            <button type="button" onClick={() => removeIngredient(sectionIndex, ingredientIndex)}>
+                                                ✕
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            )
+                        })}
 
                         <button type="button" onClick={() => addIngredient(sectionIndex)} className={styles.addButton}>
                             Lägg till ingrediens

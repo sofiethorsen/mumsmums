@@ -165,7 +165,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
 
             section.ingredients.forEachIndexed { ingredientIndex, ingredient ->
                 connection.prepareStatement(
-                    "INSERT INTO ingredients (sectionId, name, volume, quantity, recipeId, position) VALUES (?, ?, ?, ?, ?, ?)"
+                    "INSERT INTO ingredients (sectionId, name, volume, quantity, recipeId, ingredientId, unitId, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
                 ).use { statement ->
                     statement.setLong(1, sectionId)
                     statement.setString(2, ingredient.name)
@@ -177,7 +177,19 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
                     } else {
                         statement.setNull(5, java.sql.Types.BIGINT)
                     }
-                    statement.setInt(6, ingredientIndex)
+                    val ingredientLibraryId = ingredient.ingredientId
+                    if (ingredientLibraryId != null) {
+                        statement.setLong(6, ingredientLibraryId)
+                    } else {
+                        statement.setNull(6, java.sql.Types.BIGINT)
+                    }
+                    val unitLibraryId = ingredient.unitId
+                    if (unitLibraryId != null) {
+                        statement.setLong(7, unitLibraryId)
+                    } else {
+                        statement.setNull(7, java.sql.Types.BIGINT)
+                    }
+                    statement.setInt(8, ingredientIndex)
                     statement.executeUpdate()
                 }
             }
@@ -216,7 +228,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         val ingredients = mutableListOf<Ingredient>()
 
         connection.prepareStatement(
-            "SELECT name, volume, quantity, recipeId FROM ingredients WHERE sectionId = ? ORDER BY position"
+            "SELECT name, volume, quantity, recipeId, ingredientId, unitId FROM ingredients WHERE sectionId = ? ORDER BY position"
         ).use { statement ->
             statement.setLong(1, sectionId)
             val resultSet = statement.executeQuery()
@@ -267,7 +279,9 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             name = resultSet.getString("name"),
             volume = resultSet.getString("volume"),
             quantity = resultSet.getNullableFloat("quantity"),
-            recipeId = resultSet.getNullableLong("recipeId")
+            recipeId = resultSet.getNullableLong("recipeId"),
+            ingredientId = resultSet.getNullableLong("ingredientId"),
+            unitId = resultSet.getNullableLong("unitId")
         )
     }
 

@@ -38,13 +38,21 @@ class UnitTable(database: DatabaseConnection, private val idGenerator: NumericId
 
     fun insert(unit: LibraryUnit): Long {
         val id = idGenerator.generateId()
+        insertWithId(unit.copy(id = id))
+        return id
+    }
+
+    /**
+     * Insert a unit with its existing ID (used for database initialization from JSON).
+     */
+    fun insertWithId(unit: LibraryUnit) {
         connection.prepareStatement(
             """
             INSERT INTO unit_library (id, short_name_sv, short_name_en, name_sv, name_en, type, ml_equivalent, g_equivalent)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """.trimIndent()
         ).use { statement ->
-            statement.setLong(1, id)
+            statement.setLong(1, unit.id)
             statement.setString(2, unit.shortNameSv)
             statement.setString(3, unit.shortNameEn)
             statement.setString(4, unit.nameSv)
@@ -54,7 +62,6 @@ class UnitTable(database: DatabaseConnection, private val idGenerator: NumericId
             statement.setObject(8, unit.gEquivalent)
             statement.executeUpdate()
         }
-        return id
     }
 
     fun update(unit: LibraryUnit) {

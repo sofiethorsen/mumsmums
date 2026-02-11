@@ -106,13 +106,21 @@ class IngredientTable(database: DatabaseConnection, private val idGenerator: Num
 
     fun insert(ingredient: LibraryIngredient): Long {
         val id = idGenerator.generateId()
+        insertWithId(ingredient.copy(id = id))
+        return id
+    }
+
+    /**
+     * Insert an ingredient with its existing ID (used for database initialization from JSON).
+     */
+    fun insertWithId(ingredient: LibraryIngredient) {
         connection.prepareStatement(
             """
             INSERT INTO ingredient_library (id, name_sv, name_en, qualifier_sv, qualifier_en, derives_from_id, full_name_sv, full_name_en)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """.trimIndent()
         ).use { statement ->
-            statement.setLong(1, id)
+            statement.setLong(1, ingredient.id)
             statement.setString(2, ingredient.nameSv)
             statement.setString(3, ingredient.nameEn)
             statement.setString(4, ingredient.qualifierSv)
@@ -122,7 +130,6 @@ class IngredientTable(database: DatabaseConnection, private val idGenerator: Num
             statement.setString(8, ingredient.fullNameEn)
             statement.executeUpdate()
         }
-        return id
     }
 
     fun update(ingredient: LibraryIngredient) {

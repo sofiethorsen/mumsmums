@@ -23,6 +23,29 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
 
         // Create tables if they don't exist
         createTablesIfNotExists()
+
+        // Run migrations for existing databases
+        runMigrations()
+    }
+
+    private fun runMigrations() {
+        // Add ingredientId and unitId columns to ingredients table if they don't exist
+        val existingColumns = mutableSetOf<String>()
+        connection.createStatement().use { statement ->
+            val rs = statement.executeQuery("PRAGMA table_info(ingredients)")
+            while (rs.next()) {
+                existingColumns.add(rs.getString("name"))
+            }
+        }
+
+        connection.createStatement().use { statement ->
+            if ("ingredientId" !in existingColumns) {
+                statement.execute("ALTER TABLE ingredients ADD COLUMN ingredientId INTEGER REFERENCES ingredient_library(id)")
+            }
+            if ("unitId" !in existingColumns) {
+                statement.execute("ALTER TABLE ingredients ADD COLUMN unitId INTEGER REFERENCES unit_library(id)")
+            }
+        }
     }
 
     fun createTablesIfNotExists() {
@@ -64,9 +87,13 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
                     volume TEXT,
                     quantity REAL,
                     recipeId INTEGER,
+                    ingredientId INTEGER,
+                    unitId INTEGER,
                     position INTEGER NOT NULL,
                     FOREIGN KEY (sectionId) REFERENCES ingredient_sections(id) ON DELETE CASCADE,
-                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId)
+                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId),
+                    FOREIGN KEY (ingredientId) REFERENCES ingredient_library(id),
+                    FOREIGN KEY (unitId) REFERENCES unit_library(id)
                 )
                 """.trimIndent()
             )

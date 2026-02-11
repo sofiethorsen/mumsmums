@@ -52,7 +52,9 @@ data class IngredientInput(
     val name: String,
     val volume: String? = null,
     val quantity: Float? = null,
-    val recipeId: Long? = null
+    val recipeId: Long? = null,
+    val ingredientId: Long? = null,
+    val unitId: Long? = null
 )
 
 data class IngredientSectionInput(
@@ -194,7 +196,9 @@ fun Application.configureGraphQL(
                                         name = ing.name,
                                         volume = ing.volume,
                                         quantity = ing.quantity,
-                                        recipeId = ing.recipeId
+                                        recipeId = ing.recipeId,
+                                        ingredientId = ing.ingredientId,
+                                        unitId = ing.unitId
                                     )
                                 }
                             )
@@ -238,7 +242,9 @@ fun Application.configureGraphQL(
                                         name = ing.name,
                                         volume = ing.volume,
                                         quantity = ing.quantity,
-                                        recipeId = ing.recipeId
+                                        recipeId = ing.recipeId,
+                                        ingredientId = ing.ingredientId,
+                                        unitId = ing.unitId
                                     )
                                 }
                             )

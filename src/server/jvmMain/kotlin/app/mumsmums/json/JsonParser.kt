@@ -1,6 +1,8 @@
 package app.mumsmums.json
 
 import app.mumsmums.identifiers.NumericIdGenerator
+import app.mumsmums.model.LibraryIngredient
+import app.mumsmums.model.LibraryUnit
 import app.mumsmums.model.Recipe
 import java.io.FileReader
 import java.nio.charset.Charset
@@ -26,6 +28,18 @@ object JsonParser {
         FileReader(pathToFile.toString(), Charset.forName("UTF-8")).use {
             val recipe: Recipe = formatter.decodeFromString(it.buffered().readText())
             return recipe.copy(recipeId = idGenerator.generateId())
+        }
+    }
+
+    fun parseIngredients(pathToFile: Path): List<LibraryIngredient> {
+        return FileReader(pathToFile.toString(), Charset.forName("UTF-8")).use {
+            formatter.decodeFromString(it.buffered().readText())
+        }
+    }
+
+    fun parseUnits(pathToFile: Path): List<LibraryUnit> {
+        return FileReader(pathToFile.toString(), Charset.forName("UTF-8")).use {
+            formatter.decodeFromString(it.buffered().readText())
         }
     }
 

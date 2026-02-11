@@ -131,7 +131,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
                         quantity: ing.quantity ? parseFloat(ing.quantity) : null,
                         recipeId: ing.recipeId ? parseInt(ing.recipeId) : null,
                         ingredientId: ing.ingredientId ? parseInt(ing.ingredientId) : null,
-                        unitId: ing.unitId && ing.unitId !== 'none' ? parseInt(ing.unitId) : null,
+                        unitId: ing.unitId ? parseInt(ing.unitId) : null,
                     })),
             })),
             steps: steps.filter((step) => step.trim()),
@@ -199,11 +199,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
         const newSections = [...ingredientSections]
         const ingredient = newSections[sectionIndex].ingredients[ingredientIndex]
 
-        if (unitId === 'none') {
-            // Explicitly no unit
-            ingredient.unitId = 'none'
-            ingredient.volume = ''
-        } else if (unitId) {
+        if (unitId) {
             const libraryUnit = libraryUnits.find(u => u.id.toString() === unitId)
             if (libraryUnit) {
                 ingredient.unitId = unitId
@@ -317,7 +313,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
 
                         {section.ingredients.map((ingredient, ingredientIndex) => {
                             const isLinked = !!ingredient.ingredientId
-                            const hasUnit = !!ingredient.unitId || ingredient.unitId === 'none'
+                            const hasUnit = !!ingredient.unitId
                             const needsMigration = !isLinked || !hasUnit
 
                             return (
@@ -372,10 +368,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
                                             className={`${styles.unitSelect} ${!hasUnit && ingredient.volume ? styles.needsSelection : ''}`}
                                         >
                                             <option value="">Välj enhet...</option>
-                                            <option value="none">Ingen enhet</option>
                                             {libraryUnits.map(unit => (
                                                 <option key={unit.id} value={unit.id}>
-                                                    {unit.shortNameSv} ({unit.nameSv})
+                                                    {unit.shortNameSv ? `${unit.shortNameSv} (${unit.nameSv})` : unit.nameSv}
                                                 </option>
                                             ))}
                                         </select>

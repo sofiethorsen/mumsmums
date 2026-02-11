@@ -9,6 +9,9 @@ interface IngredientRowProps {
     ingredient: Ingredient
 }
 
+// Reserved ID for "no unit" entry in unit_library
+const NO_UNIT_ID = 2362809692160
+
 // Format quantity to remove floating point errors and unnecessary decimals
 const formatQuantity = (quantity: number): string => {
     // Round to 2 decimal places to avoid floating point precision errors
@@ -19,7 +22,8 @@ const formatQuantity = (quantity: number): string => {
 
 const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient }) => {
     const quantity = ingredient.quantity ? `${formatQuantity(ingredient.quantity)} ` : ''
-    const volume = ingredient.volume && `${ingredient.volume} `
+    const isNoUnit = ingredient.unitId === NO_UNIT_ID
+    const volume = !isNoUnit && ingredient.volume && `${ingredient.volume} `
     const hasRecipeId = Boolean(ingredient.recipeId)
 
     if (hasRecipeId) {

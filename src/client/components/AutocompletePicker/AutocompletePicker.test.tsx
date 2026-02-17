@@ -136,4 +136,89 @@ describe('AutocompletePicker', () => {
             expect(screen.getByText('Apple')).toBeInTheDocument()
         })
     })
+
+    describe('onCreateNew', () => {
+        const mockOnCreateNew = jest.fn()
+
+        beforeEach(() => {
+            mockOnCreateNew.mockClear()
+        })
+
+        it('shows create option when onCreateNew is provided and query has no matches', () => {
+            render(
+                <AutocompletePicker
+                    {...defaultProps}
+                    onCreateNew={mockOnCreateNew}
+                    createNewLabel={(q) => `Create "${q}"`}
+                />
+            )
+            const input = screen.getByPlaceholderText('Search...')
+
+            fireEvent.change(input, { target: { value: 'Mango' } })
+
+            expect(screen.getByText('Create "Mango"')).toBeInTheDocument()
+        })
+
+        it('shows create option alongside matching results', () => {
+            render(
+                <AutocompletePicker
+                    {...defaultProps}
+                    onCreateNew={mockOnCreateNew}
+                    createNewLabel={(q) => `Create "${q}"`}
+                />
+            )
+            const input = screen.getByPlaceholderText('Search...')
+
+            fireEvent.change(input, { target: { value: 'App' } })
+
+            expect(screen.getByText('Apple')).toBeInTheDocument()
+            expect(screen.getByText('Create "App"')).toBeInTheDocument()
+        })
+
+        it('calls onCreateNew when clicking create option', () => {
+            render(
+                <AutocompletePicker
+                    {...defaultProps}
+                    onCreateNew={mockOnCreateNew}
+                    createNewLabel={(q) => `Create "${q}"`}
+                />
+            )
+            const input = screen.getByPlaceholderText('Search...')
+
+            fireEvent.change(input, { target: { value: 'Mango' } })
+            fireEvent.click(screen.getByText('Create "Mango"'))
+
+            expect(mockOnCreateNew).toHaveBeenCalledWith('Mango')
+        })
+
+        it('calls onCreateNew when selecting create option with keyboard', () => {
+            render(
+                <AutocompletePicker
+                    {...defaultProps}
+                    onCreateNew={mockOnCreateNew}
+                    createNewLabel={(q) => `Create "${q}"`}
+                />
+            )
+            const input = screen.getByPlaceholderText('Search...')
+
+            fireEvent.change(input, { target: { value: 'Mango' } })
+            fireEvent.keyDown(input, { key: 'Enter' })
+
+            expect(mockOnCreateNew).toHaveBeenCalledWith('Mango')
+        })
+
+        it('does not show create option when query is empty', () => {
+            render(
+                <AutocompletePicker
+                    {...defaultProps}
+                    onCreateNew={mockOnCreateNew}
+                    createNewLabel={(q) => `Create "${q}"`}
+                />
+            )
+            const input = screen.getByPlaceholderText('Search...')
+            fireEvent.focus(input)
+
+            expect(screen.queryByText(/Create/)).not.toBeInTheDocument()
+        })
+    })
 })

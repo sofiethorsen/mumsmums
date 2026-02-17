@@ -1,0 +1,86 @@
+[
+  {
+    "id": 2362634387456,
+    "shortNameSv": "tsk",
+    "shortNameEn": "tsp",
+    "nameSv": "tesked",
+    "nameEn": "teaspoon",
+    "type": "VOLUME",
+    "mlEquivalent": 5.0
+  },
+  {
+    "id": 2362634409984,
+    "shortNameSv": "msk",
+    "shortNameEn": "tbsp",
+    "nameSv": "matsked",
+    "nameEn": "tablespoon",
+    "type": "VOLUME",
+    "mlEquivalent": 15.0
+  },
+  {
+    "id": 2362634446848,
+    "shortNameSv": "dl",
+    "shortNameEn": "dl",
+    "nameSv": "deciliter",
+    "nameEn": "deciliter",
+    "type": "VOLUME"
+  },
+  {
+    "id": 2362634469376,
+    "shortNameSv": "ml",
+    "shortNameEn": "ml",
+    "nameSv": "milliliter",
+    "nameEn": "milliliter",
+    "type": "VOLUME"
+  },
+  {
+    "id": 2362634526720,
+    "shortNameSv": "g",
+    "shortNameEn": "g",
+    "nameSv": "gram",
+    "nameEn": "gram",
+    "type": "WEIGHT"
+  },
+  {
+    "id": 2362634967040,
+    "shortNameSv": "st",
+    "shortNameEn": "pcs",
+    "nameSv": "stycken",
+    "nameEn": "pieces",
+    "type": "COUNT"
+  },
+  {
+    "id": 2362803802112,
+    "shortNameSv": "krm",
+    "shortNameEn": "measuring spoon",
+    "nameSv": "kryddmått",
+    "nameEn": "measuring spoon",
+    "type": "VOLUME",
+    "mlEquivalent": 1.0
+  },
+  {
+    "id": 2362809692160,
+    "shortNameSv": "Ingen enhet",
+    "shortNameEn": "No unit",
+    "nameSv": "Ingen enhet",
+    "nameEn": "No unit",
+    "type": "OTHER"
+  },
+  {
+    "id": 2363846807552,
+    "shortNameSv": "l",
+    "shortNameEn": "l",
+    "nameSv": "liter",
+    "nameEn": "litre",
+    "type": "VOLUME",
+    "mlEquivalent": 1000.0
+  },
+  {
+    "id": 2363853103104,
+    "shortNameSv": "paket",
+    "shortNameEn": "pkt",
+    "nameSv": "paket",
+    "nameEn": "packet",
+    "type": "VOLUME"
+  }
+]

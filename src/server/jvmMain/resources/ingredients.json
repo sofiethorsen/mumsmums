@@ -1,0 +1,1051 @@
+[
+  {
+    "id": 2362628841472,
+    "nameSv": "ägg",
+    "nameEn": "egg",
+    "fullNameSv": "ägg",
+    "fullNameEn": "egg"
+  },
+  {
+    "id": 2362628866048,
+    "nameSv": "socker",
+    "nameEn": "sugar",
+    "fullNameSv": "socker",
+    "fullNameEn": "sugar"
+  },
+  {
+    "id": 2362628892672,
+    "nameSv": "smör",
+    "nameEn": "butter",
+    "fullNameSv": "smör",
+    "fullNameEn": "butter"
+  },
+  {
+    "id": 2362628964352,
+    "nameSv": "vaniljsocker",
+    "nameEn": "vanilla sugar",
+    "fullNameSv": "vaniljsocker",
+    "fullNameEn": "vanilla sugar"
+  },
+  {
+    "id": 2362629011456,
+    "nameSv": "bakpulver",
+    "nameEn": "baking powder",
+    "fullNameSv": "bakpulver",
+    "fullNameEn": "baking powder"
+  },
+  {
+    "id": 2362629079040,
+    "nameSv": "mjöl",
+    "nameEn": "flour",
+    "fullNameSv": "mjöl",
+    "fullNameEn": "flour"
+  },
+  {
+    "id": 2362629158912,
+    "nameSv": "koriander",
+    "nameEn": "coriander",
+    "qualifierSv": "malen",
+    "qualifierEn": "ground",
+    "derivesFromId": 2362632945664,
+    "fullNameSv": "koriander, malen",
+    "fullNameEn": "ground coriander"
+  },
+  {
+    "id": 2362629197824,
+    "nameSv": "muskot",
+    "nameEn": "nutmeg",
+    "fullNameSv": "muskot",
+    "fullNameEn": "nutmeg"
+  },
+  {
+    "id": 2362629218304,
+    "nameSv": "salt",
+    "nameEn": "salt",
+    "fullNameSv": "salt",
+    "fullNameEn": "salt"
+  },
+  {
+    "id": 2362629244928,
+    "nameSv": "äpple",
+    "nameEn": "apple",
+    "fullNameSv": "äpple",
+    "fullNameEn": "apple"
+  },
+  {
+    "id": 2362629304320,
+    "nameSv": "kanel",
+    "nameEn": "cinnamon",
+    "qualifierSv": "malen",
+    "qualifierEn": "ground",
+    "fullNameSv": "kanel, malen",
+    "fullNameEn": "ground cinnamon"
+  },
+  {
+    "id": 2362629347328,
+    "nameSv": "ströbröd",
+    "nameEn": "breadcrumbs",
+    "fullNameSv": "ströbröd",
+    "fullNameEn": "breadcrumbs"
+  },
+  {
+    "id": 2362629423104,
+    "nameSv": "tomat",
+    "nameEn": "tomato",
+    "qualifierSv": "cocktail",
+    "qualifierEn": "cocktail",
+    "fullNameSv": "tomat, cocktail",
+    "fullNameEn": "cocktail tomato"
+  },
+  {
+    "id": 2362629509120,
+    "nameSv": "olivolja",
+    "nameEn": "olive oil",
+    "fullNameSv": "olivolja",
+    "fullNameEn": "olive oil"
+  },
+  {
+    "id": 2362629611520,
+    "nameSv": "timjan",
+    "nameEn": "thyme",
+    "qualifierSv": "färsk",
+    "qualifierEn": "fresh",
+    "fullNameSv": "timjan, färsk",
+    "fullNameEn": "fresh thyme"
+  },
+  {
+    "id": 2362629640192,
+    "nameSv": "chiliflakes",
+    "nameEn": "chili flakes",
+    "fullNameSv": "chiliflakes",
+    "fullNameEn": "chili flakes"
+  },
+  {
+    "id": 2362629724160,
+    "nameSv": "vit quinoa",
+    "nameEn": "white quinoa",
+    "fullNameSv": "vit quinoa",
+    "fullNameEn": "white quinoa"
+  },
+  {
+    "id": 2362629748736,
+    "nameSv": "sesamolja",
+    "nameEn": "sesame oil",
+    "fullNameSv": "sesamolja",
+    "fullNameEn": "sesame oil"
+  },
+  {
+    "id": 2362629793792,
+    "nameSv": "vitkål",
+    "nameEn": "cabbage",
+    "fullNameSv": "vitkål",
+    "fullNameEn": "cabbage"
+  },
+  {
+    "id": 2362629830656,
+    "nameSv": "grönkål",
+    "nameEn": "kale",
+    "fullNameSv": "grönkål",
+    "fullNameEn": "kale"
+  },
+  {
+    "id": 2362629890048,
+    "nameSv": "kycklinglårfilé",
+    "nameEn": "chicken thighs",
+    "fullNameSv": "kycklinglårfilé",
+    "fullNameEn": "chicken thighs"
+  },
+  {
+    "id": 2362629924864,
+    "nameSv": "paprika",
+    "nameEn": "bell pepper",
+    "fullNameSv": "paprika",
+    "fullNameEn": "bell pepper"
+  },
+  {
+    "id": 2362629953536,
+    "nameSv": "morot",
+    "nameEn": "carrot",
+    "fullNameSv": "morot",
+    "fullNameEn": "carrot"
+  },
+  {
+    "id": 2362629969920,
+    "nameSv": "edamame",
+    "nameEn": "edamame",
+    "fullNameSv": "edamame",
+    "fullNameEn": "edamame"
+  },
+  {
+    "id": 2362630010880,
+    "nameSv": "rapsolja",
+    "nameEn": "rapeseed oil",
+    "fullNameSv": "rapsolja",
+    "fullNameEn": "rapeseed oil"
+  },
+  {
+    "id": 2362630033408,
+    "nameSv": "soja",
+    "nameEn": "soy",
+    "fullNameSv": "soja",
+    "fullNameEn": "soy"
+  },
+  {
+    "id": 2362630060032,
+    "nameSv": "lime",
+    "nameEn": "lime",
+    "fullNameSv": "lime",
+    "fullNameEn": "lime"
+  },
+  {
+    "id": 2362630088704,
+    "nameSv": "limejuice",
+    "nameEn": "lime juice",
+    "derivesFromId": 2362630060032,
+    "fullNameSv": "limejuice",
+    "fullNameEn": "lime juice"
+  },
+  {
+    "id": 2362630107136,
+    "nameSv": "mirin",
+    "nameEn": "mirin",
+    "fullNameSv": "mirin",
+    "fullNameEn": "mirin"
+  },
+  {
+    "id": 2362630135808,
+    "nameSv": "jordnötssmör",
+    "nameEn": "peanut butter",
+    "fullNameSv": "jordnötssmör",
+    "fullNameEn": "peanut butter"
+  },
+  {
+    "id": 2362630232064,
+    "nameSv": "krispig chiliolja",
+    "nameEn": "crispy chili oil",
+    "qualifierSv": "Laoganma",
+    "qualifierEn": "Laoganma",
+    "fullNameSv": "krispig chiliolja, Laoganma",
+    "fullNameEn": "crispy chili oil, Laoganma"
+  },
+  {
+    "id": 2362630291456,
+    "nameSv": "röd chili",
+    "nameEn": "red pepper",
+    "fullNameSv": "röd chili",
+    "fullNameEn": "red pepper"
+  },
+  {
+    "id": 2362630318080,
+    "nameSv": "fläskfärs",
+    "nameEn": "pork mince",
+    "fullNameSv": "fläskfärs",
+    "fullNameEn": "pork mince"
+  },
+  {
+    "id": 2362630346752,
+    "nameSv": "ostronsås",
+    "nameEn": "oyster sauce",
+    "fullNameSv": "ostronsås",
+    "fullNameEn": "oyster sauce"
+  },
+  {
+    "id": 2362630408192,
+    "nameSv": "kycklingbuljong",
+    "nameEn": "chicken bouillon",
+    "fullNameSv": "kycklingbuljong",
+    "fullNameEn": "chicken bouillon"
+  },
+  {
+    "id": 2362630451200,
+    "nameSv": "msg",
+    "nameEn": "msg",
+    "fullNameSv": "msg",
+    "fullNameEn": "msg"
+  },
+  {
+    "id": 2362630475776,
+    "nameSv": "helig basilika",
+    "nameEn": "holy basil",
+    "fullNameSv": "helig basilika",
+    "fullNameEn": "holy basil"
+  },
+  {
+    "id": 2362630535168,
+    "nameSv": "ingefära",
+    "nameEn": "ginger",
+    "fullNameSv": "ingefära",
+    "fullNameEn": "ginger"
+  },
+  {
+    "id": 2362630656000,
+    "nameSv": "tomat",
+    "nameEn": "tomato",
+    "qualifierSv": "burk",
+    "qualifierEn": "canned",
+    "fullNameSv": "tomat, burk",
+    "fullNameEn": "canned tomato"
+  },
+  {
+    "id": 2362630680576,
+    "nameSv": "lagerblad",
+    "nameEn": "bay leaf",
+    "fullNameSv": "lagerblad",
+    "fullNameEn": "bay leaf"
+  },
+  {
+    "id": 2362630719488,
+    "nameSv": "lagerblad",
+    "nameEn": "bay leaf",
+    "qualifierSv": "färsk",
+    "qualifierEn": "fresh",
+    "fullNameSv": "lagerblad, färsk",
+    "fullNameEn": "fresh bay leaf"
+  },
+  {
+    "id": 2362630791168,
+    "nameSv": "kardemumma",
+    "nameEn": "cardamom",
+    "qualifierSv": "grön",
+    "qualifierEn": "green",
+    "fullNameSv": "kardemumma, grön",
+    "fullNameEn": "green cardamom"
+  },
+  {
+    "id": 2362630838272,
+    "nameSv": "kardemumma",
+    "nameEn": "cardamom",
+    "qualifierSv": "svart",
+    "qualifierEn": "black",
+    "fullNameSv": "kardemumma, svart",
+    "fullNameEn": "black cardamom"
+  },
+  {
+    "id": 2362630864896,
+    "nameSv": "kanelstång",
+    "nameEn": "cinnamon stick",
+    "fullNameSv": "kanelstång",
+    "fullNameEn": "cinnamon stick"
+  },
+  {
+    "id": 2362630889472,
+    "nameSv": "flingsalt",
+    "nameEn": "sea salt",
+    "fullNameSv": "flingsalt",
+    "fullNameEn": "sea salt"
+  },
+  {
+    "id": 2362630916096,
+    "nameSv": "deggi mirch",
+    "nameEn": "deggi mirch",
+    "fullNameSv": "deggi mirch",
+    "fullNameEn": "deggi mirch"
+  },
+  {
+    "id": 2362630965248,
+    "nameSv": "flytande honung",
+    "nameEn": "runny honey",
+    "fullNameSv": "flytande honung",
+    "fullNameEn": "runny honey"
+  },
+  {
+    "id": 2362631012352,
+    "nameSv": "spiskummin",
+    "nameEn": "cumin",
+    "fullNameSv": "spiskummin",
+    "fullNameEn": "cumin"
+  },
+  {
+    "id": 2362631092224,
+    "nameSv": "bockhornsklöver",
+    "nameEn": "fenugreek",
+    "qualifierSv": "torkad",
+    "qualifierEn": "dried",
+    "fullNameSv": "bockhornsklöver, torkad",
+    "fullNameEn": "dried fenugreek"
+  },
+  {
+    "id": 2362631127040,
+    "nameSv": "dill",
+    "nameEn": "dill",
+    "qualifierSv": "färsk",
+    "qualifierEn": "fresh",
+    "fullNameSv": "dill, färsk",
+    "fullNameEn": "fresh dill"
+  },
+  {
+    "id": 2362631147520,
+    "nameSv": "grädde",
+    "nameEn": "cream",
+    "fullNameSv": "grädde",
+    "fullNameEn": "cream"
+  },
+  {
+    "id": 2362631192576,
+    "nameSv": "grekisk yoghurt",
+    "nameEn": "greek yoghurt",
+    "fullNameSv": "grekisk yoghurt",
+    "fullNameEn": "greek yoghurt"
+  },
+  {
+    "id": 2362631260160,
+    "nameSv": "ingefära",
+    "nameEn": "ginger",
+    "qualifierSv": "juliennad",
+    "qualifierEn": "sticks",
+    "derivesFromId": 2362630535168,
+    "fullNameSv": "ingefära, juliennad",
+    "fullNameEn": "ginger sticks"
+  },
+  {
+    "id": 2362631311360,
+    "nameSv": "granatäpple",
+    "nameEn": "pomegranate",
+    "fullNameSv": "granatäpple",
+    "fullNameEn": "pomegranate"
+  },
+  {
+    "id": 2362631383040,
+    "nameSv": "gul lök",
+    "nameEn": "onion",
+    "fullNameSv": "gul lök",
+    "fullNameEn": "onion"
+  },
+  {
+    "id": 2362631401472,
+    "nameSv": "selleri",
+    "nameEn": "celery",
+    "fullNameSv": "selleri",
+    "fullNameEn": "celery"
+  },
+  {
+    "id": 2362631424000,
+    "nameSv": "pancetta",
+    "nameEn": "pancetta",
+    "fullNameSv": "pancetta",
+    "fullNameEn": "pancetta"
+  },
+  {
+    "id": 2362631448576,
+    "nameSv": "köttfärs",
+    "nameEn": "minced meat",
+    "fullNameSv": "köttfärs",
+    "fullNameEn": "minced meat"
+  },
+  {
+    "id": 2362631499776,
+    "nameSv": "tomatpuré",
+    "nameEn": "tomato purée",
+    "fullNameSv": "tomatpuré",
+    "fullNameEn": "tomato purée"
+  },
+  {
+    "id": 2362631534592,
+    "nameSv": "sardeller",
+    "nameEn": "anchovies",
+    "fullNameSv": "sardeller",
+    "fullNameEn": "anchovies"
+  },
+  {
+    "id": 2362631589888,
+    "nameSv": "rött vin",
+    "nameEn": "red wine",
+    "fullNameSv": "rött vin",
+    "fullNameEn": "red wine"
+  },
+  {
+    "id": 2362631604224,
+    "nameSv": "marmite",
+    "nameEn": "marmite",
+    "fullNameSv": "marmite",
+    "fullNameEn": "marmite"
+  },
+  {
+    "id": 2362631624704,
+    "nameSv": "persilja",
+    "nameEn": "parsley",
+    "fullNameSv": "persilja",
+    "fullNameEn": "parsley"
+  },
+  {
+    "id": 2362631688192,
+    "nameSv": "parmesan",
+    "nameEn": "parmesan cheese",
+    "fullNameSv": "parmesan",
+    "fullNameEn": "parmesan cheese"
+  },
+  {
+    "id": 2362631712768,
+    "nameSv": "gurka",
+    "nameEn": "cucumber",
+    "fullNameSv": "gurka",
+    "fullNameEn": "cucumber"
+  },
+  {
+    "id": 2362631733248,
+    "nameSv": "jalapeño",
+    "nameEn": "jalapeño",
+    "fullNameSv": "jalapeño",
+    "fullNameEn": "jalapeño"
+  },
+  {
+    "id": 2362631759872,
+    "nameSv": "pasta",
+    "nameEn": "pasta",
+    "fullNameSv": "pasta",
+    "fullNameEn": "pasta"
+  },
+  {
+    "id": 2362631780352,
+    "nameSv": "guanciale",
+    "nameEn": "guanciale",
+    "fullNameSv": "guanciale",
+    "fullNameEn": "guanciale"
+  },
+  {
+    "id": 2362631800832,
+    "nameSv": "svartpeppar",
+    "nameEn": "black pepper",
+    "fullNameSv": "svartpeppar",
+    "fullNameEn": "black pepper"
+  },
+  {
+    "id": 2362631823360,
+    "nameSv": "pastavatten",
+    "nameEn": "pasta water",
+    "fullNameSv": "pastavatten",
+    "fullNameEn": "pasta water"
+  },
+  {
+    "id": 2362631852032,
+    "nameSv": "jäst",
+    "nameEn": "fresh yeast",
+    "fullNameSv": "jäst",
+    "fullNameEn": "fresh yeast"
+  },
+  {
+    "id": 2362631872512,
+    "nameSv": "kallt vatten",
+    "nameEn": "cold water",
+    "fullNameSv": "kallt vatten",
+    "fullNameEn": "cold water"
+  },
+  {
+    "id": 2362631888896,
+    "nameSv": "kosher salt",
+    "nameEn": "kosher salt",
+    "fullNameSv": "kosher salt",
+    "fullNameEn": "kosher salt"
+  },
+  {
+    "id": 2362631931904,
+    "nameSv": "mjöl",
+    "nameEn": "flour",
+    "qualifierSv": "manitoba cream",
+    "qualifierEn": "manitoba cream",
+    "fullNameSv": "mjöl, manitoba cream",
+    "fullNameEn": "manitoba cream flour"
+  },
+  {
+    "id": 2362632009728,
+    "nameSv": "potatis",
+    "nameEn": "potatoes",
+    "qualifierSv": "små",
+    "qualifierEn": "small",
+    "fullNameSv": "potatis, små",
+    "fullNameEn": "small potatoes"
+  },
+  {
+    "id": 2362632052736,
+    "nameSv": "löjrom",
+    "nameEn": "vendice roe",
+    "fullNameSv": "löjrom",
+    "fullNameEn": "vendice roe"
+  },
+  {
+    "id": 2362632122368,
+    "nameSv": "finhackad gräslök",
+    "nameEn": "finely chopped chives",
+    "fullNameSv": "finhackad gräslök",
+    "fullNameEn": "finely chopped chives"
+  },
+  {
+    "id": 2362632144896,
+    "nameSv": "olja",
+    "nameEn": "oil",
+    "fullNameSv": "olja",
+    "fullNameEn": "oil"
+  },
+  {
+    "id": 2362632175616,
+    "nameSv": "äppelcidervinäger",
+    "nameEn": "apple cider vinegar",
+    "fullNameSv": "äppelcidervinäger",
+    "fullNameEn": "apple cider vinegar"
+  },
+  {
+    "id": 2362632202240,
+    "nameSv": "mjölk",
+    "nameEn": "milk",
+    "fullNameSv": "mjölk",
+    "fullNameEn": "milk"
+  },
+  {
+    "id": 2362632298496,
+    "nameSv": "mjöl",
+    "nameEn": "flour",
+    "qualifierSv": "vetemjöl special",
+    "qualifierEn": "strong bread",
+    "fullNameSv": "mjöl, vetemjöl special",
+    "fullNameEn": "strong bread flour"
+  },
+  {
+    "id": 2362632331264,
+    "nameSv": "kardemumma",
+    "nameEn": "cardamom",
+    "qualifierSv": "malen",
+    "qualifierEn": "ground",
+    "fullNameSv": "kardemumma, malen",
+    "fullNameEn": "ground cardamom"
+  },
+  {
+    "id": 2362632380416,
+    "nameSv": "pärlsocker",
+    "nameEn": "pearl sugar",
+    "fullNameSv": "pärlsocker",
+    "fullNameEn": "pearl sugar"
+  },
+  {
+    "id": 2362632433664,
+    "nameSv": "mandelmassa",
+    "nameEn": "almond paste",
+    "fullNameSv": "mandelmassa",
+    "fullNameEn": "almond paste"
+  },
+  {
+    "id": 2362632445952,
+    "nameSv": "vatten",
+    "nameEn": "water",
+    "fullNameSv": "vatten",
+    "fullNameEn": "water"
+  },
+  {
+    "id": 2362632478720,
+    "nameSv": "oxfilé",
+    "nameEn": "beef fillet",
+    "fullNameSv": "oxfilé",
+    "fullNameEn": "beef fillet"
+  },
+  {
+    "id": 2362632501248,
+    "nameSv": "majonäs",
+    "nameEn": "mayonaise",
+    "fullNameSv": "majonäs",
+    "fullNameEn": "mayonaise"
+  },
+  {
+    "id": 2362632550400,
+    "nameSv": "spritärter",
+    "nameEn": "garden peas",
+    "fullNameSv": "spritärter",
+    "fullNameEn": "garden peas"
+  },
+  {
+    "id": 2362632574976,
+    "nameSv": "dillolja",
+    "nameEn": "dill oil",
+    "fullNameSv": "dillolja",
+    "fullNameEn": "dill oil"
+  },
+  {
+    "id": 2362632648704,
+    "nameSv": "yoghurt",
+    "nameEn": "yoghurt",
+    "fullNameSv": "yoghurt",
+    "fullNameEn": "yoghurt"
+  },
+  {
+    "id": 2362632673280,
+    "nameSv": "blåbär",
+    "nameEn": "blueberries",
+    "fullNameSv": "blåbär",
+    "fullNameEn": "blueberries"
+  },
+  {
+    "id": 2362632697856,
+    "nameSv": "lönnsirap",
+    "nameEn": "maple syrup",
+    "fullNameSv": "lönnsirap",
+    "fullNameEn": "maple syrup"
+  },
+  {
+    "id": 2362632742912,
+    "nameSv": "florsocker",
+    "nameEn": "powdered sugar",
+    "fullNameSv": "florsocker",
+    "fullNameEn": "powdered sugar"
+  },
+  {
+    "id": 2362632804352,
+    "nameSv": "bikarbonat",
+    "nameEn": "baking soda",
+    "fullNameSv": "bikarbonat",
+    "fullNameEn": "baking soda"
+  },
+  {
+    "id": 2362632869888,
+    "nameSv": "nejlika",
+    "nameEn": "cloves",
+    "qualifierSv": "hel",
+    "qualifierEn": "whole",
+    "fullNameSv": "nejlika, hel",
+    "fullNameEn": "whole cloves"
+  },
+  {
+    "id": 2362632892416,
+    "nameSv": "svartpepparkorn",
+    "nameEn": "back pepper corns",
+    "fullNameSv": "svartpepparkorn",
+    "fullNameEn": "back pepper corns"
+  },
+  {
+    "id": 2362632945664,
+    "nameSv": "korianderfrö",
+    "nameEn": "coriander seed",
+    "fullNameSv": "korianderfrö",
+    "fullNameEn": "coriander seed"
+  },
+  {
+    "id": 2362633029632,
+    "nameSv": "spiskumminfrö",
+    "nameEn": "cumin seed",
+    "fullNameSv": "spiskumminfrö",
+    "fullNameEn": "cumin seed"
+  },
+  {
+    "id": 2362633050112,
+    "nameSv": "fänkålsfrö",
+    "nameEn": "fennel seed",
+    "fullNameSv": "fänkålsfrö",
+    "fullNameEn": "fennel seed"
+  },
+  {
+    "id": 2362633097216,
+    "nameSv": "stjärnanis",
+    "nameEn": "star anise",
+    "fullNameSv": "stjärnanis",
+    "fullNameEn": "star anise"
+  },
+  {
+    "id": 2362633134080,
+    "nameSv": "muskotblomma",
+    "nameEn": "mace flower",
+    "fullNameSv": "muskotblomma",
+    "fullNameEn": "mace flower"
+  },
+  {
+    "id": 2362633152512,
+    "nameSv": "vallmofrö",
+    "nameEn": "poppy seed",
+    "fullNameSv": "vallmofrö",
+    "fullNameEn": "poppy seed"
+  },
+  {
+    "id": 2362633177088,
+    "nameSv": "rosblad",
+    "nameEn": "rose petals",
+    "fullNameSv": "rosblad",
+    "fullNameEn": "rose petals"
+  },
+  {
+    "id": 2362633232384,
+    "nameSv": "belugalinser",
+    "nameEn": "beluga lentils",
+    "fullNameSv": "belugalinser",
+    "fullNameEn": "beluga lentils"
+  },
+  {
+    "id": 2362633256960,
+    "nameSv": "vitlökspasta",
+    "nameEn": "garlic paste",
+    "fullNameSv": "vitlökspasta",
+    "fullNameEn": "garlic paste"
+  },
+  {
+    "id": 2362633328640,
+    "nameSv": "salladslök",
+    "nameEn": "spring onion",
+    "fullNameSv": "salladslök",
+    "fullNameEn": "spring onion"
+  },
+  {
+    "id": 2362633381888,
+    "nameSv": "gyozablad",
+    "nameEn": "gyoza wrappers",
+    "fullNameSv": "gyozablad",
+    "fullNameEn": "gyoza wrappers"
+  },
+  {
+    "id": 2362633408512,
+    "nameSv": "risvinäger",
+    "nameEn": "rice vinegar",
+    "fullNameSv": "risvinäger",
+    "fullNameEn": "rice vinegar"
+  },
+  {
+    "id": 2362633457664,
+    "nameSv": "äggula",
+    "nameEn": "egg yolk",
+    "derivesFromId": 2362628841472,
+    "fullNameSv": "äggula",
+    "fullNameEn": "egg yolk"
+  },
+  {
+    "id": 2362633494528,
+    "nameSv": "vitlökspulver",
+    "nameEn": "garlic powder",
+    "fullNameSv": "vitlökspulver",
+    "fullNameEn": "garlic powder"
+  },
+  {
+    "id": 2362633562112,
+    "nameSv": "gochugaru",
+    "nameEn": "gochugaru",
+    "fullNameSv": "gochugaru",
+    "fullNameEn": "gochugaru"
+  },
+  {
+    "id": 2362633596928,
+    "nameSv": "svarta sesamfrön",
+    "nameEn": "black sesame seeds",
+    "fullNameSv": "svarta sesamfrön",
+    "fullNameEn": "black sesame seeds"
+  },
+  {
+    "id": 2362633617408,
+    "nameSv": "gochujang",
+    "nameEn": "gochujang",
+    "fullNameSv": "gochujang",
+    "fullNameEn": "gochujang"
+  },
+  {
+    "id": 2362633650176,
+    "nameSv": "vita sesamfrön",
+    "nameEn": "white sesame seeds",
+    "fullNameSv": "vita sesamfrön",
+    "fullNameEn": "white sesame seeds"
+  },
+  {
+    "id": 2362633707520,
+    "nameSv": "paprikapulver",
+    "nameEn": "paprika powder",
+    "fullNameSv": "paprikapulver",
+    "fullNameEn": "paprika powder"
+  },
+  {
+    "id": 2362633723904,
+    "nameSv": "oregano",
+    "nameEn": "oregano",
+    "fullNameSv": "oregano",
+    "fullNameEn": "oregano"
+  },
+  {
+    "id": 2362633752576,
+    "nameSv": "cayennepeppar",
+    "nameEn": "cayenne pepper",
+    "fullNameSv": "cayennepeppar",
+    "fullNameEn": "cayenne pepper"
+  },
+  {
+    "id": 2362633775104,
+    "nameSv": "chilipulver",
+    "nameEn": "chili powder",
+    "fullNameSv": "chilipulver",
+    "fullNameEn": "chili powder"
+  },
+  {
+    "id": 2362633830400,
+    "nameSv": "torskrygg",
+    "nameEn": "back of cod",
+    "fullNameSv": "torskrygg",
+    "fullNameEn": "back of cod"
+  },
+  {
+    "id": 2362633883648,
+    "nameSv": "spetskål",
+    "nameEn": "pointed cabbage",
+    "fullNameSv": "spetskål",
+    "fullNameEn": "pointed cabbage"
+  },
+  {
+    "id": 2362633904128,
+    "nameSv": "hasselnötter",
+    "nameEn": "hazelnuts",
+    "fullNameSv": "hasselnötter",
+    "fullNameEn": "hazelnuts"
+  },
+  {
+    "id": 2362633945088,
+    "nameSv": "schalottenlök",
+    "nameEn": "shallot",
+    "fullNameSv": "schalottenlök",
+    "fullNameEn": "shallot"
+  },
+  {
+    "id": 2362633975808,
+    "nameSv": "champagne",
+    "nameEn": "champagne",
+    "fullNameSv": "champagne",
+    "fullNameEn": "champagne"
+  },
+  {
+    "id": 2362634055680,
+    "nameSv": "fiskfond",
+    "nameEn": "concentrated fish stock",
+    "fullNameSv": "fiskfond",
+    "fullNameEn": "concentrated fish stock"
+  },
+  {
+    "id": 2362634090496,
+    "nameSv": "rödvinsvinäger",
+    "nameEn": "red wine vinegar",
+    "fullNameSv": "rödvinsvinäger",
+    "fullNameEn": "red wine vinegar"
+  },
+  {
+    "id": 2362634123264,
+    "nameSv": "ärtor",
+    "nameEn": "peas",
+    "fullNameSv": "ärtor",
+    "fullNameEn": "peas"
+  },
+  {
+    "id": 2362634149888,
+    "nameSv": "kakao",
+    "nameEn": "cacao powder",
+    "fullNameSv": "kakao",
+    "fullNameEn": "cacao powder"
+  },
+  {
+    "id": 2362634168320,
+    "nameSv": "havregryn",
+    "nameEn": "oatmeal",
+    "fullNameSv": "havregryn",
+    "fullNameEn": "oatmeal"
+  },
+  {
+    "id": 2362634188800,
+    "nameSv": "kallt kaffe",
+    "nameEn": "cold coffee",
+    "fullNameSv": "kallt kaffe",
+    "fullNameEn": "cold coffee"
+  },
+  {
+    "id": 2362634231808,
+    "nameSv": "torrjäst",
+    "nameEn": "dry yeast",
+    "fullNameSv": "torrjäst",
+    "fullNameEn": "dry yeast"
+  },
+  {
+    "id": 2362634266624,
+    "nameSv": "rosmarin",
+    "nameEn": "rosemary",
+    "qualifierSv": "färsk",
+    "qualifierEn": "fresh",
+    "fullNameSv": "rosmarin, färsk",
+    "fullNameEn": "fresh rosemary"
+  },
+  {
+    "id": 2362634287104,
+    "nameSv": "oliver",
+    "nameEn": "olives",
+    "fullNameSv": "oliver",
+    "fullNameEn": "olives"
+  },
+  {
+    "id": 2362803429376,
+    "nameSv": "vitlöksklyftor",
+    "nameEn": "garlic cloves",
+    "derivesFromId": 2362805157888,
+    "fullNameSv": "vitlöksklyftor",
+    "fullNameEn": "garlic cloves"
+  },
+  {
+    "id": 2362805041152,
+    "nameSv": "fisksås",
+    "nameEn": "fish sauce",
+    "fullNameSv": "fisksås",
+    "fullNameEn": "fish sauce"
+  },
+  {
+    "id": 2362805157888,
+    "nameSv": "vitlök",
+    "nameEn": "garlic",
+    "fullNameSv": "vitlök",
+    "fullNameEn": "garlic"
+  },
+  {
+    "id": 2362805630976,
+    "nameSv": "garam masala",
+    "nameEn": "garam masala",
+    "fullNameSv": "garam masala",
+    "fullNameEn": "garam masala"
+  },
+  {
+    "id": 2363846232064,
+    "nameSv": "makhani sauce",
+    "nameEn": "makhani sauce",
+    "fullNameSv": "makhani sauce",
+    "fullNameEn": "makhani sauce"
+  },
+  {
+    "id": 2363846348800,
+    "nameSv": "koriander",
+    "nameEn": "cilantro",
+    "fullNameSv": "koriander",
+    "fullNameEn": "cilantro"
+  },
+  {
+    "id": 2363846467584,
+    "nameSv": "pecorino",
+    "nameEn": "pecorino",
+    "fullNameSv": "pecorino",
+    "fullNameEn": "pecorino"
+  },
+  {
+    "id": 2363846612992,
+    "nameSv": "gräslök",
+    "nameEn": "chives",
+    "fullNameSv": "gräslök",
+    "fullNameEn": "chives"
+  },
+  {
+    "id": 2363847741440,
+    "nameSv": "pannkaksmix",
+    "nameEn": "pancake mix",
+    "fullNameSv": "pannkaksmix",
+    "fullNameEn": "pancake mix"
+  },
+  {
+    "id": 2363851603968,
+    "nameSv": "lökpulver",
+    "nameEn": "onion powder",
+    "fullNameSv": "lökpulver",
+    "fullNameEn": "onion powder"
+  },
+  {
+    "id": 2363852693504,
+    "nameSv": "vitpeppar",
+    "nameEn": "white pepper",
+    "fullNameSv": "vitpeppar",
+    "fullNameEn": "white pepper"
+  },
+  {
+    "id": 2363853293568,
+    "nameSv": "ingefärspasta",
+    "nameEn": "ginger paste",
+    "fullNameSv": "ingefärspasta",
+    "fullNameEn": "ginger paste"
+  }
+]

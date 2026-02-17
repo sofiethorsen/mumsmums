@@ -12,6 +12,8 @@ interface AutocompletePickerProps {
     onChange: (id: string) => void
     placeholder?: string
     className?: string
+    onCreateNew?: (query: string) => void
+    createNewLabel?: (query: string) => string
 }
 
 const AutocompletePicker: React.FC<AutocompletePickerProps> = ({
@@ -20,6 +22,8 @@ const AutocompletePicker: React.FC<AutocompletePickerProps> = ({
     onChange,
     placeholder = 'Sök...',
     className,
+    onCreateNew,
+    createNewLabel = (q) => `Skapa "${q}"...`,
 }) => {
     const [query, setQuery] = useState('')
     const [isOpen, setIsOpen] = useState(false)
@@ -63,10 +67,23 @@ const AutocompletePicker: React.FC<AutocompletePickerProps> = ({
         setIsOpen(true)
     }
 
+    // Calculate total items including "create new" option
+    const showCreateNew = onCreateNew && query.trim().length > 0
+    const totalItems = filteredOptions.slice(0, 10).length + (showCreateNew ? 1 : 0)
+    const createNewIndex = filteredOptions.slice(0, 10).length
+
     const handleSelect = (option: AutocompletePickerOption) => {
         onChange(option.id)
         setQuery('')
         setIsOpen(false)
+    }
+
+    const handleCreateNew = () => {
+        if (onCreateNew) {
+            onCreateNew(query.trim())
+            setQuery('')
+            setIsOpen(false)
+        }
     }
 
     const handleClear = () => {
@@ -86,7 +103,7 @@ const AutocompletePicker: React.FC<AutocompletePickerProps> = ({
         switch (e.key) {
             case 'ArrowDown':
                 e.preventDefault()
-                setHighlightedIndex(i => Math.min(i + 1, filteredOptions.length - 1))
+                setHighlightedIndex(i => Math.min(i + 1, totalItems - 1))
                 break
             case 'ArrowUp':
                 e.preventDefault()
@@ -94,7 +111,9 @@ const AutocompletePicker: React.FC<AutocompletePickerProps> = ({
                 break
             case 'Enter':
                 e.preventDefault()
-                if (filteredOptions[highlightedIndex]) {
+                if (highlightedIndex === createNewIndex && showCreateNew) {
+                    handleCreateNew()
+                } else if (filteredOptions[highlightedIndex]) {
                     handleSelect(filteredOptions[highlightedIndex])
                 }
                 break
@@ -140,19 +159,27 @@ const AutocompletePicker: React.FC<AutocompletePickerProps> = ({
             </div>
             {isOpen && query && (
                 <ul className={styles.dropdown}>
-                    {filteredOptions.length === 0 ? (
+                    {filteredOptions.length === 0 && !showCreateNew && (
                         <li className={styles.noResults}>Inga resultat</li>
-                    ) : (
-                        filteredOptions.slice(0, 10).map((option, index) => (
-                            <li
-                                key={option.id}
-                                className={`${styles.option} ${index === highlightedIndex ? styles.highlighted : ''}`}
-                                onClick={() => handleSelect(option)}
-                                onMouseEnter={() => setHighlightedIndex(index)}
-                            >
-                                {option.label}
-                            </li>
-                        ))
+                    )}
+                    {filteredOptions.slice(0, 10).map((option, index) => (
+                        <li
+                            key={option.id}
+                            className={`${styles.option} ${index === highlightedIndex ? styles.highlighted : ''}`}
+                            onClick={() => handleSelect(option)}
+                            onMouseEnter={() => setHighlightedIndex(index)}
+                        >
+                            {option.label}
+                        </li>
+                    ))}
+                    {showCreateNew && (
+                        <li
+                            className={`${styles.option} ${styles.createNew} ${highlightedIndex === createNewIndex ? styles.highlighted : ''}`}
+                            onClick={handleCreateNew}
+                            onMouseEnter={() => setHighlightedIndex(createNewIndex)}
+                        >
+                            {createNewLabel(query.trim())}
+                        </li>
                     )}
                 </ul>
             )}

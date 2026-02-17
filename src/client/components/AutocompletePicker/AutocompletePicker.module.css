@@ -97,3 +97,9 @@
     color: var(--color-content-secondary);
     font-style: italic;
 }
+
+.createNew {
+    border-top: 1px solid var(--color-border);
+    color: var(--color-accent-primary);
+    font-weight: 500;
+}

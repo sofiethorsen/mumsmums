@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styles from './AdminPage.module.css'
 import { GetRecipeByIdQuery, LibraryIngredient, LibraryUnit } from '../../graphql/generated'
 import ImageUpload from '../../components/ImageUpload/ImageUpload'
+import AutocompletePicker from '../../components/AutocompletePicker/AutocompletePicker'
 import client from '../../graphql/client'
 import { GET_INGREDIENTS, GET_UNITS } from '../../graphql/queries'
 
@@ -301,18 +302,16 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
                         {section.ingredients.map((ingredient, ingredientIndex) => (
                             <div key={ingredientIndex} className={styles.ingredientRow}>
                                 <div className={styles.ingredientMain}>
-                                    <select
+                                    <AutocompletePicker
+                                        options={libraryIngredients.map(lib => ({
+                                            id: lib.id.toString(),
+                                            label: lib.fullNameSv,
+                                        }))}
                                         value={ingredient.ingredientId}
-                                        onChange={(e) => handleIngredientSelect(sectionIndex, ingredientIndex, e.target.value)}
+                                        onChange={(id) => handleIngredientSelect(sectionIndex, ingredientIndex, id)}
+                                        placeholder="Sök ingrediens..."
                                         className={styles.librarySelect}
-                                    >
-                                        <option value="">Välj ingrediens...</option>
-                                        {libraryIngredients.map(lib => (
-                                            <option key={lib.id} value={lib.id}>
-                                                {lib.fullNameSv}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    />
                                 </div>
                                 <div className={styles.ingredientQuantity}>
                                     <input

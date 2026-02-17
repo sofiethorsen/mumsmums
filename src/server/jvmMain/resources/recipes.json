@@ -1458,28 +1458,38 @@
       {
         "ingredients": [
           {
+            "ingredientId": 2362629079040,
             "name": "mjöl",
             "quantity": 280,
-            "volume": "gram"
+            "unitId": 2362634526720,
+            "volume": "g"
           },
           {
+            "ingredientId": 2362629011456,
             "name": "bakpulver",
             "quantity": 1,
+            "unitId": 2362634387456,
             "volume": "tsk"
           },
           {
+            "ingredientId": 2362632804352,
             "name": "bikarbonat",
             "quantity": 0.5,
+            "unitId": 2362634387456,
             "volume": "tsk"
           },
           {
+            "ingredientId": 2362631888896,
             "name": "kosher salt",
             "quantity": 1,
+            "unitId": 2362634387456,
             "volume": "tsk"
           },
           {
+            "ingredientId": 2362628866048,
             "name": "socker",
             "quantity": 1,
+            "unitId": 2362634409984,
             "volume": "msk"
           }
         ],

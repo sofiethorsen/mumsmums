@@ -1,0 +1,64 @@
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    background-color: var(--color-surface-card);
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.section h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-content-primary);
+}
+
+.step {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    align-items: start;
+}
+
+.stepNumber {
+    padding-top: 8px;
+    font-weight: 500;
+    color: var(--color-content-primary);
+}
+
+.stepInput {
+    padding: 8px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    resize: vertical;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+}
+
+.removeButton {
+    padding: 4px 8px;
+    background-color: var(--terracotta-700);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.removeButton:hover {
+    background-color: var(--terracotta-800);
+}
+
+.addButton {
+    padding: 8px 16px;
+    background-color: var(--color-accent-secondary);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.addButton:hover {
+    background-color: var(--color-accent-secondary-hover);
+}

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import styles from './AdminPage.module.css'
-import { GetRecipeByIdQuery, LibraryIngredient, LibraryUnit } from '../../graphql/generated'
+import { GetRecipeByIdQuery } from '../../graphql/generated'
 import ImageUpload from '../../components/ImageUpload/ImageUpload'
 import AutocompletePicker from '../../components/AutocompletePicker/AutocompletePicker'
 import Modal from '../../components/Modal/Modal'
-import IngredientForm, { IngredientFormValues } from '../../components/IngredientForm/IngredientForm'
-import client from '../../graphql/client'
-import { GET_INGREDIENTS, GET_UNITS, CREATE_INGREDIENT } from '../../graphql/queries'
+import IngredientForm from '../../components/IngredientForm/IngredientForm'
+import { useIngredients, useUnits, useCreateIngredientModal } from '../../hooks'
 
 // Use the query result type - we only need the fields the form actually uses
 type RecipeDetails = NonNullable<GetRecipeByIdQuery['recipe']>
@@ -64,38 +63,11 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
     const [steps, setSteps] = useState<string[]>([''])
 
     // Library data
-    const [libraryIngredients, setLibraryIngredients] = useState<LibraryIngredient[]>([])
-    const [libraryUnits, setLibraryUnits] = useState<LibraryUnit[]>([])
+    const { ingredients: libraryIngredients, addIngredient: addLibraryIngredient } = useIngredients()
+    const { units: libraryUnits } = useUnits()
 
-    // Create ingredient modal state
-    const [createModalOpen, setCreateModalOpen] = useState(false)
-    const [createModalInitialName, setCreateModalInitialName] = useState('')
-    const [createModalTarget, setCreateModalTarget] = useState<{ sectionIndex: number; ingredientIndex: number } | null>(null)
-    const [createModalLoading, setCreateModalLoading] = useState(false)
-    const [createModalError, setCreateModalError] = useState<string | null>(null)
-
-    // Fetch library data on mount
-    useEffect(() => {
-        const fetchLibraryData = async () => {
-            try {
-                const [ingredientsResult, unitsResult] = await Promise.all([
-                    client.query<{ ingredients: LibraryIngredient[] }>({
-                        query: GET_INGREDIENTS,
-                        fetchPolicy: 'cache-first',
-                    }),
-                    client.query<{ units: LibraryUnit[] }>({
-                        query: GET_UNITS,
-                        fetchPolicy: 'cache-first',
-                    }),
-                ])
-                setLibraryIngredients(ingredientsResult.data?.ingredients ?? [])
-                setLibraryUnits(unitsResult.data?.units ?? [])
-            } catch (error) {
-                console.error('Error loading library data:', error)
-            }
-        }
-        fetchLibraryData()
-    }, [])
+    // Create ingredient modal
+    const createModal = useCreateIngredientModal()
 
     useEffect(() => {
         if (recipe) {
@@ -224,59 +196,20 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
     }
 
     const handleCreateNewIngredient = (sectionIndex: number, ingredientIndex: number, query: string) => {
-        setCreateModalInitialName(query)
-        setCreateModalTarget({ sectionIndex, ingredientIndex })
-        setCreateModalError(null)
-        setCreateModalOpen(true)
+        createModal.open(query, { sectionIndex, ingredientIndex })
     }
 
-    const handleCloseCreateModal = () => {
-        setCreateModalOpen(false)
-        setCreateModalInitialName('')
-        setCreateModalTarget(null)
-        setCreateModalError(null)
-    }
-
-    const handleCreateIngredientSubmit = async (values: IngredientFormValues) => {
-        setCreateModalLoading(true)
-        setCreateModalError(null)
-        try {
-            const input = {
-                nameSv: values.nameSv,
-                nameEn: values.nameEn || null,
-                qualifierSv: values.qualifierSv || null,
-                qualifierEn: values.qualifierEn || null,
-                derivesFromId: values.derivesFromId,
-                fullNameSv: values.fullNameSv,
-                fullNameEn: values.fullNameEn || null,
+    const handleCreateIngredientSubmit = async (values: Parameters<typeof createModal.submit>[0]) => {
+        const newIngredient = await createModal.submit(values)
+        if (newIngredient) {
+            addLibraryIngredient(newIngredient)
+            if (createModal.target) {
+                handleIngredientSelect(
+                    createModal.target.sectionIndex,
+                    createModal.target.ingredientIndex,
+                    newIngredient.id.toString()
+                )
             }
-
-            const result = await client.mutate<{ createIngredient: LibraryIngredient }>({
-                mutation: CREATE_INGREDIENT,
-                variables: { input },
-            })
-
-            const newIngredient = result.data?.createIngredient
-            if (newIngredient) {
-                // Add the new ingredient to the list
-                setLibraryIngredients(prev => [...prev, newIngredient])
-
-                // Auto-select it in the target field
-                if (createModalTarget) {
-                    handleIngredientSelect(
-                        createModalTarget.sectionIndex,
-                        createModalTarget.ingredientIndex,
-                        newIngredient.id.toString()
-                    )
-                }
-            }
-
-            handleCloseCreateModal()
-        } catch (error) {
-            console.error('Error creating ingredient:', error)
-            setCreateModalError('Kunde inte spara. Kontrollera att visningsnamnet är unikt.')
-        } finally {
-            setCreateModalLoading(false)
         }
     }
 
@@ -466,21 +399,21 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
         </form>
 
         <Modal
-            isOpen={createModalOpen}
-            onClose={handleCloseCreateModal}
+            isOpen={createModal.isOpen}
+            onClose={createModal.close}
             title="Skapa ny ingrediens"
         >
             <IngredientForm
                 mode="create"
                 initialValues={{
-                    nameSv: createModalInitialName,
-                    fullNameSv: createModalInitialName,
+                    nameSv: createModal.initialName,
+                    fullNameSv: createModal.initialName,
                 }}
                 existingIngredients={libraryIngredients}
                 onSubmit={handleCreateIngredientSubmit}
-                onCancel={handleCloseCreateModal}
-                loading={createModalLoading}
-                error={createModalError}
+                onCancel={createModal.close}
+                loading={createModal.loading}
+                error={createModal.error}
             />
         </Modal>
     </>

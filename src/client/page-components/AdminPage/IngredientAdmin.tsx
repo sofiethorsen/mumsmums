@@ -1,44 +1,30 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import client from '../../graphql/client'
 import type { LibraryIngredient } from '../../graphql/generated'
 import {
-    GET_INGREDIENTS,
     CREATE_INGREDIENT,
     UPDATE_INGREDIENT,
     DELETE_INGREDIENT,
 } from '../../graphql/queries'
 import IngredientForm, { IngredientFormValues } from '../../components/IngredientForm/IngredientForm'
+import { useIngredients } from '../../hooks'
 import styles from './AdminPage.module.css'
 
 type Mode = 'list' | 'create' | 'edit'
 
 const IngredientAdmin: React.FC = () => {
     const [mode, setMode] = useState<Mode>('list')
-    const [ingredients, setIngredients] = useState<LibraryIngredient[]>([])
-    const [loading, setLoading] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
     const [editingIngredient, setEditingIngredient] = useState<LibraryIngredient | null>(null)
     const [formError, setFormError] = useState<string | null>(null)
+    const [saving, setSaving] = useState(false)
 
-    useEffect(() => {
-        loadData()
-    }, [])
-
-    const loadData = async () => {
-        setLoading(true)
-        try {
-            const result = await client.query<{ ingredients: LibraryIngredient[] }>({
-                query: GET_INGREDIENTS,
-                fetchPolicy: 'network-only',
-            })
-            setIngredients(result.data?.ingredients ?? [])
-        } catch (error) {
-            console.error('Error loading data:', error)
-            alert('Kunde inte ladda data')
-        } finally {
-            setLoading(false)
-        }
-    }
+    const {
+        ingredients,
+        loading,
+        reload,
+        removeIngredient,
+    } = useIngredients({ fetchPolicy: 'network-only' })
 
     const handleCreate = () => {
         setEditingIngredient(null)
@@ -65,7 +51,7 @@ const IngredientAdmin: React.FC = () => {
                 mutation: DELETE_INGREDIENT,
                 variables: { id },
             })
-            await loadData()
+            removeIngredient(id)
         } catch (error) {
             console.error('Error deleting ingredient:', error)
             alert('Kunde inte radera')
@@ -73,7 +59,7 @@ const IngredientAdmin: React.FC = () => {
     }
 
     const handleSubmit = async (values: IngredientFormValues) => {
-        setLoading(true)
+        setSaving(true)
         setFormError(null)
         try {
             const input = {
@@ -98,13 +84,13 @@ const IngredientAdmin: React.FC = () => {
                 })
             }
 
-            await loadData()
+            await reload()
             handleCancel()
         } catch (error) {
             console.error('Error saving ingredient:', error)
             setFormError('Kunde inte spara. Kontrollera att visningsnamnet är unikt.')
         } finally {
-            setLoading(false)
+            setSaving(false)
         }
     }
 
@@ -140,7 +126,7 @@ const IngredientAdmin: React.FC = () => {
                 editingId={editingIngredient?.id}
                 onSubmit={handleSubmit}
                 onCancel={handleCancel}
-                loading={loading}
+                loading={saving}
                 error={formError}
             />
         )

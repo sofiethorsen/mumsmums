@@ -50,6 +50,15 @@ interface IngredientSectionInput {
     ingredients: IngredientInput[]
 }
 
+const EMPTY_INGREDIENT: IngredientInput = {
+    name: '',
+    volume: '',
+    quantity: '',
+    recipeId: '',
+    ingredientId: '',
+    unitId: '',
+}
+
 const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
@@ -58,7 +67,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
     const [imageUrl, setImageUrl] = useState('')
     const [uploadError, setUploadError] = useState<string | null>(null)
     const [ingredientSections, setIngredientSections] = useState<IngredientSectionInput[]>([
-        { name: '', ingredients: [{ name: '', volume: '', quantity: '', recipeId: '', ingredientId: '', unitId: '' }] },
+        { name: '', ingredients: [EMPTY_INGREDIENT] },
     ])
     const [steps, setSteps] = useState<string[]>([''])
 
@@ -125,7 +134,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
     const addIngredientSection = () => {
         setIngredientSections([
             ...ingredientSections,
-            { name: '', ingredients: [{ name: '', volume: '', quantity: '', recipeId: '', ingredientId: '', unitId: '' }] },
+            { name: '', ingredients: [EMPTY_INGREDIENT] },
         ])
     }
 
@@ -135,7 +144,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
 
     const addIngredient = (sectionIndex: number) => {
         const newSections = [...ingredientSections]
-        newSections[sectionIndex].ingredients.push({ name: '', volume: '', quantity: '', recipeId: '', ingredientId: '', unitId: '' })
+        newSections[sectionIndex].ingredients.push(EMPTY_INGREDIENT)
         setIngredientSections(newSections)
     }
 

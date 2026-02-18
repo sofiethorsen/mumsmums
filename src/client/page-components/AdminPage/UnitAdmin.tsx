@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import client from '../../graphql/client'
 import { type LibraryUnit, UnitType } from '../../graphql/generated'
 import {
-    GET_UNITS,
     CREATE_UNIT,
     UPDATE_UNIT,
     DELETE_UNIT,
 } from '../../graphql/queries'
+import { useUnits } from '../../hooks'
 import styles from './AdminPage.module.css'
 
 type Mode = 'list' | 'create' | 'edit'
@@ -20,8 +20,7 @@ const UNIT_TYPE_LABELS: Record<UnitType, string> = {
 
 const UnitAdmin: React.FC = () => {
     const [mode, setMode] = useState<Mode>('list')
-    const [units, setUnits] = useState<LibraryUnit[]>([])
-    const [loading, setLoading] = useState(false)
+    const [saving, setSaving] = useState(false)
 
     // Form state
     const [editingId, setEditingId] = useState<number | null>(null)
@@ -33,25 +32,7 @@ const UnitAdmin: React.FC = () => {
     const [mlEquivalent, setMlEquivalent] = useState('')
     const [gEquivalent, setGEquivalent] = useState('')
 
-    useEffect(() => {
-        loadData()
-    }, [])
-
-    const loadData = async () => {
-        setLoading(true)
-        try {
-            const result = await client.query<{ units: LibraryUnit[] }>({
-                query: GET_UNITS,
-                fetchPolicy: 'network-only',
-            })
-            setUnits(result.data?.units ?? [])
-        } catch (error) {
-            console.error('Error loading units:', error)
-            alert('Kunde inte ladda enheter')
-        } finally {
-            setLoading(false)
-        }
-    }
+    const { units, loading, reload, removeUnit } = useUnits({ fetchPolicy: 'network-only' })
 
     const resetForm = () => {
         setMode('list')
@@ -90,7 +71,7 @@ const UnitAdmin: React.FC = () => {
                 mutation: DELETE_UNIT,
                 variables: { id },
             })
-            await loadData()
+            removeUnit(id)
         } catch (error) {
             console.error('Error deleting unit:', error)
             alert('Kunde inte radera')
@@ -108,7 +89,7 @@ const UnitAdmin: React.FC = () => {
             return
         }
 
-        setLoading(true)
+        setSaving(true)
         try {
             const input = {
                 shortNameSv: shortNameSv.trim(),
@@ -132,13 +113,13 @@ const UnitAdmin: React.FC = () => {
                 })
             }
 
-            await loadData()
+            await reload()
             resetForm()
         } catch (error) {
             console.error('Error saving unit:', error)
             alert('Kunde inte spara')
         } finally {
-            setLoading(false)
+            setSaving(false)
         }
     }
 
@@ -232,8 +213,8 @@ const UnitAdmin: React.FC = () => {
                     )}
                 </div>
                 <div className={styles.formActions}>
-                    <button type="submit" className={styles.submitButton} disabled={loading}>
-                        {loading ? 'Sparar...' : 'Spara'}
+                    <button type="submit" className={styles.submitButton} disabled={saving}>
+                        {saving ? 'Sparar...' : 'Spara'}
                     </button>
                     <button type="button" onClick={resetForm} className={styles.cancelButton}>
                         Avbryt

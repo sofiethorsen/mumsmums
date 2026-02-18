@@ -5,6 +5,7 @@ import ImageUpload from '../../components/ImageUpload/ImageUpload'
 import AutocompletePicker from '../../components/AutocompletePicker/AutocompletePicker'
 import Modal from '../../components/Modal/Modal'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
+import StepsEditor from '../../components/StepsEditor/StepsEditor'
 import { useIngredients, useUnits, useCreateIngredientModal } from '../../hooks'
 
 // Use the query result type - we only need the fields the form actually uses
@@ -222,20 +223,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
         }
     }
 
-    const addStep = () => {
-        setSteps([...steps, ''])
-    }
-
-    const removeStep = (index: number) => {
-        setSteps(steps.filter((_, i) => i !== index))
-    }
-
-    const updateStep = (index: number, value: string) => {
-        const newSteps = [...steps]
-        newSteps[index] = value
-        setSteps(newSteps)
-    }
-
     const handleUploadSuccess = (newImageUrl: string) => {
         // Add timestamp to force browser to reload the image (cache busting)
         const urlWithCacheBust = `${newImageUrl}?t=${Date.now()}`
@@ -373,29 +360,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
                 </button>
             </div>
 
-            <div className={styles.formSection}>
-                <h3>Steg</h3>
-                {steps.map((step, index) => (
-                    <div key={index} className={styles.step}>
-                        <span>{index + 1}.</span>
-                        <textarea
-                            value={step}
-                            onChange={(e) => updateStep(index, e.target.value)}
-                            rows={2}
-                            placeholder="Beskrivning"
-                        />
-                        {steps.length > 1 && (
-                            <button type="button" onClick={() => removeStep(index)}>
-                                ✕
-                            </button>
-                        )}
-                    </div>
-                ))}
-
-                <button type="button" onClick={addStep} className={styles.addButton}>
-                    Lägg till steg
-                </button>
-            </div>
+            <StepsEditor steps={steps} onChange={setSteps} />
 
             <div className={styles.formActions}>
                 <button type="submit" className={styles.submitButton}>

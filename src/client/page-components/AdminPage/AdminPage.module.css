@@ -240,42 +240,6 @@
     background-color: var(--terracotta-800);
 }
 
-.step {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 8px;
-    align-items: start;
-}
-
-.step span {
-    padding-top: 8px;
-    font-weight: 500;
-    color: var(--color-content-primary);
-}
-
-.step textarea {
-    padding: 8px;
-    border: 1px solid var(--color-input-border);
-    border-radius: 8px;
-    resize: vertical;
-    background-color: var(--color-input-bg);
-    color: var(--color-content-primary);
-}
-
-.step button {
-    padding: 4px 8px;
-    background-color: var(--terracotta-700);
-    color: var(--cream-50);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.step button:hover {
-    background-color: var(--terracotta-800);
-}
-
 .addButton {
     padding: 8px 16px;
     background-color: var(--color-accent-secondary);

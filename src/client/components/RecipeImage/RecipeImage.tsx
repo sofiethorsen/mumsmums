@@ -44,17 +44,23 @@ const RecipeImage: React.FC<RecipeImageProps> = ({
     }, [priority])
 
     // For priority images (above-the-fold), always render immediately to avoid layout shift
-    if (priority && imageUrl) {
+    if (priority) {
         return (
             <div className={styles.imageWrapper}>
-                <Image
-                    src={imageUrl}
-                    alt={imageAltText}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className={styles.recipeImage}
-                    priority={true}
-                />
+                {imageUrl ? (
+                    <Image
+                        src={imageUrl}
+                        alt={imageAltText}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className={styles.recipeImage}
+                        priority={true}
+                    />
+                ) : (
+                    <div className={styles.noImage}>
+                        <span className={styles.noImageEmoji}>🍽️</span>
+                    </div>
+                )}
             </div>
         )
     }
@@ -70,13 +76,17 @@ const RecipeImage: React.FC<RecipeImageProps> = ({
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className={styles.recipeImage}
                 />
-            ) : (
+            ) : imageUrl ? (
                 <Image
                     src={placeholder}
                     alt={imageAltText}
                     fill
                     className={styles.placeholderImage}
                 />
+            ) : (
+                <div className={styles.noImage}>
+                    <span className={styles.noImageEmoji}>🍽️</span>
+                </div>
             )}
         </div>
     )

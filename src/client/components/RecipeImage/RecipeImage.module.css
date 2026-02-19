@@ -15,6 +15,20 @@
     background-color: transparent;
 }
 
+.noImage {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--stone-200) 0%, var(--stone-300) 100%);
+}
+
+.noImageEmoji {
+    font-size: 3rem;
+    opacity: 0.6;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

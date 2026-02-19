@@ -1,0 +1,74 @@
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background-color: var(--color-surface-card);
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.main {
+    display: flex;
+    gap: 8px;
+}
+
+.ingredientPicker {
+    flex: 1;
+}
+
+.quantity {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr;
+    gap: 8px;
+}
+
+.quantityInput,
+.unitSelect {
+    padding: 8px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+}
+
+.quantityInput:focus,
+.unitSelect:focus {
+    outline: none;
+    border-color: var(--color-input-focus);
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.recipeIdInput {
+    width: 100px;
+    padding: 8px;
+    border: 1px solid var(--color-input-border);
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: var(--color-input-bg);
+    color: var(--color-content-primary);
+}
+
+.recipeIdInput:focus {
+    outline: none;
+    border-color: var(--color-input-focus);
+}
+
+.removeButton {
+    padding: 4px 8px;
+    background-color: var(--terracotta-700);
+    color: var(--cream-50);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.removeButton:hover {
+    background-color: var(--terracotta-800);
+}

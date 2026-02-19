@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import styles from './AdminPage.module.css'
 import { GetRecipeByIdQuery } from '../../graphql/generated'
 import ImageUpload from '../../components/ImageUpload/ImageUpload'
-import AutocompletePicker from '../../components/AutocompletePicker/AutocompletePicker'
 import Modal from '../../components/Modal/Modal'
+import IngredientRowEditor from '../../components/IngredientRowEditor/IngredientRowEditor'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
 import StepsEditor from '../../components/StepsEditor/StepsEditor'
 import { useIngredients, useUnits, useCreateIngredientModal } from '../../hooks'
@@ -161,47 +161,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
         setIngredientSections(newSections)
     }
 
-    const updateIngredient = (sectionIndex: number, ingredientIndex: number, field: string, value: string) => {
+    const updateIngredientRow = (sectionIndex: number, ingredientIndex: number, ingredient: IngredientInput) => {
         const newSections = [...ingredientSections]
-        newSections[sectionIndex].ingredients[ingredientIndex] = {
-            ...newSections[sectionIndex].ingredients[ingredientIndex],
-            [field]: value,
-        }
-        setIngredientSections(newSections)
-    }
-
-    const handleIngredientSelect = (sectionIndex: number, ingredientIndex: number, ingredientId: string) => {
-        const newSections = [...ingredientSections]
-        const ingredient = newSections[sectionIndex].ingredients[ingredientIndex]
-
-        if (ingredientId) {
-            const libraryIngredient = libraryIngredients.find(i => i.id.toString() === ingredientId)
-            if (libraryIngredient) {
-                ingredient.ingredientId = ingredientId
-                ingredient.name = libraryIngredient.fullNameSv
-            }
-        } else {
-            ingredient.ingredientId = ''
-        }
-
-        setIngredientSections(newSections)
-    }
-
-    const handleUnitSelect = (sectionIndex: number, ingredientIndex: number, unitId: string) => {
-        const newSections = [...ingredientSections]
-        const ingredient = newSections[sectionIndex].ingredients[ingredientIndex]
-
-        if (unitId) {
-            const libraryUnit = libraryUnits.find(u => u.id.toString() === unitId)
-            if (libraryUnit) {
-                ingredient.unitId = unitId
-                ingredient.volume = libraryUnit.shortNameSv
-            }
-        } else {
-            ingredient.unitId = ''
-            ingredient.volume = ''
-        }
-
+        newSections[sectionIndex].ingredients[ingredientIndex] = ingredient
         setIngredientSections(newSections)
     }
 
@@ -211,15 +173,15 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
 
     const handleCreateIngredientSubmit = async (values: Parameters<typeof createModal.submit>[0]) => {
         const newIngredient = await createModal.submit(values)
-        if (newIngredient) {
+        if (newIngredient && createModal.target) {
             addLibraryIngredient(newIngredient)
-            if (createModal.target) {
-                handleIngredientSelect(
-                    createModal.target.sectionIndex,
-                    createModal.target.ingredientIndex,
-                    newIngredient.id.toString()
-                )
-            }
+            const { sectionIndex, ingredientIndex } = createModal.target
+            const currentIngredient = ingredientSections[sectionIndex].ingredients[ingredientIndex]
+            updateIngredientRow(sectionIndex, ingredientIndex, {
+                ...currentIngredient,
+                ingredientId: newIngredient.id.toString(),
+                name: newIngredient.fullNameSv,
+            })
         }
     }
 
@@ -296,57 +258,16 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
                         </div>
 
                         {section.ingredients.map((ingredient, ingredientIndex) => (
-                            <div key={ingredientIndex} className={styles.ingredientRow}>
-                                <div className={styles.ingredientMain}>
-                                    <AutocompletePicker
-                                        options={libraryIngredients.map(lib => ({
-                                            id: lib.id.toString(),
-                                            label: lib.fullNameSv,
-                                        }))}
-                                        value={ingredient.ingredientId}
-                                        onChange={(id) => handleIngredientSelect(sectionIndex, ingredientIndex, id)}
-                                        placeholder="Sök ingrediens..."
-                                        className={styles.librarySelect}
-                                        onCreateNew={(query) => handleCreateNewIngredient(sectionIndex, ingredientIndex, query)}
-                                        createNewLabel={(query) => `Skapa "${query}"`}
-                                    />
-                                </div>
-                                <div className={styles.ingredientQuantity}>
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        placeholder="Mängd"
-                                        value={ingredient.quantity}
-                                        onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'quantity', e.target.value)}
-                                    />
-                                    <select
-                                        value={ingredient.unitId}
-                                        onChange={(e) => handleUnitSelect(sectionIndex, ingredientIndex, e.target.value)}
-                                        className={styles.unitSelect}
-                                    >
-                                        <option value="">Välj enhet...</option>
-                                        {libraryUnits.map(unit => (
-                                            <option key={unit.id} value={unit.id}>
-                                                {unit.shortNameSv ? `${unit.shortNameSv} (${unit.nameSv})` : unit.nameSv}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className={styles.ingredientActions}>
-                                    <input
-                                        type="number"
-                                        placeholder="Recept-ID"
-                                        value={ingredient.recipeId}
-                                        onChange={(e) => updateIngredient(sectionIndex, ingredientIndex, 'recipeId', e.target.value)}
-                                        className={styles.recipeIdInput}
-                                    />
-                                    {section.ingredients.length > 1 && (
-                                        <button type="button" onClick={() => removeIngredient(sectionIndex, ingredientIndex)}>
-                                            ✕
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
+                            <IngredientRowEditor
+                                key={ingredientIndex}
+                                ingredient={ingredient}
+                                libraryIngredients={libraryIngredients}
+                                libraryUnits={libraryUnits}
+                                canRemove={section.ingredients.length > 1}
+                                onChange={(updated) => updateIngredientRow(sectionIndex, ingredientIndex, updated)}
+                                onCreateNew={(query) => handleCreateNewIngredient(sectionIndex, ingredientIndex, query)}
+                                onRemove={() => removeIngredient(sectionIndex, ingredientIndex)}
+                            />
                         ))}
 
                         <button type="button" onClick={() => addIngredient(sectionIndex)} className={styles.addButton}>

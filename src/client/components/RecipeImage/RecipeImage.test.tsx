@@ -57,13 +57,28 @@ describe('RecipeImage', () => {
             expect(images).toHaveLength(1)
         })
 
-        it('renders placeholder when imageUrl is undefined', () => {
+        it('renders placeholder with emoji when imageUrl is undefined', () => {
             render(
                 <RecipeImage imageUrl={undefined} imageAltText="Test Recipe" />
             )
 
-            const images = screen.getAllByAltText('Test Recipe')
-            expect(images).toHaveLength(1)
+            expect(screen.getByText('🍽️')).toBeInTheDocument()
+        })
+
+        it('renders placeholder with emoji when imageUrl is null', () => {
+            render(
+                <RecipeImage imageUrl={null} imageAltText="Test Recipe" />
+            )
+
+            expect(screen.getByText('🍽️')).toBeInTheDocument()
+        })
+
+        it('renders placeholder with emoji when priority and no imageUrl', () => {
+            render(
+                <RecipeImage imageUrl={null} imageAltText="Test Recipe" priority />
+            )
+
+            expect(screen.getByText('🍽️')).toBeInTheDocument()
         })
 
         it('renders placeholder when imageUrl does not start with /images/', () => {

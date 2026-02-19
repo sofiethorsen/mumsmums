@@ -3,7 +3,7 @@ import styles from './AdminPage.module.css'
 import { GetRecipeByIdQuery } from '../../graphql/generated'
 import ImageUpload from '../../components/ImageUpload/ImageUpload'
 import Modal from '../../components/Modal/Modal'
-import IngredientRowEditor from '../../components/IngredientRowEditor/IngredientRowEditor'
+import RecipeSectionEditor, { RecipeSectionData } from '../../components/RecipeSectionEditor/RecipeSectionEditor'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
 import StepsEditor from '../../components/StepsEditor/StepsEditor'
 import { useIngredients, useUnits, useCreateIngredientModal } from '../../hooks'
@@ -37,27 +37,16 @@ interface RecipeFormProps {
     onCancel: () => void
 }
 
-interface IngredientInput {
-    name: string
-    volume: string
-    quantity: string
-    recipeId: string
-    ingredientId: string
-    unitId: string
-}
-
-interface IngredientSectionInput {
-    name: string
-    ingredients: IngredientInput[]
-}
-
-const EMPTY_INGREDIENT: IngredientInput = {
+const EMPTY_SECTION: RecipeSectionData = {
     name: '',
-    volume: '',
-    quantity: '',
-    recipeId: '',
-    ingredientId: '',
-    unitId: '',
+    ingredients: [{
+        name: '',
+        volume: '',
+        quantity: '',
+        recipeId: '',
+        ingredientId: '',
+        unitId: '',
+    }],
 }
 
 const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
@@ -67,9 +56,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
     const [numberOfUnits, setNumberOfUnits] = useState('')
     const [imageUrl, setImageUrl] = useState('')
     const [uploadError, setUploadError] = useState<string | null>(null)
-    const [ingredientSections, setIngredientSections] = useState<IngredientSectionInput[]>([
-        { name: '', ingredients: [EMPTY_INGREDIENT] },
-    ])
+    const [sections, setSections] = useState<RecipeSectionData[]>([EMPTY_SECTION])
     const [steps, setSteps] = useState<string[]>([''])
 
     // Library data
@@ -86,7 +73,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
             setServings(recipe.servings?.toString() || '')
             setNumberOfUnits(recipe.numberOfUnits?.toString() || '')
             setImageUrl(recipe.imageUrl || '')
-            setIngredientSections(
+            setSections(
                 recipe.ingredientSections.map((section) => ({
                     name: section.name || '',
                     ingredients: section.ingredients.map((ing) => ({
@@ -113,7 +100,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
             numberOfUnits: numberOfUnits ? parseInt(numberOfUnits) : null,
             // Use imageUrl state (updated after upload), stripping any cache-busting query params
             imageUrl: imageUrl ? imageUrl.split('?')[0] : null,
-            ingredientSections: ingredientSections.map((section) => ({
+            ingredientSections: sections.map((section) => ({
                 name: section.name || null,
                 ingredients: section.ingredients
                     .filter((ing) => ing.name.trim())
@@ -132,39 +119,18 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
         onSubmit(recipeInput)
     }
 
-    const addIngredientSection = () => {
-        setIngredientSections([
-            ...ingredientSections,
-            { name: '', ingredients: [EMPTY_INGREDIENT] },
-        ])
+    const addSection = () => {
+        setSections([...sections, EMPTY_SECTION])
     }
 
-    const removeIngredientSection = (sectionIndex: number) => {
-        setIngredientSections(ingredientSections.filter((_, i) => i !== sectionIndex))
+    const updateSection = (index: number, section: RecipeSectionData) => {
+        const newSections = [...sections]
+        newSections[index] = section
+        setSections(newSections)
     }
 
-    const addIngredient = (sectionIndex: number) => {
-        const newSections = [...ingredientSections]
-        newSections[sectionIndex].ingredients.push(EMPTY_INGREDIENT)
-        setIngredientSections(newSections)
-    }
-
-    const removeIngredient = (sectionIndex: number, ingredientIndex: number) => {
-        const newSections = [...ingredientSections]
-        newSections[sectionIndex].ingredients = newSections[sectionIndex].ingredients.filter((_, i) => i !== ingredientIndex)
-        setIngredientSections(newSections)
-    }
-
-    const updateIngredientSection = (sectionIndex: number, field: string, value: string) => {
-        const newSections = [...ingredientSections]
-        newSections[sectionIndex] = { ...newSections[sectionIndex], [field]: value }
-        setIngredientSections(newSections)
-    }
-
-    const updateIngredientRow = (sectionIndex: number, ingredientIndex: number, ingredient: IngredientInput) => {
-        const newSections = [...ingredientSections]
-        newSections[sectionIndex].ingredients[ingredientIndex] = ingredient
-        setIngredientSections(newSections)
+    const removeSection = (index: number) => {
+        setSections(sections.filter((_, i) => i !== index))
     }
 
     const handleCreateNewIngredient = (sectionIndex: number, ingredientIndex: number, query: string) => {
@@ -176,12 +142,14 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
         if (newIngredient && createModal.target) {
             addLibraryIngredient(newIngredient)
             const { sectionIndex, ingredientIndex } = createModal.target
-            const currentIngredient = ingredientSections[sectionIndex].ingredients[ingredientIndex]
-            updateIngredientRow(sectionIndex, ingredientIndex, {
-                ...currentIngredient,
+            const section = sections[sectionIndex]
+            const updatedIngredients = [...section.ingredients]
+            updatedIngredients[ingredientIndex] = {
+                ...updatedIngredients[ingredientIndex],
                 ingredientId: newIngredient.id.toString(),
                 name: newIngredient.fullNameSv,
-            })
+            }
+            updateSection(sectionIndex, { ...section, ingredients: updatedIngredients })
         }
     }
 
@@ -241,42 +209,20 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
 
             <div className={styles.formSection}>
                 <h3>Ingredienssektioner</h3>
-                {ingredientSections.map((section, sectionIndex) => (
-                    <div key={sectionIndex} className={styles.ingredientSection}>
-                        <div className={styles.sectionHeader}>
-                            <input
-                                type="text"
-                                placeholder="Sektionsnamn (frivilligt)"
-                                value={section.name}
-                                onChange={(e) => updateIngredientSection(sectionIndex, 'name', e.target.value)}
-                            />
-                            {ingredientSections.length > 1 && (
-                                <button type="button" onClick={() => removeIngredientSection(sectionIndex)}>
-                                    Ta bort sektion
-                                </button>
-                            )}
-                        </div>
-
-                        {section.ingredients.map((ingredient, ingredientIndex) => (
-                            <IngredientRowEditor
-                                key={ingredientIndex}
-                                ingredient={ingredient}
-                                libraryIngredients={libraryIngredients}
-                                libraryUnits={libraryUnits}
-                                canRemove={section.ingredients.length > 1}
-                                onChange={(updated) => updateIngredientRow(sectionIndex, ingredientIndex, updated)}
-                                onCreateNew={(query) => handleCreateNewIngredient(sectionIndex, ingredientIndex, query)}
-                                onRemove={() => removeIngredient(sectionIndex, ingredientIndex)}
-                            />
-                        ))}
-
-                        <button type="button" onClick={() => addIngredient(sectionIndex)} className={styles.addButton}>
-                            Lägg till ingrediens
-                        </button>
-                    </div>
+                {sections.map((section, index) => (
+                    <RecipeSectionEditor
+                        key={index}
+                        section={section}
+                        libraryIngredients={libraryIngredients}
+                        libraryUnits={libraryUnits}
+                        canRemove={sections.length > 1}
+                        onChange={(updated) => updateSection(index, updated)}
+                        onCreateNewIngredient={(ingredientIndex, query) => handleCreateNewIngredient(index, ingredientIndex, query)}
+                        onRemove={() => removeSection(index)}
+                    />
                 ))}
 
-                <button type="button" onClick={addIngredientSection} className={styles.addButton}>
+                <button type="button" onClick={addSection} className={styles.addButton}>
                     Lägg till ingredienssektion
                 </button>
             </div>

@@ -1076,12 +1076,150 @@
       "Blöt sedan din hand och ta tag i en sida av degen, sträck upp och vik över sig själv. Rotera bunken ett kvarts varv och upprepa så du har vikt degen fyra gånger totalt. Låt vila övertäckt i 10 minuter. ",
       "Upprepa sträckning/vikning och låt vila övertäckt i 10 minuter. ",
       "Gör en sista omgång av sträckning/vikning. Låt nu vila övertäckt i rumstemperatur i 45 minuter (degen ska öka 30-50% i storlek).",
-      "Se till att bunken fortfarande är väl övertäckt med plastfolie så den ej torkar ut - ställ den nu i kylen över natten; gärna 12h+, men ej mer än 24h.",
+      "Se till att bunken fortfarande är väl övertäckt med plastfolie så den ej torkar ut - ställ den nu i kylen över natten; gärna 12h+, men ej mer än 20h.",
       "På morgonen, sätt ugnen på 250C och ställ en ugnsäker form eller plåt i botten av ugnen (detta för att hälla iskuber eller vatten i utan att riskera att skada ugnsbottnen själv). Låt ugnen värma gärna 30-45 minuter innan du bakar ut. ",
       "Ta ut bunken ur kylen, och pudra generöst med mjöl på toppen. Mjöla även ytan där du ska hälla ut degen. ",
       "Tippa försiktigt ut degen på den mjölade ytan - och försök hantera degen så lite som möjligt, du ska ej knåda eller forma degen då det riskerar att förstöra luftbubblorna. Degen ska vara rejält klibbig.",
       "Skär degen i bitar (du brukar få ut cirka 10 bröd på en sats deg) och lägg sedan upp på plåt med bakplåtspapper. ",
-      "Ställ in plåten med bröd i ugnen - men se även till att hälla några isbitar eller lite vatten i ugnsformen/plåten i bottnen av ugnen. Låt baka i 15 minuter och ta sedan ut för att svalna."
+      "Täck bröden med plastfolie/handduk/plåt så att ytan ej torkar ut, men så att bröden fortfarande tillåts jäsa. Låt jäsa i rumstemperatur ca 45m - 1h. ",
+      "Ställ in plåten med bröd i ugnen - men se även till att hälla några isbitar eller lite vatten i ugnsformen/plåten i bottnen av ugnen. Låt baka i ca 15 minuter och ta sedan ut för att svalna."
+    ]
+  },
+  {
+    "description": "Biff Stroganoff kan göras på många olika styckdetaljer - detta recept är ett långkok på högrev. ",
+    "imageUrl": "/images/recipes/2363866974208.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "ingredientId": 2363864686592,
+            "name": "högrev",
+            "quantity": 1000,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2363864766464,
+            "name": "champinjoner",
+            "quantity": 650,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2362631383040,
+            "name": "gul lök",
+            "quantity": 1,
+            "unitId": 2362634967040,
+            "volume": "st"
+          },
+          {
+            "ingredientId": 2362803429376,
+            "name": "vitlöksklyftor",
+            "quantity": 6,
+            "unitId": 2362634967040,
+            "volume": "st"
+          },
+          {
+            "ingredientId": 2362630291456,
+            "name": "röd chili",
+            "quantity": 1,
+            "unitId": 2362634967040,
+            "volume": "st"
+          },
+          {
+            "ingredientId": 2363864948736,
+            "name": "chipotleflakes",
+            "quantity": 1,
+            "unitId": 2362634387456,
+            "volume": "tsk"
+          },
+          {
+            "ingredientId": 2363865112576,
+            "name": "crème fraiche",
+            "quantity": 5,
+            "unitId": 2362634446848,
+            "volume": "dl"
+          },
+          {
+            "ingredientId": 2362631147520,
+            "name": "grädde",
+            "quantity": 2,
+            "unitId": 2362634446848,
+            "volume": "dl"
+          },
+          {
+            "ingredientId": 2363865184256,
+            "name": "vitt vin",
+            "quantity": 2,
+            "unitId": 2362634446848,
+            "volume": "dl"
+          },
+          {
+            "ingredientId": 2362631499776,
+            "name": "tomatpuré",
+            "quantity": 3,
+            "unitId": 2362634409984,
+            "volume": "msk"
+          },
+          {
+            "ingredientId": 2363865346048,
+            "name": "köttbuljong",
+            "quantity": 1,
+            "unitId": 2362634967040,
+            "volume": "st"
+          },
+          {
+            "ingredientId": 2363865413632,
+            "name": "citron",
+            "unitId": 2362809692160,
+            "volume": "Ingen enhet"
+          },
+          {
+            "ingredientId": 2362628892672,
+            "name": "smör",
+            "unitId": 2362809692160,
+            "volume": "Ingen enhet"
+          },
+          {
+            "ingredientId": 2363865513984,
+            "name": "jordnötsolja",
+            "unitId": 2362809692160,
+            "volume": "Ingen enhet"
+          },
+          {
+            "ingredientId": 2362629218304,
+            "name": "salt",
+            "unitId": 2362809692160,
+            "volume": "Ingen enhet"
+          },
+          {
+            "ingredientId": 2362631800832,
+            "name": "svartpeppar",
+            "unitId": 2362809692160,
+            "volume": "Ingen enhet"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Biff Stroganoff",
+    "numberOfUnits": null,
+    "recipeId": 2363866974208,
+    "servings": 8,
+    "steps": [
+      "Skiva champinjonerna tunt. ",
+      "Börja stek champinjonerna i omgångar, det tar tid att få fin färg. Börja i torr panna med lite salt och lägg i en klick smör när all vätska har kokat bort. Lägg de färdigstekta champinjonerna i en skål och ställ åt sidan. ",
+      "Under tiden som champinjonerna steks, börja skiva högreven i mindre bitar. Salta köttet. Stek även detta i omgångar på hög värme i lite jordnötsolja (eller annan olja med hög rykpunkt) i en stor gjutgärnsgryta. Lägg det färdigstekta köttet i en skål och ställ åt sidan. ",
+      "Medan du steker svamp och kött, finhacka lök, vitlök och chili. ",
+      "När köttet har brynts och plockats ur grytan, häll lite mer olja i grytan (om det behövs) och stek löken, vitlöken och chilin. Häll även i chipotleflakesen. ",
+      "När grönsakerna börjat få färg så kan du hälla i tomatpurén och steka. ",
+      "Häll i köttet och svampen och rör om. ",
+      "Häll på vinet och låt alkoholen koka bort. ",
+      "Häll sedan i all crème fraiche, samt grädden. Lägg i köttbuljongen och rör runt. ",
+      "När allt kokat upp, sänk värmen och lägg på ett lock på glänt. Låt koka i 2-4 timmar tills köttet är mört (beror på storlek och kvalitet). ",
+      "Smaka av ca var 30:e minut, och tillsätt eventuellt lite vatten om för mycket vätska kokar bort. ",
+      "När köttet är mört kan du reducera ytterligare till önskad konsistens. Smaka av med salt, peppar och en skvätt citronsaft.",
+      "Servera med jasminris och gröna ärtor. "
     ]
   },
   {

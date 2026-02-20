@@ -1047,5 +1047,61 @@
     "nameEn": "ginger paste",
     "fullNameSv": "ingefärspasta",
     "fullNameEn": "ginger paste"
+  },
+  {
+    "id": 2363864686592,
+    "nameSv": "högrev",
+    "nameEn": "beef chuck",
+    "fullNameSv": "högrev",
+    "fullNameEn": "beef chuck"
+  },
+  {
+    "id": 2363864766464,
+    "nameSv": "champinjoner",
+    "nameEn": "mushrooms",
+    "fullNameSv": "champinjoner",
+    "fullNameEn": "mushrooms"
+  },
+  {
+    "id": 2363864948736,
+    "nameSv": "chipotleflakes",
+    "nameEn": "chipotle flakes",
+    "fullNameSv": "chipotleflakes",
+    "fullNameEn": "chipotle flakes"
+  },
+  {
+    "id": 2363865112576,
+    "nameSv": "crème fraiche",
+    "nameEn": "crème fraiche",
+    "fullNameSv": "crème fraiche",
+    "fullNameEn": "crème fraiche"
+  },
+  {
+    "id": 2363865184256,
+    "nameSv": "vitt vin",
+    "nameEn": "white wine",
+    "fullNameSv": "vitt vin",
+    "fullNameEn": "white wine"
+  },
+  {
+    "id": 2363865346048,
+    "nameSv": "köttbuljong",
+    "nameEn": "beef bouillon cube",
+    "fullNameSv": "köttbuljong",
+    "fullNameEn": "beef bouillon cube"
+  },
+  {
+    "id": 2363865413632,
+    "nameSv": "citron",
+    "nameEn": "lemon",
+    "fullNameSv": "citron",
+    "fullNameEn": "lemon"
+  },
+  {
+    "id": 2363865513984,
+    "nameSv": "jordnötsolja",
+    "nameEn": "peanut oil",
+    "fullNameSv": "jordnötsolja",
+    "fullNameEn": "peanut oil"
   }
 ]

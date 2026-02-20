@@ -22,6 +22,7 @@ const ImageGrid: React.FC<ImageGridProps> = ({ recipes }) => {
                         <RecipeImage
                             imageUrl={recipe.imageUrl}
                             imageAltText={recipe.name}
+                            priority={index === 0} // LCP optimization: load first image immediately
                         />
                         <div className={styles.imageOverlay} />
                         <div className={styles.recipeName}>

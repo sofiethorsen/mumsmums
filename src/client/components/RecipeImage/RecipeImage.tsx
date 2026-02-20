@@ -54,7 +54,8 @@ const RecipeImage: React.FC<RecipeImageProps> = ({
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className={styles.recipeImage}
-                        priority={true}
+                        priority
+                        fetchPriority="high"
                     />
                 ) : (
                     <div className={styles.noImage}>

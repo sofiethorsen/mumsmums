@@ -12,6 +12,10 @@ bazel_dep(name = "rules_jvm_external", version = "6.7")
 # JVM contrib rules (JUnit 5 test runner)
 bazel_dep(name = "contrib_rules_jvm", version = "0.32.0")
 
+# Transitive dependency via rules_kotlin and rules_jvm_external. Without this pin,
+# 0.6.4 is resolved which fails to load on Linux CI under Bazel 9.
+bazel_dep(name = "rules_android", version = "0.6.6")
+
 # Register Kotlin toolchain
 register_toolchains("//bazel:kotlin_toolchain")
 

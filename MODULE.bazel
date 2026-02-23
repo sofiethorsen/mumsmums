@@ -7,14 +7,18 @@ module(
 bazel_dep(name = "rules_kotlin", version = "2.2.1")
 
 # JVM external rules
-bazel_dep(name = "rules_jvm_external", version = "6.7")
+bazel_dep(name = "rules_jvm_external", version = "6.9")
+
+# Java rules (needed for java_binary with _deploy.jar support in Bazel 9)
+bazel_dep(name = "rules_java", version = "9.3.0")
 
 # JVM contrib rules (JUnit 5 test runner)
 bazel_dep(name = "contrib_rules_jvm", version = "0.32.0")
 
-# Transitive dependency via rules_kotlin and rules_jvm_external. Without this pin,
-# 0.6.4 is resolved which fails to load on Linux CI under Bazel 9.
-bazel_dep(name = "rules_android", version = "0.6.6")
+# Transitive dependency via rules_kotlin. Without this pin, 0.6.4 is resolved
+# which fails to load on Linux CI under Bazel 9.
+# 0.7.0 is the first release with explicit Bazel 9 compatibility.
+bazel_dep(name = "rules_android", version = "0.7.0")
 
 # Register Kotlin toolchain
 register_toolchains("//bazel:kotlin_toolchain")
@@ -46,6 +50,11 @@ maven.artifact(
 maven.install(
     artifacts = [
         "at.favre.lib:bcrypt:0.10.2",
+        # byte-buddy is a transitive dependency of mockk, used for runtime class
+        # generation when creating mocks. Pinned here because rules_jvm_external@6.9
+        # otherwise resolves to 1.12.20 which doesn't support Java 21.
+        "net.bytebuddy:byte-buddy:1.15.11",
+        "net.bytebuddy:byte-buddy-agent:1.15.11",
         "ch.qos.logback:logback-classic:1.5.12",
         "com.auth0:java-jwt:4.4.0",
         "com.apurebase:kgraphql-ktor:0.19.0",

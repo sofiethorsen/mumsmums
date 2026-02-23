@@ -4,10 +4,13 @@ module(
 )
 
 # Kotlin rules
-bazel_dep(name = "rules_kotlin", version = "2.2.0")
+bazel_dep(name = "rules_kotlin", version = "2.2.1")
 
 # JVM external rules
-bazel_dep(name = "rules_jvm_external", version = "6.6")
+bazel_dep(name = "rules_jvm_external", version = "6.7")
+
+# JVM contrib rules (JUnit 5 test runner)
+bazel_dep(name = "contrib_rules_jvm", version = "0.32.0")
 
 # Register Kotlin toolchain
 register_toolchains("//bazel:kotlin_toolchain")
@@ -56,14 +59,15 @@ maven.install(
         "io.ktor:ktor-server-netty-jvm:2.3.2",
         "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3",
         "org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0",
-        "org.junit.jupiter:junit-jupiter-api:5.10.0",
-        "org.junit.jupiter:junit-jupiter-engine:5.10.0",
-        "org.junit.jupiter:junit-jupiter-params:5.10.0",
-        "org.junit.platform:junit-platform-commons:1.10.0",
-        "org.junit.platform:junit-platform-console:1.10.0",
-        "org.junit.platform:junit-platform-engine:1.10.0",
-        "org.junit.platform:junit-platform-launcher:1.10.0",
-        "org.junit.platform:junit-platform-suite-api:1.10.0",
+        "org.junit.jupiter:junit-jupiter-api:5.11.4",
+        "org.junit.jupiter:junit-jupiter-engine:5.11.4",
+        "org.junit.jupiter:junit-jupiter-params:5.11.4",
+        "org.junit.platform:junit-platform-commons:1.11.4",
+        "org.junit.platform:junit-platform-console:1.11.4",
+        "org.junit.platform:junit-platform-engine:1.11.4",
+        "org.junit.platform:junit-platform-launcher:1.11.4",
+        "org.junit.platform:junit-platform-reporting:1.11.4",
+        "org.junit.platform:junit-platform-suite-api:1.11.4",
         "org.xerial:sqlite-jdbc:3.47.1.0",
     ],
     repositories = ["https://repo1.maven.org/maven2"],

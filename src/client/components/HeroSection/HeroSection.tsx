@@ -1,6 +1,6 @@
 import React from 'react'
 import { SearchIcon } from '../icons'
-import style from './HeroSection.module.css'
+import styles from './HeroSection.module.css'
 
 interface HeroSectionProps {
     searchQuery: string
@@ -12,21 +12,21 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     onSearchChange,
 }) => {
     return (
-        <section className={style.hero}>
-            <div className={style.heroContent}>
-                <h1 className={style.title}>Mumsmums</h1>
-                <p className={style.subtitle}>
+        <section className={styles.hero}>
+            <div className={styles.heroContent}>
+                <h1 className={styles.title}>Mumsmums</h1>
+                <p className={styles.subtitle}>
                     Recept utan livshistorier.
                 </p>
 
-                <div className={style.searchWrapper}>
-                    <SearchIcon size={20} className={style.searchIcon} />
+                <div className={styles.searchWrapper}>
+                    <SearchIcon size={20} className={styles.searchIcon} />
                     <input
                         type="text"
                         placeholder="Sök recept..."
                         value={searchQuery}
                         onChange={(e) => onSearchChange(e.target.value)}
-                        className={style.searchInput}
+                        className={styles.searchInput}
                     />
                 </div>
             </div>

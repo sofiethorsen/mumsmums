@@ -2,14 +2,14 @@ import React from 'react'
 import Link from 'next/link'
 
 import { HomeIcon } from '../icons'
-import style from './Navigation.module.css'
+import styles from './Navigation.module.css'
 
 const Navigation = () => {
     return (
-        <div className={style.header}>
-            <nav className={style.nav}>
-                <div className={style.navLeft}>
-                    <Link href="/" className={style.home} aria-label="Hem">
+        <div className={styles.header}>
+            <nav className={styles.nav}>
+                <div className={styles.navLeft}>
+                    <Link href="/" className={styles.home} aria-label="Hem">
                         <HomeIcon size={28} />
                     </Link>
                 </div>

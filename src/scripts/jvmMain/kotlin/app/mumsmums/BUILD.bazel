@@ -1,4 +1,4 @@
-load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
 
 kt_jvm_library(
     name = "lib",
@@ -15,31 +15,31 @@ kt_jvm_library(
     ],
 )
 
-java_binary(
+kt_jvm_binary(
     name = "initalize",
     main_class = "app.mumsmums.InitializeDbKt",
     runtime_deps = [":lib"],
 )
 
-java_binary(
+kt_jvm_binary(
     name = "update",
     main_class = "app.mumsmums.UpdateRecipeItemKt",
     runtime_deps = [":lib"],
 )
 
-java_binary(
+kt_jvm_binary(
     name = "put",
     main_class = "app.mumsmums.PutRecipeItemKt",
     runtime_deps = [":lib"],
 )
 
-java_binary(
+kt_jvm_binary(
     name = "delete",
     main_class = "app.mumsmums.DeleteRecipeItemKt",
     runtime_deps = [":lib"],
 )
 
-java_binary(
+kt_jvm_binary(
     name = "get",
     main_class = "app.mumsmums.GetRecipeItemKt",
     runtime_deps = [":lib"],

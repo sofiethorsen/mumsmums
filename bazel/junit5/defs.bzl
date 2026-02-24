@@ -1,17 +1,14 @@
-load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library", "kt_jvm_test")
+load("@contrib_rules_jvm//java:defs.bzl", "java_junit5_test")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 
-def kt_jvm_junit5_test(name, srcs = [], test_package = None, deps = [], runtime_deps = [], **kwargs):
-    """Generates kotlin test targets that run using junit 5"""
+def kt_jvm_junit5_test(name, srcs = [], test_package = None, deps = [], runtime_deps = [], associates = [], **kwargs):
+    """Generates Kotlin JUnit 5 test targets using contrib_rules_jvm's java_junit5_test runner.
 
-    # args to ignore
-    FILTER_KWARGS = [
-        "main_class",
-        "args",
-    ]
-
-    for arg in FILTER_KWARGS:
-        if arg in kwargs.keys():
-            kwargs.pop(arg)
+    Each source file becomes its own test target. The java_junit5_test runner supports
+    TESTBRIDGE_TEST_ONLY, which is the environment variable Bazel uses to pass --test_filter
+    values. This allows running individual test methods via `bazel test --test_filter=methodName`
+    or from IDE integrations that set this variable.
+    """
 
     if not test_package:
         fail("must specify test package")
@@ -19,39 +16,50 @@ def kt_jvm_junit5_test(name, srcs = [], test_package = None, deps = [], runtime_
     if not srcs:
         fail("must specify sources")
 
-    # Add all the test deps here instead of per test bazel file
     test_deps = [
         "@maven//:org_junit_jupiter_junit_jupiter_api",
         "@maven//:org_junit_jupiter_junit_jupiter_engine",
         "@maven//:org_junit_jupiter_junit_jupiter_params",
         "@maven//:org_junit_platform_junit_platform_suite_api",
     ]
+
     test_runtime_deps = [
         "@maven//:org_junit_platform_junit_platform_commons",
-        "@maven//:org_junit_platform_junit_platform_console",
         "@maven//:org_junit_platform_junit_platform_engine",
         "@maven//:org_junit_platform_junit_platform_launcher",
-        "@maven//:org_junit_platform_junit_platform_suite_api",
+        "@maven//:org_junit_platform_junit_platform_reporting",
     ]
 
-    # If we dynamically generate tests with new names, create a suite with the name provided by the user
-    # so they can still run all tests using the target in their build file.
+    all_deps = deps + test_deps
+    all_runtime_deps = runtime_deps + test_runtime_deps
+
     test_suite_tests = []
 
-    # Generate a test rule for each class
     for src in srcs:
-        classname = src[:src.rfind(".")]  # strip '.<extension>'
-        _rule_kt_test(
+        classname = src[:src.rfind(".")]
+        fully_qualified_class_name = test_package + "." + classname
+        lib_name = classname + "_lib"
+
+        kt_jvm_library(
+            name = lib_name,
             srcs = [src],
+            deps = all_deps,
+            associates = associates,
+            testonly = True,
+        )
+
+        java_junit5_test(
             name = classname,
-            deps = depset(deps + test_deps).to_list(),
-            test_package = test_package,
-            runtime_deps = depset(runtime_deps + test_runtime_deps).to_list(),
+            test_class = fully_qualified_class_name,
+            runtime_deps = [":" + lib_name] + all_runtime_deps,
             **kwargs
         )
+
         if name != classname:
             test_suite_tests.append(classname)
 
+    # When multiple srcs are provided, create a test_suite so the caller's `name`
+    # works as a single target that runs all individual test targets.
     if test_suite_tests:
         native.test_suite(
             name = name,
@@ -59,27 +67,3 @@ def kt_jvm_junit5_test(name, srcs = [], test_package = None, deps = [], runtime_
             tests = test_suite_tests,
             visibility = ["//:__subpackages__"],
         )
-
-def _rule_kt_test(name, test_package, srcs = [], runtime_deps = [], **kwargs):
-    """Helper macro for calling kt_jvm_test"""
-    args = [
-        "--disable-banner",
-        "--include-classname=.*",
-    ]
-
-    if "/" in name:
-        args.append("--select-package")
-        args.append(test_package)
-    else:
-        args.append("--select-class")
-        args.append(test_package + "." + name[name.rfind("/") + 1:])
-
-    kt_jvm_test(
-        name = name,
-        srcs = srcs,
-        testonly = True,
-        main_class = "org.junit.platform.console.ConsoleLauncher",
-        args = args,
-        runtime_deps = runtime_deps,
-        **kwargs
-    )

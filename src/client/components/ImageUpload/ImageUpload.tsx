@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, type FC, type ChangeEvent, type MouseEvent } from 'react'
 import styles from './ImageUpload.module.css'
 import { BACKEND_BASE_URI } from '../../constants/environment'
 
@@ -20,7 +20,7 @@ const TARGET_WIDTH = 1200
 const TARGET_HEIGHT = 600
 const ASPECT_RATIO = TARGET_WIDTH / TARGET_HEIGHT // 2:1
 
-const ImageUpload: React.FC<ImageUploadProps> = ({
+const ImageUpload: FC<ImageUploadProps> = ({
     recipeId,
     currentImageUrl,
     onUploadSuccess,
@@ -75,13 +75,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         img.src = url
     }, [onUploadError])
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0]) {
             handleFileSelect(e.target.files[0])
         }
     }
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
         if (!cropArea || !imageRef.current) return
 
         const rect = imageRef.current.getBoundingClientRect()
@@ -95,7 +95,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         setIsDragging(true)
     }
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
         if (!isDragging || !cropArea || !imageRef.current || !dragStart.current) return
 
         const rect = imageRef.current.getBoundingClientRect()

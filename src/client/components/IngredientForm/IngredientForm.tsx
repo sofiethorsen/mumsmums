@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, type FC, type FormEvent } from 'react'
 import styles from './IngredientForm.module.css'
 import type { LibraryIngredient } from '../../graphql/generated'
 
@@ -24,7 +24,7 @@ interface IngredientFormProps {
     compact?: boolean
 }
 
-const IngredientForm: React.FC<IngredientFormProps> = ({
+const IngredientForm: FC<IngredientFormProps> = ({
     mode,
     initialValues,
     existingIngredients,
@@ -59,7 +59,7 @@ const IngredientForm: React.FC<IngredientFormProps> = ({
         }
     }, [])
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         if (!nameSv.trim()) {
             alert('Namn (svenska) krävs')

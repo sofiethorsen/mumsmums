@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, type FC } from 'react'
 import { useRouter } from 'next/router'
 import client from '../../graphql/client'
 import RecipeForm, { RecipeInput } from './RecipeForm'
@@ -22,7 +22,7 @@ type RecipeDetails = NonNullable<GetRecipeByIdQuery['recipe']>
 
 type Tab = 'recipes' | 'ingredients' | 'units'
 
-const AdminPage: React.FC = () => {
+const AdminPage: FC = () => {
     const router = useRouter()
     const [activeTab, setActiveTab] = useState<Tab>('recipes')
     const [selectedRecipeId, setSelectedRecipeId] = useState<number | null>(null)

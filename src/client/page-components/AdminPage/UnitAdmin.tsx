@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, type FC, type FormEvent } from 'react'
 import client from '../../graphql/client'
 import { type LibraryUnit, UnitType } from '../../graphql/generated'
 import {
@@ -18,7 +18,7 @@ const UNIT_TYPE_LABELS: Record<UnitType, string> = {
     [UnitType.Other]: 'Övrigt',
 }
 
-const UnitAdmin: React.FC = () => {
+const UnitAdmin: FC = () => {
     const [mode, setMode] = useState<Mode>('list')
     const [saving, setSaving] = useState(false)
 
@@ -78,7 +78,7 @@ const UnitAdmin: React.FC = () => {
         }
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         if (!shortNameSv.trim()) {
             alert('Svensk förkortning krävs')

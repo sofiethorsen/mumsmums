@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC } from 'react'
 
 import styles from './IngredientSection.module.css'
 
@@ -9,7 +9,7 @@ interface IngredientSectionProps {
     section: IngredientSectionType
 }
 
-const IngredientSection: React.FC<IngredientSectionProps> = ({ section }) => {
+const IngredientSection: FC<IngredientSectionProps> = ({ section }) => {
     return (
         <div className={styles.section}>
             {section.name && <div className={styles.sectionTitle}>{section.name}</div>}

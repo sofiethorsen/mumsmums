@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, type FC, type ChangeEvent, type KeyboardEvent } from 'react'
 import styles from './AutocompletePicker.module.css'
 
 export interface AutocompletePickerOption {
@@ -16,7 +16,7 @@ interface AutocompletePickerProps {
     createNewLabel?: (query: string) => string
 }
 
-const AutocompletePicker: React.FC<AutocompletePickerProps> = ({
+const AutocompletePicker: FC<AutocompletePickerProps> = ({
     options,
     value,
     onChange,
@@ -58,7 +58,7 @@ const AutocompletePicker: React.FC<AutocompletePickerProps> = ({
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
         setIsOpen(true)
     }
@@ -92,7 +92,7 @@ const AutocompletePicker: React.FC<AutocompletePickerProps> = ({
         inputRef.current?.focus()
     }
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
         if (!isOpen) {
             if (e.key === 'ArrowDown' || e.key === 'Enter') {
                 setIsOpen(true)

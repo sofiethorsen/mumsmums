@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import LoginPage from './LoginPage'
@@ -17,7 +17,7 @@ jest.mock('next/router', () => ({
 // Mock PageFrame to simplify tests
 jest.mock('../../components/PageFrame/PageFrame', () => ({
     __esModule: true,
-    default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+    default: ({ children }: { children: ReactNode }) => <div>{children}</div>,
 }))
 
 // Mock environment

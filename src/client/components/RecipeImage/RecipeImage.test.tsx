@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ImgHTMLAttributes } from 'react'
 import { render, screen, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import RecipeImage from './RecipeImage'
@@ -6,7 +6,7 @@ import RecipeImage from './RecipeImage'
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
     __esModule: true,
-    default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean; sizes?: string }) => {
+    default: (props: ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean; sizes?: string }) => {
         // Filter out Next.js-specific props
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { fill, priority, sizes, ...imgProps } = props

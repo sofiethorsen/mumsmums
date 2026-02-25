@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, type FC, type FormEvent } from 'react'
 import styles from './AdminPage.module.css'
 import { GetRecipeByIdQuery } from '../../graphql/generated'
 import ImageUpload from '../../components/ImageUpload/ImageUpload'
@@ -49,7 +49,7 @@ const EMPTY_SECTION: RecipeSectionData = {
     }],
 }
 
-const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
+const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [servings, setServings] = useState('')
@@ -90,7 +90,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) =
         }
     }, [recipe])
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
 
         const recipeInput = {

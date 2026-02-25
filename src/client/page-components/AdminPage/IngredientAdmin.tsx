@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, type FC } from 'react'
 import client from '../../graphql/client'
 import type { LibraryIngredient } from '../../graphql/generated'
 import {
@@ -12,7 +12,7 @@ import styles from './AdminPage.module.css'
 
 type Mode = 'list' | 'create' | 'edit'
 
-const IngredientAdmin: React.FC = () => {
+const IngredientAdmin: FC = () => {
     const [mode, setMode] = useState<Mode>('list')
     const [searchTerm, setSearchTerm] = useState('')
     const [editingIngredient, setEditingIngredient] = useState<LibraryIngredient | null>(null)

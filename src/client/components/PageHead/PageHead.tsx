@@ -1,3 +1,4 @@
+import type { FC } from 'react'
 import Head from 'next/head'
 import Script from 'next/script'
 
@@ -23,7 +24,7 @@ const renderPreviewImageTag = (meta: PageMeta) => {
     }
 }
 
-const PageHead: React.FC<PageMeta> = (meta: PageMeta) => {
+const PageHead: FC<PageMeta> = (meta: PageMeta) => {
     return (
         <>
             <Head>

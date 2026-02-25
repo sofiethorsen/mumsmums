@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC } from 'react'
 import Link from 'next/link'
 import styles from './UsedInSection.module.css'
 import RecipeImage from '../RecipeImage/RecipeImage'
@@ -8,7 +8,7 @@ interface UsedInSectionProps {
     recipes: RecipeReference[]
 }
 
-const UsedInSection: React.FC<UsedInSectionProps> = ({ recipes }) => {
+const UsedInSection: FC<UsedInSectionProps> = ({ recipes }) => {
     if (!recipes || recipes.length === 0) {
         return null
     }

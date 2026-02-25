@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
 
 import styles from './PageFrame.module.css'
 import client from '../../graphql/client'

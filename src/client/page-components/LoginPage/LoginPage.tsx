@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, type FC, type FormEvent } from 'react'
 import { useRouter } from 'next/router'
 import styles from './LoginPage.module.css'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import { BACKEND_BASE_URI } from '../../constants/environment'
 
-const LoginPage: React.FC = () => {
+const LoginPage: FC = () => {
     const router = useRouter()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
         checkAuth()
     }, [])
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
         setError('')
         setLoading(true)

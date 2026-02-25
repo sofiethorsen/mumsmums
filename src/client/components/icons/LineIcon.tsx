@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC, ReactNode } from 'react'
 
 export interface LineIconProps {
     size?: number
@@ -6,14 +6,14 @@ export interface LineIconProps {
 }
 
 interface BaseLineIconProps extends LineIconProps {
-    children: React.ReactNode
+    children: ReactNode
 }
 
 /**
  * Base component for line-style SVG icons
  * All icons use the same SVG attributes (24x24 viewBox, stroke-based, rounded)
  */
-export const LineIcon: React.FC<BaseLineIconProps> = ({ size = 20, className = '', children }) => {
+export const LineIcon: FC<BaseLineIconProps> = ({ size = 20, className = '', children }) => {
     return (
         <svg
             className={className}

@@ -5,6 +5,8 @@ import app.mumsmums.db.UsersTable
 import app.mumsmums.time.TimeProvider
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -23,7 +25,7 @@ class UsersTableTest {
     }
 
     @Test
-    fun `When finding a user by email, it should return the user`() {
+    fun `When finding a user by email, it should return the user`() = runTest {
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L
         val created = usersTable.createUser("test@example.com", "hashedPassword123")
 
@@ -36,14 +38,14 @@ class UsersTableTest {
     }
 
     @Test
-    fun `When finding a user by email that does not exist, it should return null`() {
+    fun `When finding a user by email that does not exist, it should return null`() = runTest {
         val found = usersTable.findByEmail("nonexistent@example.com")
 
         assertNull(found)
     }
 
     @Test
-    fun `When finding a user by ID, it should return the user`() {
+    fun `When finding a user by ID, it should return the user`() = runTest {
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L
         val created = usersTable.createUser("test@example.com", "hashedPassword123")
 
@@ -54,14 +56,14 @@ class UsersTableTest {
     }
 
     @Test
-    fun `When finding a user by ID that does not exist, it should return null`() {
+    fun `When finding a user by ID that does not exist, it should return null`() = runTest {
         val found = usersTable.findById(999999999L)
 
         assertNull(found)
     }
 
     @Test
-    fun `When updating password hash, it should update and return true`() {
+    fun `When updating password hash, it should update and return true`() = runTest {
         val createTime = 1000000L
         val updateTime = 2000000L
         every { mockTimeProvider.currentTimeMillis() } returns createTime
@@ -79,7 +81,7 @@ class UsersTableTest {
     }
 
     @Test
-    fun `When updating password hash for non-existent user, it should return false`() {
+    fun `When updating password hash for non-existent user, it should return false`() = runTest {
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L
 
         val result = usersTable.updatePasswordHash(999999999L, "newPassword")
@@ -88,13 +90,13 @@ class UsersTableTest {
     }
 
     @Test
-    fun `When creating a user with duplicate email, it should throw exception`() {
+    fun `When creating a user with duplicate email, it should throw exception`() = runTest {
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L
 
         usersTable.createUser("duplicate@example.com", "password1")
 
         assertThrows<SQLException> {
-            usersTable.createUser("duplicate@example.com", "password2")
+            runBlocking { usersTable.createUser("duplicate@example.com", "password2") }
         }
     }
 }

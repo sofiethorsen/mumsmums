@@ -1,14 +1,24 @@
 package app.mumsmums.db
 
 import app.mumsmums.filesystem.MumsMumsPaths
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.withContext
 import java.sql.Connection
 import java.sql.DriverManager
 
 /**
  * Manages the SQLite database connection and initialization.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
     val connection: Connection
+
+    // Single-concurrency dispatcher for all database operations. Uses IO (designed for
+    // blocking I/O like JDBC calls) limited to 1 thread so that only one coroutine accesses
+    // the shared JDBC connection at a time — preventing interleaved statements and transaction
+    // corruption. Callers suspend (non-blocking) while waiting for their turn.
+    private val dbDispatcher = Dispatchers.IO.limitedParallelism(1)
 
     init {
         // Ensure the parent directory exists
@@ -19,6 +29,11 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
         // Enable foreign key constraints (required to use CASCADE for example)
         connection.createStatement().use { statement ->
             statement.execute("PRAGMA foreign_keys = ON")
+        }
+
+        // Enable WAL mode for better read concurrency
+        connection.createStatement().use { statement ->
+            statement.execute("PRAGMA journal_mode = WAL")
         }
 
         // Create tables if they don't exist
@@ -45,6 +60,29 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
             if ("unitId" !in existingColumns) {
                 statement.execute("ALTER TABLE ingredients ADD COLUMN unitId INTEGER REFERENCES unit_library(id)")
             }
+        }
+    }
+
+    /**
+     * Run a read or single-statement write on the DB dispatcher.
+     */
+    suspend fun <T> execute(block: () -> T): T = withContext(dbDispatcher) { block() }
+
+    /**
+     * Run a multi-statement write as an atomic transaction on the DB dispatcher.
+     * Commits on success, rolls back on exception.
+     */
+    suspend fun <T> transaction(block: () -> T): T = withContext(dbDispatcher) {
+        connection.autoCommit = false
+        try {
+            val result = block()
+            connection.commit()
+            result
+        } catch (e: Exception) {
+            connection.rollback()
+            throw e
+        } finally {
+            connection.autoCommit = true
         }
     }
 

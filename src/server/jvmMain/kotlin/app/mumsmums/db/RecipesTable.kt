@@ -11,12 +11,12 @@ import java.sql.ResultSet
 /**
  * Handles CRUD operations for the recipes table.
  */
-class RecipesTable(database: DatabaseConnection, private val idGenerator: NumericIdGenerator) : RecipesDatabase {
+class RecipesTable(private val database: DatabaseConnection, private val idGenerator: NumericIdGenerator) : RecipesDatabase {
     private val connection = database.connection
     private val logger = getLoggerByClass<RecipesTable>()
 
-    override fun get(recipeId: Long): Recipe? {
-        return connection.prepareStatement("SELECT * FROM recipes WHERE recipeId = ?").use { statement ->
+    override suspend fun get(recipeId: Long): Recipe? = database.execute {
+        connection.prepareStatement("SELECT * FROM recipes WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
             if (resultSet.next()) {
@@ -27,12 +27,12 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         }
     }
 
-    override fun put(recipe: Recipe) = withTransaction {
+    override suspend fun put(recipe: Recipe) = database.transaction {
         prepareInsert(recipe)
         logger.info("Inserted recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 
-    override fun batchPut(recipes: List<Recipe>) = withTransaction {
+    override suspend fun batchPut(recipes: List<Recipe>) = database.transaction {
         // Start by inserting all 'main' recipes - this to ensure that any foreign key requirements
         // by linked recipes are satisfied
         recipes.forEach { recipe ->
@@ -70,7 +70,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         logger.info("Loaded {} recipes into SQLite database", recipes.size)
     }
 
-    override fun update(recipeId: Long, recipe: Recipe) = withTransaction {
+    override suspend fun update(recipeId: Long, recipe: Recipe) = database.transaction {
         // Update the main recipe row (don't delete it - other recipes may reference it)
         connection.prepareStatement(
             """
@@ -105,7 +105,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         logger.info("Updated recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 
-    override fun delete(recipeId: Long) = withTransaction {
+    override suspend fun delete(recipeId: Long) = database.transaction {
         // Get recipe name before deleting for confirmation message
         val recipeName = connection.prepareStatement("SELECT name FROM recipes WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
@@ -115,7 +115,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
 
         if (recipeName == null) {
             logger.warn("Attempted to delete non-existent recipe with ID: {}", recipeId)
-            return@withTransaction
+            return@transaction
         }
 
         // Note that the CASCADE on the recipe table handles deletions for related data
@@ -127,7 +127,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         logger.info("Deleted recipe: {} (ID: {})", recipeName, recipeId)
     }
 
-    override fun scan(): List<Recipe> {
+    override suspend fun scan(): List<Recipe> = database.execute {
         val recipes = mutableListOf<Recipe>()
 
         connection.createStatement().use { statement ->
@@ -137,7 +137,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             }
         }
 
-        return recipes
+        recipes
     }
 
     private fun prepareInsert(recipe: Recipe) {
@@ -317,24 +317,7 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
         )
     }
 
-    /**
-     * Executes a block of code within a transaction, commiting if successful or rolling back on exception.
-     */
-    private inline fun <T> withTransaction(block: () -> T): T {
-        connection.autoCommit = false
-        return try {
-            val result = block()
-            connection.commit()
-            result
-        } catch (e: Exception) {
-            connection.rollback()
-            throw e
-        } finally {
-            connection.autoCommit = true
-        }
-    }
-
-    override fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> {
+    override suspend fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> = database.execute {
         val references = mutableListOf<RecipeReference>()
 
         connection.prepareStatement(
@@ -360,6 +343,6 @@ class RecipesTable(database: DatabaseConnection, private val idGenerator: Numeri
             }
         }
 
-        return references
+        references
     }
 }

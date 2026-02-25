@@ -2,7 +2,6 @@ package app.mumsmums.db
 
 import app.mumsmums.logging.getLoggerByClass
 import app.mumsmums.model.User
-import app.mumsmums.time.SystemTimeProvider
 import app.mumsmums.time.TimeProvider
 import java.sql.ResultSet
 import java.sql.Statement
@@ -11,14 +10,14 @@ import java.sql.Statement
  * Handles CRUD operations for the users table.
  */
 class UsersTable(
-    database: DatabaseConnection,
+    private val database: DatabaseConnection,
     private val timeProvider: TimeProvider,
 ) {
     private val connection = database.connection
     private val logger = getLoggerByClass<UsersTable>()
 
-    fun findByEmail(email: String): User? {
-        return connection.prepareStatement(
+    suspend fun findByEmail(email: String): User? = database.execute {
+        connection.prepareStatement(
             "SELECT * FROM users WHERE email = ?"
         ).use { statement ->
             statement.setString(1, email)
@@ -31,8 +30,8 @@ class UsersTable(
         }
     }
 
-    fun findById(userId: Long): User? {
-        return connection.prepareStatement(
+    suspend fun findById(userId: Long): User? = database.execute {
+        connection.prepareStatement(
             "SELECT * FROM users WHERE userId = ?"
         ).use { statement ->
             statement.setLong(1, userId)
@@ -45,7 +44,7 @@ class UsersTable(
         }
     }
 
-    fun createUser(email: String, passwordHash: String): User {
+    suspend fun createUser(email: String, passwordHash: String): User = database.execute {
         val currentTime = timeProvider.currentTimeMillis()
 
         val userId = connection.prepareStatement(
@@ -70,7 +69,7 @@ class UsersTable(
         }
 
         logger.info("Created user with email: {}", email)
-        return User(
+        User(
             userId = userId,
             email = email,
             passwordHash = passwordHash,
@@ -79,7 +78,7 @@ class UsersTable(
         )
     }
 
-    fun updatePasswordHash(userId: Long, newPasswordHash: String): Boolean {
+    suspend fun updatePasswordHash(userId: Long, newPasswordHash: String): Boolean = database.execute {
         val currentTime = timeProvider.currentTimeMillis()
         val rowsUpdated = connection.prepareStatement(
             "UPDATE users SET passwordHash = ?, lastUpdatedAtInMillis = ? WHERE userId = ?"
@@ -93,7 +92,7 @@ class UsersTable(
         if (rowsUpdated > 0) {
             logger.info("Updated password for user ID: {}", userId)
         }
-        return rowsUpdated > 0
+        rowsUpdated > 0
     }
 
     private fun toUser(resultSet: ResultSet): User {

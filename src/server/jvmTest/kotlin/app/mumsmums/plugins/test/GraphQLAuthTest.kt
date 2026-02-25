@@ -17,7 +17,6 @@ import app.mumsmums.plugins.configureSerialization
 import app.mumsmums.revalidation.RevalidationClient
 import app.mumsmums.time.TimeProvider
 import io.ktor.client.request.cookie
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -28,6 +27,7 @@ import io.ktor.server.testing.testApplication
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -72,7 +72,7 @@ class GraphQLAuthTest {
 
         // Create a test user
         val passwordHash = PasswordHasher.hash("testpassword")
-        usersTable.createUser("test@example.com", passwordHash)
+        runBlocking { usersTable.createUser("test@example.com", passwordHash) }
     }
 
     @Test

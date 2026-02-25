@@ -4,6 +4,7 @@ import app.mumsmums.db.DatabaseConnection
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.logging.getLoggerByPackage
+import kotlinx.coroutines.runBlocking
 import kotlin.system.exitProcess
 
 private val logger = getLoggerByPackage()
@@ -25,25 +26,27 @@ fun main(args: Array<String>) {
     val recipesTable = RecipesTable(database, numericIdGenerator)
 
     logger.info("Fetching recipe with ID: $recipeId")
-    recipesTable.get(recipeId)?.let { original ->
-        logger.info("\n=== Original Recipe ===")
-        logger.info("Name: ${original.name}")
-        logger.info("Current imageUrl: ${original.imageUrl}")
+    runBlocking {
+        recipesTable.get(recipeId)?.let { original ->
+            logger.info("\n=== Original Recipe ===")
+            logger.info("Name: ${original.name}")
+            logger.info("Current imageUrl: ${original.imageUrl}")
 
-        // Example: Update image URLs
-        // Modify this section to update the fields you need
-        val updated = original.copy(
-            imageUrl = "https://dmdqeeh0foqsn.cloudfront.net/assets/$recipeId/300-300.webp",
-        )
+            // Example: Update image URLs
+            // Modify this section to update the fields you need
+            val updated = original.copy(
+                imageUrl = "https://dmdqeeh0foqsn.cloudfront.net/assets/$recipeId/300-300.webp",
+            )
 
-        logger.info("\n=== Updating Recipe ===")
-        logger.info("New imageUrl: ${updated.imageUrl}")
+            logger.info("\n=== Updating Recipe ===")
+            logger.info("New imageUrl: ${updated.imageUrl}")
 
-        recipesTable.update(recipeId, updated)
+            recipesTable.update(recipeId, updated)
 
-        logger.info("\n=== Recipe Updated Successfully ===")
-    } ?: run {
-        logger.info("Recipe with ID $recipeId not found")
-        exitProcess(1)
+            logger.info("\n=== Recipe Updated Successfully ===")
+        } ?: run {
+            logger.info("Recipe with ID $recipeId not found")
+            exitProcess(1)
+        }
     }
 }

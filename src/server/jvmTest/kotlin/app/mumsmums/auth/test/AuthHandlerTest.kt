@@ -8,6 +8,7 @@ import app.mumsmums.db.UsersTable
 import app.mumsmums.time.TimeProvider
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -28,7 +29,7 @@ class AuthHandlerTest {
     }
 
     @Test
-    fun `When authenticating with valid credentials, it should return Success with user`() {
+    fun `When authenticating with valid credentials, it should return Success with user`() = runTest {
         val passwordHash = PasswordHasher.hash("password123")
         val created = usersTable.createUser("admin@example.com", passwordHash)
 
@@ -41,7 +42,7 @@ class AuthHandlerTest {
     }
 
     @Test
-    fun `When authenticating with wrong password, it should return InvalidPassword`() {
+    fun `When authenticating with wrong password, it should return InvalidPassword`() = runTest {
         val passwordHash = PasswordHasher.hash("password123")
         usersTable.createUser("admin@example.com", passwordHash)
 
@@ -51,7 +52,7 @@ class AuthHandlerTest {
     }
 
     @Test
-    fun `When authenticating with non-existent email, it should return UserNotFound`() {
+    fun `When authenticating with non-existent email, it should return UserNotFound`() = runTest {
         val result = authHandler.authenticate("nonexistent@example.com", "password123")
 
         assertTrue(result is AuthResult.UserNotFound)

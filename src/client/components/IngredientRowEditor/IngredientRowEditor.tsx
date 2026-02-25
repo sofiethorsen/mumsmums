@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC } from 'react'
 import styles from './IngredientRowEditor.module.css'
 import AutocompletePicker from '../AutocompletePicker/AutocompletePicker'
 import type { LibraryIngredient, LibraryUnit } from '../../graphql/generated'
@@ -22,7 +22,7 @@ interface IngredientRowEditorProps {
     onRemove: () => void
 }
 
-const IngredientRowEditor: React.FC<IngredientRowEditorProps> = ({
+const IngredientRowEditor: FC<IngredientRowEditorProps> = ({
     ingredient,
     libraryIngredients,
     libraryUnits,

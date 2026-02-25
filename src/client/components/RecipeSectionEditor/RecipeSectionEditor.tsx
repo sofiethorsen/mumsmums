@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC } from 'react'
 import styles from './RecipeSectionEditor.module.css'
 import IngredientRowEditor, { IngredientRowData } from '../IngredientRowEditor/IngredientRowEditor'
 import type { LibraryIngredient, LibraryUnit } from '../../graphql/generated'
@@ -27,7 +27,7 @@ interface RecipeSectionEditorProps {
     onRemove: () => void
 }
 
-const RecipeSectionEditor: React.FC<RecipeSectionEditorProps> = ({
+const RecipeSectionEditor: FC<RecipeSectionEditorProps> = ({
     section,
     libraryIngredients,
     libraryUnits,

@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react'
+import { useEffect, type FC, type ReactNode } from 'react'
 import styles from './Modal.module.css'
 
 interface ModalProps {
     isOpen: boolean
     onClose: () => void
     title: string
-    children: React.ReactNode
+    children: ReactNode
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+const Modal: FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
     // Close on Escape key
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {

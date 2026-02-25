@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, type FC, type ChangeEvent } from 'react'
 
 import styles from './IngredientsCard.module.css'
 
@@ -15,12 +15,12 @@ interface IngredientsCardProps {
 
 const MULTIPLIERS = [0.5, 1, 1.5, 2]
 
-const IngredientsCard: React.FC<IngredientsCardProps> = ({ recipe, multiplier: externalMultiplier, onMultiplierChange }) => {
+const IngredientsCard: FC<IngredientsCardProps> = ({ recipe, multiplier: externalMultiplier, onMultiplierChange }) => {
     const [internalMultiplier, setInternalMultiplier] = useState(1)
     const multiplier = externalMultiplier !== undefined ? externalMultiplier : internalMultiplier
     const originalAmount = recipe.numberOfUnits || recipe.servings || 1
 
-    const handleMultiplierChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleMultiplierChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const newMultiplier = parseFloat(e.target.value)
         if (onMultiplierChange) {
             onMultiplierChange(newMultiplier)

@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC } from 'react'
 import { SearchIcon } from '../icons'
 import styles from './HeroSection.module.css'
 
@@ -7,7 +7,7 @@ interface HeroSectionProps {
     onSearchChange: (query: string) => void
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({
+const HeroSection: FC<HeroSectionProps> = ({
     searchQuery,
     onSearchChange,
 }) => {

@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC } from 'react'
 import styles from './ImageGrid.module.css'
 
 import Link from 'next/link'
@@ -12,7 +12,7 @@ interface ImageGridProps {
     recipes: RecipePreview[]
 }
 
-const ImageGrid: React.FC<ImageGridProps> = ({ recipes }) => {
+const ImageGrid: FC<ImageGridProps> = ({ recipes }) => {
 
     return (
         <div className={styles.grid}>

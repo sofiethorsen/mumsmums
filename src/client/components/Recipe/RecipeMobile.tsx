@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, type FC } from 'react'
 import styles from './RecipeMobile.module.css'
 
 import IngredientsCard from '../IngredientsCard/IngredientsCard'
@@ -14,7 +14,7 @@ interface RecipeProps {
     recipe: Recipe
 }
 
-const RecipeMobile: React.FC<RecipeProps> = ({ recipe }) => {
+const RecipeMobile: FC<RecipeProps> = ({ recipe }) => {
     const [multiplier, setMultiplier] = useState(1)
 
     const scaledServings = recipe.servings ? recipe.servings * multiplier : null

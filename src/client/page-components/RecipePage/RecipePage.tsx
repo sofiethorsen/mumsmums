@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { useMediaQuery } from 'react-responsive'
 
 import RecipeDesktop from '../../components/Recipe/RecipeDesktop'
@@ -12,7 +12,7 @@ interface RecipePageProps {
     recipe: Recipe
 }
 
-const RecipePage: React.FC<RecipePageProps> = ({ recipe }) => {
+const RecipePage: FC<RecipePageProps> = ({ recipe }) => {
     const [isDesktop, setDesktop] = useState(false)
 
     const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' })

@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ReactNode, ImgHTMLAttributes } from 'react'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import UsedInSection from './UsedInSection'
@@ -7,7 +7,7 @@ import type { RecipeReference } from '../../graphql/generated'
 // Mock Next.js Link component
 jest.mock('next/link', () => ({
     __esModule: true,
-    default: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    default: ({ children, href }: { children: ReactNode; href: string }) => (
         <a href={href}>{children}</a>
     ),
 }))
@@ -15,7 +15,7 @@ jest.mock('next/link', () => ({
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
     __esModule: true,
-    default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean; sizes?: string }) => {
+    default: (props: ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean; sizes?: string }) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { fill, priority, sizes, ...imgProps } = props
         return <img {...imgProps} />

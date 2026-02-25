@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC } from 'react'
 
 import Link from 'next/link'
 import styles from './IngredientRow.module.css'
@@ -20,7 +20,7 @@ const formatQuantity = (quantity: number): string => {
     return rounded.toString().replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '')
 }
 
-const IngredientRow: React.FC<IngredientRowProps> = ({ ingredient }) => {
+const IngredientRow: FC<IngredientRowProps> = ({ ingredient }) => {
     const quantity = ingredient.quantity ? `${formatQuantity(ingredient.quantity)} ` : ''
     const isNoUnit = ingredient.unitId === NO_UNIT_ID
     const volume = !isNoUnit && ingredient.volume && `${ingredient.volume} `

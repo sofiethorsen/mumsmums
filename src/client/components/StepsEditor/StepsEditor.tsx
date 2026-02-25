@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC } from 'react'
 import styles from './StepsEditor.module.css'
 
 interface StepsEditorProps {
@@ -6,7 +6,7 @@ interface StepsEditorProps {
     onChange: (steps: string[]) => void
 }
 
-const StepsEditor: React.FC<StepsEditorProps> = ({ steps, onChange }) => {
+const StepsEditor: FC<StepsEditorProps> = ({ steps, onChange }) => {
     const addStep = () => onChange([...steps, ''])
 
     const removeStep = (index: number) => {

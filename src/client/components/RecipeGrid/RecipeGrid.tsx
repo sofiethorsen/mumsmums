@@ -1,4 +1,4 @@
-import React from 'react'
+import type { FC } from 'react'
 import styles from './RecipeGrid.module.css'
 import type { GetRecipePreviewsQuery } from '../../graphql/generated'
 import ImageGrid from '../ImageGrid/ImageGrid'
@@ -12,7 +12,7 @@ interface RecipeGridProps {
     error?: { message: string }
 }
 
-const RecipeGrid: React.FC<RecipeGridProps> = ({ recipes, searchQuery, loading = false, error }) => {
+const RecipeGrid: FC<RecipeGridProps> = ({ recipes, searchQuery, loading = false, error }) => {
     if (loading) return null
     if (error) return <p>Error: {error.message}</p>
 

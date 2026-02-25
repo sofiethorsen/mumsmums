@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import HomePage from './HomePage'
@@ -18,7 +18,7 @@ jest.mock('../../components/PageHead/PageHead', () => ({
 
 jest.mock('../../components/PageFrame/PageFrame', () => ({
     __esModule: true,
-    default: ({ children }: { children: React.ReactNode }) => (
+    default: ({ children }: { children: ReactNode }) => (
         <div data-testid="page-frame">{children}</div>
     ),
 }))

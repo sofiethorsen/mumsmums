@@ -1,4 +1,3 @@
-import React from 'react'
 import RecipePage from '../../page-components/RecipePage/RecipePage'
 import PageHead from '../../components/PageHead/PageHead'
 import PageFrame from '../../components/PageFrame/PageFrame'

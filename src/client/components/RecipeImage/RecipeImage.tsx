@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type FC } from 'react'
 import Image from 'next/image'
 import styles from './RecipeImage.module.css'
 
@@ -11,7 +11,7 @@ interface RecipeImageProps {
 // Transparent 1x1 placeholder
 const placeholder = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
 
-const RecipeImage: React.FC<RecipeImageProps> = ({
+const RecipeImage: FC<RecipeImageProps> = ({
     imageUrl,
     imageAltText,
     priority = false

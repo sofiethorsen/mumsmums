@@ -7,10 +7,10 @@ import app.mumsmums.model.UnitType
 /**
  * Handles CRUD operations for the unit_library table.
  */
-class UnitTable(database: DatabaseConnection, private val idGenerator: NumericIdGenerator) {
+class UnitTable(private val database: DatabaseConnection, private val idGenerator: NumericIdGenerator) {
     private val connection = database.connection
 
-    fun getAll(): List<LibraryUnit> {
+    suspend fun getAll(): List<LibraryUnit> = database.execute {
         val units = mutableListOf<LibraryUnit>()
         connection.createStatement().use { statement ->
             val resultSet = statement.executeQuery(
@@ -20,32 +20,37 @@ class UnitTable(database: DatabaseConnection, private val idGenerator: NumericId
                 units.add(toLibraryUnit(resultSet))
             }
         }
-        return units
+        units
     }
 
-    fun getById(id: Long): LibraryUnit? {
+    suspend fun getById(id: Long): LibraryUnit? = database.execute {
         connection.prepareStatement(
             "SELECT id, short_name_sv, short_name_en, name_sv, name_en, type, ml_equivalent, g_equivalent FROM unit_library WHERE id = ?"
         ).use { statement ->
             statement.setLong(1, id)
             val resultSet = statement.executeQuery()
             if (resultSet.next()) {
-                return toLibraryUnit(resultSet)
+                toLibraryUnit(resultSet)
+            } else {
+                null
             }
         }
-        return null
     }
 
-    fun insert(unit: LibraryUnit): Long {
+    suspend fun insert(unit: LibraryUnit): Long = database.execute {
         val id = idGenerator.generateId()
-        insertWithId(unit.copy(id = id))
-        return id
+        insertWithIdInternal(unit.copy(id = id))
+        id
     }
 
     /**
      * Insert a unit with its existing ID (used for database initialization from JSON).
      */
-    fun insertWithId(unit: LibraryUnit) {
+    suspend fun insertWithId(unit: LibraryUnit) = database.execute {
+        insertWithIdInternal(unit)
+    }
+
+    private fun insertWithIdInternal(unit: LibraryUnit) {
         connection.prepareStatement(
             """
             INSERT INTO unit_library (id, short_name_sv, short_name_en, name_sv, name_en, type, ml_equivalent, g_equivalent)
@@ -64,7 +69,7 @@ class UnitTable(database: DatabaseConnection, private val idGenerator: NumericId
         }
     }
 
-    fun update(unit: LibraryUnit) {
+    suspend fun update(unit: LibraryUnit) = database.execute {
         connection.prepareStatement(
             """
             UPDATE unit_library
@@ -84,7 +89,7 @@ class UnitTable(database: DatabaseConnection, private val idGenerator: NumericId
         }
     }
 
-    fun delete(id: Long) {
+    suspend fun delete(id: Long) = database.execute {
         connection.prepareStatement(
             "DELETE FROM unit_library WHERE id = ?"
         ).use { statement ->
@@ -93,7 +98,7 @@ class UnitTable(database: DatabaseConnection, private val idGenerator: NumericId
         }
     }
 
-    fun batchInsert(units: List<LibraryUnit>) {
+    suspend fun batchInsert(units: List<LibraryUnit>) = database.transaction {
         connection.prepareStatement(
             """
             INSERT OR IGNORE INTO unit_library (short_name_sv, short_name_en, name_sv, name_en, type, ml_equivalent, g_equivalent)

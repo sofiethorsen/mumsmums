@@ -20,7 +20,6 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.install
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.principal
-import kotlinx.coroutines.runBlocking
 
 class UnauthorizedException : Exception("Authentication required")
 
@@ -216,10 +215,8 @@ fun Application.configureGraphQL(
                     recipeRepository.createRecipe(recipe)
 
                     // Trigger revalidation of homepage and new recipe page
-                    runBlocking {
-                        val jwtToken = ctx.getJwtToken()
-                        revalidationClient.revalidateRecipe(recipeId, jwtToken)
-                    }
+                    val jwtToken = ctx.getJwtToken()
+                    revalidationClient.revalidateRecipe(recipeId, jwtToken)
 
                     recipe
                 }
@@ -262,10 +259,8 @@ fun Application.configureGraphQL(
                     recipeRepository.updateRecipe(recipeId, updatedRecipe)
 
                     // Trigger revalidation of homepage and updated recipe page
-                    runBlocking {
-                        val jwtToken = ctx.getJwtToken()
-                        revalidationClient.revalidateRecipe(recipeId, jwtToken)
-                    }
+                    val jwtToken = ctx.getJwtToken()
+                    revalidationClient.revalidateRecipe(recipeId, jwtToken)
 
                     updatedRecipe
                 }
@@ -280,10 +275,8 @@ fun Application.configureGraphQL(
                     recipeRepository.deleteRecipe(recipeId)
 
                     // Trigger revalidation of homepage (recipe page will 404)
-                    runBlocking {
-                        val jwtToken = ctx.getJwtToken()
-                        revalidationClient.revalidateHomepage(jwtToken)
-                    }
+                    val jwtToken = ctx.getJwtToken()
+                    revalidationClient.revalidateHomepage(jwtToken)
 
                     true
                 }

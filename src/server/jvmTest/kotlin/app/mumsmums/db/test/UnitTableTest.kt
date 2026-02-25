@@ -7,6 +7,8 @@ import app.mumsmums.model.LibraryUnit
 import app.mumsmums.model.UnitType
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -28,7 +30,7 @@ class UnitTableTest {
     }
 
     @Test
-    fun `insert creates a new unit and returns its id`() {
+    fun `insert creates a new unit and returns its id`() = runTest {
         val id = table.insert(
             LibraryUnit(
                 id = 0,
@@ -55,7 +57,7 @@ class UnitTableTest {
     }
 
     @Test
-    fun `insert with null optional fields works`() {
+    fun `insert with null optional fields works`() = runTest {
         val id = table.insert(
             LibraryUnit(
                 id = 0,
@@ -78,7 +80,7 @@ class UnitTableTest {
     }
 
     @Test
-    fun `insert weight unit with gEquivalent works`() {
+    fun `insert weight unit with gEquivalent works`() = runTest {
         val id = table.insert(
             LibraryUnit(
                 id = 0,
@@ -99,27 +101,27 @@ class UnitTableTest {
     }
 
     @Test
-    fun `insert with duplicate shortNameSv throws exception`() {
+    fun `insert with duplicate shortNameSv throws exception`() = runTest {
         table.insert(
             LibraryUnit(0, "dl", "dl", "deciliter", "deciliter", UnitType.VOLUME, 100f, null)
         )
 
         assertThrows<SQLException> {
-            table.insert(
+            runBlocking { table.insert(
                 LibraryUnit(0, "dl", null, "deciliter variant", null, UnitType.VOLUME, 100f, null)
-            )
+            ) }
         }
     }
 
     @Test
-    fun `getById returns null for non-existent id`() {
+    fun `getById returns null for non-existent id`() = runTest {
         val found = table.getById(999999L)
 
         assertNull(found)
     }
 
     @Test
-    fun `getAll returns all units sorted by Swedish name`() {
+    fun `getAll returns all units sorted by Swedish name`() = runTest {
         table.insert(LibraryUnit(0, "msk", "tbsp", "matsked", "tablespoon", UnitType.VOLUME, 15f, null))
         table.insert(LibraryUnit(0, "dl", "dl", "deciliter", "deciliter", UnitType.VOLUME, 100f, null))
         table.insert(LibraryUnit(0, "g", "g", "gram", "gram", UnitType.WEIGHT, null, 1f))
@@ -133,14 +135,14 @@ class UnitTableTest {
     }
 
     @Test
-    fun `getAll returns empty list when no units exist`() {
+    fun `getAll returns empty list when no units exist`() = runTest {
         val all = table.getAll()
 
         assertTrue(all.isEmpty())
     }
 
     @Test
-    fun `update modifies unit`() {
+    fun `update modifies unit`() = runTest {
         val id = table.insert(
             LibraryUnit(0, "tsk", null, "tesked", null, UnitType.VOLUME, 5f, null)
         )
@@ -155,7 +157,7 @@ class UnitTableTest {
     }
 
     @Test
-    fun `delete removes unit`() {
+    fun `delete removes unit`() = runTest {
         val id = table.insert(
             LibraryUnit(0, "krm", "pinch", "kryddmått", "pinch", UnitType.VOLUME, 1f, null)
         )
@@ -166,14 +168,14 @@ class UnitTableTest {
     }
 
     @Test
-    fun `delete non-existent id does not throw`() {
+    fun `delete non-existent id does not throw`() = runTest {
         assertDoesNotThrow {
-            table.delete(999999L)
+            runBlocking { table.delete(999999L) }
         }
     }
 
     @Test
-    fun `batchInsert creates multiple units`() {
+    fun `batchInsert creates multiple units`() = runTest {
         val units = listOf(
             LibraryUnit(0, "ml", "ml", "milliliter", "milliliter", UnitType.VOLUME, 1f, null),
             LibraryUnit(0, "cl", "cl", "centiliter", "centiliter", UnitType.VOLUME, 10f, null),
@@ -187,7 +189,7 @@ class UnitTableTest {
     }
 
     @Test
-    fun `batchInsert ignores duplicates`() {
+    fun `batchInsert ignores duplicates`() = runTest {
         table.insert(LibraryUnit(0, "g", "g", "gram", "gram", UnitType.WEIGHT, null, 1f))
 
         val units = listOf(
@@ -202,7 +204,7 @@ class UnitTableTest {
     }
 
     @Test
-    fun `all unit types can be stored and retrieved`() {
+    fun `all unit types can be stored and retrieved`() = runTest {
         table.insert(LibraryUnit(0, "dl", "dl", "deciliter", null, UnitType.VOLUME, 100f, null))
         table.insert(LibraryUnit(0, "g", "g", "gram", null, UnitType.WEIGHT, null, 1f))
         table.insert(LibraryUnit(0, "st", "pcs", "stycken", null, UnitType.COUNT, null, null))

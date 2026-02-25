@@ -6,6 +6,8 @@ import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.LibraryIngredient
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -27,7 +29,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `insert creates a new ingredient and returns its id`() {
+    fun `insert creates a new ingredient and returns its id`() = runTest {
         val id = table.insert(
             LibraryIngredient(
                 id = 0,
@@ -54,7 +56,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `insert with null optional fields works`() {
+    fun `insert with null optional fields works`() = runTest {
         val id = table.insert(
             LibraryIngredient(
                 id = 0,
@@ -77,7 +79,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `insert with derivesFromId creates derivation relationship`() {
+    fun `insert with derivesFromId creates derivation relationship`() = runTest {
         val eggId = table.insert(
             LibraryIngredient(0, "ägg", "egg", null, null, null, "ägg", "egg")
         )
@@ -90,27 +92,27 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `insert with duplicate fullNameSv throws exception`() {
+    fun `insert with duplicate fullNameSv throws exception`() = runTest {
         table.insert(
             LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null)
         )
 
         assertThrows<SQLException> {
-            table.insert(
+            runBlocking { table.insert(
                 LibraryIngredient(0, "koriander", null, "färsk", null, null, "koriander", null)
-            )
+            ) }
         }
     }
 
     @Test
-    fun `getById returns null for non-existent id`() {
+    fun `getById returns null for non-existent id`() = runTest {
         val found = table.getById(999999L)
 
         assertNull(found)
     }
 
     @Test
-    fun `getAll returns all ingredients sorted by Swedish name`() {
+    fun `getAll returns all ingredients sorted by Swedish name`() = runTest {
         table.insert(LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null))
         table.insert(LibraryIngredient(0, "lime", null, null, null, null, "lime", null))
         table.insert(LibraryIngredient(0, "koriander", null, "malen", null, null, "koriander, malen", null))
@@ -124,7 +126,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `getDerivedFrom returns all ingredients derived from given ingredient`() {
+    fun `getDerivedFrom returns all ingredients derived from given ingredient`() = runTest {
         val eggId = table.insert(
             LibraryIngredient(0, "ägg", null, null, null, null, "ägg", null)
         )
@@ -142,7 +144,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `getDerivedFrom returns empty list when no derivations exist`() {
+    fun `getDerivedFrom returns empty list when no derivations exist`() = runTest {
         val limeId = table.insert(
             LibraryIngredient(0, "lime", null, null, null, null, "lime", null)
         )
@@ -153,7 +155,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `search finds ingredients by Swedish full name`() {
+    fun `search finds ingredients by Swedish full name`() = runTest {
         table.insert(LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null))
         table.insert(LibraryIngredient(0, "koriander", null, "malen", null, null, "koriander, malen", null))
         table.insert(LibraryIngredient(0, "lime", null, null, null, null, "lime", null))
@@ -165,7 +167,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `search finds ingredients by base name`() {
+    fun `search finds ingredients by base name`() = runTest {
         table.insert(LibraryIngredient(0, "koriander", null, "blad", null, null, "koriander, blad", null))
         table.insert(LibraryIngredient(0, "lime", null, null, null, null, "lime", null))
 
@@ -176,7 +178,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `search finds ingredients by English name`() {
+    fun `search finds ingredients by English name`() = runTest {
         table.insert(LibraryIngredient(0, "koriander", "coriander", null, null, null, "koriander", "coriander"))
         table.insert(LibraryIngredient(0, "lime", "lime", null, null, null, "lime", "lime"))
 
@@ -187,7 +189,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `search returns empty list when no matches`() {
+    fun `search returns empty list when no matches`() = runTest {
         table.insert(LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null))
 
         val results = table.search("xyz")
@@ -196,7 +198,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `update modifies ingredient`() {
+    fun `update modifies ingredient`() = runTest {
         val id = table.insert(
             LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null)
         )
@@ -214,7 +216,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `delete removes ingredient`() {
+    fun `delete removes ingredient`() = runTest {
         val id = table.insert(
             LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null)
         )
@@ -225,14 +227,14 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `delete non-existent id does not throw`() {
+    fun `delete non-existent id does not throw`() = runTest {
         assertDoesNotThrow {
-            table.delete(999999L)
+            runBlocking { table.delete(999999L) }
         }
     }
 
     @Test
-    fun `getByName returns ingredient without qualifier`() {
+    fun `getByName returns ingredient without qualifier`() = runTest {
         table.insert(LibraryIngredient(0, "koriander", null, null, null, null, "koriander", null))
         table.insert(LibraryIngredient(0, "koriander", null, "malen", null, null, "koriander, malen", null))
 
@@ -244,7 +246,7 @@ class IngredientTableTest {
     }
 
     @Test
-    fun `getByName returns null when name has qualifier`() {
+    fun `getByName returns null when name has qualifier`() = runTest {
         table.insert(LibraryIngredient(0, "koriander", null, "malen", null, null, "koriander, malen", null))
 
         val found = table.getByName("koriander")

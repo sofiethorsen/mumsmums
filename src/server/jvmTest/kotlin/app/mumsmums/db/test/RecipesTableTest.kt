@@ -8,6 +8,7 @@ import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,7 +26,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When putting a recipe with an ID, it should be stored with that ID`() {
+    fun `When putting a recipe with an ID, it should be stored with that ID`() = runTest {
         val recipeId = 123456789L
         val recipe = createTestRecipe(recipeId = recipeId, name = "Test Recipe")
 
@@ -38,7 +39,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When putting a recipe without an ID, it should generate one`() {
+    fun `When putting a recipe without an ID, it should generate one`() = runTest {
         val recipeId = 123456789L
         every { mockIdGenerator.generateId() } returns recipeId
         val recipe = createTestRecipe(recipeId = 0L, name = "Auto ID Recipe")
@@ -52,7 +53,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When getting a non-existent recipe, it should return null`() {
+    fun `When getting a non-existent recipe, it should return null`() = runTest {
         val recipeId = 123456789L
         val retrieved = recipesTable.get(recipeId)
 
@@ -60,7 +61,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When batch putting recipes, all should be stored`() {
+    fun `When batch putting recipes, all should be stored`() = runTest {
         val recipeIdOne = 123456789L
         val recipeIdTwo = 456789123L
         val recipeIdThree = 7891234567L
@@ -79,14 +80,14 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When scanning an empty database, it should return an empty list`() {
+    fun `When scanning an empty database, it should return an empty list`() = runTest {
         val recipes = recipesTable.scan()
 
         assertTrue(recipes.isEmpty())
     }
 
     @Test
-    fun `When updating a recipe, the changes should be persisted`() {
+    fun `When updating a recipe, the changes should be persisted`() = runTest {
         val recipeId = 123456789L
         val original = createTestRecipe(recipeId = recipeId, name = "Original Name")
         recipesTable.put(original)
@@ -103,7 +104,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When deleting a recipe, it should be removed from the database`() {
+    fun `When deleting a recipe, it should be removed from the database`() = runTest {
         val recipeId = 123456789L
         val recipe = createTestRecipe(recipeId = recipeId, name = "To Delete")
         recipesTable.put(recipe)
@@ -115,7 +116,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When storing a recipe with ingredients, they should be persisted correctly`() {
+    fun `When storing a recipe with ingredients, they should be persisted correctly`() = runTest {
         val recipeId = 123456789L
         val recipe = Recipe(
             recipeId = recipeId,
@@ -149,7 +150,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When storing a recipe with steps, they should be persisted in order`() {
+    fun `When storing a recipe with steps, they should be persisted in order`() = runTest {
         val recipeId = 123456789L
         val recipe = createTestRecipe(
             recipeId = recipeId,
@@ -164,7 +165,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When storing ingredients with recipe references, they should be preserved`() {
+    fun `When storing ingredients with recipe references, they should be preserved`() = runTest {
         val recipeOneId = 123456789L
         val recipeOne = createTestRecipe(recipeId = recipeOneId, name = "Garam Masala Recipe")
         recipesTable.put(recipeOne)
@@ -195,7 +196,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When storing multiple ingredient sections, they should be preserved in order`() {
+    fun `When storing multiple ingredient sections, they should be preserved in order`() = runTest {
         val recipeId = 123456789L
         val recipe = Recipe(
             recipeId = recipeId,
@@ -223,7 +224,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When updating a recipe, old ingredients should be replaced`() {
+    fun `When updating a recipe, old ingredients should be replaced`() = runTest {
         val recipeId = 123456789L
         val original = Recipe(
             recipeId = recipeId,
@@ -255,7 +256,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When deleting a recipe, CASCADE should remove all related ingredient sections`() {
+    fun `When deleting a recipe, CASCADE should remove all related ingredient sections`() = runTest {
         val recipeId = 123456789L
         val recipe = Recipe(
             recipeId = recipeId,
@@ -299,7 +300,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When deleting a recipe, CASCADE should remove all related ingredients`() {
+    fun `When deleting a recipe, CASCADE should remove all related ingredients`() = runTest {
         val recipeId = 123456789L
         val recipe = Recipe(
             recipeId = recipeId,
@@ -334,7 +335,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When deleting a recipe, CASCADE should remove all related steps`() {
+    fun `When deleting a recipe, CASCADE should remove all related steps`() = runTest {
         val recipeId = 123456789L
         val recipe = createTestRecipe(
             recipeId = recipeId,
@@ -358,7 +359,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When updating a recipe, CASCADE should remove all old steps`() {
+    fun `When updating a recipe, CASCADE should remove all old steps`() = runTest {
         val recipeId = 123456789L
         val original = createTestRecipe(
             recipeId = recipeId,
@@ -389,7 +390,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When a recipe is used as ingredient, getRecipesUsingAsIngredient should return the parent recipe`() {
+    fun `When a recipe is used as ingredient, getRecipesUsingAsIngredient should return the parent recipe`() = runTest {
         // Create a base recipe (e.g., "Garam Masala")
         val baseRecipeId = 111L
         val baseRecipe = createTestRecipe(recipeId = baseRecipeId, name = "Garam Masala")
@@ -424,7 +425,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When a recipe is used in multiple recipes, getRecipesUsingAsIngredient should return all`() {
+    fun `When a recipe is used in multiple recipes, getRecipesUsingAsIngredient should return all`() = runTest {
         // Create a base recipe
         val baseRecipeId = 111L
         val baseRecipe = createTestRecipe(recipeId = baseRecipeId, name = "Taco Seasoning")
@@ -470,7 +471,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When a recipe is not used anywhere, getRecipesUsingAsIngredient should return empty list`() {
+    fun `When a recipe is not used anywhere, getRecipesUsingAsIngredient should return empty list`() = runTest {
         val recipeId = 111L
         val recipe = createTestRecipe(recipeId = recipeId, name = "Standalone Recipe")
         recipesTable.put(recipe)
@@ -481,7 +482,7 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When recipe is used multiple times in same parent, getRecipesUsingAsIngredient should return it once`() {
+    fun `When recipe is used multiple times in same parent, getRecipesUsingAsIngredient should return it once`() = runTest {
         // Create a base recipe
         val baseRecipeId = 111L
         val baseRecipe = createTestRecipe(recipeId = baseRecipeId, name = "Spice Mix")

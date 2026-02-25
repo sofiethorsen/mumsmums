@@ -14,16 +14,16 @@ class RecipeRepository(
     private val imageStoragePath: String
 ) {
 
-    fun getAllRecipes(): List<Recipe> {
+    suspend fun getAllRecipes(): List<Recipe> {
         val items = recipesDatabase.scan()
         return items.sortedBy { it.recipeId }.toList()
     }
 
-    fun getRecipeById(id: Long): Recipe? {
+    suspend fun getRecipeById(id: Long): Recipe? {
         return recipesDatabase.get(id)
     }
 
-    fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> {
+    suspend fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> {
         return recipesDatabase.getRecipesUsingAsIngredient(recipeId)
     }
 
@@ -31,15 +31,15 @@ class RecipeRepository(
         return idGenerator.generateId()
     }
 
-    fun createRecipe(recipe: Recipe) {
+    suspend fun createRecipe(recipe: Recipe) {
         recipesDatabase.put(recipe)
     }
 
-    fun updateRecipe(recipeId: Long, recipe: Recipe) {
+    suspend fun updateRecipe(recipeId: Long, recipe: Recipe) {
         recipesDatabase.update(recipeId, recipe)
     }
 
-    fun deleteRecipe(recipeId: Long) {
+    suspend fun deleteRecipe(recipeId: Long) {
         // Get recipe to check if it has an image
         val recipe = recipesDatabase.get(recipeId)
 

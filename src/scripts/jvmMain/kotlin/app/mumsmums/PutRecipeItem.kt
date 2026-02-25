@@ -7,6 +7,7 @@ import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.json.JsonParser
 import app.mumsmums.logging.getLoggerByPackage
 import app.mumsmums.model.Recipe
+import kotlinx.coroutines.runBlocking
 import kotlin.io.path.Path
 
 private val logger = getLoggerByPackage()
@@ -22,19 +23,21 @@ fun main() {
     logger.info("Reading recipe from: $recipePath")
     val recipeWithId = JsonParser.parseRecipe(Path(recipePath))
 
-    // store the new recipe (ID will be generated if not present)
-    recipesTable.put(recipeWithId)
+    runBlocking {
+        // store the new recipe (ID will be generated if not present)
+        recipesTable.put(recipeWithId)
 
-    // now see if we need to make any updates
-    val allRecipes = recipesTable.scan()
+        // now see if we need to make any updates
+        val allRecipes = recipesTable.scan()
 
-    val updates = filterNeedUpdate(allRecipes)
+        val updates = filterNeedUpdate(allRecipes)
 
-    updates.forEach { recipe ->
-        recipesTable.update(recipe.recipeId, recipe)
+        updates.forEach { recipe ->
+            recipesTable.update(recipe.recipeId, recipe)
+        }
+
+        logger.info("Done! Added/updated ${updates.size + 1} recipe(s)")
     }
-
-    logger.info("Done! Added/updated ${updates.size + 1} recipe(s)")
 }
 
 

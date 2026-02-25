@@ -20,7 +20,7 @@ class AuthHandler(private val usersTable: UsersTable) {
     /**
      * Authenticates a user with email and password.
      */
-    fun authenticate(email: String, password: String): AuthResult {
+    suspend fun authenticate(email: String, password: String): AuthResult {
         val user = usersTable.findByEmail(email)
             ?: return AuthResult.UserNotFound(email)
         return if (PasswordHasher.verify(password, user.passwordHash)) {

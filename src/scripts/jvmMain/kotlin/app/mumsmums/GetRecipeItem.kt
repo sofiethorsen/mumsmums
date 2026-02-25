@@ -4,6 +4,7 @@ import app.mumsmums.db.DatabaseConnection
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.logging.getLoggerByPackage
+import kotlinx.coroutines.runBlocking
 import kotlin.system.exitProcess
 
 private val logger = getLoggerByPackage()
@@ -25,7 +26,7 @@ fun main(args: Array<String>) {
     val recipesTable = RecipesTable(database, numericIdGenerator)
 
     logger.info("Fetching recipe with ID: $recipeId")
-    val recipe = recipesTable.get(recipeId)
+    val recipe = runBlocking { recipesTable.get(recipeId) }
 
     if (recipe != null) {
         logger.info("\n=== Recipe Found ===")

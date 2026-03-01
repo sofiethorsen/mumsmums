@@ -1,6 +1,6 @@
 package app.mumsmums
 
-import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.Database
 import app.mumsmums.db.IngredientTable
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.db.UnitTable
@@ -53,7 +53,7 @@ fun main() {
 
     try {
         // Initialize database connection
-        val database = DatabaseConnection()
+        val database = Database()
         val numericIdGenerator = NumericIdGenerator()
 
         logger.info("Deleting existing tables and recreating them...")

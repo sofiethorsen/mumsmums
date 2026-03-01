@@ -2,7 +2,7 @@ package app.mumsmums
 
 import app.mumsmums.auth.AuthHandler
 import app.mumsmums.auth.JwtConfig
-import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.Database
 import app.mumsmums.db.IngredientTable
 import app.mumsmums.db.RecipeRepository
 import app.mumsmums.db.RecipesTable
@@ -44,12 +44,12 @@ fun Application.module() {
         ?: throw IllegalStateException("$SECURE_COOKIES_ENV_VAR environment variable is required")
     val jwtSecret = System.getenv(JWT_SECRET_ENV_VAR) ?: throw IllegalStateException("$JWT_SECRET_ENV_VAR environment variable is required")
 
-    val connection = DatabaseConnection()
+    val database = Database()
     val idGenerator = NumericIdGenerator()
-    val recipesTable = RecipesTable(connection, idGenerator)
-    val usersTable = UsersTable(connection, SystemTimeProvider)
-    val ingredientTable = IngredientTable(connection, idGenerator)
-    val unitTable = UnitTable(connection, idGenerator)
+    val recipesTable = RecipesTable(database, idGenerator)
+    val usersTable = UsersTable(database, SystemTimeProvider)
+    val ingredientTable = IngredientTable(database, idGenerator)
+    val unitTable = UnitTable(database, idGenerator)
 
     // JWT setup
     val secret = JwtConfig.Secret(jwtSecret)

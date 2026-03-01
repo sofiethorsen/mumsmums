@@ -1,6 +1,6 @@
 package app.mumsmums.db.test
 
-import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.Database
 import app.mumsmums.db.UsersTable
 import app.mumsmums.time.TimeProvider
 import io.mockk.every
@@ -15,13 +15,13 @@ import java.sql.SQLException
 
 class UsersTableTest {
     private val mockTimeProvider = mockk<TimeProvider>()
-    private lateinit var connection: DatabaseConnection
+    private lateinit var database: Database
     private lateinit var usersTable: UsersTable
 
     @BeforeEach
     fun setUp() {
-        connection = DatabaseConnection(":memory:")
-        usersTable = UsersTable(connection, mockTimeProvider)
+        database = Database(":memory:")
+        usersTable = UsersTable(database, mockTimeProvider)
     }
 
     @Test

@@ -1,6 +1,6 @@
 package app.mumsmums.db.test
 
-import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.Database
 import app.mumsmums.db.IngredientTable
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.LibraryIngredient
@@ -16,16 +16,16 @@ import java.sql.SQLException
 
 class IngredientTableTest {
     private val mockIdGenerator = mockk<NumericIdGenerator>()
-    private lateinit var connection: DatabaseConnection
+    private lateinit var database: Database
     private lateinit var table: IngredientTable
     private var nextId = 1L
 
     @BeforeEach
     fun setUp() {
-        connection = DatabaseConnection(":memory:")
+        database = Database(":memory:")
         nextId = 1L
         every { mockIdGenerator.generateId() } answers { nextId++ }
-        table = IngredientTable(connection, mockIdGenerator)
+        table = IngredientTable(database, mockIdGenerator)
     }
 
     @Test

@@ -1,7 +1,7 @@
 package app.mumsmums.db.test
 
 import app.mumsmums.db.RecipesTable
-import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.Database
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
@@ -15,14 +15,14 @@ import org.junit.jupiter.api.Test
 
 class RecipesTableTest {
     private val mockIdGenerator = mockk<NumericIdGenerator>()
-    private lateinit var connection: DatabaseConnection
+    private lateinit var database: Database
     private lateinit var recipesTable: RecipesTable
 
     @BeforeEach
     fun setUp() {
         // Use in-memory SQLite database for testing
-        connection = DatabaseConnection(":memory:")
-        recipesTable = RecipesTable(connection, mockIdGenerator)
+        database = Database(":memory:")
+        recipesTable = RecipesTable(database, mockIdGenerator)
     }
 
     @Test
@@ -288,13 +288,15 @@ class RecipesTableTest {
         assertNull(afterDelete)
 
         // Verify orphaned sections don't exist by checking raw database
-        val sectionCount = connection.connection.prepareStatement(
-            "SELECT COUNT(*) FROM ingredient_sections WHERE recipeId = ?"
-        ).use { statement ->
-            statement.setLong(1, recipeId)
-            val resultSet = statement.executeQuery()
-            resultSet.next()
-            resultSet.getInt(1)
+        val sectionCount = database.execute { connection ->
+            connection.prepareStatement(
+                "SELECT COUNT(*) FROM ingredient_sections WHERE recipeId = ?"
+            ).use { statement ->
+                statement.setLong(1, recipeId)
+                val resultSet = statement.executeQuery()
+                resultSet.next()
+                resultSet.getInt(1)
+            }
         }
         assertEquals(0, sectionCount)
     }
@@ -323,13 +325,15 @@ class RecipesTableTest {
         recipesTable.delete(recipeId)
 
         // Verify orphaned ingredients don't exist by checking raw database
-        val ingredientCount = connection.connection.prepareStatement(
-            "SELECT COUNT(*) FROM ingredients WHERE sectionId IN (SELECT id FROM ingredient_sections WHERE recipeId = ?)"
-        ).use { statement ->
-            statement.setLong(1, recipeId)
-            val resultSet = statement.executeQuery()
-            resultSet.next()
-            resultSet.getInt(1)
+        val ingredientCount = database.execute { connection ->
+            connection.prepareStatement(
+                "SELECT COUNT(*) FROM ingredients WHERE sectionId IN (SELECT id FROM ingredient_sections WHERE recipeId = ?)"
+            ).use { statement ->
+                statement.setLong(1, recipeId)
+                val resultSet = statement.executeQuery()
+                resultSet.next()
+                resultSet.getInt(1)
+            }
         }
         assertEquals(0, ingredientCount)
     }
@@ -347,13 +351,15 @@ class RecipesTableTest {
         recipesTable.delete(recipeId)
 
         // Verify orphaned steps don't exist by checking raw database
-        val stepsCount = connection.connection.prepareStatement(
-            "SELECT COUNT(*) FROM recipe_steps WHERE recipeId = ?"
-        ).use { statement ->
-            statement.setLong(1, recipeId)
-            val resultSet = statement.executeQuery()
-            resultSet.next()
-            resultSet.getInt(1)
+        val stepsCount = database.execute { connection ->
+            connection.prepareStatement(
+                "SELECT COUNT(*) FROM recipe_steps WHERE recipeId = ?"
+            ).use { statement ->
+                statement.setLong(1, recipeId)
+                val resultSet = statement.executeQuery()
+                resultSet.next()
+                resultSet.getInt(1)
+            }
         }
         assertEquals(0, stepsCount)
     }
@@ -378,13 +384,15 @@ class RecipesTableTest {
         assertEquals("New Step 1", retrieved?.steps?.get(0))
 
         // Verify old steps don't exist by checking count
-        val stepsCount = connection.connection.prepareStatement(
-            "SELECT COUNT(*) FROM recipe_steps WHERE recipeId = ?"
-        ).use { statement ->
-            statement.setLong(1, recipeId)
-            val resultSet = statement.executeQuery()
-            resultSet.next()
-            resultSet.getInt(1)
+        val stepsCount = database.execute { connection ->
+            connection.prepareStatement(
+                "SELECT COUNT(*) FROM recipe_steps WHERE recipeId = ?"
+            ).use { statement ->
+                statement.setLong(1, recipeId)
+                val resultSet = statement.executeQuery()
+                resultSet.next()
+                resultSet.getInt(1)
+            }
         }
         assertEquals(1, stepsCount)
     }

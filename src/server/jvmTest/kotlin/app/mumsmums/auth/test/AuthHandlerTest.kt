@@ -3,7 +3,7 @@ package app.mumsmums.auth.test
 import app.mumsmums.auth.AuthHandler
 import app.mumsmums.auth.AuthResult
 import app.mumsmums.auth.PasswordHasher
-import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.Database
 import app.mumsmums.db.UsersTable
 import app.mumsmums.time.TimeProvider
 import io.mockk.every
@@ -15,14 +15,14 @@ import org.junit.jupiter.api.Test
 
 class AuthHandlerTest {
     private val mockTimeProvider = mockk<TimeProvider>()
-    private lateinit var connection: DatabaseConnection
+    private lateinit var database: Database
     private lateinit var usersTable: UsersTable
     private lateinit var authHandler: AuthHandler
 
     @BeforeEach
     fun setUp() {
-        connection = DatabaseConnection(":memory:")
-        usersTable = UsersTable(connection, mockTimeProvider)
+        database = Database(":memory:")
+        usersTable = UsersTable(database, mockTimeProvider)
         authHandler = AuthHandler(usersTable)
 
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L

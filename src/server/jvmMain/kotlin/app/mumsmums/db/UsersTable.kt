@@ -10,13 +10,12 @@ import java.sql.Statement
  * Handles CRUD operations for the users table.
  */
 class UsersTable(
-    private val database: DatabaseConnection,
+    private val database: Database,
     private val timeProvider: TimeProvider,
 ) {
-    private val connection = database.connection
     private val logger = getLoggerByClass<UsersTable>()
 
-    suspend fun findByEmail(email: String): User? = database.execute {
+    suspend fun findByEmail(email: String): User? = database.execute { connection ->
         connection.prepareStatement(
             "SELECT * FROM users WHERE email = ?"
         ).use { statement ->
@@ -30,7 +29,7 @@ class UsersTable(
         }
     }
 
-    suspend fun findById(userId: Long): User? = database.execute {
+    suspend fun findById(userId: Long): User? = database.execute { connection ->
         connection.prepareStatement(
             "SELECT * FROM users WHERE userId = ?"
         ).use { statement ->
@@ -44,7 +43,7 @@ class UsersTable(
         }
     }
 
-    suspend fun createUser(email: String, passwordHash: String): User = database.execute {
+    suspend fun createUser(email: String, passwordHash: String): User = database.execute { connection ->
         val currentTime = timeProvider.currentTimeMillis()
 
         val userId = connection.prepareStatement(
@@ -78,7 +77,7 @@ class UsersTable(
         )
     }
 
-    suspend fun updatePasswordHash(userId: Long, newPasswordHash: String): Boolean = database.execute {
+    suspend fun updatePasswordHash(userId: Long, newPasswordHash: String): Boolean = database.execute { connection ->
         val currentTime = timeProvider.currentTimeMillis()
         val rowsUpdated = connection.prepareStatement(
             "UPDATE users SET passwordHash = ?, lastUpdatedAtInMillis = ? WHERE userId = ?"

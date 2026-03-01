@@ -6,33 +6,33 @@ import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
 import app.mumsmums.model.RecipeReference
+import java.sql.Connection
 import java.sql.ResultSet
 
 /**
  * Handles CRUD operations for the recipes table.
  */
-class RecipesTable(private val database: DatabaseConnection, private val idGenerator: NumericIdGenerator) : RecipesDatabase {
-    private val connection = database.connection
+class RecipesTable(private val database: Database, private val idGenerator: NumericIdGenerator) : RecipesDatabase {
     private val logger = getLoggerByClass<RecipesTable>()
 
-    override suspend fun get(recipeId: Long): Recipe? = database.execute {
+    override suspend fun get(recipeId: Long): Recipe? = database.execute { connection ->
         connection.prepareStatement("SELECT * FROM recipes WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
             if (resultSet.next()) {
-                toRecipe(resultSet)
+                toRecipe(connection, resultSet)
             } else {
                 null
             }
         }
     }
 
-    override suspend fun put(recipe: Recipe) = database.transaction {
-        prepareInsert(recipe)
+    override suspend fun put(recipe: Recipe) = database.transaction { connection ->
+        prepareInsert(connection, recipe)
         logger.info("Inserted recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 
-    override suspend fun batchPut(recipes: List<Recipe>) = database.transaction {
+    override suspend fun batchPut(recipes: List<Recipe>) = database.transaction { connection ->
         // Start by inserting all 'main' recipes - this to ensure that any foreign key requirements
         // by linked recipes are satisfied
         recipes.forEach { recipe ->
@@ -64,13 +64,13 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
 
         // Now we can insert all related data (sections, ingredients, steps)
         recipes.forEach { recipe ->
-            insertRelatedData(recipe)
+            insertRelatedData(connection, recipe)
         }
 
         logger.info("Loaded {} recipes into SQLite database", recipes.size)
     }
 
-    override suspend fun update(recipeId: Long, recipe: Recipe) = database.transaction {
+    override suspend fun update(recipeId: Long, recipe: Recipe) = database.transaction { connection ->
         // Update the main recipe row (don't delete it - other recipes may reference it)
         connection.prepareStatement(
             """
@@ -101,11 +101,11 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
         }
 
         // Re-insert the related data
-        insertRelatedData(recipe)
+        insertRelatedData(connection, recipe)
         logger.info("Updated recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 
-    override suspend fun delete(recipeId: Long) = database.transaction {
+    override suspend fun delete(recipeId: Long) = database.transaction { connection ->
         // Get recipe name before deleting for confirmation message
         val recipeName = connection.prepareStatement("SELECT name FROM recipes WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
@@ -127,20 +127,20 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
         logger.info("Deleted recipe: {} (ID: {})", recipeName, recipeId)
     }
 
-    override suspend fun scan(): List<Recipe> = database.execute {
+    override suspend fun scan(): List<Recipe> = database.execute { connection ->
         val recipes = mutableListOf<Recipe>()
 
         connection.createStatement().use { statement ->
             val resultSet = statement.executeQuery("SELECT * FROM recipes ORDER BY recipeId")
             while (resultSet.next()) {
-                recipes.add(toRecipe(resultSet))
+                recipes.add(toRecipe(connection, resultSet))
             }
         }
 
         recipes
     }
 
-    private fun prepareInsert(recipe: Recipe) {
+    private fun prepareInsert(connection: Connection, recipe: Recipe) {
         // Generate ID if not provided
         val recipeWithId = if (recipe.recipeId == 0L) {
             recipe.copy(recipeId = idGenerator.generateId())
@@ -167,10 +167,10 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
             statement.executeUpdate()
         }
 
-        insertRelatedData(recipeWithId)
+        insertRelatedData(connection, recipeWithId)
     }
 
-    private fun insertRelatedData(recipe: Recipe) {
+    private fun insertRelatedData(connection: Connection, recipe: Recipe) {
         recipe.ingredientSections.forEachIndexed { sectionIndex, section ->
             val sectionId = connection.prepareStatement(
                 "INSERT INTO ingredient_sections (recipeId, name, position) VALUES (?, ?, ?)",
@@ -230,7 +230,7 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
         }
     }
 
-    private fun loadIngredientSections(recipeId: Long): List<IngredientSection> {
+    private fun loadIngredientSections(connection: Connection, recipeId: Long): List<IngredientSection> {
         val sections = mutableListOf<IngredientSection>()
 
         connection.prepareStatement(
@@ -239,7 +239,7 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
             while (resultSet.next()) {
-                val section = toIngredientSection(resultSet)
+                val section = toIngredientSection(connection, resultSet)
                 sections.add(section)
             }
         }
@@ -247,7 +247,7 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
         return sections
     }
 
-    private fun loadIngredients(sectionId: Long): List<Ingredient> {
+    private fun loadIngredients(connection: Connection, sectionId: Long): List<Ingredient> {
         val ingredients = mutableListOf<Ingredient>()
 
         connection.prepareStatement(
@@ -264,7 +264,7 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
         return ingredients
     }
 
-    private fun loadSteps(recipeId: Long): List<String> {
+    private fun loadSteps(connection: Connection, recipeId: Long): List<String> {
         val steps = mutableListOf<String>()
 
         connection.prepareStatement(
@@ -280,7 +280,7 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
         return steps
     }
 
-    private fun toRecipe(resultSet: ResultSet): Recipe {
+    private fun toRecipe(connection: Connection, resultSet: ResultSet): Recipe {
         val recipeId = resultSet.getLong("recipeId")
         return Recipe(
             recipeId = recipeId,
@@ -292,8 +292,8 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
             version = resultSet.getLong("version"),
             createdAtInMillis = resultSet.getLong("createdAtInMillis"),
             lastUpdatedAtInMillis = resultSet.getLong("lastUpdatedAtInMillis"),
-            ingredientSections = loadIngredientSections(recipeId),
-            steps = loadSteps(recipeId)
+            ingredientSections = loadIngredientSections(connection, recipeId),
+            steps = loadSteps(connection, recipeId)
         )
     }
 
@@ -309,15 +309,15 @@ class RecipesTable(private val database: DatabaseConnection, private val idGener
     }
 
     // Note that this loads ingredients from the database through another SELECT query
-    private fun toIngredientSection(resultSet: ResultSet): IngredientSection {
+    private fun toIngredientSection(connection: Connection, resultSet: ResultSet): IngredientSection {
         val sectionId = resultSet.getLong("id")
         return IngredientSection(
             name = resultSet.getString("name"),
-            ingredients = loadIngredients(sectionId)
+            ingredients = loadIngredients(connection, sectionId)
         )
     }
 
-    override suspend fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> = database.execute {
+    override suspend fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> = database.execute { connection ->
         val references = mutableListOf<RecipeReference>()
 
         connection.prepareStatement(

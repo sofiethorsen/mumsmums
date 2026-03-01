@@ -8,11 +8,12 @@ import java.sql.Connection
 import java.sql.DriverManager
 
 /**
- * Manages the SQLite database connection and initialization.
+ * SQLite database: owns the JDBC connection, serializes access through a single-threaded
+ * dispatcher, and provides [execute]/[transaction] for all query and mutation operations.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
-class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
-    val connection: Connection
+class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
+    private val connection: Connection
 
     // Single-concurrency dispatcher for all database operations. Uses IO (designed for
     // blocking I/O like JDBC calls) limited to 1 thread so that only one coroutine accesses
@@ -38,44 +39,21 @@ class DatabaseConnection(dbPath: String = MumsMumsPaths.getDbPath()) {
 
         // Create tables if they don't exist
         createTablesIfNotExists()
-
-        // Run migrations for existing databases
-        runMigrations()
-    }
-
-    private fun runMigrations() {
-        // Add ingredientId and unitId columns to ingredients table if they don't exist
-        val existingColumns = mutableSetOf<String>()
-        connection.createStatement().use { statement ->
-            val rs = statement.executeQuery("PRAGMA table_info(ingredients)")
-            while (rs.next()) {
-                existingColumns.add(rs.getString("name"))
-            }
-        }
-
-        connection.createStatement().use { statement ->
-            if ("ingredientId" !in existingColumns) {
-                statement.execute("ALTER TABLE ingredients ADD COLUMN ingredientId INTEGER REFERENCES ingredient_library(id)")
-            }
-            if ("unitId" !in existingColumns) {
-                statement.execute("ALTER TABLE ingredients ADD COLUMN unitId INTEGER REFERENCES unit_library(id)")
-            }
-        }
     }
 
     /**
      * Run a read or single-statement write on the DB dispatcher.
      */
-    suspend fun <T> execute(block: () -> T): T = withContext(dbDispatcher) { block() }
+    suspend fun <T> execute(block: (Connection) -> T): T = withContext(dbDispatcher) { block(connection) }
 
     /**
      * Run a multi-statement write as an atomic transaction on the DB dispatcher.
      * Commits on success, rolls back on exception.
      */
-    suspend fun <T> transaction(block: () -> T): T = withContext(dbDispatcher) {
+    suspend fun <T> transaction(block: (Connection) -> T): T = withContext(dbDispatcher) {
         connection.autoCommit = false
         try {
-            val result = block()
+            val result = block(connection)
             connection.commit()
             result
         } catch (e: Exception) {

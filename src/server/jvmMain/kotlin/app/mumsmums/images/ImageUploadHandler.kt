@@ -1,6 +1,6 @@
 package app.mumsmums.images
 
-import app.mumsmums.db.RecipeRepository
+import app.mumsmums.db.RecipesTable
 import app.mumsmums.logging.getLoggerByClass
 import app.mumsmums.revalidation.RevalidationClient
 import java.io.File
@@ -20,7 +20,7 @@ sealed class ImageUploadResult {
 private val logger = getLoggerByClass<ImageUploadHandler>()
 
 class ImageUploadHandler(
-    private val recipeRepository: RecipeRepository,
+    private val recipesTable: RecipesTable,
     private val imageStoragePath: String,
     private val revalidationClient: RevalidationClient? = null
 ) {
@@ -46,7 +46,7 @@ class ImageUploadHandler(
      */
     suspend fun uploadImage(recipeId: Long, fileBytes: ByteArray, contentType: String, jwtToken: String? = null): ImageUploadResult {
         // 1. Check if recipe exists
-        val recipe = recipeRepository.getRecipeById(recipeId)
+        val recipe = recipesTable.get(recipeId)
             ?: return ImageUploadResult.RecipeNotFound(recipeId)
 
         // 2. Validate file size
@@ -83,7 +83,7 @@ class ImageUploadHandler(
                 imageUrl = imageUrl,
                 lastUpdatedAtInMillis = System.currentTimeMillis()
             )
-            recipeRepository.updateRecipe(recipeId, updatedRecipe)
+            recipesTable.update(recipeId, updatedRecipe)
             logger.info("Updated recipe $recipeId with image URL: $imageUrl")
         } catch (e: Exception) {
             logger.error("Failed to update recipe in database", e)

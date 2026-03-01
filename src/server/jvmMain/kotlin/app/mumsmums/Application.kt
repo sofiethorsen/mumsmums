@@ -4,7 +4,6 @@ import app.mumsmums.auth.AuthHandler
 import app.mumsmums.auth.JwtConfig
 import app.mumsmums.db.Database
 import app.mumsmums.db.IngredientTable
-import app.mumsmums.db.RecipeRepository
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.db.UnitTable
 import app.mumsmums.db.UsersTable
@@ -46,7 +45,7 @@ fun Application.module() {
 
     val database = Database()
     val idGenerator = NumericIdGenerator()
-    val recipesTable = RecipesTable(database, idGenerator)
+    val recipesTable = RecipesTable(database, idGenerator, MumsMumsPaths.getImagePath())
     val usersTable = UsersTable(database, SystemTimeProvider)
     val ingredientTable = IngredientTable(database, idGenerator)
     val unitTable = UnitTable(database, idGenerator)
@@ -60,18 +59,18 @@ fun Application.module() {
     // Auth handler
     val authHandler = AuthHandler(usersTable)
 
-    val recipeRepository = RecipeRepository(recipesTable, idGenerator, MumsMumsPaths.getImagePath())
     val frontendUrl = System.getenv(FRONTEND_URL_ENV_VAR) ?: "http://localhost:3000"
     val revalidationClient = RevalidationClient(frontendUrl)
 
     // Image upload handler
-    val uploadHandler = ImageUploadHandler(recipeRepository, MumsMumsPaths.getImagePath(), revalidationClient)
+    val uploadHandler = ImageUploadHandler(recipesTable, MumsMumsPaths.getImagePath(), revalidationClient)
 
     configureSerialization()
     configureAuth(jwtConfig)
     configureAuthRoutes(authHandler, jwtConfig, secureCookies)
     configureGraphQL(
-        recipeRepository,
+        recipesTable,
+        idGenerator,
         jwtConfig,
         revalidationClient,
         ingredientTable,

@@ -21,27 +21,3 @@ kt_jvm_binary(
     main_class = "app.mumsmums.InitializeDbKt",
     runtime_deps = [":lib"],
 )
-
-kt_jvm_binary(
-    name = "update",
-    main_class = "app.mumsmums.UpdateRecipeItemKt",
-    runtime_deps = [":lib"],
-)
-
-kt_jvm_binary(
-    name = "put",
-    main_class = "app.mumsmums.PutRecipeItemKt",
-    runtime_deps = [":lib"],
-)
-
-kt_jvm_binary(
-    name = "delete",
-    main_class = "app.mumsmums.DeleteRecipeItemKt",
-    runtime_deps = [":lib"],
-)
-
-kt_jvm_binary(
-    name = "get",
-    main_class = "app.mumsmums.GetRecipeItemKt",
-    runtime_deps = [":lib"],
-)

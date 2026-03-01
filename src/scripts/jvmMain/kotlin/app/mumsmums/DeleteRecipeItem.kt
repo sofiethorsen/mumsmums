@@ -1,6 +1,6 @@
 package app.mumsmums
 
-import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.Database
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.logging.getLoggerByPackage
@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
         exitProcess(1)
     }
 
-    val database = DatabaseConnection()
+    val database = Database()
     val numericIdGenerator = NumericIdGenerator()
     val recipesTable = RecipesTable(database, numericIdGenerator)
 

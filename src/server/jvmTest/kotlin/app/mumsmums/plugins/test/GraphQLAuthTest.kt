@@ -3,7 +3,7 @@ package app.mumsmums.plugins.test
 import app.mumsmums.auth.AuthHandler
 import app.mumsmums.auth.JwtConfig
 import app.mumsmums.auth.PasswordHasher
-import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.Database
 import app.mumsmums.db.IngredientTable
 import app.mumsmums.db.RecipeRepository
 import app.mumsmums.db.RecipesTable
@@ -39,7 +39,7 @@ import java.io.File
 
 class GraphQLAuthTest {
     private val mockTimeProvider = mockk<TimeProvider>()
-    private lateinit var connection: DatabaseConnection
+    private lateinit var database: Database
     private lateinit var usersTable: UsersTable
     private lateinit var recipesTable: RecipesTable
     private lateinit var recipeRepository: RecipeRepository
@@ -51,12 +51,12 @@ class GraphQLAuthTest {
 
     @BeforeEach
     fun setUp(@TempDir tempDir: File) {
-        connection = DatabaseConnection(":memory:")
-        usersTable = UsersTable(connection, mockTimeProvider)
+        database = Database(":memory:")
+        usersTable = UsersTable(database, mockTimeProvider)
         val idGenerator = NumericIdGenerator()
-        recipesTable = RecipesTable(connection, idGenerator)
-        ingredientTable = IngredientTable(connection, idGenerator)
-        unitTable = UnitTable(connection, idGenerator)
+        recipesTable = RecipesTable(database, idGenerator)
+        ingredientTable = IngredientTable(database, idGenerator)
+        unitTable = UnitTable(database, idGenerator)
         // Create recipes directory for image deletion tests
         File(tempDir, "recipes").mkdirs()
         recipeRepository = RecipeRepository(recipesTable, idGenerator, tempDir.absolutePath)

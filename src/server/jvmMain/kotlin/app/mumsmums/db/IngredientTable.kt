@@ -2,14 +2,14 @@ package app.mumsmums.db
 
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.LibraryIngredient
+import java.sql.Connection
 
 /**
  * Handles CRUD operations for the ingredient_library table.
  */
-class IngredientTable(private val database: DatabaseConnection, private val idGenerator: NumericIdGenerator) {
-    private val connection = database.connection
+class IngredientTable(private val database: Database, private val idGenerator: NumericIdGenerator) {
 
-    suspend fun getAll(): List<LibraryIngredient> = database.execute {
+    suspend fun getAll(): List<LibraryIngredient> = database.execute { connection ->
         val ingredients = mutableListOf<LibraryIngredient>()
         connection.createStatement().use { statement ->
             val resultSet = statement.executeQuery(
@@ -26,7 +26,7 @@ class IngredientTable(private val database: DatabaseConnection, private val idGe
         ingredients
     }
 
-    suspend fun getById(id: Long): LibraryIngredient? = database.execute {
+    suspend fun getById(id: Long): LibraryIngredient? = database.execute { connection ->
         connection.prepareStatement(
             """
             SELECT id, name_sv, name_en, qualifier_sv, qualifier_en, derives_from_id, full_name_sv, full_name_en
@@ -43,7 +43,7 @@ class IngredientTable(private val database: DatabaseConnection, private val idGe
         }
     }
 
-    suspend fun getByName(nameSv: String): LibraryIngredient? = database.execute {
+    suspend fun getByName(nameSv: String): LibraryIngredient? = database.execute { connection ->
         connection.prepareStatement(
             """
             SELECT id, name_sv, name_en, qualifier_sv, qualifier_en, derives_from_id, full_name_sv, full_name_en
@@ -64,7 +64,7 @@ class IngredientTable(private val database: DatabaseConnection, private val idGe
      * Get all ingredients that derive from the given ingredient.
      * E.g., if ingredientId is "ägg", returns ["äggula", "äggvita"].
      */
-    suspend fun getDerivedFrom(ingredientId: Long): List<LibraryIngredient> = database.execute {
+    suspend fun getDerivedFrom(ingredientId: Long): List<LibraryIngredient> = database.execute { connection ->
         val ingredients = mutableListOf<LibraryIngredient>()
         connection.prepareStatement(
             """
@@ -83,7 +83,7 @@ class IngredientTable(private val database: DatabaseConnection, private val idGe
         ingredients
     }
 
-    suspend fun search(query: String): List<LibraryIngredient> = database.execute {
+    suspend fun search(query: String): List<LibraryIngredient> = database.execute { connection ->
         val ingredients = mutableListOf<LibraryIngredient>()
         connection.prepareStatement(
             """
@@ -106,20 +106,20 @@ class IngredientTable(private val database: DatabaseConnection, private val idGe
         ingredients
     }
 
-    suspend fun insert(ingredient: LibraryIngredient): Long = database.execute {
+    suspend fun insert(ingredient: LibraryIngredient): Long = database.execute { connection ->
         val id = idGenerator.generateId()
-        insertWithIdInternal(ingredient.copy(id = id))
+        insertWithIdInternal(connection, ingredient.copy(id = id))
         id
     }
 
     /**
      * Insert an ingredient with its existing ID (used for database initialization from JSON).
      */
-    suspend fun insertWithId(ingredient: LibraryIngredient) = database.execute {
-        insertWithIdInternal(ingredient)
+    suspend fun insertWithId(ingredient: LibraryIngredient) = database.execute { connection ->
+        insertWithIdInternal(connection, ingredient)
     }
 
-    private fun insertWithIdInternal(ingredient: LibraryIngredient) {
+    private fun insertWithIdInternal(connection: Connection, ingredient: LibraryIngredient) {
         connection.prepareStatement(
             """
             INSERT INTO ingredient_library (id, name_sv, name_en, qualifier_sv, qualifier_en, derives_from_id, full_name_sv, full_name_en)
@@ -138,7 +138,7 @@ class IngredientTable(private val database: DatabaseConnection, private val idGe
         }
     }
 
-    suspend fun update(ingredient: LibraryIngredient) = database.execute {
+    suspend fun update(ingredient: LibraryIngredient) = database.execute { connection ->
         connection.prepareStatement(
             """
             UPDATE ingredient_library
@@ -158,7 +158,7 @@ class IngredientTable(private val database: DatabaseConnection, private val idGe
         }
     }
 
-    suspend fun delete(id: Long) = database.execute {
+    suspend fun delete(id: Long) = database.execute { connection ->
         connection.prepareStatement(
             "DELETE FROM ingredient_library WHERE id = ?"
         ).use { statement ->

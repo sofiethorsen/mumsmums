@@ -1,6 +1,6 @@
 package app.mumsmums.db.test
 
-import app.mumsmums.db.DatabaseConnection
+import app.mumsmums.db.Database
 import app.mumsmums.db.UnitTable
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.LibraryUnit
@@ -17,16 +17,16 @@ import java.sql.SQLException
 
 class UnitTableTest {
     private val mockIdGenerator = mockk<NumericIdGenerator>()
-    private lateinit var connection: DatabaseConnection
+    private lateinit var database: Database
     private lateinit var table: UnitTable
     private var nextId = 1L
 
     @BeforeEach
     fun setUp() {
-        connection = DatabaseConnection(":memory:")
+        database = Database(":memory:")
         nextId = 1L
         every { mockIdGenerator.generateId() } answers { nextId++ }
-        table = UnitTable(connection, mockIdGenerator)
+        table = UnitTable(database, mockIdGenerator)
     }
 
     @Test

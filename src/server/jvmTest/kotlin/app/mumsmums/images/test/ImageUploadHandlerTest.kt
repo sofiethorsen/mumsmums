@@ -1,6 +1,6 @@
 package app.mumsmums.images.test
 
-import app.mumsmums.db.RecipeRepository
+import app.mumsmums.db.RecipesTable
 import app.mumsmums.images.ImageUploadHandler
 import app.mumsmums.images.ImageUploadResult
 import app.mumsmums.model.Recipe
@@ -19,7 +19,7 @@ import java.io.File
 import javax.imageio.ImageIO
 
 class ImageUploadHandlerTest {
-    private val mockRecipeRepository = mockk<RecipeRepository>()
+    private val mockRecipesTable = mockk<RecipesTable>()
     private lateinit var tempDir: File
     private lateinit var handler: ImageUploadHandler
 
@@ -29,7 +29,7 @@ class ImageUploadHandlerTest {
         // Create the recipes directory that ImageUploadHandler expects to exist
         val recipesDir = File(tempDir, "recipes")
         recipesDir.mkdirs()
-        handler = ImageUploadHandler(mockRecipeRepository, tempDir.absolutePath)
+        handler = ImageUploadHandler(mockRecipesTable, tempDir.absolutePath)
     }
 
     @AfterEach
@@ -69,8 +69,8 @@ class ImageUploadHandlerTest {
         val recipe = createMockRecipe(recipeId)
         val imageBytes = createTestImage(100, 100)
 
-        coEvery { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
-        coEvery { mockRecipeRepository.updateRecipe(recipeId, any()) } returns Unit
+        coEvery { mockRecipesTable.get(recipeId) } returns recipe
+        coEvery { mockRecipesTable.update(recipeId, any()) } returns Unit
 
         val result = handler.uploadImage(recipeId, imageBytes, "image/webp")
 
@@ -82,7 +82,7 @@ class ImageUploadHandlerTest {
         assertTrue(savedFile.exists())
 
         // Verify recipe was updated
-        coVerify { mockRecipeRepository.updateRecipe(recipeId, match { it.imageUrl == "/images/recipes/$recipeId.webp" }) }
+        coVerify { mockRecipesTable.update(recipeId, match { it.imageUrl == "/images/recipes/$recipeId.webp" }) }
     }
 
     @Test
@@ -90,7 +90,7 @@ class ImageUploadHandlerTest {
         val recipeId = 999L
         val imageBytes = createTestImage(100, 100)
 
-        coEvery { mockRecipeRepository.getRecipeById(recipeId) } returns null
+        coEvery { mockRecipesTable.get(recipeId) } returns null
 
         val result = handler.uploadImage(recipeId, imageBytes, "image/webp")
 
@@ -104,7 +104,7 @@ class ImageUploadHandlerTest {
         val recipe = createMockRecipe(recipeId)
         val largeImageBytes = ByteArray(6 * 1024 * 1024) // 6MB
 
-        coEvery { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
+        coEvery { mockRecipesTable.get(recipeId) } returns recipe
 
         val result = handler.uploadImage(recipeId, largeImageBytes, "image/webp")
 
@@ -119,7 +119,7 @@ class ImageUploadHandlerTest {
         val recipe = createMockRecipe(recipeId)
         val imageBytes = createTestImage(100, 100)
 
-        coEvery { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
+        coEvery { mockRecipesTable.get(recipeId) } returns recipe
 
         val result = handler.uploadImage(recipeId, imageBytes, "image/jpeg")
 
@@ -135,8 +135,8 @@ class ImageUploadHandlerTest {
         val firstImageBytes = createTestImage(100, 100)
         val secondImageBytes = createTestImage(100, 100)
 
-        coEvery { mockRecipeRepository.getRecipeById(recipeId) } returns recipe
-        coEvery { mockRecipeRepository.updateRecipe(recipeId, any()) } returns Unit
+        coEvery { mockRecipesTable.get(recipeId) } returns recipe
+        coEvery { mockRecipesTable.update(recipeId, any()) } returns Unit
 
         // Upload first image
         handler.uploadImage(recipeId, firstImageBytes, "image/webp")

@@ -101,7 +101,7 @@ fun main() {
             val recipes = JsonParser.parseRecipes(Path(MumsMumsPaths.getRecipesJsonPath()))
             logger.info("Found {} recipes", recipes.size)
 
-            val recipesTable = RecipesTable(database, numericIdGenerator)
+            val recipesTable = RecipesTable(database, numericIdGenerator, MumsMumsPaths.getImagePath())
             recipesTable.batchPut(recipes)
 
             logger.info("=== Database initialization complete! ===")

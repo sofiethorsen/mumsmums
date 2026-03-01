@@ -6,16 +6,17 @@ import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.Recipe
 import app.mumsmums.model.RecipeReference
+import java.io.File
 import java.sql.Connection
 import java.sql.ResultSet
 
 /**
  * Handles CRUD operations for the recipes table.
  */
-class RecipesTable(private val database: Database, private val idGenerator: NumericIdGenerator) : RecipesDatabase {
+class RecipesTable(private val database: Database, private val idGenerator: NumericIdGenerator, private val imageStoragePath: String) {
     private val logger = getLoggerByClass<RecipesTable>()
 
-    override suspend fun get(recipeId: Long): Recipe? = database.execute { connection ->
+    suspend fun get(recipeId: Long): Recipe? = database.execute { connection ->
         connection.prepareStatement("SELECT * FROM recipes WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
@@ -27,12 +28,12 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         }
     }
 
-    override suspend fun put(recipe: Recipe) = database.transaction { connection ->
+    suspend fun put(recipe: Recipe) = database.transaction { connection ->
         prepareInsert(connection, recipe)
         logger.info("Inserted recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 
-    override suspend fun batchPut(recipes: List<Recipe>) = database.transaction { connection ->
+    suspend fun batchPut(recipes: List<Recipe>) = database.transaction { connection ->
         // Start by inserting all 'main' recipes - this to ensure that any foreign key requirements
         // by linked recipes are satisfied
         recipes.forEach { recipe ->
@@ -70,7 +71,7 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         logger.info("Loaded {} recipes into SQLite database", recipes.size)
     }
 
-    override suspend fun update(recipeId: Long, recipe: Recipe) = database.transaction { connection ->
+    suspend fun update(recipeId: Long, recipe: Recipe) = database.transaction { connection ->
         // Update the main recipe row (don't delete it - other recipes may reference it)
         connection.prepareStatement(
             """
@@ -105,18 +106,20 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         logger.info("Updated recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 
-    override suspend fun delete(recipeId: Long) = database.transaction { connection ->
-        // Get recipe name before deleting for confirmation message
-        val recipeName = connection.prepareStatement("SELECT name FROM recipes WHERE recipeId = ?").use { statement ->
+    suspend fun delete(recipeId: Long) = database.transaction { connection ->
+        // Get recipe before deleting for logging and image cleanup
+        val result = connection.prepareStatement("SELECT name, imageUrl FROM recipes WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
-            if (resultSet.next()) resultSet.getString("name") else null
+            if (resultSet.next()) Pair(resultSet.getString("name"), resultSet.getString("imageUrl")) else null
         }
 
-        if (recipeName == null) {
+        if (result == null) {
             logger.warn("Attempted to delete non-existent recipe with ID: {}", recipeId)
             return@transaction
         }
+
+        val (recipeName, imageUrl) = result
 
         // Note that the CASCADE on the recipe table handles deletions for related data
         connection.prepareStatement("DELETE FROM recipes WHERE recipeId = ?").use { statement ->
@@ -124,10 +127,23 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
             statement.executeUpdate()
         }
 
+        // Delete associated image file if it exists
+        if (imageUrl != null) {
+            try {
+                val imageFile = File(imageStoragePath, "recipes/$recipeId.webp")
+                if (imageFile.exists()) {
+                    imageFile.delete()
+                    logger.info("Deleted image file for recipe {}: {}", recipeId, imageFile.absolutePath)
+                }
+            } catch (e: Exception) {
+                logger.error("Failed to delete image file for recipe $recipeId", e)
+            }
+        }
+
         logger.info("Deleted recipe: {} (ID: {})", recipeName, recipeId)
     }
 
-    override suspend fun scan(): List<Recipe> = database.execute { connection ->
+    suspend fun scan(): List<Recipe> = database.execute { connection ->
         val recipes = mutableListOf<Recipe>()
 
         connection.createStatement().use { statement ->
@@ -317,7 +333,7 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         )
     }
 
-    override suspend fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> = database.execute { connection ->
+    suspend fun getRecipesUsingAsIngredient(recipeId: Long): List<RecipeReference> = database.execute { connection ->
         val references = mutableListOf<RecipeReference>()
 
         connection.prepareStatement(

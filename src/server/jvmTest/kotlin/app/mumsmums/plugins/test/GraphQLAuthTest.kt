@@ -5,7 +5,6 @@ import app.mumsmums.auth.JwtConfig
 import app.mumsmums.auth.PasswordHasher
 import app.mumsmums.db.Database
 import app.mumsmums.db.IngredientTable
-import app.mumsmums.db.RecipeRepository
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.db.UnitTable
 import app.mumsmums.db.UsersTable
@@ -42,9 +41,9 @@ class GraphQLAuthTest {
     private lateinit var database: Database
     private lateinit var usersTable: UsersTable
     private lateinit var recipesTable: RecipesTable
-    private lateinit var recipeRepository: RecipeRepository
     private lateinit var ingredientTable: IngredientTable
     private lateinit var unitTable: UnitTable
+    private lateinit var idGenerator: NumericIdGenerator
     private lateinit var authHandler: AuthHandler
     private lateinit var jwtConfig: JwtConfig
     private val revalidationClient = mockk<RevalidationClient>()
@@ -53,13 +52,11 @@ class GraphQLAuthTest {
     fun setUp(@TempDir tempDir: File) {
         database = Database(":memory:")
         usersTable = UsersTable(database, mockTimeProvider)
-        val idGenerator = NumericIdGenerator()
-        recipesTable = RecipesTable(database, idGenerator)
+        idGenerator = NumericIdGenerator()
+        File(tempDir, "recipes").mkdirs()
+        recipesTable = RecipesTable(database, idGenerator, tempDir.absolutePath)
         ingredientTable = IngredientTable(database, idGenerator)
         unitTable = UnitTable(database, idGenerator)
-        // Create recipes directory for image deletion tests
-        File(tempDir, "recipes").mkdirs()
-        recipeRepository = RecipeRepository(recipesTable, idGenerator, tempDir.absolutePath)
         authHandler = AuthHandler(usersTable)
 
         every { mockTimeProvider.currentTimeMillis() } returns 1000000L
@@ -81,7 +78,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientTable, unitTable)
+            configureGraphQL(recipesTable, idGenerator, jwtConfig, revalidationClient, ingredientTable, unitTable)
         }
 
         val response = client.post("/graphql") {
@@ -104,7 +101,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientTable, unitTable)
+            configureGraphQL(recipesTable, idGenerator, jwtConfig, revalidationClient, ingredientTable, unitTable)
         }
 
         val response = client.post("/graphql") {
@@ -138,7 +135,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientTable, unitTable)
+            configureGraphQL(recipesTable, idGenerator, jwtConfig, revalidationClient, ingredientTable, unitTable)
         }
 
         coEvery { revalidationClient.revalidateRecipe(any(), any()) } answers {}
@@ -191,7 +188,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientTable, unitTable)
+            configureGraphQL(recipesTable, idGenerator, jwtConfig, revalidationClient, ingredientTable, unitTable)
         }
 
         val response = client.post("/graphql") {
@@ -226,7 +223,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientTable, unitTable)
+            configureGraphQL(recipesTable, idGenerator, jwtConfig, revalidationClient, ingredientTable, unitTable)
         }
 
         val response = client.post("/graphql") {
@@ -259,7 +256,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientTable, unitTable)
+            configureGraphQL(recipesTable, idGenerator, jwtConfig, revalidationClient, ingredientTable, unitTable)
         }
 
         val response = client.post("/graphql") {
@@ -280,7 +277,7 @@ class GraphQLAuthTest {
             configureSerialization()
             configureAuth(jwtConfig)
             configureAuthRoutes(authHandler, jwtConfig, secureCookies = false)
-            configureGraphQL(recipeRepository, jwtConfig, revalidationClient, ingredientTable, unitTable)
+            configureGraphQL(recipesTable, idGenerator, jwtConfig, revalidationClient, ingredientTable, unitTable)
         }
 
         val response = client.post("/graphql") {

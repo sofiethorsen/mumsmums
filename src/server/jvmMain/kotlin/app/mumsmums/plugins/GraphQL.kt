@@ -2,8 +2,9 @@ package app.mumsmums.plugins
 
 import app.mumsmums.auth.JwtConfig
 import app.mumsmums.db.IngredientTable
-import app.mumsmums.db.RecipeRepository
+import app.mumsmums.db.RecipesTable
 import app.mumsmums.db.UnitTable
+import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.LibraryIngredient
@@ -93,7 +94,8 @@ data class LibraryUnitInput(
 )
 
 fun Application.configureGraphQL(
-    recipeRepository: RecipeRepository,
+    recipesTable: RecipesTable,
+    idGenerator: NumericIdGenerator,
     jwtConfig: JwtConfig,
     revalidationClient: RevalidationClient,
     ingredientTable: IngredientTable,
@@ -110,7 +112,7 @@ fun Application.configureGraphQL(
                 property<List<RecipeReference>>("usedIn") {
                     description = "Recipes that use this recipe as an ingredient"
                     resolver { recipe: Recipe ->
-                        recipeRepository.getRecipesUsingAsIngredient(recipe.recipeId)
+                        recipesTable.getRecipesUsingAsIngredient(recipe.recipeId)
                     }
                 }
             }
@@ -153,10 +155,10 @@ fun Application.configureGraphQL(
             }
 
             query("recipes") {
-                resolver { -> recipeRepository.getAllRecipes() }
+                resolver { -> recipesTable.scan() }
             }
             query("recipe") {
-                resolver { recipeId: Long -> recipeRepository.getRecipeById(recipeId) }
+                resolver { recipeId: Long -> recipesTable.get(recipeId) }
             }
 
             // Ingredient queries
@@ -181,7 +183,7 @@ fun Application.configureGraphQL(
             mutation("createRecipe") {
                 resolver { ctx: Context, input: RecipeInput ->
                     ctx.requireAuth(jwtConfig)
-                    val recipeId = recipeRepository.createRecipeId()
+                    val recipeId = idGenerator.generateId()
                     val currentTime = System.currentTimeMillis()
 
                     val recipe = Recipe(
@@ -212,7 +214,7 @@ fun Application.configureGraphQL(
                         lastUpdatedAtInMillis = currentTime
                     )
 
-                    recipeRepository.createRecipe(recipe)
+                    recipesTable.put(recipe)
 
                     // Trigger revalidation of homepage and new recipe page
                     val jwtToken = ctx.getJwtToken()
@@ -225,7 +227,7 @@ fun Application.configureGraphQL(
             mutation("updateRecipe") {
                 resolver { ctx: Context, recipeId: Long, input: RecipeInput ->
                     ctx.requireAuth(jwtConfig)
-                    val existingRecipe = recipeRepository.getRecipeById(recipeId)
+                    val existingRecipe = recipesTable.get(recipeId)
                         ?: throw IllegalArgumentException("Recipe with ID $recipeId not found")
 
                     val updatedRecipe = Recipe(
@@ -256,7 +258,7 @@ fun Application.configureGraphQL(
                         lastUpdatedAtInMillis = System.currentTimeMillis()
                     )
 
-                    recipeRepository.updateRecipe(recipeId, updatedRecipe)
+                    recipesTable.update(recipeId, updatedRecipe)
 
                     // Trigger revalidation of homepage and updated recipe page
                     val jwtToken = ctx.getJwtToken()
@@ -269,10 +271,10 @@ fun Application.configureGraphQL(
             mutation("deleteRecipe") {
                 resolver { ctx: Context, recipeId: Long ->
                     ctx.requireAuth(jwtConfig)
-                    val recipe = recipeRepository.getRecipeById(recipeId)
+                    val recipe = recipesTable.get(recipeId)
                         ?: throw IllegalArgumentException("Recipe with ID $recipeId not found")
 
-                    recipeRepository.deleteRecipe(recipeId)
+                    recipesTable.delete(recipeId)
 
                     // Trigger revalidation of homepage (recipe page will 404)
                     val jwtToken = ctx.getJwtToken()

@@ -12,6 +12,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.io.File
 
 class RecipesTableTest {
     private val mockIdGenerator = mockk<NumericIdGenerator>()
@@ -19,10 +21,10 @@ class RecipesTableTest {
     private lateinit var recipesTable: RecipesTable
 
     @BeforeEach
-    fun setUp() {
+    fun setUp(@TempDir tempDir: File) {
         // Use in-memory SQLite database for testing
         database = Database(":memory:")
-        recipesTable = RecipesTable(database, mockIdGenerator)
+        recipesTable = RecipesTable(database, mockIdGenerator, tempDir.absolutePath)
     }
 
     @Test

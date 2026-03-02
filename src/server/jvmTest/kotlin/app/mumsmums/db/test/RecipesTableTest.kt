@@ -5,6 +5,7 @@ import app.mumsmums.db.Database
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
+import app.mumsmums.model.NewRecipe
 import app.mumsmums.model.Recipe
 import io.mockk.every
 import io.mockk.mockk
@@ -41,17 +42,18 @@ class RecipesTableTest {
     }
 
     @Test
-    fun `When putting a recipe without an ID, it should generate one`() = runTest {
+    fun `When inserting a new recipe, it should generate an ID`() = runTest {
         val recipeId = 123456789L
         every { mockIdGenerator.generateId() } returns recipeId
-        val recipe = createTestRecipe(recipeId = 0L, name = "Auto ID Recipe")
+        val newRecipe = createTestNewRecipe(name = "Auto ID Recipe")
 
-        recipesTable.put(recipe)
+        val recipe = recipesTable.insert(newRecipe)
 
+        assertEquals(recipeId, recipe.recipeId)
+        assertEquals("Auto ID Recipe", recipe.name)
         val allRecipes = recipesTable.scan()
         assertEquals(1, allRecipes.size)
         assertEquals(recipeId, allRecipes[0].recipeId)
-        assertEquals("Auto ID Recipe", allRecipes[0].name)
     }
 
     @Test
@@ -533,6 +535,24 @@ class RecipesTableTest {
     ): Recipe {
         return Recipe(
             recipeId = recipeId,
+            name = name,
+            description = description,
+            ingredientSections = listOf(
+                IngredientSection(
+                    name = null,
+                    ingredients = listOf(Ingredient(name = "Test Ingredient"))
+                )
+            ),
+            steps = steps
+        )
+    }
+
+    private fun createTestNewRecipe(
+        name: String,
+        description: String = "Test description",
+        steps: List<String> = listOf("Test step")
+    ): NewRecipe {
+        return NewRecipe(
             name = name,
             description = description,
             ingredientSections = listOf(

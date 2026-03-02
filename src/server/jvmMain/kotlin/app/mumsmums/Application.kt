@@ -70,7 +70,6 @@ fun Application.module() {
     configureAuthRoutes(authHandler, jwtConfig, secureCookies)
     configureGraphQL(
         recipesTable,
-        idGenerator,
         jwtConfig,
         revalidationClient,
         ingredientTable,

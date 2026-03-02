@@ -4,6 +4,7 @@ import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.logging.getLoggerByClass
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
+import app.mumsmums.model.NewRecipe
 import app.mumsmums.model.Recipe
 import app.mumsmums.model.RecipeReference
 import java.io.File
@@ -28,8 +29,16 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         }
     }
 
+    suspend fun insert(newRecipe: NewRecipe): Recipe = database.transaction { connection ->
+        val recipeId = idGenerator.generateId()
+        val recipe = newRecipe.toRecipe(recipeId)
+        insertRecipe(connection, recipe)
+        logger.info("Inserted recipe: {} (ID: {})", recipe.name, recipeId)
+        recipe
+    }
+
     suspend fun put(recipe: Recipe) = database.transaction { connection ->
-        prepareInsert(connection, recipe)
+        insertRecipe(connection, recipe)
         logger.info("Inserted recipe: {} (ID: {})", recipe.name, recipe.recipeId)
     }
 
@@ -37,12 +46,6 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         // Start by inserting all 'main' recipes - this to ensure that any foreign key requirements
         // by linked recipes are satisfied
         recipes.forEach { recipe ->
-            val recipeWithId = if (recipe.recipeId == 0L) {
-                recipe.copy(recipeId = idGenerator.generateId())
-            } else {
-                recipe
-            }
-
             connection.prepareStatement(
                 """
                 INSERT INTO recipes (recipeId, name, description, servings, numberOfUnits,
@@ -50,15 +53,15 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """.trimIndent()
             ).use { statement ->
-                statement.setLong(1, recipeWithId.recipeId)
-                statement.setString(2, recipeWithId.name)
-                statement.setString(3, recipeWithId.description)
-                statement.setObject(4, recipeWithId.servings)
-                statement.setObject(5, recipeWithId.numberOfUnits)
-                statement.setString(6, recipeWithId.imageUrl)
-                statement.setLong(7, recipeWithId.version)
-                statement.setLong(8, recipeWithId.createdAtInMillis)
-                statement.setLong(9, recipeWithId.lastUpdatedAtInMillis)
+                statement.setLong(1, recipe.recipeId)
+                statement.setString(2, recipe.name)
+                statement.setString(3, recipe.description)
+                statement.setObject(4, recipe.servings)
+                statement.setObject(5, recipe.numberOfUnits)
+                statement.setString(6, recipe.imageUrl)
+                statement.setLong(7, recipe.version)
+                statement.setLong(8, recipe.createdAtInMillis)
+                statement.setLong(9, recipe.lastUpdatedAtInMillis)
                 statement.executeUpdate()
             }
         }
@@ -156,14 +159,7 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         recipes
     }
 
-    private fun prepareInsert(connection: Connection, recipe: Recipe) {
-        // Generate ID if not provided
-        val recipeWithId = if (recipe.recipeId == 0L) {
-            recipe.copy(recipeId = idGenerator.generateId())
-        } else {
-            recipe
-        }
-
+    private fun insertRecipe(connection: Connection, recipe: Recipe) {
         connection.prepareStatement(
             """
             INSERT INTO recipes (recipeId, name, description, servings, numberOfUnits,
@@ -171,19 +167,19 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """.trimIndent()
         ).use { statement ->
-            statement.setLong(1, recipeWithId.recipeId)
-            statement.setString(2, recipeWithId.name)
-            statement.setString(3, recipeWithId.description)
-            statement.setObject(4, recipeWithId.servings)
-            statement.setObject(5, recipeWithId.numberOfUnits)
-            statement.setString(6, recipeWithId.imageUrl)
-            statement.setLong(7, recipeWithId.version)
-            statement.setLong(8, recipeWithId.createdAtInMillis)
-            statement.setLong(9, recipeWithId.lastUpdatedAtInMillis)
+            statement.setLong(1, recipe.recipeId)
+            statement.setString(2, recipe.name)
+            statement.setString(3, recipe.description)
+            statement.setObject(4, recipe.servings)
+            statement.setObject(5, recipe.numberOfUnits)
+            statement.setString(6, recipe.imageUrl)
+            statement.setLong(7, recipe.version)
+            statement.setLong(8, recipe.createdAtInMillis)
+            statement.setLong(9, recipe.lastUpdatedAtInMillis)
             statement.executeUpdate()
         }
 
-        insertRelatedData(connection, recipeWithId)
+        insertRelatedData(connection, recipe)
     }
 
     private fun insertRelatedData(connection: Connection, recipe: Recipe) {

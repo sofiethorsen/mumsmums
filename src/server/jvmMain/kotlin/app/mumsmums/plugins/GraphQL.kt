@@ -4,11 +4,11 @@ import app.mumsmums.auth.JwtConfig
 import app.mumsmums.db.IngredientTable
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.db.UnitTable
-import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.LibraryIngredient
 import app.mumsmums.model.LibraryUnit
+import app.mumsmums.model.NewRecipe
 import app.mumsmums.model.Recipe
 import app.mumsmums.model.RecipeReference
 import app.mumsmums.model.UnitType
@@ -95,7 +95,6 @@ data class LibraryUnitInput(
 
 fun Application.configureGraphQL(
     recipesTable: RecipesTable,
-    idGenerator: NumericIdGenerator,
     jwtConfig: JwtConfig,
     revalidationClient: RevalidationClient,
     ingredientTable: IngredientTable,
@@ -183,11 +182,9 @@ fun Application.configureGraphQL(
             mutation("createRecipe") {
                 resolver { ctx: Context, input: RecipeInput ->
                     ctx.requireAuth(jwtConfig)
-                    val recipeId = idGenerator.generateId()
                     val currentTime = System.currentTimeMillis()
 
-                    val recipe = Recipe(
-                        recipeId = recipeId,
+                    val newRecipe = NewRecipe(
                         name = input.name,
                         ingredientSections = input.ingredientSections.map { section ->
                             IngredientSection(
@@ -214,11 +211,11 @@ fun Application.configureGraphQL(
                         lastUpdatedAtInMillis = currentTime
                     )
 
-                    recipesTable.put(recipe)
+                    val recipe = recipesTable.insert(newRecipe)
 
                     // Trigger revalidation of homepage and new recipe page
                     val jwtToken = ctx.getJwtToken()
-                    revalidationClient.revalidateRecipe(recipeId, jwtToken)
+                    revalidationClient.revalidateRecipe(recipe.recipeId, jwtToken)
 
                     recipe
                 }
@@ -271,7 +268,7 @@ fun Application.configureGraphQL(
             mutation("deleteRecipe") {
                 resolver { ctx: Context, recipeId: Long ->
                     ctx.requireAuth(jwtConfig)
-                    val recipe = recipesTable.get(recipeId)
+                    recipesTable.get(recipeId)
                         ?: throw IllegalArgumentException("Recipe with ID $recipeId not found")
 
                     recipesTable.delete(recipeId)

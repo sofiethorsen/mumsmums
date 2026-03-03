@@ -1103,5 +1103,54 @@
     "nameEn": "peanut oil",
     "fullNameSv": "jordnötsolja",
     "fullNameEn": "peanut oil"
+  },
+  {
+    "id": 2365970849792,
+    "nameSv": "farinsocker",
+    "nameEn": "brown sugar",
+    "fullNameSv": "farinsocker",
+    "fullNameEn": "brown sugar"
+  },
+  {
+    "id": 2365970958336,
+    "nameSv": "vaniljextrakt",
+    "nameEn": "vanilla extract",
+    "fullNameSv": "vaniljextrakt",
+    "fullNameEn": "vanilla extract"
+  },
+  {
+    "id": 2365971343360,
+    "nameSv": "vita chokladknappar",
+    "nameEn": "white chocolate chips",
+    "fullNameSv": "vita chokladknappar",
+    "fullNameEn": "white chocolate chips"
+  },
+  {
+    "id": 2365971404800,
+    "nameSv": "ljusa chokladknappar",
+    "nameEn": "milk chocolate chips",
+    "fullNameSv": "ljusa chokladknappar",
+    "fullNameEn": "milk chocolate chips"
+  },
+  {
+    "id": 2365971451904,
+    "nameSv": "mörka chokladknappar",
+    "nameEn": "dark chocolate chips",
+    "fullNameSv": "mörka chokladknappar",
+    "fullNameEn": "dark chocolate chips"
+  },
+  {
+    "id": 2365971587072,
+    "nameSv": "valnötter",
+    "nameEn": "walnuts",
+    "fullNameSv": "valnötter",
+    "fullNameEn": "walnuts"
+  },
+  {
+    "id": 2365971615744,
+    "nameSv": "pecannötter",
+    "nameEn": "pecans",
+    "fullNameSv": "pecannötter",
+    "fullNameEn": "pecans"
   }
 ]

@@ -1,10 +1,12 @@
 import { useState, type FC } from 'react'
+import { useTranslations, useLocale } from 'next-intl'
 import styles from './RecipeMobile.module.css'
 
 import IngredientsCard from '../IngredientsCard/IngredientsCard'
 import RecipeImage from '../RecipeImage/RecipeImage'
 import UsedInSection from '../UsedInSection/UsedInSection'
 import { ClockIcon, UsersIcon } from '../icons'
+import { localized } from '../../i18n'
 
 import type { GetRecipeByIdQuery } from '../../graphql/generated'
 
@@ -15,8 +17,13 @@ interface RecipeProps {
 }
 
 const RecipeMobile: FC<RecipeProps> = ({ recipe }) => {
+    const t = useTranslations('recipe')
+    const locale = useLocale()
     const [multiplier, setMultiplier] = useState(1)
 
+    const name = localized(recipe.nameSv, recipe.nameEn, locale)
+    const description = localized(recipe.descriptionSv ?? '', recipe.descriptionEn, locale)
+    const steps = locale === 'en' && recipe.stepsEn.length > 0 ? recipe.stepsEn : recipe.stepsSv
     const scaledServings = recipe.servings ? recipe.servings * multiplier : null
     const scaledUnits = recipe.numberOfUnits ? recipe.numberOfUnits * multiplier : null
 
@@ -27,36 +34,36 @@ const RecipeMobile: FC<RecipeProps> = ({ recipe }) => {
                 <div className={styles.imageContainer}>
                     <RecipeImage
                         imageUrl={recipe.imageUrl}
-                        imageAltText={recipe.nameSv}
+                        imageAltText={name}
                         priority
                     />
                     <div className={styles.imageOverlay} />
                     <div className={styles.heroTitle}>
-                        <h1 className={styles.recipeName}>{recipe.nameSv}</h1>
+                        <h1 className={styles.recipeName}>{name}</h1>
                     </div>
                 </div>
             </div>
 
             {/* Meta information */}
             <div className={styles.metaSection}>
-                {recipe.descriptionSv && (
-                    <p className={styles.description}>{recipe.descriptionSv}</p>
+                {description && (
+                    <p className={styles.description}>{description}</p>
                 )}
                 <div className={styles.metaInfo}>
                     <span className={styles.metaItem}>
                         <ClockIcon size={16} />
-                        {recipe.stepsSv.length} steg
+                        {t('steps', { count: steps.length })}
                     </span>
                     {scaledServings && (
                         <span className={styles.metaItem}>
                             <UsersIcon size={16} />
-                            {scaledServings} portioner
+                            {t('servings', { count: scaledServings })}
                         </span>
                     )}
                     {scaledUnits && (
                         <span className={styles.metaItem}>
                             <UsersIcon size={16} />
-                            {scaledUnits} st
+                            {t('units', { count: scaledUnits })}
                         </span>
                     )}
                 </div>
@@ -70,9 +77,9 @@ const RecipeMobile: FC<RecipeProps> = ({ recipe }) => {
 
                 <div className={styles.instructionsSection}>
                     <div className={styles.instructionCard}>
-                        <h2 className={styles.sectionTitle}>Gör så här</h2>
+                        <h2 className={styles.sectionTitle}>{t('instructionsTitle')}</h2>
                         <ol className={styles.stepsList}>
-                            {recipe.stepsSv.map((step: string, index: number) => (
+                            {steps.map((step: string, index: number) => (
                                 <li className={styles.stepItem} key={`step-${index}`}>
                                     {step}
                                 </li>

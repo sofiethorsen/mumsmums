@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { useLocale } from 'next-intl'
 
 import Link from 'next/link'
 import styles from './IngredientRow.module.css'
@@ -21,20 +22,23 @@ const formatQuantity = (quantity: number): string => {
 }
 
 const IngredientRow: FC<IngredientRowProps> = ({ ingredient }) => {
+    const locale = useLocale()
     const quantity = ingredient.quantity ? `${formatQuantity(ingredient.quantity)} ` : ''
     const isNoUnit = ingredient.unitId === NO_UNIT_ID
-    const volume = !isNoUnit && ingredient.volume && `${ingredient.volume} `
+    const displayVolume = locale === 'en' && ingredient.volumeEn ? ingredient.volumeEn : ingredient.volume
+    const volume = !isNoUnit && displayVolume && `${displayVolume} `
+    const name = locale === 'en' && ingredient.nameEn ? ingredient.nameEn : ingredient.name
     const hasRecipeId = Boolean(ingredient.recipeId)
 
     if (hasRecipeId) {
         return (
             <Link className={styles.ingredientLink} href={`/recipe/${ingredient.recipeId}`}>
-                <div className={styles.ingredient}>{quantity}{volume}{ingredient.name}</div>
+                <div className={styles.ingredient}>{quantity}{volume}{name}</div>
             </Link >
         )
     } else {
         return (
-            <div className={styles.ingredient}>{quantity}{volume}{ingredient.name}</div>
+            <div className={styles.ingredient}>{quantity}{volume}{name}</div>
         )
     }
 }

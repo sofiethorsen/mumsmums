@@ -8,6 +8,7 @@ interface PageMeta {
     url: string
     description?: string | null
     imageUrl?: string | null
+    locale?: string
 }
 
 const renderPreviewImageTag = (meta: PageMeta) => {
@@ -25,6 +26,8 @@ const renderPreviewImageTag = (meta: PageMeta) => {
 }
 
 const PageHead: FC<PageMeta> = (meta: PageMeta) => {
+    const ogLocale = meta.locale === 'en' ? 'en_US' : 'sv_SE'
+
     return (
         <>
             <Head>
@@ -33,7 +36,7 @@ const PageHead: FC<PageMeta> = (meta: PageMeta) => {
                 <meta property="og:site_name" content="mumsmums" />
                 <meta property="og:type" content={meta.siteType} />
                 <meta property="og:url" content={meta.url} />
-                <meta property="og:locale" content="sv_SE" />
+                <meta property="og:locale" content={ogLocale} />
                 {meta.description && <meta property="og:description" content={meta.description} />}
                 {renderPreviewImageTag(meta)}
 

@@ -1,0 +1,28 @@
+{
+  "hero": {
+    "subtitle": "Recept utan livshistorier.",
+    "searchPlaceholder": "Sök recept..."
+  },
+  "recipeGrid": {
+    "recipesFound": "{count} recept hittade för \"{query}\"",
+    "noResults": "Inga recept matchade din sökning \"{query}\"",
+    "tryAnother": "Försök med ett annat sökord"
+  },
+  "recipe": {
+    "steps": "{count} steg",
+    "servings": "{count} portioner",
+    "units": "{count} st",
+    "instructionsTitle": "Gör så här"
+  },
+  "ingredients": {
+    "title": "Ingredienser",
+    "unitAbbreviation": "st",
+    "portionAbbreviation": "port."
+  },
+  "usedIn": {
+    "title": "Ingår i"
+  },
+  "navigation": {
+    "homeAriaLabel": "Hem"
+  }
+}

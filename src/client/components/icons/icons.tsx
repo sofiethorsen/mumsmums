@@ -42,3 +42,14 @@ export const UsersIcon: FC<LineIconProps> = (props) => (
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </LineIcon>
 )
+
+/**
+ * Globe icon - globe with latitude/longitude lines
+ */
+export const GlobeIcon: FC<LineIconProps> = (props) => (
+    <LineIcon {...props}>
+        <circle cx="12" cy="12" r="10" />
+        <path d="M2 12h20" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </LineIcon>
+)

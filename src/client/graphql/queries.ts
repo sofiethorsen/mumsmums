@@ -42,7 +42,9 @@ export const GET_RECIPE_BY_ID = gql`
                 nameEn
                 ingredients {
                     name
+                    nameEn
                     volume
+                    volumeEn
                     quantity
                     recipeId
                     ingredientId

@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import HomePage from './HomePage'
+import { renderWithIntl } from '../../test-utils/renderWithIntl'
 
 // Mock next/router
 jest.mock('next/router', () => ({
@@ -72,7 +73,7 @@ const mockRecipes = [
 
 describe('HomePage', () => {
     it('renders the page structure', () => {
-        render(<HomePage recipes={mockRecipes} />)
+        renderWithIntl(<HomePage recipes={mockRecipes} />)
         expect(screen.getByTestId('page-head')).toBeInTheDocument()
         expect(screen.getByTestId('page-frame')).toBeInTheDocument()
         expect(screen.getByTestId('hero-section')).toBeInTheDocument()
@@ -80,7 +81,7 @@ describe('HomePage', () => {
     })
 
     it('displays all recipes when no search query', () => {
-        render(<HomePage recipes={mockRecipes} />)
+        renderWithIntl(<HomePage recipes={mockRecipes} />)
         expect(screen.getByTestId('filtered-count')).toHaveTextContent('4')
         expect(screen.getByTestId('recipe-1')).toHaveTextContent('Kanelbullar')
         expect(screen.getByTestId('recipe-2')).toHaveTextContent('Kardemummabullar')
@@ -90,7 +91,7 @@ describe('HomePage', () => {
 
     describe('Search filtering', () => {
         it('filters recipes based on search query', () => {
-            render(<HomePage recipes={mockRecipes} />)
+            renderWithIntl(<HomePage recipes={mockRecipes} />)
             const searchInput = screen.getByTestId('search-input')
 
             fireEvent.change(searchInput, { target: { value: 'bullar' } })
@@ -104,7 +105,7 @@ describe('HomePage', () => {
         })
 
         it('requires at least 2 characters to filter', () => {
-            render(<HomePage recipes={mockRecipes} />)
+            renderWithIntl(<HomePage recipes={mockRecipes} />)
             const searchInput = screen.getByTestId('search-input')
 
             // Single character should show all recipes
@@ -117,7 +118,7 @@ describe('HomePage', () => {
         })
 
         it('is case insensitive', () => {
-            render(<HomePage recipes={mockRecipes} />)
+            renderWithIntl(<HomePage recipes={mockRecipes} />)
             const searchInput = screen.getByTestId('search-input')
 
             fireEvent.change(searchInput, { target: { value: 'SEMLOR' } })
@@ -127,7 +128,7 @@ describe('HomePage', () => {
         })
 
         it('handles partial matches with fuzzy search', () => {
-            render(<HomePage recipes={mockRecipes} />)
+            renderWithIntl(<HomePage recipes={mockRecipes} />)
             const searchInput = screen.getByTestId('search-input')
 
             // Fuzzy search should match "Kanelbullar" and "Kardemummabullar"
@@ -137,7 +138,7 @@ describe('HomePage', () => {
         })
 
         it('shows no results when no matches found', () => {
-            render(<HomePage recipes={mockRecipes} />)
+            renderWithIntl(<HomePage recipes={mockRecipes} />)
             const searchInput = screen.getByTestId('search-input')
 
             fireEvent.change(searchInput, { target: { value: 'pizza' } })
@@ -146,7 +147,7 @@ describe('HomePage', () => {
         })
 
         it('clears filter when search is cleared', () => {
-            render(<HomePage recipes={mockRecipes} />)
+            renderWithIntl(<HomePage recipes={mockRecipes} />)
             const searchInput = screen.getByTestId('search-input')
 
             // Filter
@@ -160,7 +161,7 @@ describe('HomePage', () => {
     })
 
     it('handles empty recipe list', () => {
-        render(<HomePage recipes={[]} />)
+        renderWithIntl(<HomePage recipes={[]} />)
         expect(screen.getByTestId('filtered-count')).toHaveTextContent('0')
     })
 })

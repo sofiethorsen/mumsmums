@@ -1,0 +1,28 @@
+{
+  "hero": {
+    "subtitle": "Recipes without life stories.",
+    "searchPlaceholder": "Search recipes..."
+  },
+  "recipeGrid": {
+    "recipesFound": "{count} recipes found for \"{query}\"",
+    "noResults": "No recipes matched your search \"{query}\"",
+    "tryAnother": "Try another search term"
+  },
+  "recipe": {
+    "steps": "{count} steps",
+    "servings": "{count} servings",
+    "units": "{count} pcs",
+    "instructionsTitle": "Instructions"
+  },
+  "ingredients": {
+    "title": "Ingredients",
+    "unitAbbreviation": "pcs",
+    "portionAbbreviation": "serv."
+  },
+  "usedIn": {
+    "title": "Used in"
+  },
+  "navigation": {
+    "homeAriaLabel": "Home"
+  }
+}

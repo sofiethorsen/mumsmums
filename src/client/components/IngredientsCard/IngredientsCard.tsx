@@ -1,4 +1,5 @@
 import { useState, type FC, type ChangeEvent } from 'react'
+import { useTranslations } from 'next-intl'
 
 import styles from './IngredientsCard.module.css'
 
@@ -16,6 +17,7 @@ interface IngredientsCardProps {
 const MULTIPLIERS = [0.5, 1, 1.5, 2]
 
 const IngredientsCard: FC<IngredientsCardProps> = ({ recipe, multiplier: externalMultiplier, onMultiplierChange }) => {
+    const t = useTranslations('ingredients')
     const [internalMultiplier, setInternalMultiplier] = useState(1)
     const multiplier = externalMultiplier !== undefined ? externalMultiplier : internalMultiplier
     const originalAmount = recipe.numberOfUnits || recipe.servings || 1
@@ -42,11 +44,11 @@ const IngredientsCard: FC<IngredientsCardProps> = ({ recipe, multiplier: externa
         })),
     }
 
-    const unit = (scaledRecipe.numberOfUnits && 'st') || (scaledRecipe.servings && 'port.')
+    const unit = (scaledRecipe.numberOfUnits && t('unitAbbreviation')) || (scaledRecipe.servings && t('portionAbbreviation'))
 
     return (
         <div className={styles.ingredientsCard}>
-            <div className={styles.title}>Ingredienser</div>
+            <div className={styles.title}>{t('title')}</div>
             <div className={styles.servings}>
                 <label>
                     <select value={multiplier} onChange={handleMultiplierChange}>

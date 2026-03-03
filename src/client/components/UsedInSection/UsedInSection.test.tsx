@@ -1,8 +1,9 @@
 import type { ReactNode, ImgHTMLAttributes } from 'react'
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import UsedInSection from './UsedInSection'
 import type { RecipeReference } from '../../graphql/generated'
+import { renderWithIntl } from '../../test-utils/renderWithIntl'
 
 // Mock Next.js Link component
 jest.mock('next/link', () => ({
@@ -54,14 +55,14 @@ describe('UsedInSection', () => {
 
     it('renders the title "Ingår i"', () => {
         const recipes = createMockRecipes(2)
-        render(<UsedInSection recipes={recipes} />)
+        renderWithIntl(<UsedInSection recipes={recipes} />)
 
         expect(screen.getByText('Ingår i')).toBeInTheDocument()
     })
 
     it('renders all recipe cards', () => {
         const recipes = createMockRecipes(3)
-        render(<UsedInSection recipes={recipes} />)
+        renderWithIntl(<UsedInSection recipes={recipes} />)
 
         expect(screen.getByText('Recept 1')).toBeInTheDocument()
         expect(screen.getByText('Recept 2')).toBeInTheDocument()
@@ -70,7 +71,7 @@ describe('UsedInSection', () => {
 
     it('renders links to recipe pages', () => {
         const recipes = createMockRecipes(2)
-        render(<UsedInSection recipes={recipes} />)
+        renderWithIntl(<UsedInSection recipes={recipes} />)
 
         const links = screen.getAllByRole('link')
         expect(links).toHaveLength(2)
@@ -79,12 +80,12 @@ describe('UsedInSection', () => {
     })
 
     it('returns null when recipes array is empty', () => {
-        const { container } = render(<UsedInSection recipes={[]} />)
+        const { container } = renderWithIntl(<UsedInSection recipes={[]} />)
         expect(container.firstChild).toBeNull()
     })
 
     it('returns null when recipes is undefined', () => {
-        const { container } = render(<UsedInSection recipes={undefined as unknown as RecipeReference[]} />)
+        const { container } = renderWithIntl(<UsedInSection recipes={undefined as unknown as RecipeReference[]} />)
         expect(container.firstChild).toBeNull()
     })
 
@@ -92,7 +93,7 @@ describe('UsedInSection', () => {
         const recipes: RecipeReference[] = [
             { recipeId: 1, nameSv: 'Recept utan bild', nameEn: null, imageUrl: undefined },
         ]
-        render(<UsedInSection recipes={recipes} />)
+        renderWithIntl(<UsedInSection recipes={recipes} />)
 
         expect(screen.getByText('Recept utan bild')).toBeInTheDocument()
     })

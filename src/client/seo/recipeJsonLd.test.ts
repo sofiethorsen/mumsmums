@@ -119,4 +119,51 @@ describe('generateRecipeJsonLd', () => {
 
         expect(result.description).toBeUndefined()
     })
+
+    describe('with English locale', () => {
+        it('uses English name and description when available', () => {
+            const recipe = createMockRecipe({
+                nameEn: 'Test Recipe',
+                descriptionEn: 'A delicious test recipe',
+            })
+            const result = generateRecipeJsonLd(recipe, 'en')
+
+            expect(result.name).toBe('Test Recipe')
+            expect(result.description).toBe('A delicious test recipe')
+        })
+
+        it('falls back to Swedish when English is not available', () => {
+            const recipe = createMockRecipe()
+            const result = generateRecipeJsonLd(recipe, 'en')
+
+            expect(result.name).toBe('Testrecept')
+            expect(result.description).toBe('Ett utsökt testrecept')
+        })
+
+        it('uses English steps when available', () => {
+            const recipe = createMockRecipe({
+                stepsEn: ['Mix the ingredients', 'Bake for 20 minutes'],
+            })
+            const result = generateRecipeJsonLd(recipe, 'en')
+
+            expect(result.recipeInstructions).toEqual([
+                { '@type': 'HowToStep', position: 1, text: 'Mix the ingredients' },
+                { '@type': 'HowToStep', position: 2, text: 'Bake for 20 minutes' },
+            ])
+        })
+
+        it('formats servings in English', () => {
+            const recipe = createMockRecipe({ servings: 4, numberOfUnits: null })
+            const result = generateRecipeJsonLd(recipe, 'en')
+
+            expect(result.recipeYield).toBe('4 servings')
+        })
+
+        it('formats numberOfUnits in English', () => {
+            const recipe = createMockRecipe({ servings: null, numberOfUnits: 12 })
+            const result = generateRecipeJsonLd(recipe, 'en')
+
+            expect(result.recipeYield).toBe('12 pcs')
+        })
+    })
 })

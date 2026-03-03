@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { useTranslations } from 'next-intl'
 import styles from './RecipeGrid.module.css'
 import type { GetRecipePreviewsQuery } from '../../graphql/generated'
 import ImageGrid from '../ImageGrid/ImageGrid'
@@ -13,6 +14,8 @@ interface RecipeGridProps {
 }
 
 const RecipeGrid: FC<RecipeGridProps> = ({ recipes, searchQuery, loading = false, error }) => {
+    const t = useTranslations('recipeGrid')
+
     if (loading) return null
     if (error) return <p>Error: {error.message}</p>
 
@@ -24,8 +27,8 @@ const RecipeGrid: FC<RecipeGridProps> = ({ recipes, searchQuery, loading = false
             {hasSearchQuery && (
                 <p className={styles.searchResults}>
                     {hasResults
-                        ? `${recipes.length} recept hittade för "${searchQuery}"`
-                        : `Inga recept matchade din sökning "${searchQuery}"`}
+                        ? t('recipesFound', { count: recipes.length, query: searchQuery })
+                        : t('noResults', { query: searchQuery })}
                 </p>
             )}
 
@@ -34,7 +37,7 @@ const RecipeGrid: FC<RecipeGridProps> = ({ recipes, searchQuery, loading = false
             ) : (
                 hasSearchQuery && (
                     <div className={styles.emptyState}>
-                        <p>Försök med ett annat sökord</p>
+                        <p>{t('tryAnother')}</p>
                     </div>
                 )
             )}

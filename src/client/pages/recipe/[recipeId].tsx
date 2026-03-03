@@ -1,20 +1,23 @@
+import { useLocale } from 'next-intl'
 import RecipePage from '../../page-components/RecipePage/RecipePage'
 import PageHead from '../../components/PageHead/PageHead'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import client from '../../graphql/client'
 import { toAbsoluteUrl } from '../../constants/urls'
 import { generateRecipeJsonLd } from '../../seo/recipeJsonLd'
+import { getMessages, localized } from '../../i18n'
 import { GetRecipeByIdDocument, GetRecipeByIdQuery, GetRecipesDocument } from '../../graphql/generated'
 
 type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
-const renderPageHead = (recipe: Recipe) => {
+const RecipePageHead = ({ recipe, locale }: { recipe: Recipe; locale: string }) => {
     return <PageHead
-        title={`mumsmums - ${recipe.nameSv}`}
-        description={recipe.descriptionSv}
+        title={`mumsmums - ${localized(recipe.nameSv, recipe.nameEn, locale)}`}
+        description={localized(recipe.descriptionSv ?? '', recipe.descriptionEn, locale) || undefined}
         siteType={'article'}
         url={`https://mumsmums.app/recipe/${recipe.recipeId}`}
         imageUrl={toAbsoluteUrl(recipe.imageUrl)}
+        locale={locale}
     />
 }
 
@@ -23,12 +26,13 @@ interface RecipeProps {
 }
 
 export default function Recipe({ recipe }: RecipeProps) {
-    const jsonLd = generateRecipeJsonLd(recipe)
+    const locale = useLocale()
+    const jsonLd = generateRecipeJsonLd(recipe, locale)
 
     // See: https://nextjs.org/docs/app/guides/json-ld
     return (
         <>
-            {renderPageHead(recipe)}
+            <RecipePageHead recipe={recipe} locale={locale} />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -48,9 +52,12 @@ export async function getStaticPaths() {
     })
 
     const recipes = data?.recipes ?? []
-    const paths = recipes.map((recipe) => ({
-        params: { recipeId: String(recipe.recipeId) },
-    }))
+    const paths = recipes.flatMap((recipe) =>
+        ['sv', 'en'].map((locale) => ({
+            params: { recipeId: String(recipe.recipeId) },
+            locale,
+        }))
+    )
 
     return {
         paths: paths,
@@ -59,7 +66,7 @@ export async function getStaticPaths() {
     }
 }
 
-export async function getStaticProps({ params }: { params: { recipeId: string } }) {
+export async function getStaticProps({ params, locale }: { params: { recipeId: string }; locale: string }) {
     // since we get the ID from the URL, we need to convert it to a number to make TS happy
     const numericRecipeId = parseInt(params.recipeId, 10)
     const recipeData = await client.query({
@@ -78,6 +85,7 @@ export async function getStaticProps({ params }: { params: { recipeId: string } 
     return {
         props: {
             recipe,
+            messages: await getMessages(locale),
         },
         // Revalidate every 60 seconds (ISR - Incremental Static Regeneration)
         revalidate: 60,

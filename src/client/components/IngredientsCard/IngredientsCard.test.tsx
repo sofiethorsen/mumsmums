@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import IngredientsCard from './IngredientsCard'
 import type { GetRecipeByIdQuery } from '../../graphql/generated'
+import { renderWithIntl } from '../../test-utils/renderWithIntl'
 
 type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
@@ -37,27 +38,27 @@ const getServingsSelector = () => screen.getByRole('combobox')
 describe('IngredientsCard', () => {
     it('renders the title "Ingredienser"', () => {
         const recipe = createMockRecipe()
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
         expect(screen.getByText('Ingredienser')).toBeInTheDocument()
     })
 
     it('displays servings with "port." unit when recipe has servings', () => {
         const recipe = createMockRecipe({ servings: 4, numberOfUnits: null })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         expect(getServingsSelector()).toHaveTextContent('4 port.')
     })
 
     it('displays numberOfUnits with "st" unit when recipe has numberOfUnits', () => {
         const recipe = createMockRecipe({ servings: null, numberOfUnits: 12 })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         expect(getServingsSelector()).toHaveTextContent('12 st')
     })
 
     it('renders all ingredient sections', () => {
         const recipe = createMockRecipe()
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         // Check that ingredients are rendered (this depends on IngredientSection implementation)
         expect(screen.getByText('Huvudingredienser')).toBeInTheDocument()
@@ -65,7 +66,7 @@ describe('IngredientsCard', () => {
 
     it('scales ingredients when multiplier is changed to 2x', () => {
         const recipe = createMockRecipe({ servings: 4 })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         const selector = getServingsSelector()
 
@@ -77,7 +78,7 @@ describe('IngredientsCard', () => {
 
     it('scales ingredients when multiplier is changed to 0.5x', () => {
         const recipe = createMockRecipe({ servings: 4 })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         const selector = getServingsSelector()
 
@@ -89,7 +90,7 @@ describe('IngredientsCard', () => {
 
     it('provides all multiplier options (0.5, 1, 1.5, 2)', () => {
         const recipe = createMockRecipe({ servings: 4 })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         const selector = getServingsSelector()
         const options = Array.from(selector.querySelectorAll('option'))
@@ -100,7 +101,7 @@ describe('IngredientsCard', () => {
 
     it('defaults to 1x multiplier', () => {
         const recipe = createMockRecipe({ servings: 4 })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         const selector = getServingsSelector() as HTMLSelectElement
         expect(selector.value).toBe('1')
@@ -108,21 +109,21 @@ describe('IngredientsCard', () => {
 
     it('handles recipe with both servings and numberOfUnits (prefers numberOfUnits)', () => {
         const recipe = createMockRecipe({ servings: 4, numberOfUnits: 12 })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         expect(getServingsSelector()).toHaveTextContent('12 st')
     })
 
     it('handles recipe with no servings or numberOfUnits (defaults to 1)', () => {
         const recipe = createMockRecipe({ servings: null, numberOfUnits: null })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         expect(getServingsSelector()).toHaveTextContent('1')
     })
 
     it('scales quantities correctly with 1.5x multiplier', () => {
         const recipe = createMockRecipe({ servings: 4 })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         const selector = getServingsSelector()
 
@@ -134,7 +135,7 @@ describe('IngredientsCard', () => {
 
     it('displays correct options when user selects a new multiplier', () => {
         const recipe = createMockRecipe({ numberOfUnits: 30 })
-        render(<IngredientsCard recipe={recipe} />)
+        renderWithIntl(<IngredientsCard recipe={recipe} />)
 
         const selector = getServingsSelector()
 
@@ -156,7 +157,7 @@ describe('IngredientsCard', () => {
     describe('Controlled multiplier behavior', () => {
         it('uses external multiplier prop when provided', () => {
             const recipe = createMockRecipe({ servings: 4 })
-            render(<IngredientsCard recipe={recipe} multiplier={2} />)
+            renderWithIntl(<IngredientsCard recipe={recipe} multiplier={2} />)
 
             const selector = getServingsSelector() as HTMLSelectElement
             expect(selector.value).toBe('2')
@@ -166,7 +167,7 @@ describe('IngredientsCard', () => {
         it('calls onMultiplierChange when user changes selection', () => {
             const recipe = createMockRecipe({ servings: 4 })
             const handleChange = jest.fn()
-            render(<IngredientsCard recipe={recipe} multiplier={1} onMultiplierChange={handleChange} />)
+            renderWithIntl(<IngredientsCard recipe={recipe} multiplier={1} onMultiplierChange={handleChange} />)
 
             const selector = getServingsSelector()
             fireEvent.change(selector, { target: { value: '2' } })
@@ -176,7 +177,7 @@ describe('IngredientsCard', () => {
 
         it('does not call onMultiplierChange when used in uncontrolled mode', () => {
             const recipe = createMockRecipe({ servings: 4 })
-            render(<IngredientsCard recipe={recipe} />)
+            renderWithIntl(<IngredientsCard recipe={recipe} />)
 
             const selector = getServingsSelector()
             // This should work fine with internal state, no callback needed
@@ -187,7 +188,7 @@ describe('IngredientsCard', () => {
 
         it('maintains backwards compatibility when no multiplier props provided', () => {
             const recipe = createMockRecipe({ servings: 4 })
-            render(<IngredientsCard recipe={recipe} />)
+            renderWithIntl(<IngredientsCard recipe={recipe} />)
 
             const selector = getServingsSelector() as HTMLSelectElement
 
@@ -215,7 +216,7 @@ describe('IngredientsCard', () => {
                     },
                 ],
             })
-            render(<IngredientsCard recipe={recipe} />)
+            renderWithIntl(<IngredientsCard recipe={recipe} />)
 
             // 1.5 cups should display as "1.5" not "1.5000000002"
             expect(screen.getByText(/1\.5\s+dl/)).toBeInTheDocument()
@@ -234,7 +235,7 @@ describe('IngredientsCard', () => {
                     },
                 ],
             })
-            render(<IngredientsCard recipe={recipe} />)
+            renderWithIntl(<IngredientsCard recipe={recipe} />)
 
             // 2.0 should display as "2" not "2.0"
             expect(screen.getByText(/^2\s+dl/)).toBeInTheDocument()

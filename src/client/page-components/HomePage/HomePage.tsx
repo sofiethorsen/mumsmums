@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { useLocale } from 'next-intl'
 import Fuse from 'fuse.js'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import PageHead from '../../components/PageHead/PageHead'
@@ -14,20 +15,22 @@ interface HomePageProps {
 }
 
 export default function HomePage({ recipes }: HomePageProps) {
+    const locale = useLocale()
     const [searchQuery, setSearchQuery] = useState('')
 
     const filteredRecipes = useMemo(() => {
         if (!recipes) return []
         if (!searchQuery || searchQuery.length < 2) return recipes
 
+        const keys = locale === 'en' ? ['nameSv', 'nameEn'] : ['nameSv']
         const fuse = new Fuse(recipes, {
-            keys: ['nameSv'],
+            keys,
             threshold: 0.3,
             ignoreLocation: true,
         })
 
         return fuse.search(searchQuery).map((result) => result.item)
-    }, [recipes, searchQuery])
+    }, [recipes, searchQuery, locale])
 
     return (
         <>

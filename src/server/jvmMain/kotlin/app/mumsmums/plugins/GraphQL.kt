@@ -124,6 +124,22 @@ fun Application.configureGraphQL(
                 description = "A lightweight reference to a recipe"
             }
 
+            type<Ingredient>() {
+                description = "An ingredient in a recipe"
+                property<String?>("nameEn") {
+                    description = "English name resolved from ingredient library"
+                    resolver { ingredient: Ingredient ->
+                        ingredient.ingredientId?.let { ingredientTable.getById(it)?.fullNameEn }
+                    }
+                }
+                property<String?>("volumeEn") {
+                    description = "English unit abbreviation resolved from unit library"
+                    resolver { ingredient: Ingredient ->
+                        ingredient.unitId?.let { unitTable.getById(it)?.shortNameEn }
+                    }
+                }
+            }
+
             inputType<IngredientInput>() {
                 description = "Input for an ingredient"
             }

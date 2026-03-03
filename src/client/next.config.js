@@ -9,6 +9,14 @@ const nextConfig = {
     // Enable React strict mode for better development warnings
     reactStrictMode: true,
 
+    // Internationalization — Swedish at root, English at /en/*
+    // localeDetection: false prevents auto-redirect based on Accept-Language header
+    i18n: {
+        locales: ['sv', 'en'],
+        defaultLocale: 'sv',
+        localeDetection: false,
+    },
+
     // Image optimization configuration
     images: {
         // Allowed image formats - WebP provides better compression than PNG/JPEG

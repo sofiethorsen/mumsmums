@@ -48,7 +48,7 @@ jest.mock('../../components/RecipeGrid/RecipeGrid', () => ({
         recipes,
         searchQuery,
     }: {
-        recipes: Array<{ recipeId: number; name: string }>
+        recipes: Array<{ recipeId: number; nameSv: string }>
         searchQuery: string
     }) => (
         <div data-testid="recipe-grid">
@@ -56,7 +56,7 @@ jest.mock('../../components/RecipeGrid/RecipeGrid', () => ({
             <span data-testid="filtered-count">{recipes.length}</span>
             {recipes.map((recipe) => (
                 <div key={recipe.recipeId} data-testid={`recipe-${recipe.recipeId}`}>
-                    {recipe.name}
+                    {recipe.nameSv}
                 </div>
             ))}
         </div>
@@ -64,10 +64,10 @@ jest.mock('../../components/RecipeGrid/RecipeGrid', () => ({
 }))
 
 const mockRecipes = [
-    { recipeId: 1, name: 'Kanelbullar', imageUrl: '/images/kanelbullar.jpg', description: 'Delicious cinnamon buns', steps: ['Step 1', 'Step 2'], servings: 12, numberOfUnits: undefined },
-    { recipeId: 2, name: 'Kardemummabullar', imageUrl: '/images/kardemumma.jpg', description: 'Tasty cardamom buns', steps: ['Step 1'], servings: 10, numberOfUnits: undefined },
-    { recipeId: 3, name: 'Semlor', imageUrl: '/images/semlor.jpg', description: 'Swedish cream buns', steps: ['Step 1', 'Step 2', 'Step 3'], servings: 8, numberOfUnits: undefined },
-    { recipeId: 4, name: 'Chokladbollar', imageUrl: '/images/choklad.jpg', description: 'Chocolate balls', steps: ['Step 1', 'Step 2'], servings: undefined, numberOfUnits: 20 },
+    { recipeId: 1, nameSv: 'Kanelbullar', nameEn: null, imageUrl: '/images/kanelbullar.jpg', descriptionSv: 'Klassiska kanelbullar', descriptionEn: null, stepsSv: ['Steg 1', 'Steg 2'], stepsEn: [], servings: 12, numberOfUnits: undefined },
+    { recipeId: 2, nameSv: 'Kardemummabullar', nameEn: null, imageUrl: '/images/kardemumma.jpg', descriptionSv: 'Goda kardemummabullar', descriptionEn: null, stepsSv: ['Steg 1'], stepsEn: [], servings: 10, numberOfUnits: undefined },
+    { recipeId: 3, nameSv: 'Semlor', nameEn: null, imageUrl: '/images/semlor.jpg', descriptionSv: 'Traditionella semlor', descriptionEn: null, stepsSv: ['Steg 1', 'Steg 2', 'Steg 3'], stepsEn: [], servings: 8, numberOfUnits: undefined },
+    { recipeId: 4, nameSv: 'Chokladbollar', nameEn: null, imageUrl: '/images/choklad.jpg', descriptionSv: 'Klassiska chokladbollar', descriptionEn: null, stepsSv: ['Steg 1', 'Steg 2'], stepsEn: [], servings: undefined, numberOfUnits: 20 },
 ]
 
 describe('HomePage', () => {

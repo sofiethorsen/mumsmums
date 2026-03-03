@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RecipeReference(
     val recipeId: Long,
-    val name: String,
+    val nameSv: String,
+    val nameEn: String? = null,
     val imageUrl: String? = null
 )

@@ -17,7 +17,7 @@ export function generateRecipeJsonLd(recipe: Recipe) {
         section.ingredients.map(formatIngredient)
     )
 
-    const instructions = recipe.steps.map((step, index) => ({
+    const instructions = recipe.stepsSv.map((step, index) => ({
         '@type': 'HowToStep',
         position: index + 1,
         text: step,
@@ -26,8 +26,8 @@ export function generateRecipeJsonLd(recipe: Recipe) {
     return {
         '@context': 'https://schema.org',
         '@type': 'Recipe',
-        name: recipe.name,
-        description: recipe.description || undefined,
+        name: recipe.nameSv,
+        description: recipe.descriptionSv || undefined,
         image: toAbsoluteUrl(recipe.imageUrl),
         recipeYield: recipe.servings
             ? `${recipe.servings} portioner`

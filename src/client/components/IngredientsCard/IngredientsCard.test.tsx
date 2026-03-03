@@ -7,22 +7,26 @@ type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
 const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
     recipeId: 1,
-    name: 'Test Recipe',
-    description: 'A test recipe',
+    nameSv: 'Testrecept',
+    nameEn: null,
+    descriptionSv: 'Ett testrecept',
+    descriptionEn: null,
     servings: 4,
     numberOfUnits: null,
     imageUrl: null,
     ingredientSections: [
         {
-            name: 'Main Ingredients',
+            nameSv: 'Huvudingredienser',
+            nameEn: null,
             ingredients: [
-                { name: 'Flour', quantity: 2, volume: 'cups', recipeId: null },
-                { name: 'Sugar', quantity: 1, volume: 'cup', recipeId: null },
-                { name: 'Salt', quantity: null, volume: 'pinch', recipeId: null },
+                { name: 'Mjöl', quantity: 2, volume: 'dl', recipeId: null },
+                { name: 'Socker', quantity: 1, volume: 'dl', recipeId: null },
+                { name: 'Salt', quantity: null, volume: 'nypa', recipeId: null },
             ],
         },
     ],
-    steps: [],
+    stepsSv: [],
+    stepsEn: [],
     usedIn: [],
     ...overrides,
 })
@@ -56,7 +60,7 @@ describe('IngredientsCard', () => {
         render(<IngredientsCard recipe={recipe} />)
 
         // Check that ingredients are rendered (this depends on IngredientSection implementation)
-        expect(screen.getByText('Main Ingredients')).toBeInTheDocument()
+        expect(screen.getByText('Huvudingredienser')).toBeInTheDocument()
     })
 
     it('scales ingredients when multiplier is changed to 2x', () => {
@@ -203,9 +207,10 @@ describe('IngredientsCard', () => {
                 servings: 3,
                 ingredientSections: [
                     {
-                        name: 'Test',
+                        nameSv: 'Test',
+                        nameEn: null,
                         ingredients: [
-                            { name: 'Test Ingredient', quantity: 1.5, volume: 'cups', recipeId: null },
+                            { name: 'Testingrediens', quantity: 1.5, volume: 'dl', recipeId: null },
                         ],
                     },
                 ],
@@ -213,7 +218,7 @@ describe('IngredientsCard', () => {
             render(<IngredientsCard recipe={recipe} />)
 
             // 1.5 cups should display as "1.5" not "1.5000000002"
-            expect(screen.getByText(/1\.5\s+cups/)).toBeInTheDocument()
+            expect(screen.getByText(/1\.5\s+dl/)).toBeInTheDocument()
         })
 
         it('removes trailing zeros after decimal point', () => {
@@ -221,9 +226,10 @@ describe('IngredientsCard', () => {
                 servings: 2,
                 ingredientSections: [
                     {
-                        name: 'Test',
+                        nameSv: 'Test',
+                        nameEn: null,
                         ingredients: [
-                            { name: 'Test Ingredient', quantity: 2.0, volume: 'cups', recipeId: null },
+                            { name: 'Testingrediens', quantity: 2.0, volume: 'dl', recipeId: null },
                         ],
                     },
                 ],
@@ -231,7 +237,7 @@ describe('IngredientsCard', () => {
             render(<IngredientsCard recipe={recipe} />)
 
             // 2.0 should display as "2" not "2.0"
-            expect(screen.getByText(/^2\s+cups/)).toBeInTheDocument()
+            expect(screen.getByText(/^2\s+dl/)).toBeInTheDocument()
         })
     })
 })

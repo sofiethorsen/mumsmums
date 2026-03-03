@@ -5,14 +5,17 @@ type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
 const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
     recipeId: 1,
-    name: 'Test Recipe',
-    description: 'A delicious test recipe',
+    nameSv: 'Testrecept',
+    nameEn: null,
+    descriptionSv: 'Ett utsökt testrecept',
+    descriptionEn: null,
     servings: 4,
     numberOfUnits: null,
     imageUrl: '/images/recipes/test.webp',
     ingredientSections: [
         {
-            name: 'Main',
+            nameSv: 'Huvudingredienser',
+            nameEn: null,
             ingredients: [
                 { name: 'flour', quantity: 2, volume: 'dl', recipeId: null },
                 { name: 'salt', quantity: null, volume: 'pinch', recipeId: null },
@@ -20,7 +23,8 @@ const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
             ],
         },
     ],
-    steps: ['Mix ingredients', 'Bake for 20 minutes'],
+    stepsSv: ['Blanda ingredienserna', 'Grädda i 20 minuter'],
+    stepsEn: [],
     usedIn: [],
     ...overrides,
 })
@@ -54,8 +58,8 @@ describe('generateRecipeJsonLd', () => {
 
         expect(result['@context']).toBe('https://schema.org')
         expect(result['@type']).toBe('Recipe')
-        expect(result.name).toBe('Test Recipe')
-        expect(result.description).toBe('A delicious test recipe')
+        expect(result.name).toBe('Testrecept')
+        expect(result.description).toBe('Ett utsökt testrecept')
     })
 
     it('formats servings as portioner', () => {
@@ -89,28 +93,28 @@ describe('generateRecipeJsonLd', () => {
     it('flattens ingredients from all sections', () => {
         const recipe = createMockRecipe({
             ingredientSections: [
-                { name: 'Dough', ingredients: [{ name: 'flour', quantity: 2, volume: 'dl', recipeId: null }] },
-                { name: 'Filling', ingredients: [{ name: 'sugar', quantity: 1, volume: 'dl', recipeId: null }] },
+                { nameSv: 'Deg', nameEn: null, ingredients: [{ name: 'mjöl', quantity: 2, volume: 'dl', recipeId: null }] },
+                { nameSv: 'Fyllning', nameEn: null, ingredients: [{ name: 'socker', quantity: 1, volume: 'dl', recipeId: null }] },
             ],
         })
         const result = generateRecipeJsonLd(recipe)
 
-        expect(result.recipeIngredient).toEqual(['2 dl flour', '1 dl sugar'])
+        expect(result.recipeIngredient).toEqual(['2 dl mjöl', '1 dl socker'])
     })
 
     it('generates instructions with positions', () => {
-        const recipe = createMockRecipe({ steps: ['Step one', 'Step two', 'Step three'] })
+        const recipe = createMockRecipe({ stepsSv: ['Steg ett', 'Steg två', 'Steg tre'] })
         const result = generateRecipeJsonLd(recipe)
 
         expect(result.recipeInstructions).toEqual([
-            { '@type': 'HowToStep', position: 1, text: 'Step one' },
-            { '@type': 'HowToStep', position: 2, text: 'Step two' },
-            { '@type': 'HowToStep', position: 3, text: 'Step three' },
+            { '@type': 'HowToStep', position: 1, text: 'Steg ett' },
+            { '@type': 'HowToStep', position: 2, text: 'Steg två' },
+            { '@type': 'HowToStep', position: 3, text: 'Steg tre' },
         ])
     })
 
     it('handles missing description', () => {
-        const recipe = createMockRecipe({ description: null })
+        const recipe = createMockRecipe({ descriptionSv: null })
         const result = generateRecipeJsonLd(recipe)
 
         expect(result.description).toBeUndefined()

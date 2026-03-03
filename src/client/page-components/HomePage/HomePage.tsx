@@ -21,7 +21,7 @@ export default function HomePage({ recipes }: HomePageProps) {
         if (!searchQuery || searchQuery.length < 2) return recipes
 
         const fuse = new Fuse(recipes, {
-            keys: ['name'],
+            keys: ['nameSv'],
             threshold: 0.3,
             ignoreLocation: true,
         })

@@ -5,6 +5,7 @@ import { LibraryIngredient, LibraryUnit, UnitType } from '../../graphql/generate
 
 const mockSection: RecipeSectionData = {
     name: 'För degen',
+    nameEn: 'For the dough',
     ingredients: [
         {
             name: 'Vetemjöl',

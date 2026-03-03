@@ -4,9 +4,10 @@ import styles from './StepsEditor.module.css'
 interface StepsEditorProps {
     steps: string[]
     onChange: (steps: string[]) => void
+    label?: string
 }
 
-const StepsEditor: FC<StepsEditorProps> = ({ steps, onChange }) => {
+const StepsEditor: FC<StepsEditorProps> = ({ steps, onChange, label = 'Steg' }) => {
     const addStep = () => onChange([...steps, ''])
 
     const removeStep = (index: number) => {
@@ -21,7 +22,7 @@ const StepsEditor: FC<StepsEditorProps> = ({ steps, onChange }) => {
 
     return (
         <div className={styles.section}>
-            <h3>Steg</h3>
+            <h3>{label}</h3>
             {steps.map((step, index) => (
                 <div key={index} className={styles.step}>
                     <span className={styles.stepNumber}>{index + 1}.</span>

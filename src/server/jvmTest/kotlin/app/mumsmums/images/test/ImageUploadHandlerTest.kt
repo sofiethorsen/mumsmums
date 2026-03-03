@@ -50,10 +50,10 @@ class ImageUploadHandlerTest {
     private fun createMockRecipe(recipeId: Long): Recipe {
         return Recipe(
             recipeId = recipeId,
-            name = "Test Recipe",
+            nameSv = "Testrecept",
             ingredientSections = emptyList(),
-            steps = emptyList(),
-            description = null,
+            stepsSv = emptyList(),
+            descriptionSv = null,
             servings = null,
             numberOfUnits = null,
             imageUrl = null,

@@ -5,6 +5,7 @@ import type { LibraryIngredient, LibraryUnit } from '../../graphql/generated'
 
 export interface RecipeSectionData {
     name: string
+    nameEn: string
     ingredients: IngredientRowData[]
 }
 
@@ -40,6 +41,10 @@ const RecipeSectionEditor: FC<RecipeSectionEditorProps> = ({
         onChange({ ...section, name })
     }
 
+    const handleNameEnChange = (nameEn: string) => {
+        onChange({ ...section, nameEn })
+    }
+
     const handleIngredientChange = (index: number, ingredient: IngredientRowData) => {
         const newIngredients = [...section.ingredients]
         newIngredients[index] = ingredient
@@ -65,6 +70,13 @@ const RecipeSectionEditor: FC<RecipeSectionEditorProps> = ({
                     placeholder="Sektionsnamn (frivilligt)"
                     value={section.name}
                     onChange={(e) => handleNameChange(e.target.value)}
+                    className={styles.nameInput}
+                />
+                <input
+                    type="text"
+                    placeholder="Section name EN (optional)"
+                    value={section.nameEn}
+                    onChange={(e) => handleNameEnChange(e.target.value)}
                     className={styles.nameInput}
                 />
                 {canRemove && (

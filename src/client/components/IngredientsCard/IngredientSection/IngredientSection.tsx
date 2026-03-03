@@ -12,7 +12,7 @@ interface IngredientSectionProps {
 const IngredientSection: FC<IngredientSectionProps> = ({ section }) => {
     return (
         <div className={styles.section}>
-            {section.name && <div className={styles.sectionTitle}>{section.name}</div>}
+            {section.nameSv && <div className={styles.sectionTitle}>{section.nameSv}</div>}
             <div className={styles.ingredients}>
                 {section.ingredients.map((ingredient: Ingredient, index: number) => (
                     <IngredientRow key={index} ingredient={ingredient} />

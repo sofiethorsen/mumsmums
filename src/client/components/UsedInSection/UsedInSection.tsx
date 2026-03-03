@@ -26,10 +26,10 @@ const UsedInSection: FC<UsedInSectionProps> = ({ recipes }) => {
                         <div className={styles.imageContainer}>
                             <RecipeImage
                                 imageUrl={recipe.imageUrl}
-                                imageAltText={recipe.name}
+                                imageAltText={recipe.nameSv}
                             />
                             <div className={styles.imageOverlay} />
-                            <div className={styles.recipeName}>{recipe.name}</div>
+                            <div className={styles.recipeName}>{recipe.nameSv}</div>
                         </div>
                     </Link>
                 ))}

@@ -31,26 +31,26 @@ class RecipesTableTest {
     @Test
     fun `When putting a recipe with an ID, it should be stored with that ID`() = runTest {
         val recipeId = 123456789L
-        val recipe = createTestRecipe(recipeId = recipeId, name = "Test Recipe")
+        val recipe = createTestRecipe(recipeId = recipeId, nameSv = "Testrecept")
 
         recipesTable.put(recipe)
 
         val retrieved = recipesTable.get(recipeId)
         assertNotNull(retrieved)
         assertEquals(recipeId, retrieved?.recipeId)
-        assertEquals("Test Recipe", retrieved?.name)
+        assertEquals("Testrecept", retrieved?.nameSv)
     }
 
     @Test
     fun `When inserting a new recipe, it should generate an ID`() = runTest {
         val recipeId = 123456789L
         every { mockIdGenerator.generateId() } returns recipeId
-        val newRecipe = createTestNewRecipe(name = "Auto ID Recipe")
+        val newRecipe = createTestNewRecipe(nameSv = "Automatiskt ID-recept")
 
         val recipe = recipesTable.insert(newRecipe)
 
         assertEquals(recipeId, recipe.recipeId)
-        assertEquals("Auto ID Recipe", recipe.name)
+        assertEquals("Automatiskt ID-recept", recipe.nameSv)
         val allRecipes = recipesTable.scan()
         assertEquals(1, allRecipes.size)
         assertEquals(recipeId, allRecipes[0].recipeId)
@@ -71,16 +71,16 @@ class RecipesTableTest {
         val recipeIdThree = 7891234567L
 
         val recipes = listOf(
-            createTestRecipe(recipeId = recipeIdOne, name = "Recipe 1"),
-            createTestRecipe(recipeId = recipeIdTwo, name = "Recipe 2"),
-            createTestRecipe(recipeId = recipeIdThree, name = "Recipe 3")
+            createTestRecipe(recipeId = recipeIdOne, nameSv = "Recept 1"),
+            createTestRecipe(recipeId = recipeIdTwo, nameSv = "Recept 2"),
+            createTestRecipe(recipeId = recipeIdThree, nameSv = "Recept 3")
         )
 
         recipesTable.batchPut(recipes)
 
         val allRecipes = recipesTable.scan()
         assertEquals(3, allRecipes.size)
-        assertEquals(listOf("Recipe 1", "Recipe 2", "Recipe 3"), allRecipes.map { it.name })
+        assertEquals(listOf("Recept 1", "Recept 2", "Recept 3"), allRecipes.map { it.nameSv })
     }
 
     @Test
@@ -93,24 +93,24 @@ class RecipesTableTest {
     @Test
     fun `When updating a recipe, the changes should be persisted`() = runTest {
         val recipeId = 123456789L
-        val original = createTestRecipe(recipeId = recipeId, name = "Original Name")
+        val original = createTestRecipe(recipeId = recipeId, nameSv = "Ursprungligt namn")
         recipesTable.put(original)
 
         val updated = original.copy(
-            name = "Updated Name",
-            description = "New description"
+            nameSv = "Uppdaterat namn",
+            descriptionSv = "Ny beskrivning"
         )
         recipesTable.update(recipeId, updated)
 
         val retrieved = recipesTable.get(recipeId)
-        assertEquals("Updated Name", retrieved?.name)
-        assertEquals("New description", retrieved?.description)
+        assertEquals("Uppdaterat namn", retrieved?.nameSv)
+        assertEquals("Ny beskrivning", retrieved?.descriptionSv)
     }
 
     @Test
     fun `When deleting a recipe, it should be removed from the database`() = runTest {
         val recipeId = 123456789L
-        val recipe = createTestRecipe(recipeId = recipeId, name = "To Delete")
+        val recipe = createTestRecipe(recipeId = recipeId, nameSv = "Att radera")
         recipesTable.put(recipe)
 
         recipesTable.delete(recipeId)
@@ -124,19 +124,19 @@ class RecipesTableTest {
         val recipeId = 123456789L
         val recipe = Recipe(
             recipeId = recipeId,
-            name = "Recipe with Ingredients",
-            description = "A test recipe",
+            nameSv = "Recept med ingredienser",
+            descriptionSv = "Ett testrecept",
             ingredientSections = listOf(
                 IngredientSection(
-                    name = "Main Ingredients",
+                    nameSv = "Huvudingredienser",
                     ingredients = listOf(
-                        Ingredient(name = "Flour", quantity = 2.0f, volume = "cups"),
-                        Ingredient(name = "Sugar", quantity = 1.0f, volume = "cup"),
-                        Ingredient(name = "Salt", volume = "pinch")
+                        Ingredient(name = "Mjöl", quantity = 2.0f, volume = "dl"),
+                        Ingredient(name = "Socker", quantity = 1.0f, volume = "dl"),
+                        Ingredient(name = "Salt", volume = "nypa")
                     )
                 )
             ),
-            steps = listOf("Mix ingredients", "Bake")
+            stepsSv = listOf("Blanda ingredienserna", "Grädda")
         )
 
         recipesTable.put(recipe)
@@ -144,13 +144,13 @@ class RecipesTableTest {
         val retrieved = recipesTable.get(recipeId)
         assertNotNull(retrieved)
         assertEquals(1, retrieved?.ingredientSections?.size)
-        assertEquals("Main Ingredients", retrieved?.ingredientSections?.get(0)?.name)
+        assertEquals("Huvudingredienser", retrieved?.ingredientSections?.get(0)?.nameSv)
         assertEquals(3, retrieved?.ingredientSections?.get(0)?.ingredients?.size)
 
         val ingredients = retrieved?.ingredientSections?.get(0)?.ingredients
-        assertEquals("Flour", ingredients?.get(0)?.name)
+        assertEquals("Mjöl", ingredients?.get(0)?.name)
         assertEquals(2.0f, ingredients?.get(0)?.quantity)
-        assertEquals("cups", ingredients?.get(0)?.volume)
+        assertEquals("dl", ingredients?.get(0)?.volume)
     }
 
     @Test
@@ -158,37 +158,37 @@ class RecipesTableTest {
         val recipeId = 123456789L
         val recipe = createTestRecipe(
             recipeId = recipeId,
-            name = "Recipe with Steps",
-            steps = listOf("Step 1", "Step 2", "Step 3")
+            nameSv = "Recept med steg",
+            stepsSv = listOf("Steg 1", "Steg 2", "Steg 3")
         )
 
         recipesTable.put(recipe)
 
         val retrieved = recipesTable.get(recipeId)
-        assertEquals(listOf("Step 1", "Step 2", "Step 3"), retrieved?.steps)
+        assertEquals(listOf("Steg 1", "Steg 2", "Steg 3"), retrieved?.stepsSv)
     }
 
     @Test
     fun `When storing ingredients with recipe references, they should be preserved`() = runTest {
         val recipeOneId = 123456789L
-        val recipeOne = createTestRecipe(recipeId = recipeOneId, name = "Garam Masala Recipe")
+        val recipeOne = createTestRecipe(recipeId = recipeOneId, nameSv = "Garam masala-recept")
         recipesTable.put(recipeOne)
 
         val recipeTwoId = 456789123L
         val recipeTwo = Recipe(
             recipeId = recipeTwoId,
-            name = "Recipe with Linked Ingredients",
-            description = "Test",
+            nameSv = "Recept med länkade ingredienser",
+            descriptionSv = "Test",
             ingredientSections = listOf(
                 IngredientSection(
-                    name = null,
+                    nameSv = null,
                     ingredients = listOf(
                         Ingredient(name = "Garam Masala", recipeId = recipeOneId),
                         Ingredient(name = "Salt", recipeId = null)
                     )
                 )
             ),
-            steps = listOf()
+            stepsSv = listOf()
         )
 
         recipesTable.put(recipeTwo)
@@ -204,27 +204,27 @@ class RecipesTableTest {
         val recipeId = 123456789L
         val recipe = Recipe(
             recipeId = recipeId,
-            name = "Multi-section Recipe",
-            description = "Test",
+            nameSv = "Recept med flera sektioner",
+            descriptionSv = "Test",
             ingredientSections = listOf(
                 IngredientSection(
-                    name = "Dry Ingredients",
-                    ingredients = listOf(Ingredient(name = "Flour"))
+                    nameSv = "Torra ingredienser",
+                    ingredients = listOf(Ingredient(name = "Mjöl"))
                 ),
                 IngredientSection(
-                    name = "Wet Ingredients",
-                    ingredients = listOf(Ingredient(name = "Milk"))
+                    nameSv = "Våta ingredienser",
+                    ingredients = listOf(Ingredient(name = "Mjölk"))
                 )
             ),
-            steps = listOf()
+            stepsSv = listOf()
         )
 
         recipesTable.put(recipe)
 
         val retrieved = recipesTable.get(recipeId)
         assertEquals(2, retrieved?.ingredientSections?.size)
-        assertEquals("Dry Ingredients", retrieved?.ingredientSections?.get(0)?.name)
-        assertEquals("Wet Ingredients", retrieved?.ingredientSections?.get(1)?.name)
+        assertEquals("Torra ingredienser", retrieved?.ingredientSections?.get(0)?.nameSv)
+        assertEquals("Våta ingredienser", retrieved?.ingredientSections?.get(1)?.nameSv)
     }
 
     @Test
@@ -232,23 +232,23 @@ class RecipesTableTest {
         val recipeId = 123456789L
         val original = Recipe(
             recipeId = recipeId,
-            name = "Original",
-            description = "Test",
+            nameSv = "Ursprungligt",
+            descriptionSv = "Test",
             ingredientSections = listOf(
                 IngredientSection(
-                    name = null,
-                    ingredients = listOf(Ingredient(name = "Old Ingredient"))
+                    nameSv = null,
+                    ingredients = listOf(Ingredient(name = "Gammal ingrediens"))
                 )
             ),
-            steps = listOf()
+            stepsSv = listOf()
         )
         recipesTable.put(original)
 
         val updated = original.copy(
             ingredientSections = listOf(
                 IngredientSection(
-                    name = null,
-                    ingredients = listOf(Ingredient(name = "New Ingredient"))
+                    nameSv = null,
+                    ingredients = listOf(Ingredient(name = "Ny ingrediens"))
                 )
             )
         )
@@ -256,7 +256,7 @@ class RecipesTableTest {
 
         val retrieved = recipesTable.get(recipeId)
         assertEquals(1, retrieved?.ingredientSections?.get(0)?.ingredients?.size)
-        assertEquals("New Ingredient", retrieved?.ingredientSections?.get(0)?.ingredients?.get(0)?.name)
+        assertEquals("Ny ingrediens", retrieved?.ingredientSections?.get(0)?.ingredients?.get(0)?.name)
     }
 
     @Test
@@ -264,19 +264,19 @@ class RecipesTableTest {
         val recipeId = 123456789L
         val recipe = Recipe(
             recipeId = recipeId,
-            name = "Recipe with Sections",
-            description = "Test",
+            nameSv = "Recept med sektioner",
+            descriptionSv = "Test",
             ingredientSections = listOf(
                 IngredientSection(
-                    name = "Section 1",
-                    ingredients = listOf(Ingredient(name = "Ingredient 1"))
+                    nameSv = "Sektion 1",
+                    ingredients = listOf(Ingredient(name = "Ingrediens 1"))
                 ),
                 IngredientSection(
-                    name = "Section 2",
-                    ingredients = listOf(Ingredient(name = "Ingredient 2"))
+                    nameSv = "Sektion 2",
+                    ingredients = listOf(Ingredient(name = "Ingrediens 2"))
                 )
             ),
-            steps = listOf("Step 1")
+            stepsSv = listOf("Steg 1")
         )
         recipesTable.put(recipe)
 
@@ -310,19 +310,19 @@ class RecipesTableTest {
         val recipeId = 123456789L
         val recipe = Recipe(
             recipeId = recipeId,
-            name = "Recipe with Ingredients",
-            description = "Test",
+            nameSv = "Recept med ingredienser",
+            descriptionSv = "Test",
             ingredientSections = listOf(
                 IngredientSection(
-                    name = null,
+                    nameSv = null,
                     ingredients = listOf(
-                        Ingredient(name = "Ingredient 1"),
-                        Ingredient(name = "Ingredient 2"),
-                        Ingredient(name = "Ingredient 3")
+                        Ingredient(name = "Ingrediens 1"),
+                        Ingredient(name = "Ingrediens 2"),
+                        Ingredient(name = "Ingrediens 3")
                     )
                 )
             ),
-            steps = listOf()
+            stepsSv = listOf()
         )
         recipesTable.put(recipe)
 
@@ -347,8 +347,8 @@ class RecipesTableTest {
         val recipeId = 123456789L
         val recipe = createTestRecipe(
             recipeId = recipeId,
-            name = "Recipe with Steps",
-            steps = listOf("Step 1", "Step 2", "Step 3")
+            nameSv = "Recept med steg",
+            stepsSv = listOf("Steg 1", "Steg 2", "Steg 3")
         )
         recipesTable.put(recipe)
 
@@ -373,19 +373,19 @@ class RecipesTableTest {
         val recipeId = 123456789L
         val original = createTestRecipe(
             recipeId = recipeId,
-            name = "Original",
-            steps = listOf("Old Step 1", "Old Step 2")
+            nameSv = "Ursprungligt",
+            stepsSv = listOf("Gammalt steg 1", "Gammalt steg 2")
         )
         recipesTable.put(original)
 
         val updated = original.copy(
-            steps = listOf("New Step 1")
+            stepsSv = listOf("Nytt steg 1")
         )
         recipesTable.update(recipeId, updated)
 
         val retrieved = recipesTable.get(recipeId)
-        assertEquals(1, retrieved?.steps?.size)
-        assertEquals("New Step 1", retrieved?.steps?.get(0))
+        assertEquals(1, retrieved?.stepsSv?.size)
+        assertEquals("Nytt steg 1", retrieved?.stepsSv?.get(0))
 
         // Verify old steps don't exist by checking count
         val stepsCount = database.execute { connection ->
@@ -405,26 +405,26 @@ class RecipesTableTest {
     fun `When a recipe is used as ingredient, getRecipesUsingAsIngredient should return the parent recipe`() = runTest {
         // Create a base recipe (e.g., "Garam Masala")
         val baseRecipeId = 111L
-        val baseRecipe = createTestRecipe(recipeId = baseRecipeId, name = "Garam Masala")
+        val baseRecipe = createTestRecipe(recipeId = baseRecipeId, nameSv = "Garam masala")
         recipesTable.put(baseRecipe)
 
         // Create a recipe that uses the base recipe as an ingredient
         val parentRecipeId = 222L
         val parentRecipe = Recipe(
             recipeId = parentRecipeId,
-            name = "Curry",
-            description = "A curry recipe",
+            nameSv = "Currygryta",
+            descriptionSv = "En currygryta",
             imageUrl = "/images/curry.webp",
             ingredientSections = listOf(
                 IngredientSection(
-                    name = null,
+                    nameSv = null,
                     ingredients = listOf(
                         Ingredient(name = "Garam Masala", recipeId = baseRecipeId),
                         Ingredient(name = "Chicken")
                     )
                 )
             ),
-            steps = listOf("Cook")
+            stepsSv = listOf("Tillaga")
         )
         recipesTable.put(parentRecipe)
 
@@ -432,7 +432,7 @@ class RecipesTableTest {
 
         assertEquals(1, usedIn.size)
         assertEquals(parentRecipeId, usedIn[0].recipeId)
-        assertEquals("Curry", usedIn[0].name)
+        assertEquals("Currygryta", usedIn[0].nameSv)
         assertEquals("/images/curry.webp", usedIn[0].imageUrl)
     }
 
@@ -440,37 +440,37 @@ class RecipesTableTest {
     fun `When a recipe is used in multiple recipes, getRecipesUsingAsIngredient should return all`() = runTest {
         // Create a base recipe
         val baseRecipeId = 111L
-        val baseRecipe = createTestRecipe(recipeId = baseRecipeId, name = "Taco Seasoning")
+        val baseRecipe = createTestRecipe(recipeId = baseRecipeId, nameSv = "Tacokrydda")
         recipesTable.put(baseRecipe)
 
         // Create multiple recipes that use the base recipe
         val tacoRecipeId = 222L
         val tacoRecipe = Recipe(
             recipeId = tacoRecipeId,
-            name = "Tacos",
-            description = null,
+            nameSv = "Tacos",
+            descriptionSv = null,
             ingredientSections = listOf(
                 IngredientSection(
-                    name = null,
-                    ingredients = listOf(Ingredient(name = "Taco Seasoning", recipeId = baseRecipeId))
+                    nameSv = null,
+                    ingredients = listOf(Ingredient(name = "Tacokrydda", recipeId = baseRecipeId))
                 )
             ),
-            steps = listOf()
+            stepsSv = listOf()
         )
         recipesTable.put(tacoRecipe)
 
         val burritoRecipeId = 333L
         val burritoRecipe = Recipe(
             recipeId = burritoRecipeId,
-            name = "Burritos",
-            description = null,
+            nameSv = "Burritos",
+            descriptionSv = null,
             ingredientSections = listOf(
                 IngredientSection(
-                    name = null,
-                    ingredients = listOf(Ingredient(name = "Taco Seasoning", recipeId = baseRecipeId))
+                    nameSv = null,
+                    ingredients = listOf(Ingredient(name = "Tacokrydda", recipeId = baseRecipeId))
                 )
             ),
-            steps = listOf()
+            stepsSv = listOf()
         )
         recipesTable.put(burritoRecipe)
 
@@ -478,14 +478,14 @@ class RecipesTableTest {
 
         assertEquals(2, usedIn.size)
         // Results should be sorted by name
-        assertEquals("Burritos", usedIn[0].name)
-        assertEquals("Tacos", usedIn[1].name)
+        assertEquals("Burritos", usedIn[0].nameSv)
+        assertEquals("Tacos", usedIn[1].nameSv)
     }
 
     @Test
     fun `When a recipe is not used anywhere, getRecipesUsingAsIngredient should return empty list`() = runTest {
         val recipeId = 111L
-        val recipe = createTestRecipe(recipeId = recipeId, name = "Standalone Recipe")
+        val recipe = createTestRecipe(recipeId = recipeId, nameSv = "Fristående recept")
         recipesTable.put(recipe)
 
         val usedIn = recipesTable.getRecipesUsingAsIngredient(recipeId)
@@ -497,26 +497,26 @@ class RecipesTableTest {
     fun `When recipe is used multiple times in same parent, getRecipesUsingAsIngredient should return it once`() = runTest {
         // Create a base recipe
         val baseRecipeId = 111L
-        val baseRecipe = createTestRecipe(recipeId = baseRecipeId, name = "Spice Mix")
+        val baseRecipe = createTestRecipe(recipeId = baseRecipeId, nameSv = "Kryddblandning")
         recipesTable.put(baseRecipe)
 
         // Create a recipe that uses the base recipe twice (in different sections)
         val parentRecipeId = 222L
         val parentRecipe = Recipe(
             recipeId = parentRecipeId,
-            name = "Complex Dish",
-            description = null,
+            nameSv = "Komplicerad rätt",
+            descriptionSv = null,
             ingredientSections = listOf(
                 IngredientSection(
-                    name = "Marinade",
-                    ingredients = listOf(Ingredient(name = "Spice Mix", recipeId = baseRecipeId))
+                    nameSv = "Marinad",
+                    ingredients = listOf(Ingredient(name = "Kryddblandning", recipeId = baseRecipeId))
                 ),
                 IngredientSection(
-                    name = "Sauce",
-                    ingredients = listOf(Ingredient(name = "Spice Mix", recipeId = baseRecipeId))
+                    nameSv = "Sås",
+                    ingredients = listOf(Ingredient(name = "Kryddblandning", recipeId = baseRecipeId))
                 )
             ),
-            steps = listOf()
+            stepsSv = listOf()
         )
         recipesTable.put(parentRecipe)
 
@@ -524,44 +524,44 @@ class RecipesTableTest {
 
         // Should only return once due to DISTINCT
         assertEquals(1, usedIn.size)
-        assertEquals("Complex Dish", usedIn[0].name)
+        assertEquals("Komplicerad rätt", usedIn[0].nameSv)
     }
 
     private fun createTestRecipe(
         recipeId: Long,
-        name: String,
-        description: String = "Test description",
-        steps: List<String> = listOf("Test step")
+        nameSv: String,
+        descriptionSv: String = "Testbeskrivning",
+        stepsSv: List<String> = listOf("Teststeg")
     ): Recipe {
         return Recipe(
             recipeId = recipeId,
-            name = name,
-            description = description,
+            nameSv = nameSv,
+            descriptionSv = descriptionSv,
             ingredientSections = listOf(
                 IngredientSection(
-                    name = null,
-                    ingredients = listOf(Ingredient(name = "Test Ingredient"))
+                    nameSv = null,
+                    ingredients = listOf(Ingredient(name = "Testingrediens"))
                 )
             ),
-            steps = steps
+            stepsSv = stepsSv
         )
     }
 
     private fun createTestNewRecipe(
-        name: String,
-        description: String = "Test description",
-        steps: List<String> = listOf("Test step")
+        nameSv: String,
+        descriptionSv: String = "Testbeskrivning",
+        stepsSv: List<String> = listOf("Teststeg")
     ): NewRecipe {
         return NewRecipe(
-            name = name,
-            description = description,
+            nameSv = nameSv,
+            descriptionSv = descriptionSv,
             ingredientSections = listOf(
                 IngredientSection(
-                    name = null,
-                    ingredients = listOf(Ingredient(name = "Test Ingredient"))
+                    nameSv = null,
+                    ingredients = listOf(Ingredient(name = "Testingrediens"))
                 )
             ),
-            steps = steps
+            stepsSv = stepsSv
         )
     }
 }

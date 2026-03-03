@@ -12,13 +12,16 @@ import { useIngredients, useUnits, useCreateIngredientModal } from '../../hooks'
 type RecipeDetails = NonNullable<GetRecipeByIdQuery['recipe']>
 
 export interface RecipeInput {
-    name: string
-    description: string | null
+    nameSv: string
+    nameEn: string | null
+    descriptionSv: string | null
+    descriptionEn: string | null
     servings: number | null
     numberOfUnits: number | null
     imageUrl: string | null
     ingredientSections: {
-        name: string | null
+        nameSv: string | null
+        nameEn: string | null
         ingredients: {
             name: string
             volume: string | null
@@ -28,7 +31,8 @@ export interface RecipeInput {
             unitId: number | null
         }[]
     }[]
-    steps: string[]
+    stepsSv: string[]
+    stepsEn: string[]
 }
 
 interface RecipeFormProps {
@@ -39,6 +43,7 @@ interface RecipeFormProps {
 
 const EMPTY_SECTION: RecipeSectionData = {
     name: '',
+    nameEn: '',
     ingredients: [{
         name: '',
         volume: '',
@@ -51,13 +56,16 @@ const EMPTY_SECTION: RecipeSectionData = {
 
 const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
     const [name, setName] = useState('')
+    const [nameEn, setNameEn] = useState('')
     const [description, setDescription] = useState('')
+    const [descriptionEn, setDescriptionEn] = useState('')
     const [servings, setServings] = useState('')
     const [numberOfUnits, setNumberOfUnits] = useState('')
     const [imageUrl, setImageUrl] = useState('')
     const [uploadError, setUploadError] = useState<string | null>(null)
     const [sections, setSections] = useState<RecipeSectionData[]>([EMPTY_SECTION])
     const [steps, setSteps] = useState<string[]>([''])
+    const [stepsEn, setStepsEn] = useState<string[]>([''])
 
     // Library data
     const { ingredients: libraryIngredients, addIngredient: addLibraryIngredient } = useIngredients()
@@ -68,14 +76,17 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
 
     useEffect(() => {
         if (recipe) {
-            setName(recipe.name)
-            setDescription(recipe.description || '')
+            setName(recipe.nameSv)
+            setNameEn(recipe.nameEn || '')
+            setDescription(recipe.descriptionSv || '')
+            setDescriptionEn(recipe.descriptionEn || '')
             setServings(recipe.servings?.toString() || '')
             setNumberOfUnits(recipe.numberOfUnits?.toString() || '')
             setImageUrl(recipe.imageUrl || '')
             setSections(
                 recipe.ingredientSections.map((section) => ({
-                    name: section.name || '',
+                    name: section.nameSv || '',
+                    nameEn: section.nameEn || '',
                     ingredients: section.ingredients.map((ing) => ({
                         name: ing.name,
                         volume: ing.volume || '',
@@ -86,7 +97,8 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
                     })),
                 }))
             )
-            setSteps(recipe.steps)
+            setSteps(recipe.stepsSv)
+            setStepsEn(recipe.stepsEn.length > 0 ? recipe.stepsEn : [''])
         }
     }, [recipe])
 
@@ -94,14 +106,17 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
         e.preventDefault()
 
         const recipeInput = {
-            name,
-            description: description || null,
+            nameSv: name,
+            nameEn: nameEn || null,
+            descriptionSv: description || null,
+            descriptionEn: descriptionEn || null,
             servings: servings ? parseInt(servings) : null,
             numberOfUnits: numberOfUnits ? parseInt(numberOfUnits) : null,
             // Use imageUrl state (updated after upload), stripping any cache-busting query params
             imageUrl: imageUrl ? imageUrl.split('?')[0] : null,
             ingredientSections: sections.map((section) => ({
-                name: section.name || null,
+                nameSv: section.name || null,
+                nameEn: section.nameEn || null,
                 ingredients: section.ingredients
                     .filter((ing) => ing.name.trim())
                     .map((ing) => ({
@@ -113,7 +128,8 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
                         unitId: ing.unitId ? parseInt(ing.unitId) : null,
                     })),
             })),
-            steps: steps.filter((step) => step.trim()),
+            stepsSv: steps.filter((step) => step.trim()),
+            stepsEn: stepsEn.filter((step) => step.trim()),
         }
 
         onSubmit(recipeInput)
@@ -170,13 +186,23 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
             <h2>{recipe ? 'Editera recept' : 'Nytt recept'}</h2>
 
             <div className={styles.formGroup}>
-                <label>Namn *</label>
+                <label>Namn (svenska) *</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
             </div>
 
             <div className={styles.formGroup}>
-                <label>Beskrivning</label>
+                <label>Namn (engelska)</label>
+                <input type="text" value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
+            </div>
+
+            <div className={styles.formGroup}>
+                <label>Beskrivning (svenska)</label>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+            </div>
+
+            <div className={styles.formGroup}>
+                <label>Beskrivning (engelska)</label>
+                <textarea value={descriptionEn} onChange={(e) => setDescriptionEn(e.target.value)} rows={3} />
             </div>
 
             <div className={styles.formRow}>
@@ -203,7 +229,7 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
                 </>
             ) : (
                 <div className={styles.imageUploadPlaceholder}>
-                    <p>💡 Spara receptet först för att ladda upp en bild</p>
+                    <p>Spara receptet först för att ladda upp en bild</p>
                 </div>
             )}
 
@@ -227,7 +253,8 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
                 </button>
             </div>
 
-            <StepsEditor steps={steps} onChange={setSteps} />
+            <StepsEditor steps={steps} onChange={setSteps} label="Steg (svenska)" />
+            <StepsEditor steps={stepsEn} onChange={setStepsEn} label="Steg (engelska)" />
 
             <div className={styles.formActions}>
                 <button type="submit" className={styles.submitButton}>

@@ -23,20 +23,24 @@ echo "Recreating $LOCAL_PERSIST_PATH..."
 rm -rf "$LOCAL_PERSIST_PATH"
 mkdir -p "$LOCAL_PERSIST_PATH"
 
-# 2. Download database from NUC
+# 2. Checkpoint WAL on remote so all data is in the main .db file
+echo "Checkpointing WAL on remote database..."
+ssh -p "${NUC_PORT}" "${NUC_USER}@${NUC_HOST}" "sqlite3 ${NUC_PERSIST_PATH}/mumsmums.db 'PRAGMA wal_checkpoint(TRUNCATE);'"
+
+# 3. Download database from NUC
 echo "Downloading database from NUC..."
 scp -P "${NUC_PORT}" "${NUC_USER}@${NUC_HOST}:${NUC_PERSIST_PATH}/mumsmums.db" "$LOCAL_PERSIST_PATH/"
 
-# 3. Download images from NUC
+# 4. Download images from NUC
 echo "Downloading images from NUC..."
 mkdir -p "$LOCAL_PERSIST_PATH/images/recipes"
 rsync -av --progress -e "ssh -p ${NUC_PORT}" "${NUC_USER}@${NUC_HOST}:${NUC_PERSIST_PATH}/images/recipes/" "$LOCAL_PERSIST_PATH/images/recipes/"
 
-# 4. Download .env file from NUC (contains JWT_SECRET)
+# 5. Download .env file from NUC (contains JWT_SECRET)
 echo "Downloading .env file from NUC..."
 scp -P "${NUC_PORT}" "${NUC_USER}@${NUC_HOST}:${NUC_PERSIST_PATH}/.env" "$TEMP_ENV_FILE"
 
-# 5. Configure .env for local development
+# 6. Configure .env for local development
 echo "Configuring .env for local development..."
 # Extract JWT_SECRET from downloaded file
 JWT_SECRET=$(grep "^JWT_SECRET=" "$TEMP_ENV_FILE" | cut -d'=' -f2)

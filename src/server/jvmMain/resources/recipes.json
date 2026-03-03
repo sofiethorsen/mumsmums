@@ -1077,11 +1077,11 @@
       "Upprepa sträckning/vikning och låt vila övertäckt i 10 minuter. ",
       "Gör en sista omgång av sträckning/vikning. Låt nu vila övertäckt i rumstemperatur i 45 minuter (degen ska öka 30-50% i storlek).",
       "Se till att bunken fortfarande är väl övertäckt med plastfolie så den ej torkar ut - ställ den nu i kylen över natten; gärna 12h+, men ej mer än 20h.",
-      "På morgonen, sätt ugnen på 250C och ställ en ugnsäker form eller plåt i botten av ugnen (detta för att hälla iskuber eller vatten i utan att riskera att skada ugnsbottnen själv). Låt ugnen värma gärna 30-45 minuter innan du bakar ut. ",
-      "Ta ut bunken ur kylen, och pudra generöst med mjöl på toppen. Mjöla även ytan där du ska hälla ut degen. ",
+      "Efter jäsning, ta ut bunken ur kylen, och pudra generöst med mjöl på toppen. Mjöla även ytan där du ska hälla ut degen. ",
       "Tippa försiktigt ut degen på den mjölade ytan - och försök hantera degen så lite som möjligt, du ska ej knåda eller forma degen då det riskerar att förstöra luftbubblorna. Degen ska vara rejält klibbig.",
       "Skär degen i bitar (du brukar få ut cirka 10 bröd på en sats deg) och lägg sedan upp på plåt med bakplåtspapper. ",
       "Täck bröden med plastfolie/handduk/plåt så att ytan ej torkar ut, men så att bröden fortfarande tillåts jäsa. Låt jäsa i rumstemperatur ca 45m - 1h. ",
+      "Medan bröden jäser, sätt ugnen på 250C och ställ en ugnsäker form eller plåt i botten av ugnen (detta för att hälla iskuber eller vatten i utan att riskera att skada ugnsbottnen själv). Låt ugnen värma minst i 30-45 minuter innan du bakar ut. ",
       "Ställ in plåten med bröd i ugnen - men se även till att hälla några isbitar eller lite vatten i ugnsformen/plåten i bottnen av ugnen. Låt baka i ca 15 minuter och ta sedan ut för att svalna."
     ]
   },
@@ -1220,6 +1220,135 @@
       "Smaka av ca var 30:e minut, och tillsätt eventuellt lite vatten om för mycket vätska kokar bort. ",
       "När köttet är mört kan du reducera ytterligare till önskad konsistens. Smaka av med salt, peppar och en skvätt citronsaft.",
       "Servera med jasminris och gröna ärtor. "
+    ]
+  },
+  {
+    "description": "Smöriga och jättelika chokladkakor, laddade med krispiga valnötter och pekannötter.",
+    "imageUrl": "/images/recipes/2365972572160.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "ingredientId": 2362628892672,
+            "name": "smör",
+            "quantity": 115,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2365970849792,
+            "name": "farinsocker",
+            "quantity": 115,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2362628866048,
+            "name": "socker",
+            "quantity": 100,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2365970958336,
+            "name": "vaniljextrakt",
+            "quantity": 15,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2362631888896,
+            "name": "kosher salt",
+            "quantity": 8,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2362629011456,
+            "name": "bakpulver",
+            "quantity": 1.75,
+            "unitId": 2362634387456,
+            "volume": "tsk"
+          },
+          {
+            "ingredientId": 2362632804352,
+            "name": "bikarbonat",
+            "quantity": 1,
+            "unitId": 2362634387456,
+            "volume": "tsk"
+          },
+          {
+            "ingredientId": 2362629197824,
+            "name": "muskot",
+            "quantity": 0.5,
+            "unitId": 2362634387456,
+            "volume": "tsk"
+          },
+          {
+            "ingredientId": 2362628841472,
+            "name": "ägg",
+            "quantity": 2,
+            "unitId": 2362634967040,
+            "volume": "st"
+          },
+          {
+            "ingredientId": 2362629079040,
+            "name": "mjöl",
+            "quantity": 285,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2365971343360,
+            "name": "vita chokladknappar",
+            "quantity": 140,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2365971404800,
+            "name": "ljusa chokladknappar",
+            "quantity": 140,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2365971451904,
+            "name": "mörka chokladknappar",
+            "quantity": 140,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2365971587072,
+            "name": "valnötter",
+            "quantity": 120,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2365971615744,
+            "name": "pecannötter",
+            "quantity": 120,
+            "unitId": 2362634526720,
+            "volume": "g"
+          }
+        ],
+        "name": null
+      }
+    ],
+    "name": "Amerikanska chocolate-chip cookies",
+    "numberOfUnits": 8,
+    "recipeId": 2365972572160,
+    "servings": null,
+    "steps": [
+      "Ta ut smöret så det blir rumstempererat. Kombinera sedan smöret, farinsockret, sockret, vaniljextrakt, salt, bakpulver, bikarbonat och muskot i en köksmixer med paddelfäste.",
+      "Mixa på låg hastighet och öka sedan till mediumhastighet tills smeten är mjuk, fluffig och blek, ca 8 minuter. Halvägs igenom så kan du pausa och skrapa skålen med en slickepott för att se till att allt blandas ordentligt. ",
+      "När mixern fortfarande kör, knäck i ett ägg i taget och låt blandas in ordentligt innan du lägger i nästa. ",
+      "Sänk hastigheten till låg och häll i allt mjöl på en gång. När mjölet är inblandat, lägg i chokladknapparna och nötterna och fortsätt mixa tills allt är väl blandat. ",
+      "Dela degen så det blir 8 lika stora delar för en sats - ca 170g per del. Rulla delen så att det blir en jämn boll. Linda sedan in i plastfolie och låt ligga i kylen i minst 12 timmar innan du bakar kakorna.",
+      "När det är dags att baka ut kakorna, sätt ugnen på 180C. Lägg bakplåtspapper på en plåt. När ugnen är varm nog, lägg max 4 bollar av kall deg på plåten så att det finns gott om plats för kakorna att bre ut sig. ",
+      "Baka kakorna tills dom har rest sig och är ljusbruna, ca 22 minuter, eller till en temperatur mellan 79C och 85C beroende på hur kladdiga/mjuka du vill att kakorna ska vara. Låt svalna. "
     ]
   },
   {

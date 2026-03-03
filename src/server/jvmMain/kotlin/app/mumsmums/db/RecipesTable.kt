@@ -33,13 +33,13 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         val recipeId = idGenerator.generateId()
         val recipe = newRecipe.toRecipe(recipeId)
         insertRecipe(connection, recipe)
-        logger.info("Inserted recipe: {} (ID: {})", recipe.name, recipeId)
+        logger.info("Inserted recipe: {} (ID: {})", recipe.nameSv, recipeId)
         recipe
     }
 
     suspend fun put(recipe: Recipe) = database.transaction { connection ->
         insertRecipe(connection, recipe)
-        logger.info("Inserted recipe: {} (ID: {})", recipe.name, recipe.recipeId)
+        logger.info("Inserted recipe: {} (ID: {})", recipe.nameSv, recipe.recipeId)
     }
 
     suspend fun batchPut(recipes: List<Recipe>) = database.transaction { connection ->
@@ -48,20 +48,22 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         recipes.forEach { recipe ->
             connection.prepareStatement(
                 """
-                INSERT INTO recipes (recipeId, name, description, servings, numberOfUnits,
+                INSERT INTO recipes (recipeId, name_sv, name_en, description_sv, description_en, servings, numberOfUnits,
                                     imageUrl, version, createdAtInMillis, lastUpdatedAtInMillis)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """.trimIndent()
             ).use { statement ->
                 statement.setLong(1, recipe.recipeId)
-                statement.setString(2, recipe.name)
-                statement.setString(3, recipe.description)
-                statement.setObject(4, recipe.servings)
-                statement.setObject(5, recipe.numberOfUnits)
-                statement.setString(6, recipe.imageUrl)
-                statement.setLong(7, recipe.version)
-                statement.setLong(8, recipe.createdAtInMillis)
-                statement.setLong(9, recipe.lastUpdatedAtInMillis)
+                statement.setString(2, recipe.nameSv)
+                statement.setString(3, recipe.nameEn)
+                statement.setString(4, recipe.descriptionSv)
+                statement.setString(5, recipe.descriptionEn)
+                statement.setObject(6, recipe.servings)
+                statement.setObject(7, recipe.numberOfUnits)
+                statement.setString(8, recipe.imageUrl)
+                statement.setLong(9, recipe.version)
+                statement.setLong(10, recipe.createdAtInMillis)
+                statement.setLong(11, recipe.lastUpdatedAtInMillis)
                 statement.executeUpdate()
             }
         }
@@ -78,19 +80,22 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         // Update the main recipe row (don't delete it - other recipes may reference it)
         connection.prepareStatement(
             """
-            UPDATE recipes SET name = ?, description = ?, servings = ?, numberOfUnits = ?,
+            UPDATE recipes SET name_sv = ?, name_en = ?, description_sv = ?, description_en = ?,
+                              servings = ?, numberOfUnits = ?,
                               imageUrl = ?, version = ?, lastUpdatedAtInMillis = ?
             WHERE recipeId = ?
             """.trimIndent()
         ).use { statement ->
-            statement.setString(1, recipe.name)
-            statement.setString(2, recipe.description)
-            statement.setObject(3, recipe.servings)
-            statement.setObject(4, recipe.numberOfUnits)
-            statement.setString(5, recipe.imageUrl)
-            statement.setLong(6, recipe.version)
-            statement.setLong(7, recipe.lastUpdatedAtInMillis)
-            statement.setLong(8, recipeId)
+            statement.setString(1, recipe.nameSv)
+            statement.setString(2, recipe.nameEn)
+            statement.setString(3, recipe.descriptionSv)
+            statement.setString(4, recipe.descriptionEn)
+            statement.setObject(5, recipe.servings)
+            statement.setObject(6, recipe.numberOfUnits)
+            statement.setString(7, recipe.imageUrl)
+            statement.setLong(8, recipe.version)
+            statement.setLong(9, recipe.lastUpdatedAtInMillis)
+            statement.setLong(10, recipeId)
             statement.executeUpdate()
         }
 
@@ -106,15 +111,15 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
 
         // Re-insert the related data
         insertRelatedData(connection, recipe)
-        logger.info("Updated recipe: {} (ID: {})", recipe.name, recipe.recipeId)
+        logger.info("Updated recipe: {} (ID: {})", recipe.nameSv, recipe.recipeId)
     }
 
     suspend fun delete(recipeId: Long) = database.transaction { connection ->
         // Get recipe before deleting for logging and image cleanup
-        val result = connection.prepareStatement("SELECT name, imageUrl FROM recipes WHERE recipeId = ?").use { statement ->
+        val result = connection.prepareStatement("SELECT name_sv, imageUrl FROM recipes WHERE recipeId = ?").use { statement ->
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
-            if (resultSet.next()) Pair(resultSet.getString("name"), resultSet.getString("imageUrl")) else null
+            if (resultSet.next()) Pair(resultSet.getString("name_sv"), resultSet.getString("imageUrl")) else null
         }
 
         if (result == null) {
@@ -162,20 +167,22 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
     private fun insertRecipe(connection: Connection, recipe: Recipe) {
         connection.prepareStatement(
             """
-            INSERT INTO recipes (recipeId, name, description, servings, numberOfUnits,
+            INSERT INTO recipes (recipeId, name_sv, name_en, description_sv, description_en, servings, numberOfUnits,
                                 imageUrl, version, createdAtInMillis, lastUpdatedAtInMillis)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """.trimIndent()
         ).use { statement ->
             statement.setLong(1, recipe.recipeId)
-            statement.setString(2, recipe.name)
-            statement.setString(3, recipe.description)
-            statement.setObject(4, recipe.servings)
-            statement.setObject(5, recipe.numberOfUnits)
-            statement.setString(6, recipe.imageUrl)
-            statement.setLong(7, recipe.version)
-            statement.setLong(8, recipe.createdAtInMillis)
-            statement.setLong(9, recipe.lastUpdatedAtInMillis)
+            statement.setString(2, recipe.nameSv)
+            statement.setString(3, recipe.nameEn)
+            statement.setString(4, recipe.descriptionSv)
+            statement.setString(5, recipe.descriptionEn)
+            statement.setObject(6, recipe.servings)
+            statement.setObject(7, recipe.numberOfUnits)
+            statement.setString(8, recipe.imageUrl)
+            statement.setLong(9, recipe.version)
+            statement.setLong(10, recipe.createdAtInMillis)
+            statement.setLong(11, recipe.lastUpdatedAtInMillis)
             statement.executeUpdate()
         }
 
@@ -185,12 +192,13 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
     private fun insertRelatedData(connection: Connection, recipe: Recipe) {
         recipe.ingredientSections.forEachIndexed { sectionIndex, section ->
             val sectionId = connection.prepareStatement(
-                "INSERT INTO ingredient_sections (recipeId, name, position) VALUES (?, ?, ?)",
+                "INSERT INTO ingredient_sections (recipeId, name_sv, name_en, position) VALUES (?, ?, ?, ?)",
                 java.sql.Statement.RETURN_GENERATED_KEYS
             ).use { statement ->
                 statement.setLong(1, recipe.recipeId)
-                statement.setString(2, section.name)
-                statement.setInt(3, sectionIndex)
+                statement.setString(2, section.nameSv)
+                statement.setString(3, section.nameEn)
+                statement.setInt(4, sectionIndex)
                 statement.executeUpdate()
                 statement.generatedKeys.use { resultSet ->
                     resultSet.next()
@@ -230,13 +238,15 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
             }
         }
 
-        recipe.steps.forEachIndexed { stepIndex, step ->
+        recipe.stepsSv.forEachIndexed { stepIndex, stepSv ->
+            val stepEn = recipe.stepsEn.getOrNull(stepIndex)
             connection.prepareStatement(
-                "INSERT INTO recipe_steps (recipeId, step, position) VALUES (?, ?, ?)"
+                "INSERT INTO recipe_steps (recipeId, step_sv, step_en, position) VALUES (?, ?, ?, ?)"
             ).use { statement ->
                 statement.setLong(1, recipe.recipeId)
-                statement.setString(2, step)
-                statement.setInt(3, stepIndex)
+                statement.setString(2, stepSv)
+                statement.setString(3, stepEn)
+                statement.setInt(4, stepIndex)
                 statement.executeUpdate()
             }
         }
@@ -246,7 +256,7 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         val sections = mutableListOf<IngredientSection>()
 
         connection.prepareStatement(
-            "SELECT id, name FROM ingredient_sections WHERE recipeId = ? ORDER BY position"
+            "SELECT id, name_sv, name_en FROM ingredient_sections WHERE recipeId = ? ORDER BY position"
         ).use { statement ->
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
@@ -276,28 +286,34 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
         return ingredients
     }
 
-    private fun loadSteps(connection: Connection, recipeId: Long): List<String> {
-        val steps = mutableListOf<String>()
+    private fun loadSteps(connection: Connection, recipeId: Long): Pair<List<String>, List<String>> {
+        val stepsSv = mutableListOf<String>()
+        val stepsEn = mutableListOf<String>()
 
         connection.prepareStatement(
-            "SELECT step FROM recipe_steps WHERE recipeId = ? ORDER BY position"
+            "SELECT step_sv, step_en FROM recipe_steps WHERE recipeId = ? ORDER BY position"
         ).use { statement ->
             statement.setLong(1, recipeId)
             val resultSet = statement.executeQuery()
             while (resultSet.next()) {
-                steps.add(resultSet.getString("step"))
+                stepsSv.add(resultSet.getString("step_sv"))
+                val en = resultSet.getString("step_en")
+                if (en != null) stepsEn.add(en)
             }
         }
 
-        return steps
+        return Pair(stepsSv, stepsEn)
     }
 
     private fun toRecipe(connection: Connection, resultSet: ResultSet): Recipe {
         val recipeId = resultSet.getLong("recipeId")
+        val (stepsSv, stepsEn) = loadSteps(connection, recipeId)
         return Recipe(
             recipeId = recipeId,
-            name = resultSet.getString("name"),
-            description = resultSet.getString("description"),
+            nameSv = resultSet.getString("name_sv"),
+            nameEn = resultSet.getString("name_en"),
+            descriptionSv = resultSet.getString("description_sv"),
+            descriptionEn = resultSet.getString("description_en"),
             servings = resultSet.getNullableInt("servings"),
             numberOfUnits = resultSet.getNullableInt("numberOfUnits"),
             imageUrl = resultSet.getString("imageUrl"),
@@ -305,7 +321,8 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
             createdAtInMillis = resultSet.getLong("createdAtInMillis"),
             lastUpdatedAtInMillis = resultSet.getLong("lastUpdatedAtInMillis"),
             ingredientSections = loadIngredientSections(connection, recipeId),
-            steps = loadSteps(connection, recipeId)
+            stepsSv = stepsSv,
+            stepsEn = stepsEn
         )
     }
 
@@ -324,7 +341,8 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
     private fun toIngredientSection(connection: Connection, resultSet: ResultSet): IngredientSection {
         val sectionId = resultSet.getLong("id")
         return IngredientSection(
-            name = resultSet.getString("name"),
+            nameSv = resultSet.getString("name_sv"),
+            nameEn = resultSet.getString("name_en"),
             ingredients = loadIngredients(connection, sectionId)
         )
     }
@@ -334,12 +352,12 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
 
         connection.prepareStatement(
             """
-            SELECT DISTINCT r.recipeId, r.name, r.imageUrl
+            SELECT DISTINCT r.recipeId, r.name_sv, r.name_en, r.imageUrl
             FROM recipes r
             JOIN ingredient_sections s ON s.recipeId = r.recipeId
             JOIN ingredients i ON i.sectionId = s.id
             WHERE i.recipeId = ?
-            ORDER BY r.name
+            ORDER BY r.name_sv
             """.trimIndent()
         ).use { statement ->
             statement.setLong(1, recipeId)
@@ -348,7 +366,8 @@ class RecipesTable(private val database: Database, private val idGenerator: Nume
                 references.add(
                     RecipeReference(
                         recipeId = resultSet.getLong("recipeId"),
-                        name = resultSet.getString("name"),
+                        nameSv = resultSet.getString("name_sv"),
+                        nameEn = resultSet.getString("name_en"),
                         imageUrl = resultSet.getString("imageUrl")
                     )
                 )

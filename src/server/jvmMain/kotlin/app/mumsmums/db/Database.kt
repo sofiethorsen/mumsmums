@@ -39,6 +39,9 @@ class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
 
         // Create tables if they don't exist
         createTablesIfNotExists()
+
+        // Run migrations for existing databases
+        runMigrations()
     }
 
     /**
@@ -68,10 +71,20 @@ class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
         connection.createStatement().use { statement ->
             statement.execute(
                 """
+                CREATE TABLE IF NOT EXISTS schema_version (
+                    version INTEGER NOT NULL
+                )
+                """.trimIndent()
+            )
+
+            statement.execute(
+                """
                 CREATE TABLE IF NOT EXISTS recipes (
                     recipeId INTEGER PRIMARY KEY,
-                    name TEXT NOT NULL,
-                    description TEXT,
+                    name_sv TEXT NOT NULL,
+                    name_en TEXT,
+                    description_sv TEXT,
+                    description_en TEXT,
                     servings INTEGER,
                     numberOfUnits INTEGER,
                     imageUrl TEXT,
@@ -87,7 +100,8 @@ class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
                 CREATE TABLE IF NOT EXISTS ingredient_sections (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     recipeId INTEGER NOT NULL,
-                    name TEXT,
+                    name_sv TEXT,
+                    name_en TEXT,
                     position INTEGER NOT NULL,
                     FOREIGN KEY (recipeId) REFERENCES recipes(recipeId) ON DELETE CASCADE
                 )
@@ -119,7 +133,8 @@ class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
                 CREATE TABLE IF NOT EXISTS recipe_steps (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     recipeId INTEGER NOT NULL,
-                    step TEXT NOT NULL,
+                    step_sv TEXT NOT NULL,
+                    step_en TEXT,
                     position INTEGER NOT NULL,
                     FOREIGN KEY (recipeId) REFERENCES recipes(recipeId) ON DELETE CASCADE
                 )
@@ -173,6 +188,66 @@ class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
         }
     }
 
+    private fun getSchemaVersion(): Int {
+        return connection.createStatement().use { statement ->
+            val resultSet = statement.executeQuery("SELECT version FROM schema_version LIMIT 1")
+            if (resultSet.next()) resultSet.getInt("version") else 0
+        }
+    }
+
+    private fun setSchemaVersion(version: Int) {
+        connection.createStatement().use { statement ->
+            statement.execute("DELETE FROM schema_version")
+            statement.execute("INSERT INTO schema_version (version) VALUES ($version)")
+        }
+    }
+
+    private fun runMigrations() {
+        val currentVersion = getSchemaVersion()
+
+        if (currentVersion < 1) {
+            migrationV1()
+            setSchemaVersion(1)
+        }
+    }
+
+    /**
+     * Migration 1: Rename recipe text fields to *_sv and add *_en counterparts.
+     * Only runs if the old column names still exist (i.e., database was created before this migration).
+     */
+    private fun migrationV1() {
+        // Check if the old 'name' column exists on the recipes table
+        val hasOldColumn = connection.createStatement().use { statement ->
+            val resultSet = statement.executeQuery("PRAGMA table_info(recipes)")
+            var found = false
+            while (resultSet.next()) {
+                if (resultSet.getString("name") == "name") {
+                    found = true
+                    break
+                }
+            }
+            found
+        }
+
+        if (!hasOldColumn) return // Fresh database with new schema, nothing to migrate
+
+        connection.createStatement().use { statement ->
+            // Recipes table
+            statement.execute("ALTER TABLE recipes RENAME COLUMN name TO name_sv")
+            statement.execute("ALTER TABLE recipes ADD COLUMN name_en TEXT")
+            statement.execute("ALTER TABLE recipes RENAME COLUMN description TO description_sv")
+            statement.execute("ALTER TABLE recipes ADD COLUMN description_en TEXT")
+
+            // Ingredient sections table
+            statement.execute("ALTER TABLE ingredient_sections RENAME COLUMN name TO name_sv")
+            statement.execute("ALTER TABLE ingredient_sections ADD COLUMN name_en TEXT")
+
+            // Recipe steps table
+            statement.execute("ALTER TABLE recipe_steps RENAME COLUMN step TO step_sv")
+            statement.execute("ALTER TABLE recipe_steps ADD COLUMN step_en TEXT")
+        }
+    }
+
     /**
      * Drop all tables, used for resetting the database during development.
      */
@@ -185,6 +260,7 @@ class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
             statement.execute("DROP TABLE IF EXISTS users")
             statement.execute("DROP TABLE IF EXISTS ingredient_library")
             statement.execute("DROP TABLE IF EXISTS unit_library")
+            statement.execute("DROP TABLE IF EXISTS schema_version")
         }
     }
 }

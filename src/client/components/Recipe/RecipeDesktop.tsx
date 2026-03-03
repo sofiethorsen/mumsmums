@@ -27,24 +27,24 @@ const RecipeDesktop: FC<RecipeProps> = ({ recipe }) => {
                 <div className={styles.imageContainer}>
                     <RecipeImage
                         imageUrl={recipe.imageUrl}
-                        imageAltText={recipe.name}
+                        imageAltText={recipe.nameSv}
                         priority
                     />
                     <div className={styles.imageOverlay} />
                     <div className={styles.heroTitle}>
-                        <h1 className={styles.recipeName}>{recipe.name}</h1>
+                        <h1 className={styles.recipeName}>{recipe.nameSv}</h1>
                     </div>
                 </div>
             </div>
 
             <div className={styles.metaSection}>
-                {recipe.description && (
-                    <p className={styles.description}>{recipe.description}</p>
+                {recipe.descriptionSv && (
+                    <p className={styles.description}>{recipe.descriptionSv}</p>
                 )}
                 <div className={styles.metaInfo}>
                     <span className={styles.metaItem}>
                         <ClockIcon size={16} />
-                        {recipe.steps.length} steg
+                        {recipe.stepsSv.length} steg
                     </span>
                     {scaledServings && (
                         <span className={styles.metaItem}>
@@ -69,7 +69,7 @@ const RecipeDesktop: FC<RecipeProps> = ({ recipe }) => {
                     <div className={styles.instructionCard}>
                         <h2 className={styles.sectionTitle}>Gör så här</h2>
                         <ol className={styles.stepsList}>
-                            {recipe.steps.map((step: string, index: number) => (
+                            {recipe.stepsSv.map((step: string, index: number) => (
                                 <li className={styles.stepItem} key={`step-${index}`}>
                                     {step}
                                 </li>

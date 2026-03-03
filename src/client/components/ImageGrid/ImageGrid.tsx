@@ -21,22 +21,22 @@ const ImageGrid: FC<ImageGridProps> = ({ recipes }) => {
                     <div className={styles.imageContainer}>
                         <RecipeImage
                             imageUrl={recipe.imageUrl}
-                            imageAltText={recipe.name}
+                            imageAltText={recipe.nameSv}
                             priority={index === 0} // LCP optimization: load first image immediately
                         />
                         <div className={styles.imageOverlay} />
                         <div className={styles.recipeName}>
-                            {recipe.name}
+                            {recipe.nameSv}
                         </div>
                     </div>
                     <div className={styles.cardContent}>
-                        {recipe.description && (
-                            <p className={styles.description}>{recipe.description}</p>
+                        {recipe.descriptionSv && (
+                            <p className={styles.description}>{recipe.descriptionSv}</p>
                         )}
                         <div className={styles.metadata}>
                             <span className={styles.metaItem}>
                                 <ClockIcon size={16} />
-                                {recipe.steps.length} steg
+                                {recipe.stepsSv.length} steg
                             </span>
                             {recipe.servings && (
                                 <span className={styles.metaItem}>

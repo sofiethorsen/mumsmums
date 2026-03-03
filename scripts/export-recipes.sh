@@ -34,7 +34,7 @@ cursor = conn.cursor()
 
 # Get all recipes
 cursor.execute("""
-    SELECT recipeId, name, description, servings, numberOfUnits, imageUrl
+    SELECT recipeId, name_sv, name_en, description_sv, description_en, servings, numberOfUnits, imageUrl
     FROM recipes
     ORDER BY recipeId
 """)
@@ -47,9 +47,11 @@ for recipe_row in cursor.fetchall():
     # Build recipe dict with fields in alphabetical order
     recipe = {}
 
-    # Add description first (alphabetically)
-    if recipe_row['description'] is not None:
-        recipe['description'] = recipe_row['description']
+    # Add descriptions (alphabetically)
+    if recipe_row['description_en'] is not None:
+        recipe['descriptionEn'] = recipe_row['description_en']
+    if recipe_row['description_sv'] is not None:
+        recipe['descriptionSv'] = recipe_row['description_sv']
 
     # Add imageUrl
     if recipe_row['imageUrl'] is not None:
@@ -60,7 +62,7 @@ for recipe_row in cursor.fetchall():
 
     # Get ingredient sections for this recipe
     cursor.execute("""
-        SELECT id, name, position
+        SELECT id, name_sv, name_en, position
         FROM ingredient_sections
         WHERE recipeId = ?
         ORDER BY position
@@ -119,13 +121,17 @@ for recipe_row in cursor.fetchall():
 
             section['ingredients'].append(ingredient)
 
-        # name comes after ingredients alphabetically
-        section['name'] = section_row['name']
+        # names come after ingredients alphabetically
+        if section_row['name_en'] is not None:
+            section['nameEn'] = section_row['name_en']
+        section['nameSv'] = section_row['name_sv']
 
         recipe['ingredientSections'].append(section)
 
-    # Add name
-    recipe['name'] = recipe_row['name']
+    # Add names
+    if recipe_row['name_en'] is not None:
+        recipe['nameEn'] = recipe_row['name_en']
+    recipe['nameSv'] = recipe_row['name_sv']
 
     # Add numberOfUnits
     recipe['numberOfUnits'] = recipe_row['numberOfUnits']
@@ -138,14 +144,17 @@ for recipe_row in cursor.fetchall():
 
     # Get steps for this recipe
     cursor.execute("""
-        SELECT step
+        SELECT step_sv, step_en
         FROM recipe_steps
         WHERE recipeId = ?
         ORDER BY position
     """, (recipe_id,))
 
     steps = cursor.fetchall()
-    recipe['steps'] = [step_row['step'] for step_row in steps]
+    steps_en = [step_row['step_en'] for step_row in steps if step_row['step_en'] is not None]
+    if steps_en:
+        recipe['stepsEn'] = steps_en
+    recipe['stepsSv'] = [step_row['step_sv'] for step_row in steps]
 
     recipes.append(recipe)
 

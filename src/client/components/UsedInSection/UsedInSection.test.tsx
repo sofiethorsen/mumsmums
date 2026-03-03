@@ -25,7 +25,8 @@ jest.mock('next/image', () => ({
 const createMockRecipes = (count: number): RecipeReference[] => {
     return Array.from({ length: count }, (_, i) => ({
         recipeId: i + 1,
-        name: `Recipe ${i + 1}`,
+        nameSv: `Recept ${i + 1}`,
+        nameEn: null,
         imageUrl: `/images/recipe-${i + 1}.webp`,
     }))
 }
@@ -62,9 +63,9 @@ describe('UsedInSection', () => {
         const recipes = createMockRecipes(3)
         render(<UsedInSection recipes={recipes} />)
 
-        expect(screen.getByText('Recipe 1')).toBeInTheDocument()
-        expect(screen.getByText('Recipe 2')).toBeInTheDocument()
-        expect(screen.getByText('Recipe 3')).toBeInTheDocument()
+        expect(screen.getByText('Recept 1')).toBeInTheDocument()
+        expect(screen.getByText('Recept 2')).toBeInTheDocument()
+        expect(screen.getByText('Recept 3')).toBeInTheDocument()
     })
 
     it('renders links to recipe pages', () => {
@@ -89,10 +90,10 @@ describe('UsedInSection', () => {
 
     it('handles recipes without images', () => {
         const recipes: RecipeReference[] = [
-            { recipeId: 1, name: 'No Image Recipe', imageUrl: undefined },
+            { recipeId: 1, nameSv: 'Recept utan bild', nameEn: null, imageUrl: undefined },
         ]
         render(<UsedInSection recipes={recipes} />)
 
-        expect(screen.getByText('No Image Recipe')).toBeInTheDocument()
+        expect(screen.getByText('Recept utan bild')).toBeInTheDocument()
     })
 })

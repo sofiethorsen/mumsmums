@@ -84,7 +84,7 @@ class GraphQLAuthTest {
             contentType(ContentType.Application.Json)
             setBody("""
                 {
-                  "query": "query { recipes { recipeId name } }"
+                  "query": "query { recipes { recipeId nameSv } }"
                 }
             """.trimIndent())
         }
@@ -107,12 +107,12 @@ class GraphQLAuthTest {
             contentType(ContentType.Application.Json)
             setBody("""
                 {
-                  "query": "mutation(${'$'}input: RecipeInput!) { createRecipe(input: ${'$'}input) { recipeId name } }",
+                  "query": "mutation(${'$'}input: RecipeInput!) { createRecipe(input: ${'$'}input) { recipeId nameSv } }",
                   "variables": {
                     "input": {
-                      "name": "Test Recipe",
+                      "nameSv": "Testrecept",
                       "ingredientSections": [],
-                      "steps": ["Step 1"]
+                      "stepsSv": ["Steg 1"]
                     }
                   }
                 }
@@ -159,12 +159,12 @@ class GraphQLAuthTest {
             cookie("auth_token", authToken!!)
             setBody("""
                 {
-                  "query": "mutation(${'$'}input: RecipeInput!) { createRecipe(input: ${'$'}input) { recipeId name } }",
+                  "query": "mutation(${'$'}input: RecipeInput!) { createRecipe(input: ${'$'}input) { recipeId nameSv } }",
                   "variables": {
                     "input": {
-                      "name": "Test Recipe",
+                      "nameSv": "Testrecept",
                       "ingredientSections": [],
-                      "steps": ["Step 1"]
+                      "stepsSv": ["Steg 1"]
                     }
                   }
                 }
@@ -177,8 +177,8 @@ class GraphQLAuthTest {
 
         assertTrue(json.containsKey("data"))
         assertFalse(json.containsKey("errors"))
-        val recipeName = json["data"]?.jsonObject?.get("createRecipe")?.jsonObject?.get("name")?.jsonPrimitive?.content
-        assertEquals("Test Recipe", recipeName)
+        val recipeName = json["data"]?.jsonObject?.get("createRecipe")?.jsonObject?.get("nameSv")?.jsonPrimitive?.content
+        assertEquals("Testrecept", recipeName)
     }
 
     @Test
@@ -194,13 +194,13 @@ class GraphQLAuthTest {
             contentType(ContentType.Application.Json)
             setBody("""
                 {
-                  "query": "mutation(${'$'}recipeId: Long!, ${'$'}input: RecipeInput!) { updateRecipe(recipeId: ${'$'}recipeId, input: ${'$'}input) { recipeId name } }",
+                  "query": "mutation(${'$'}recipeId: Long!, ${'$'}input: RecipeInput!) { updateRecipe(recipeId: ${'$'}recipeId, input: ${'$'}input) { recipeId nameSv } }",
                   "variables": {
                     "recipeId": 1,
                     "input": {
-                      "name": "Updated Recipe",
+                      "nameSv": "Uppdaterat recept",
                       "ingredientSections": [],
-                      "steps": ["Step 1"]
+                      "stepsSv": ["Steg 1"]
                     }
                   }
                 }

@@ -4,10 +4,13 @@ export const GET_RECIPE_PREVIEWS = gql`
     query GetRecipePreviews {
         recipes {
             recipeId
-            name
+            nameSv
+            nameEn
             imageUrl
-            description
-            steps
+            descriptionSv
+            descriptionEn
+            stepsSv
+            stepsEn
             servings
             numberOfUnits
         }
@@ -18,7 +21,7 @@ export const GET_RECIPES = gql`
     query GetRecipes {
         recipes {
             recipeId
-            name
+            nameSv
         }
     }
 `
@@ -27,13 +30,16 @@ export const GET_RECIPE_BY_ID = gql`
     query GetRecipeById($recipeId: Long!) {
         recipe(recipeId: $recipeId) {
             recipeId
-            name
-            description
+            nameSv
+            nameEn
+            descriptionSv
+            descriptionEn
             servings
             numberOfUnits
             imageUrl
             ingredientSections {
-                name
+                nameSv
+                nameEn
                 ingredients {
                     name
                     volume
@@ -43,10 +49,12 @@ export const GET_RECIPE_BY_ID = gql`
                     unitId
                 }
             }
-            steps
+            stepsSv
+            stepsEn
             usedIn {
                 recipeId
-                name
+                nameSv
+                nameEn
                 imageUrl
             }
         }
@@ -59,7 +67,7 @@ export const CREATE_RECIPE = gql`
     mutation CreateRecipe($input: RecipeInput!) {
         createRecipe(input: $input) {
             recipeId
-            name
+            nameSv
         }
     }
 `
@@ -74,7 +82,7 @@ export const UPDATE_RECIPE = gql`
     mutation UpdateRecipe($recipeId: Long!, $input: RecipeInput!) {
         updateRecipe(recipeId: $recipeId, input: $input) {
             recipeId
-            name
+            nameSv
         }
     }
 `

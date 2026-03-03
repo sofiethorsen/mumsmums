@@ -10,8 +10,8 @@ type Recipe = NonNullable<GetRecipeByIdQuery['recipe']>
 
 const renderPageHead = (recipe: Recipe) => {
     return <PageHead
-        title={`mumsmums - ${recipe.name}`}
-        description={recipe.description}
+        title={`mumsmums - ${recipe.nameSv}`}
+        description={recipe.descriptionSv}
         siteType={'article'}
         url={`https://mumsmums.app/recipe/${recipe.recipeId}`}
         imageUrl={toAbsoluteUrl(recipe.imageUrl)}

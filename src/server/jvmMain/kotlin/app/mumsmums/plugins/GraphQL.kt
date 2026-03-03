@@ -58,15 +58,19 @@ data class IngredientInput(
 )
 
 data class IngredientSectionInput(
-    val name: String?,
+    val nameSv: String?,
+    val nameEn: String? = null,
     val ingredients: List<IngredientInput>
 )
 
 data class RecipeInput(
-    val name: String,
+    val nameSv: String,
     val ingredientSections: List<IngredientSectionInput>,
-    val steps: List<String>,
-    val description: String? = null,
+    val stepsSv: List<String>,
+    val nameEn: String? = null,
+    val stepsEn: List<String> = emptyList(),
+    val descriptionSv: String? = null,
+    val descriptionEn: String? = null,
     val servings: Int? = null,
     val numberOfUnits: Int? = null,
     val imageUrl: String? = null,
@@ -185,10 +189,12 @@ fun Application.configureGraphQL(
                     val currentTime = System.currentTimeMillis()
 
                     val newRecipe = NewRecipe(
-                        name = input.name,
+                        nameSv = input.nameSv,
+                        nameEn = input.nameEn,
                         ingredientSections = input.ingredientSections.map { section ->
                             IngredientSection(
-                                name = section.name,
+                                nameSv = section.nameSv,
+                                nameEn = section.nameEn,
                                 ingredients = section.ingredients.map { ing ->
                                     Ingredient(
                                         name = ing.name,
@@ -201,8 +207,10 @@ fun Application.configureGraphQL(
                                 }
                             )
                         },
-                        steps = input.steps,
-                        description = input.description,
+                        stepsSv = input.stepsSv,
+                        stepsEn = input.stepsEn,
+                        descriptionSv = input.descriptionSv,
+                        descriptionEn = input.descriptionEn,
                         servings = input.servings,
                         numberOfUnits = input.numberOfUnits,
                         imageUrl = input.imageUrl,
@@ -229,10 +237,12 @@ fun Application.configureGraphQL(
 
                     val updatedRecipe = Recipe(
                         recipeId = recipeId,
-                        name = input.name,
+                        nameSv = input.nameSv,
+                        nameEn = input.nameEn,
                         ingredientSections = input.ingredientSections.map { section ->
                             IngredientSection(
-                                name = section.name,
+                                nameSv = section.nameSv,
+                                nameEn = section.nameEn,
                                 ingredients = section.ingredients.map { ing ->
                                     Ingredient(
                                         name = ing.name,
@@ -245,8 +255,10 @@ fun Application.configureGraphQL(
                                 }
                             )
                         },
-                        steps = input.steps,
-                        description = input.description,
+                        stepsSv = input.stepsSv,
+                        stepsEn = input.stepsEn,
+                        descriptionSv = input.descriptionSv,
+                        descriptionEn = input.descriptionEn,
                         servings = input.servings,
                         numberOfUnits = input.numberOfUnits,
                         imageUrl = input.imageUrl,

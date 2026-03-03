@@ -44,13 +44,13 @@ object JsonParser {
     }
 
     private fun postprocess(recipes: List<Recipe>): List<Recipe> {
-        val recipesByName = recipes.associateBy { it.name.lowercase() }
+        val recipesByName = recipes.associateBy { it.nameSv.lowercase() }
         val recipeNames = mutableSetOf<String>()
         val ingredientNames = mutableSetOf<String>()
 
         // first, add all ingredient and recipe names to sets
         recipes.forEach { recipe ->
-            recipeNames.add(recipe.name.lowercase())
+            recipeNames.add(recipe.nameSv.lowercase())
             recipe.ingredientSections.map { section ->
                 section.ingredients.map { ingredient ->
                     ingredientNames.add(ingredient.name.lowercase())

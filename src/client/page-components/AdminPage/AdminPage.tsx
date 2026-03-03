@@ -202,7 +202,7 @@ const AdminPage: FC = () => {
                                 <div className={styles.recipeList}>
                                     {recipes.map((recipe: RecipeListItem) => (
                                         <div key={recipe.recipeId} className={styles.recipeItem}>
-                                            <span className={styles.recipeName}>{recipe.name}</span>
+                                            <span className={styles.recipeName}>{recipe.nameSv}</span>
                                             <div className={styles.actions}>
                                                 <button onClick={() => handleEdit(recipe.recipeId)}>Editera</button>
                                                 <button onClick={() => handleDelete(recipe.recipeId)}>Radera</button>

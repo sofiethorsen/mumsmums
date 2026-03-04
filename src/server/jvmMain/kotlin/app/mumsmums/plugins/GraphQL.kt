@@ -118,6 +118,15 @@ fun Application.configureGraphQL(
                         recipesTable.getRecipesUsingAsIngredient(recipe.recipeId)
                     }
                 }
+                property<List<Long>>("ingredientIds") {
+                    description = "Flat list of unique library ingredient IDs used in this recipe"
+                    resolver { recipe: Recipe ->
+                        recipe.ingredientSections
+                            .flatMap { it.ingredients }
+                            .mapNotNull { it.ingredientId }
+                            .distinct()
+                    }
+                }
             }
 
             type<RecipeReference>() {

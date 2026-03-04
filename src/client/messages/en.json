@@ -1,12 +1,17 @@
 {
   "hero": {
     "subtitle": "Recipes without life stories.",
-    "searchPlaceholder": "Search recipes..."
+    "searchPlaceholder": "Search recipes...",
+    "tabName": "Search by name",
+    "tabIngredient": "Search by ingredient",
+    "ingredientSearchPlaceholder": "Search for ingredient..."
   },
   "recipeGrid": {
     "recipesFound": "{count} recipes found for \"{query}\"",
     "noResults": "No recipes matched your search \"{query}\"",
-    "tryAnother": "Try another search term"
+    "tryAnother": "Try another search term",
+    "ingredientResults": "{count} recipes with {ingredientCount} selected ingredients",
+    "noIngredientResults": "No recipes matched your selected ingredients"
   },
   "recipe": {
     "steps": "{count} steps",

@@ -1,12 +1,17 @@
 {
   "hero": {
     "subtitle": "Recept utan livshistorier.",
-    "searchPlaceholder": "Sök recept..."
+    "searchPlaceholder": "Sök recept...",
+    "tabName": "Sök på namn",
+    "tabIngredient": "Sök på ingrediens",
+    "ingredientSearchPlaceholder": "Sök efter ingrediens..."
   },
   "recipeGrid": {
     "recipesFound": "{count} recept hittade för \"{query}\"",
     "noResults": "Inga recept matchade din sökning \"{query}\"",
-    "tryAnother": "Försök med ett annat sökord"
+    "tryAnother": "Försök med ett annat sökord",
+    "ingredientResults": "{count} recept med {ingredientCount} valda ingredienser",
+    "noIngredientResults": "Inga recept matchade dina valda ingredienser"
   },
   "recipe": {
     "steps": "{count} steg",

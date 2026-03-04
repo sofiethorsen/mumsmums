@@ -174,6 +174,29 @@ class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
                 )
                 """.trimIndent()
             )
+
+            statement.execute(
+                """
+                CREATE TABLE IF NOT EXISTS category_library (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name_sv TEXT NOT NULL UNIQUE,
+                    name_en TEXT
+                )
+                """.trimIndent()
+            )
+
+            statement.execute(
+                """
+                CREATE TABLE IF NOT EXISTS recipe_categories (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    recipeId INTEGER NOT NULL,
+                    categoryId INTEGER NOT NULL,
+                    FOREIGN KEY (recipeId) REFERENCES recipes(recipeId) ON DELETE CASCADE,
+                    FOREIGN KEY (categoryId) REFERENCES category_library(id) ON DELETE CASCADE,
+                    UNIQUE(recipeId, categoryId)
+                )
+                """.trimIndent()
+            )
         }
     }
 
@@ -182,6 +205,8 @@ class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
      */
     fun dropTables() {
         connection.createStatement().use { statement ->
+            statement.execute("DROP TABLE IF EXISTS recipe_categories")
+            statement.execute("DROP TABLE IF EXISTS category_library")
             statement.execute("DROP TABLE IF EXISTS recipe_steps")
             statement.execute("DROP TABLE IF EXISTS ingredients")
             statement.execute("DROP TABLE IF EXISTS ingredient_sections")

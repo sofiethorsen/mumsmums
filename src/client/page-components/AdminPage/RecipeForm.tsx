@@ -6,7 +6,7 @@ import Modal from '../../components/Modal/Modal'
 import RecipeSectionEditor, { RecipeSectionData } from '../../components/RecipeSectionEditor/RecipeSectionEditor'
 import IngredientForm from '../../components/IngredientForm/IngredientForm'
 import StepsEditor from '../../components/StepsEditor/StepsEditor'
-import { useIngredients, useUnits, useCreateIngredientModal } from '../../hooks'
+import { useCategories, useIngredients, useUnits, useCreateIngredientModal } from '../../hooks'
 
 // Use the query result type - we only need the fields the form actually uses
 type RecipeDetails = NonNullable<GetRecipeByIdQuery['recipe']>
@@ -37,7 +37,7 @@ export interface RecipeInput {
 
 interface RecipeFormProps {
     recipe?: RecipeDetails | null
-    onSubmit: (recipeInput: RecipeInput) => void
+    onSubmit: (recipeInput: RecipeInput, categoryIds: number[]) => void
     onCancel: () => void
 }
 
@@ -66,10 +66,12 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
     const [sections, setSections] = useState<RecipeSectionData[]>([EMPTY_SECTION])
     const [steps, setSteps] = useState<string[]>([''])
     const [stepsEn, setStepsEn] = useState<string[]>([''])
+    const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([])
 
     // Library data
     const { ingredients: libraryIngredients, addIngredient: addLibraryIngredient } = useIngredients()
     const { units: libraryUnits } = useUnits()
+    const { categories } = useCategories()
 
     // Create ingredient modal
     const createModal = useCreateIngredientModal()
@@ -99,6 +101,7 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
             )
             setSteps(recipe.stepsSv)
             setStepsEn(recipe.stepsEn.length > 0 ? recipe.stepsEn : [''])
+            setSelectedCategoryIds(recipe.categories.map(c => c.id))
         }
     }, [recipe])
 
@@ -132,7 +135,7 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
             stepsEn: stepsEn.filter((step) => step.trim()),
         }
 
-        onSubmit(recipeInput)
+        onSubmit(recipeInput, selectedCategoryIds)
     }
 
     const addSection = () => {
@@ -230,6 +233,28 @@ const RecipeForm: FC<RecipeFormProps> = ({ recipe, onSubmit, onCancel }) => {
             ) : (
                 <div className={styles.imageUploadPlaceholder}>
                     <p>Spara receptet först för att ladda upp en bild</p>
+                </div>
+            )}
+
+            {categories.length > 0 && (
+                <div className={styles.formSection}>
+                    <h3>Kategorier</h3>
+                    {[...categories].sort((a, b) => a.nameSv.localeCompare(b.nameSv, 'sv')).map(category => (
+                        <label key={category.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                            <input
+                                type="checkbox"
+                                checked={selectedCategoryIds.includes(category.id)}
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setSelectedCategoryIds(prev => [...prev, category.id])
+                                    } else {
+                                        setSelectedCategoryIds(prev => prev.filter(id => id !== category.id))
+                                    }
+                                }}
+                            />
+                            {category.nameSv}
+                        </label>
+                    ))}
                 </div>
             )}
 

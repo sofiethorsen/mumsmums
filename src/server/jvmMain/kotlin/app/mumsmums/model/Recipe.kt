@@ -18,4 +18,5 @@ data class Recipe(
         val version: Long = 0L,
         val createdAtInMillis: Long = 0L,
         val lastUpdatedAtInMillis: Long = 0L,
+        val categoryIds: List<Long> = emptyList(),
 )

@@ -4,6 +4,7 @@ import client from '../../graphql/client'
 import RecipeForm, { RecipeInput } from './RecipeForm'
 import IngredientAdmin from './IngredientAdmin'
 import UnitAdmin from './UnitAdmin'
+import CategoryAdmin from './CategoryAdmin'
 import styles from './AdminPage.module.css'
 import PageFrame from '../../components/PageFrame/PageFrame'
 import { BACKEND_BASE_URI } from '../../constants/environment'
@@ -16,11 +17,12 @@ import {
     GetRecipesQuery,
     UpdateRecipeDocument,
 } from '../../graphql/generated'
+import { SET_RECIPE_CATEGORIES } from '../../graphql/queries'
 
 type RecipeListItem = GetRecipesQuery['recipes'][number]
 type RecipeDetails = NonNullable<GetRecipeByIdQuery['recipe']>
 
-type Tab = 'recipes' | 'ingredients' | 'units'
+type Tab = 'recipes' | 'ingredients' | 'units' | 'categories'
 
 const AdminPage: FC = () => {
     const router = useRouter()
@@ -111,7 +113,7 @@ const AdminPage: FC = () => {
         setSelectedRecipe(null)
     }
 
-    const handleSubmit = async (recipeInput: RecipeInput) => {
+    const handleSubmit = async (recipeInput: RecipeInput, categoryIds: number[]) => {
         setLoading(true)
         try {
             if (mode === 'create') {
@@ -121,6 +123,10 @@ const AdminPage: FC = () => {
                 })
 
                 if (data?.createRecipe) {
+                    await client.mutate({
+                        mutation: SET_RECIPE_CATEGORIES,
+                        variables: { recipeId: data.createRecipe.recipeId, categoryIds },
+                    })
                     alert('Recept skapat.')
                     // Switch to edit mode with the newly created recipe
                     await loadRecipes()
@@ -131,6 +137,10 @@ const AdminPage: FC = () => {
                 await client.mutate({
                     mutation: UpdateRecipeDocument,
                     variables: { recipeId: selectedRecipeId, input: recipeInput },
+                })
+                await client.mutate({
+                    mutation: SET_RECIPE_CATEGORIES,
+                    variables: { recipeId: selectedRecipeId, categoryIds },
                 })
                 alert('Recept uppdaterades.')
                 await loadRecipes()
@@ -187,6 +197,12 @@ const AdminPage: FC = () => {
                     >
                         Enheter
                     </button>
+                    <button
+                        className={`${styles.tab} ${activeTab === 'categories' ? styles.tabActive : ''}`}
+                        onClick={() => { setActiveTab('categories'); handleCancel() }}
+                    >
+                        Kategorier
+                    </button>
                 </div>
 
                 {activeTab === 'recipes' && (
@@ -226,6 +242,8 @@ const AdminPage: FC = () => {
                 {activeTab === 'ingredients' && <IngredientAdmin />}
 
                 {activeTab === 'units' && <UnitAdmin />}
+
+                {activeTab === 'categories' && <CategoryAdmin />}
             </div>
         </PageFrame>
     )

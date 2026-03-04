@@ -36,6 +36,17 @@ class CategoryTable(private val database: Database, private val idGenerator: Num
         }
     }
 
+    suspend fun insertWithId(category: Category) = database.execute { connection ->
+        connection.prepareStatement(
+            "INSERT INTO category_library (id, name_sv, name_en) VALUES (?, ?, ?)"
+        ).use { statement ->
+            statement.setLong(1, category.id)
+            statement.setString(2, category.nameSv)
+            statement.setString(3, category.nameEn)
+            statement.executeUpdate()
+        }
+    }
+
     suspend fun insert(category: Category): Long = database.execute { connection ->
         val id = idGenerator.generateId()
         connection.prepareStatement(

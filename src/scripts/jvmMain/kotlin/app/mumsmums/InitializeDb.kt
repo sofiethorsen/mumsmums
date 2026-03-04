@@ -1,5 +1,6 @@
 package app.mumsmums
 
+import app.mumsmums.db.CategoryTable
 import app.mumsmums.db.Database
 import app.mumsmums.db.IngredientTable
 import app.mumsmums.db.RecipesTable
@@ -96,6 +97,22 @@ fun main() {
                 logger.info("No units.json found, skipping unit library import")
             }
 
+            // Import category library if file exists
+            val categoriesPath = Path(MumsMumsPaths.getCategoriesJsonPath())
+            if (categoriesPath.exists()) {
+                logger.info("Reading categories from JSON...")
+                val categories = JsonParser.parseCategories(categoriesPath)
+                logger.info("Found {} categories", categories.size)
+
+                val categoryTable = CategoryTable(database, numericIdGenerator)
+                categories.forEach { category ->
+                    categoryTable.insertWithId(category)
+                }
+                logger.info("Imported {} categories", categories.size)
+            } else {
+                logger.info("No categories.json found, skipping category library import")
+            }
+
             // Parse and import recipes
             logger.info("Reading recipes from JSON...")
             val recipes = JsonParser.parseRecipes(Path(MumsMumsPaths.getRecipesJsonPath()))
@@ -103,6 +120,16 @@ fun main() {
 
             val recipesTable = RecipesTable(database, numericIdGenerator, MumsMumsPaths.getImagePath())
             recipesTable.batchPut(recipes)
+
+            // Import recipe-category assignments
+            val recipesWithCategories = recipes.filter { it.categoryIds.isNotEmpty() }
+            if (recipesWithCategories.isNotEmpty()) {
+                val categoryTable = CategoryTable(database, numericIdGenerator)
+                recipesWithCategories.forEach { recipe ->
+                    categoryTable.setCategoriesForRecipe(recipe.recipeId, recipe.categoryIds)
+                }
+                logger.info("Imported category assignments for {} recipes", recipesWithCategories.size)
+            }
 
             logger.info("=== Database initialization complete! ===")
             logger.info("Total recipes in database: {}", recipes.size)

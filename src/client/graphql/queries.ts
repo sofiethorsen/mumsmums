@@ -60,6 +60,11 @@ export const GET_RECIPE_BY_ID = gql`
                 nameEn
                 imageUrl
             }
+            categories {
+                id
+                nameSv
+                nameEn
+            }
         }
     }
 `
@@ -191,5 +196,52 @@ export const UPDATE_UNIT = gql`
 export const DELETE_UNIT = gql`
     mutation DeleteUnit($id: Long!) {
         deleteUnit(id: $id)
+    }
+`
+
+// Category queries and mutations
+export const GET_CATEGORIES = gql`
+    query GetCategories {
+        categories {
+            id
+            nameSv
+            nameEn
+        }
+    }
+`
+
+export const CREATE_CATEGORY = gql`
+    mutation CreateCategory($input: CategoryInput!) {
+        createCategory(input: $input) {
+            id
+            nameSv
+            nameEn
+        }
+    }
+`
+
+export const UPDATE_CATEGORY = gql`
+    mutation UpdateCategory($id: Long!, $input: CategoryInput!) {
+        updateCategory(id: $id, input: $input) {
+            id
+            nameSv
+            nameEn
+        }
+    }
+`
+
+export const DELETE_CATEGORY = gql`
+    mutation DeleteCategory($id: Long!) {
+        deleteCategory(id: $id)
+    }
+`
+
+export const SET_RECIPE_CATEGORIES = gql`
+    mutation SetRecipeCategories($recipeId: Long!, $categoryIds: [Long!]!) {
+        setRecipeCategories(recipeId: $recipeId, categoryIds: $categoryIds) {
+            id
+            nameSv
+            nameEn
+        }
     }
 `

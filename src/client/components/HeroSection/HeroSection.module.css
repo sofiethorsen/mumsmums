@@ -1,7 +1,6 @@
 .hero {
     position: relative;
     padding: 16px;
-    overflow: hidden;
 }
 
 .heroContent {
@@ -22,13 +21,46 @@
 .subtitle {
     font-size: 18px;
     color: var(--color-content-secondary);
-    margin-bottom: 32px;
+    margin-bottom: 24px;
+}
+
+.tabBar {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.tab {
+    padding: 4px 0;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--color-content-secondary);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.tab:hover {
+    color: var(--color-content-primary);
+}
+
+.tabActive {
+    color: var(--color-content-primary);
+    font-weight: 500;
+    border-bottom-color: var(--color-accent-primary);
+}
+
+.searchArea {
+    max-width: 448px;
+    margin: 0 auto;
+    min-height: 48px;
 }
 
 .searchWrapper {
     position: relative;
-    max-width: 448px;
-    margin: 0 auto;
 }
 
 .searchIcon {

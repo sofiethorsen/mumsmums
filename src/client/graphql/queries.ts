@@ -13,6 +13,7 @@ export const GET_RECIPE_PREVIEWS = gql`
             stepsEn
             servings
             numberOfUnits
+            ingredientIds
         }
     }
 `

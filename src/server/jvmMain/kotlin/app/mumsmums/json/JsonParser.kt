@@ -2,6 +2,7 @@ package app.mumsmums.json
 
 import app.mumsmums.identifiers.NumericIdGenerator
 import app.mumsmums.model.LibraryIngredient
+import app.mumsmums.model.Category
 import app.mumsmums.model.LibraryUnit
 import app.mumsmums.model.Recipe
 import java.io.FileReader
@@ -38,6 +39,12 @@ object JsonParser {
     }
 
     fun parseUnits(pathToFile: Path): List<LibraryUnit> {
+        return FileReader(pathToFile.toString(), Charset.forName("UTF-8")).use {
+            formatter.decodeFromString(it.buffered().readText())
+        }
+    }
+
+    fun parseCategories(pathToFile: Path): List<Category> {
         return FileReader(pathToFile.toString(), Charset.forName("UTF-8")).use {
             formatter.decodeFromString(it.buffered().readText())
         }

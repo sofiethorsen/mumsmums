@@ -27,6 +27,7 @@ DB_PATH = os.path.join(os.path.expanduser("~"), "mumsmums-persist/mumsmums.db")
 OUTPUT_FILE = os.path.join(GIT_DIR, "src/server/jvmMain/resources/recipes.json")
 INGREDIENTS_FILE = os.path.join(GIT_DIR, "src/server/jvmMain/resources/ingredients.json")
 UNITS_FILE = os.path.join(GIT_DIR, "src/server/jvmMain/resources/units.json")
+CATEGORIES_FILE = os.path.join(GIT_DIR, "src/server/jvmMain/resources/categories.json")
 
 conn = sqlite3.connect(DB_PATH)
 conn.row_factory = sqlite3.Row
@@ -156,6 +157,17 @@ for recipe_row in cursor.fetchall():
         recipe['stepsEn'] = steps_en
     recipe['stepsSv'] = [step_row['step_sv'] for step_row in steps]
 
+    # Get categories for this recipe
+    cursor.execute("""
+        SELECT categoryId
+        FROM recipe_categories
+        WHERE recipeId = ?
+        ORDER BY categoryId
+    """, (recipe_id,))
+    category_ids = [row['categoryId'] for row in cursor.fetchall()]
+    if category_ids:
+        recipe['categoryIds'] = category_ids
+
     recipes.append(recipe)
 
 # Export ingredient library
@@ -210,6 +222,22 @@ for row in cursor.fetchall():
         unit['gEquivalent'] = row['g_equivalent']
     units_library.append(unit)
 
+# Export category library
+cursor.execute("""
+    SELECT id, name_sv, name_en
+    FROM category_library
+    ORDER BY id
+""")
+
+categories_library = []
+for row in cursor.fetchall():
+    category = {'id': row['id']}
+    if row['name_sv']:
+        category['nameSv'] = row['name_sv']
+    if row['name_en']:
+        category['nameEn'] = row['name_en']
+    categories_library.append(category)
+
 conn.close()
 
 with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
@@ -224,9 +252,14 @@ with open(UNITS_FILE, 'w', encoding='utf-8') as f:
     json.dump(units_library, f, indent=2, ensure_ascii=False)
     f.write('\n')
 
+with open(CATEGORIES_FILE, 'w', encoding='utf-8') as f:
+    json.dump(categories_library, f, indent=2, ensure_ascii=False)
+    f.write('\n')
+
 print(f"Exported {len(recipes)} recipes to {OUTPUT_FILE}")
 print(f"Exported {len(ingredients_library)} ingredients to {INGREDIENTS_FILE}")
 print(f"Exported {len(units_library)} units to {UNITS_FILE}")
+print(f"Exported {len(categories_library)} categories to {CATEGORIES_FILE}")
 
 PYTHON_SCRIPT
 

@@ -29,6 +29,7 @@ const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
     stepsSv: [],
     stepsEn: [],
     usedIn: [],
+    categories: [],
     ...overrides,
 })
 

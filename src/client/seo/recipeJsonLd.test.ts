@@ -26,6 +26,7 @@ const createMockRecipe = (overrides: Partial<Recipe> = {}): Recipe => ({
     stepsSv: ['Blanda ingredienserna', 'Grädda i 20 minuter'],
     stepsEn: [],
     usedIn: [],
+    categories: [],
     ...overrides,
 })
 

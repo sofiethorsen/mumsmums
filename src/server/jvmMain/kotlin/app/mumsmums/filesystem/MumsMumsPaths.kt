@@ -27,6 +27,10 @@ object MumsMumsPaths {
         return "${projectRoot}/src/server/jvmMain/resources/units.json"
     }
 
+    fun getCategoriesJsonPath(): String {
+        return "${projectRoot}/src/server/jvmMain/resources/categories.json"
+    }
+
     // Get image storage path from environment - in a Docker context, this will
     // be /app/images as per the docker-compose.yml configuration; however in local
     // dev, we'll simply default to a directory in the user's home folder.

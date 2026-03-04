@@ -1517,6 +1517,147 @@
     ]
   },
   {
+    "descriptionEn": "A water that is enriched with the flavor of Comté - this is then used to make delicious croustades. One batch yields around 80 grams of cheese water. ",
+    "descriptionSv": "Ett vatten som berikas med smaken av Comté - detta används sedan för att göra utsökta krustader. En sats ger ca 80g ostvatten. ",
+    "imageUrl": "/images/recipes/2366478956544.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "ingredientId": 2366478270464,
+            "name": "comté",
+            "quantity": 100,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2362632445952,
+            "name": "vatten",
+            "quantity": 100,
+            "unitId": 2362634526720,
+            "volume": "g"
+          }
+        ],
+        "nameSv": null
+      }
+    ],
+    "nameEn": "Cheese water",
+    "nameSv": "Ostvatten",
+    "numberOfUnits": 1,
+    "recipeId": 2366478956544,
+    "servings": null,
+    "stepsEn": [
+      "Finely grate the cheese and mix with the water. Pour into a sous-vide bag and vacuum pack.",
+      "Heat a sous-vide bath to 90C. Let the cheese and water bake for 1 hour.",
+      "Carefully remove the bag (do not shake or anything like that as this will destroy the separation that has occurred) and let it sit at room temperature for about 45 minutes.",
+      "Open the bag and pour through a fine-mesh strainer lined with cheesecloth."
+    ],
+    "stepsSv": [
+      "Riv osten fint och blanda med vattnet. Häll i en sous-vide påse och vakuumförpacka. ",
+      "Värm ett sous-vide bad till 90C. Låt osten och vattnet baka i 1h. ",
+      "Ta försiktigt ut påsen (skaka inte eller dylikt eftersom det förstör separeringen som uppstått) och låt dra i rumstemperatur ca 45 min.",
+      "Öppna påsen och häll igenom en finmaskig sil som du lagt en ostduk i. "
+    ]
+  },
+  {
+    "descriptionEn": "These croustades are flavored with Comté and get their crunch by using maltodextrin in the batter.",
+    "descriptionSv": "Dessa krustader är smaksatta med Comté och får ett extra krisp genom att använda maltodextrin i smeten.",
+    "imageUrl": "/images/recipes/2366482925568.webp",
+    "ingredientSections": [
+      {
+        "ingredients": [
+          {
+            "ingredientId": 2362629079040,
+            "name": "mjöl",
+            "quantity": 100,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2366480504832,
+            "name": "öl, pilsner",
+            "quantity": 100
+          },
+          {
+            "ingredientId": 2366479831040,
+            "name": "ostvatten",
+            "quantity": 80,
+            "recipeId": 2366478956544,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2362628866048,
+            "name": "socker",
+            "quantity": 6,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2362629218304,
+            "name": "salt",
+            "quantity": 12,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2366480701440,
+            "name": "smör, smält",
+            "quantity": 12,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2366480965632,
+            "name": "trisol",
+            "quantity": 12
+          },
+          {
+            "ingredientId": 2362628841472,
+            "name": "ägg",
+            "quantity": 50,
+            "unitId": 2362634526720,
+            "volume": "g"
+          },
+          {
+            "ingredientId": 2362632144896,
+            "name": "olja",
+            "unitId": 2362809692160,
+            "volume": "Ingen enhet"
+          }
+        ],
+        "nameSv": null
+      }
+    ],
+    "nameEn": "Croustades",
+    "nameSv": "Krustader",
+    "numberOfUnits": 35,
+    "recipeId": 2366482925568,
+    "servings": null,
+    "stepsEn": [
+      "Preheat a croustade iron in oil for at least 30 minutes (150-160C).",
+      "Mix all dry ingredients.",
+      "Combine beer, cheese water and egg and whisk the liquid into the dry mixture.",
+      "Add the melted butter and let it swell for a few minutes before you start frying.",
+      "Pour the batter into a container that is preferably taller than it is wide because you need to dip the iron (for example, a coffee cup).",
+      "When you take the iron out of the oil, it's a good idea to wipe off any excess oil with a terry towel (you want it to be thick so you don't burn yourself) before you dip the iron into the batter - this will help the batter stick better and not slip off/create holes as easily.",
+      "Let the batter fry until golden brown - about 1 minute, but it depends a lot on the temperature of the oil.",
+      "When the croustade is ready, remove the iron from the oil and carefully pry the crust off the iron with a fork onto a sheet lined with paper towels.",
+      "Once the croustades have cooled, you can store them in an airtight container for about 2 months."
+    ],
+    "stepsSv": [
+      "Förvärm ett krustadjärn i olja i minst 30 minuter (150-160C). ",
+      "Mixa alla torra ingredienser. ",
+      "Kombinera öl, ostvatten och ägg och vispa ner vätskan i den torra blandningen. ",
+      "Tillsätt sedan det smälta smöret och låt svälla några minuter innan du börjar fritera. ",
+      "Häll smeten i en tålig behållare som gärna är högre än bred eftersom du behöver doppa järnet (exempelvis en kaffekopp). ",
+      "När du tar upp järnet ur oljan kan du med fördel torka av överflödig olja med en frottéhanduk (du vill att den är tjock så du ej bränner dig) innan du sänker ner järnet i smeten - detta gör att smeten fäster bättre och inte lika lätt halkar av/skapar hål. ",
+      "Låt sedan smeten fritera tills gyllenbrun - ca 1 minut, men beror mycket på oljans värme. ",
+      "När krustaden är klar, ta upp järnet ur oljan och peta försiktigt av krustaden från järnet med en gaffel på en plåt med hushållspapper.",
+      "När krustaderna svalnat så kan du förvara dom i en lufttät behållare i ca 2 månader."
+    ]
+  },
+  {
     "descriptionEn": "Hasselback potatoes with vendace roe and sour cream are a simple and festive snack.",
     "descriptionSv": "Hasselbackspotatis med löjrom och smetana är ett enkelt och festligt tilltugg.",
     "imageUrl": "/images/recipes/43982676217856.webp",
@@ -2674,6 +2815,13 @@
             "quantity": 1,
             "unitId": 2362634967040,
             "volume": "st"
+          },
+          {
+            "ingredientId": 2362632673280,
+            "name": "blåbär",
+            "quantity": 170,
+            "unitId": 2362634526720,
+            "volume": "g"
           },
           {
             "ingredientId": 2362628866048,

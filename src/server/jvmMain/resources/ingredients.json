@@ -1152,5 +1152,45 @@
     "nameEn": "pecans",
     "fullNameSv": "pecannötter",
     "fullNameEn": "pecans"
+  },
+  {
+    "id": 2366478270464,
+    "nameSv": "comté",
+    "nameEn": "comté",
+    "fullNameSv": "comté",
+    "fullNameEn": "comté"
+  },
+  {
+    "id": 2366479831040,
+    "nameSv": "ostvatten",
+    "nameEn": "cheese water",
+    "fullNameSv": "ostvatten",
+    "fullNameEn": "cheese water"
+  },
+  {
+    "id": 2366480504832,
+    "nameSv": "öl",
+    "nameEn": "beer",
+    "qualifierSv": "pilsner",
+    "qualifierEn": "pilsner",
+    "fullNameSv": "öl, pilsner",
+    "fullNameEn": "pilsner style beer"
+  },
+  {
+    "id": 2366480701440,
+    "nameSv": "smör",
+    "nameEn": "butter",
+    "qualifierSv": "smält",
+    "qualifierEn": "melted",
+    "derivesFromId": 2362628892672,
+    "fullNameSv": "smör, smält",
+    "fullNameEn": "melted butter"
+  },
+  {
+    "id": 2366480965632,
+    "nameSv": "trisol",
+    "nameEn": "trisol",
+    "fullNameSv": "trisol",
+    "fullNameEn": "trisol"
   }
 ]

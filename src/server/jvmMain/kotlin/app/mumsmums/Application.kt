@@ -2,6 +2,7 @@ package app.mumsmums
 
 import app.mumsmums.auth.AuthHandler
 import app.mumsmums.auth.JwtConfig
+import app.mumsmums.db.CategoryTable
 import app.mumsmums.db.Database
 import app.mumsmums.db.IngredientTable
 import app.mumsmums.db.RecipesTable
@@ -49,6 +50,7 @@ fun Application.module() {
     val usersTable = UsersTable(database, SystemTimeProvider)
     val ingredientTable = IngredientTable(database, idGenerator)
     val unitTable = UnitTable(database, idGenerator)
+    val categoryTable = CategoryTable(database, idGenerator)
 
     // JWT setup
     val secret = JwtConfig.Secret(jwtSecret)
@@ -73,7 +75,8 @@ fun Application.module() {
         jwtConfig,
         revalidationClient,
         ingredientTable,
-        unitTable
+        unitTable,
+        categoryTable
     )
     configureImageUpload(uploadHandler)
     configureCORS()

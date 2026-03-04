@@ -1,9 +1,11 @@
 package app.mumsmums.plugins
 
 import app.mumsmums.auth.JwtConfig
+import app.mumsmums.db.CategoryTable
 import app.mumsmums.db.IngredientTable
 import app.mumsmums.db.RecipesTable
 import app.mumsmums.db.UnitTable
+import app.mumsmums.model.Category
 import app.mumsmums.model.Ingredient
 import app.mumsmums.model.IngredientSection
 import app.mumsmums.model.LibraryIngredient
@@ -97,12 +99,18 @@ data class LibraryUnitInput(
     val gEquivalent: Float? = null
 )
 
+data class CategoryInput(
+    val nameSv: String,
+    val nameEn: String? = null,
+)
+
 fun Application.configureGraphQL(
     recipesTable: RecipesTable,
     jwtConfig: JwtConfig,
     revalidationClient: RevalidationClient,
     ingredientTable: IngredientTable,
-    unitTable: UnitTable
+    unitTable: UnitTable,
+    categoryTable: CategoryTable
 ) {
     install(GraphQL) {
         // Provide ApplicationCall in the context for each request
@@ -125,6 +133,12 @@ fun Application.configureGraphQL(
                             .flatMap { it.ingredients }
                             .mapNotNull { it.ingredientId }
                             .distinct()
+                    }
+                }
+                property<List<Category>>("categories") {
+                    description = "Categories assigned to this recipe"
+                    resolver { recipe: Recipe ->
+                        categoryTable.getCategoriesForRecipe(recipe.recipeId)
                     }
                 }
             }
@@ -182,6 +196,14 @@ fun Application.configureGraphQL(
                 description = "Input for creating or updating a library unit"
             }
 
+            type<Category>() {
+                description = "Recipe category"
+            }
+
+            inputType<CategoryInput>() {
+                description = "Input for creating or updating a category"
+            }
+
             query("recipes") {
                 resolver { -> recipesTable.scan() }
             }
@@ -206,6 +228,14 @@ fun Application.configureGraphQL(
             }
             query("unit") {
                 resolver { id: Long -> unitTable.getById(id) }
+            }
+
+            // Category queries
+            query("categories") {
+                resolver { -> categoryTable.getAll() }
+            }
+            query("category") {
+                resolver { id: Long -> categoryTable.getById(id) }
             }
 
             mutation("createRecipe") {
@@ -409,6 +439,43 @@ fun Application.configureGraphQL(
                     ctx.requireAuth(jwtConfig)
                     unitTable.delete(id)
                     true
+                }
+            }
+
+            // Category mutations
+            mutation("createCategory") {
+                resolver { ctx: Context, input: CategoryInput ->
+                    ctx.requireAuth(jwtConfig)
+                    val id = categoryTable.insert(
+                        Category(id = 0, nameSv = input.nameSv, nameEn = input.nameEn)
+                    )
+                    categoryTable.getById(id)
+                }
+            }
+
+            mutation("updateCategory") {
+                resolver { ctx: Context, id: Long, input: CategoryInput ->
+                    ctx.requireAuth(jwtConfig)
+                    categoryTable.update(
+                        Category(id = id, nameSv = input.nameSv, nameEn = input.nameEn)
+                    )
+                    categoryTable.getById(id)
+                }
+            }
+
+            mutation("deleteCategory") {
+                resolver { ctx: Context, id: Long ->
+                    ctx.requireAuth(jwtConfig)
+                    categoryTable.delete(id)
+                    true
+                }
+            }
+
+            mutation("setRecipeCategories") {
+                resolver { ctx: Context, recipeId: Long, categoryIds: List<Long> ->
+                    ctx.requireAuth(jwtConfig)
+                    categoryTable.setCategoriesForRecipe(recipeId, categoryIds)
+                    categoryTable.getCategoriesForRecipe(recipeId)
                 }
             }
         }

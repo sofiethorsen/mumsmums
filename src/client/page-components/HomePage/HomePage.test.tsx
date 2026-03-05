@@ -95,6 +95,11 @@ jest.mock('../../components/HeroSection/HeroSection', () => ({
     ),
 }))
 
+jest.mock('../../components/CategoryFilter/CategoryFilter', () => ({
+    __esModule: true,
+    default: () => <div data-testid="category-filter">CategoryFilter</div>,
+}))
+
 jest.mock('../../components/RecipeGrid/RecipeGrid', () => ({
     __esModule: true,
     default: ({
@@ -105,6 +110,7 @@ jest.mock('../../components/RecipeGrid/RecipeGrid', () => ({
         recipes: Array<{ recipeId: number; nameSv: string }>
         searchQuery: string
         selectedIngredientCount?: number
+        selectedCategoryCount?: number
     }) => (
         <div data-testid="recipe-grid">
             <span data-testid="search-query">{searchQuery}</span>
@@ -120,10 +126,10 @@ jest.mock('../../components/RecipeGrid/RecipeGrid', () => ({
 }))
 
 const mockRecipes = [
-    { recipeId: 1, nameSv: 'Kanelbullar', nameEn: null, imageUrl: '/images/kanelbullar.jpg', descriptionSv: 'Klassiska kanelbullar', descriptionEn: null, stepsSv: ['Steg 1', 'Steg 2'], stepsEn: [], servings: 12, numberOfUnits: undefined, ingredientIds: [10, 20, 30] },
-    { recipeId: 2, nameSv: 'Kardemummabullar', nameEn: null, imageUrl: '/images/kardemumma.jpg', descriptionSv: 'Goda kardemummabullar', descriptionEn: null, stepsSv: ['Steg 1'], stepsEn: [], servings: 10, numberOfUnits: undefined, ingredientIds: [10, 40] },
-    { recipeId: 3, nameSv: 'Semlor', nameEn: null, imageUrl: '/images/semlor.jpg', descriptionSv: 'Traditionella semlor', descriptionEn: null, stepsSv: ['Steg 1', 'Steg 2', 'Steg 3'], stepsEn: [], servings: 8, numberOfUnits: undefined, ingredientIds: [20, 50, 60] },
-    { recipeId: 4, nameSv: 'Chokladbollar', nameEn: null, imageUrl: '/images/choklad.jpg', descriptionSv: 'Klassiska chokladbollar', descriptionEn: null, stepsSv: ['Steg 1', 'Steg 2'], stepsEn: [], servings: undefined, numberOfUnits: 20, ingredientIds: [10, 20] },
+    { recipeId: 1, nameSv: 'Kanelbullar', nameEn: null, imageUrl: '/images/kanelbullar.jpg', descriptionSv: 'Klassiska kanelbullar', descriptionEn: null, stepsSv: ['Steg 1', 'Steg 2'], stepsEn: [], servings: 12, numberOfUnits: undefined, ingredientIds: [10, 20, 30], categories: [] },
+    { recipeId: 2, nameSv: 'Kardemummabullar', nameEn: null, imageUrl: '/images/kardemumma.jpg', descriptionSv: 'Goda kardemummabullar', descriptionEn: null, stepsSv: ['Steg 1'], stepsEn: [], servings: 10, numberOfUnits: undefined, ingredientIds: [10, 40], categories: [] },
+    { recipeId: 3, nameSv: 'Semlor', nameEn: null, imageUrl: '/images/semlor.jpg', descriptionSv: 'Traditionella semlor', descriptionEn: null, stepsSv: ['Steg 1', 'Steg 2', 'Steg 3'], stepsEn: [], servings: 8, numberOfUnits: undefined, ingredientIds: [20, 50, 60], categories: [] },
+    { recipeId: 4, nameSv: 'Chokladbollar', nameEn: null, imageUrl: '/images/choklad.jpg', descriptionSv: 'Klassiska chokladbollar', descriptionEn: null, stepsSv: ['Steg 1', 'Steg 2'], stepsEn: [], servings: undefined, numberOfUnits: 20, ingredientIds: [10, 20], categories: [] },
 ]
 
 describe('HomePage', () => {

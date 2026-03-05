@@ -180,7 +180,7 @@ class Database(dbPath: String = MumsMumsPaths.getDbPath()) {
                 CREATE TABLE IF NOT EXISTS category_library (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name_sv TEXT NOT NULL UNIQUE,
-                    name_en TEXT
+                    name_en TEXT NOT NULL
                 )
                 """.trimIndent()
             )

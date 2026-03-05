@@ -38,7 +38,7 @@ const CategoryAdmin: FC = () => {
         resetForm()
         setEditingId(category.id)
         setNameSv(category.nameSv)
-        setNameEn(category.nameEn || '')
+        setNameEn(category.nameEn ?? '')
         setMode('edit')
     }
 
@@ -58,8 +58,8 @@ const CategoryAdmin: FC = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault()
-        if (!nameSv.trim()) {
-            alert('Svenskt namn krävs')
+        if (!nameSv.trim() || !nameEn.trim()) {
+            alert('Både svenskt och engelskt namn krävs')
             return
         }
 
@@ -67,7 +67,7 @@ const CategoryAdmin: FC = () => {
         try {
             const input = {
                 nameSv: nameSv.trim(),
-                nameEn: nameEn.trim() || null,
+                nameEn: nameEn.trim(),
             }
 
             if (mode === 'create') {
@@ -112,7 +112,7 @@ const CategoryAdmin: FC = () => {
                         />
                     </div>
                     <div className={styles.formGroup}>
-                        <label>Namn (engelska)</label>
+                        <label>Namn (engelska) *</label>
                         <input
                             type="text"
                             value={nameEn}

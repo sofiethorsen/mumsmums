@@ -40,16 +40,6 @@ class CategoryTableTest {
     }
 
     @Test
-    fun `insert with null nameEn works`() = runTest {
-        val id = table.insert(Category(id = 0, nameSv = "Middag"))
-
-        val found = table.getById(id)
-        assertNotNull(found)
-        assertEquals("Middag", found?.nameSv)
-        assertNull(found?.nameEn)
-    }
-
-    @Test
     fun `insert with duplicate nameSv throws exception`() = runTest {
         table.insert(Category(id = 0, nameSv = "Bakverk", nameEn = "Baking"))
 
@@ -84,18 +74,18 @@ class CategoryTableTest {
 
     @Test
     fun `update modifies category`() = runTest {
-        val id = table.insert(Category(id = 0, nameSv = "Bakverk"))
+        val id = table.insert(Category(id = 0, nameSv = "Bakverk", nameEn = "Baking"))
 
-        table.update(Category(id = id, nameSv = "Bakverk", nameEn = "Baking"))
+        table.update(Category(id = id, nameSv = "Bakverk", nameEn = "Pastry"))
 
         val updated = table.getById(id)
         assertEquals("Bakverk", updated?.nameSv)
-        assertEquals("Baking", updated?.nameEn)
+        assertEquals("Pastry", updated?.nameEn)
     }
 
     @Test
     fun `delete removes category`() = runTest {
-        val id = table.insert(Category(id = 0, nameSv = "Bakverk"))
+        val id = table.insert(Category(id = 0, nameSv = "Bakverk", nameEn = "Baking"))
 
         table.delete(id)
 
@@ -133,9 +123,9 @@ class CategoryTableTest {
     @Test
     fun `setCategoriesForRecipe replaces previous assignments`() = runTest {
         insertTestRecipe(100L)
-        val bakingId = table.insert(Category(id = 0, nameSv = "Bakverk"))
-        val breakfastId = table.insert(Category(id = 0, nameSv = "Frukost"))
-        val dinnerId = table.insert(Category(id = 0, nameSv = "Middag"))
+        val bakingId = table.insert(Category(id = 0, nameSv = "Bakverk", nameEn = "Baking"))
+        val breakfastId = table.insert(Category(id = 0, nameSv = "Frukost", nameEn = "Breakfast"))
+        val dinnerId = table.insert(Category(id = 0, nameSv = "Middag", nameEn = "Dinner"))
 
         table.setCategoriesForRecipe(100L, listOf(bakingId, breakfastId))
         table.setCategoriesForRecipe(100L, listOf(dinnerId))
@@ -148,7 +138,7 @@ class CategoryTableTest {
     @Test
     fun `setCategoriesForRecipe with empty list clears assignments`() = runTest {
         insertTestRecipe(100L)
-        val bakingId = table.insert(Category(id = 0, nameSv = "Bakverk"))
+        val bakingId = table.insert(Category(id = 0, nameSv = "Bakverk", nameEn = "Baking"))
         table.setCategoriesForRecipe(100L, listOf(bakingId))
 
         table.setCategoriesForRecipe(100L, emptyList())
@@ -166,8 +156,8 @@ class CategoryTableTest {
     @Test
     fun `deleting a category cascades to recipe_categories`() = runTest {
         insertTestRecipe(100L)
-        val bakingId = table.insert(Category(id = 0, nameSv = "Bakverk"))
-        val breakfastId = table.insert(Category(id = 0, nameSv = "Frukost"))
+        val bakingId = table.insert(Category(id = 0, nameSv = "Bakverk", nameEn = "Baking"))
+        val breakfastId = table.insert(Category(id = 0, nameSv = "Frukost", nameEn = "Breakfast"))
         table.setCategoriesForRecipe(100L, listOf(bakingId, breakfastId))
 
         table.delete(bakingId)

@@ -11,7 +11,10 @@
     "noResults": "No recipes matched your search \"{query}\"",
     "tryAnother": "Try another search term",
     "ingredientResults": "{count} recipes with {ingredientCount} selected ingredients",
-    "noIngredientResults": "No recipes matched your selected ingredients"
+    "noIngredientResults": "No recipes matched your selected ingredients",
+    "allCategories": "All",
+    "categoryResults": "{count} recipes in selected categories",
+    "noCategoryResults": "No recipes matched your selected categories"
   },
   "recipe": {
     "steps": "{count} steps",

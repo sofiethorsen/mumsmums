@@ -11,7 +11,10 @@
     "noResults": "Inga recept matchade din sökning \"{query}\"",
     "tryAnother": "Försök med ett annat sökord",
     "ingredientResults": "{count} recept med {ingredientCount} valda ingredienser",
-    "noIngredientResults": "Inga recept matchade dina valda ingredienser"
+    "noIngredientResults": "Inga recept matchade dina valda ingredienser",
+    "allCategories": "Alla",
+    "categoryResults": "{count} recept i valda kategorier",
+    "noCategoryResults": "Inga recept matchade dina valda kategorier"
   },
   "recipe": {
     "steps": "{count} steg",

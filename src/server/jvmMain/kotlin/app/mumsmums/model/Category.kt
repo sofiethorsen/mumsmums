@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class Category(
     val id: Long,
     val nameSv: String,
-    val nameEn: String? = null,
+    val nameEn: String,
 )

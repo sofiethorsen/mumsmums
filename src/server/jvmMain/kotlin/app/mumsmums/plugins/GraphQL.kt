@@ -101,7 +101,7 @@ data class LibraryUnitInput(
 
 data class CategoryInput(
     val nameSv: String,
-    val nameEn: String? = null,
+    val nameEn: String,
 )
 
 fun Application.configureGraphQL(

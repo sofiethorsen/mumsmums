@@ -49,6 +49,15 @@ const RecipeMobile: FC<RecipeProps> = ({ recipe }) => {
                 {description && (
                     <p className={styles.description}>{description}</p>
                 )}
+                {recipe.categories.length > 0 && (
+                    <div className={styles.categories}>
+                        {recipe.categories.map((cat) => (
+                            <span key={cat.id} className={styles.categoryBadge}>
+                                {localized(cat.nameSv, cat.nameEn, locale)}
+                            </span>
+                        ))}
+                    </div>
+                )}
                 <div className={styles.metaInfo}>
                     <span className={styles.metaItem}>
                         <ClockIcon size={16} />

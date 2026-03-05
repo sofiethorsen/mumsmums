@@ -14,6 +14,11 @@ export const GET_RECIPE_PREVIEWS = gql`
             servings
             numberOfUnits
             ingredientIds
+            categories {
+                id
+                nameSv
+                nameEn
+            }
         }
     }
 `
